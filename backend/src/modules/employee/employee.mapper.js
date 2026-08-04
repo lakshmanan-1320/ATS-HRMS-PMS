@@ -1,0 +1,46 @@
+function mapEmployee(row) {
+  if (!row) return {};
+  return {
+    employee_id: row.employee_id,
+    employee_code: row.employee_code,
+    first_name: row.first_name,
+    last_name: row.last_name,
+    email: row.email,
+    phone: row.phone,
+    gender: row.gender,
+    date_of_birth: row.date_of_birth,
+    date_of_joining: row.date_of_joining,
+    department_id: row.department_id,
+    department_name: row.department_name,
+    designation: row.designation,
+    employment_type: row.employment_type,
+    status: row.status,
+    manager_id: row.manager_id,
+    manager_name: row.manager_name,
+    manager_code: row.manager_code,
+    secondary_manager_id: row.secondary_manager_id,
+    secondary_manager_name: row.secondary_manager_name,
+    secondary_manager_code: row.secondary_manager_code,
+    hierarchy_level_id: row.hierarchy_level_id,
+    level_code: row.level_code,
+    level_designation: row.level_designation,
+    father_name: row.father_name,
+    mother_name: row.mother_name,
+    blood_group: row.blood_group,
+    emergency_contact: row.emergency_contact,
+    bank_name: row.bank_name,
+    bank_account_number: row.bank_account_number,
+    bank_ifsc: row.bank_ifsc,
+    bank_account_holder: row.bank_account_holder,
+    uan_number: row.uan_number,
+    esi_number: row.esi_number,
+    attendance_policy_id: row.attendance_policy_id,
+    attendance_policy_name: row.attendance_policy_name,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
+}
+
+module.exports = {
+  mapEmployee,
+};

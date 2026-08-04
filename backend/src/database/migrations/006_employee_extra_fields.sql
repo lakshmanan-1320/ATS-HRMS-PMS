@@ -1,0 +1,10 @@
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS father_name VARCHAR(100);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS mother_name VARCHAR(100);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS blood_group VARCHAR(10);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS emergency_contact VARCHAR(50);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS bank_name VARCHAR(100);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS bank_account_number VARCHAR(50);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS bank_ifsc VARCHAR(20);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS bank_account_holder VARCHAR(100);
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS secondary_manager_id UUID REFERENCES employees(employee_id) ON DELETE SET NULL;
+ALTER TABLE employees ADD COLUMN IF NOT EXISTS hierarchy_level_id UUID REFERENCES hierarchy_levels(hierarchy_level_id) ON DELETE SET NULL;

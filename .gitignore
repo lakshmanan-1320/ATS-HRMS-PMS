@@ -1,0 +1,82 @@
+# =========================
+# Dependencies
+# =========================
+node_modules
+**/node_modules
+
+# =========================
+# Logs
+# =========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =========================
+# Build outputs
+# =========================
+dist
+dist-ssr
+build
+out
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+!.env.example
+.env.development
+.env.local
+.env.production
+
+# =========================
+# Database / migrations (optional safety)
+# =========================
+*.sqlite
+*.sqlite3
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Editor files
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# Coverage / testing
+# =========================
+coverage
+
+# =========================
+# Frontend frameworks
+# =========================
+.next
+.nuxt
+.vite
+.cache
+
+# =========================
+# Optional uploads (backend)
+# =========================
+uploads/*
+!uploads/.gitkeep
+
+# =========================
+# Docker (if used)
+# =========================
+docker-compose.override.yml

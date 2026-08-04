@@ -1,0 +1,321 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f5f6fa;
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+
+select, option {
+  color: #1e293b;
+  background: #ffffff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Ensure global readability on light backgrounds for content pages */
+main h1, main h2, main h3, main h4,
+.page-title, .section-title {
+  color: #1e293b !important;
+}
+
+main p, .page-desc {
+  color: #475569 !important;
+}
+
+/* Welcome banner overrides — keep heading and paragraph text white */
+body.client-admin-theme main .welcome-banner-card h1,
+body.client-admin-theme main .welcome-banner-card h2,
+body.client-admin-theme main .welcome-banner-card h3,
+body.client-admin-theme main .welcome-banner-card h4,
+main .welcome-banner-card h1,
+main .welcome-banner-card h2,
+main .welcome-banner-card h3,
+main .welcome-banner-card h4 {
+  color: #ffffff !important;
+}
+body.client-admin-theme main .welcome-banner-card p,
+main .welcome-banner-card p {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* -------------------------------------------------------------
+   Client Admin Light Theme Overrides (#f5f6fa background)
+------------------------------------------------------------- */
+body.client-admin-theme {
+  background: #f5f6fa !important;
+  color: #1e293b !important;
+}
+
+/* Outer layout flex wrapper inside the route pages */
+body.client-admin-theme #root > div,
+body.client-admin-theme #root > div[style*="background"],
+body.client-admin-theme div[style*="display: flex"][style*="min-height: 100vh"],
+body.client-admin-theme div[style*="display:flex"][style*="min-height:100vh"] {
+  background: #f5f6fa !important;
+  color: #1e293b !important;
+}
+
+/* Main content area */
+body.client-admin-theme main {
+  background: #f5f6fa !important;
+}
+
+/* Headings and primary text in main content */
+body.client-admin-theme main h1,
+body.client-admin-theme main h2,
+body.client-admin-theme main h3,
+body.client-admin-theme main h4 {
+  color: #1e293b !important;
+}
+
+/* Card components / tables / lists containers that have dark backgrounds in main content */
+body.client-admin-theme main div[style*="background: rgba(15,23,42"],
+body.client-admin-theme main div[style*="background:rgba(15,23,42"],
+body.client-admin-theme main div[style*="background: rgba(255,255,255,0.02"],
+body.client-admin-theme main div[style*="background:rgba(255,255,255,0.02"],
+body.client-admin-theme main div[style*="background: rgba(255,255,255,0.03"],
+body.client-admin-theme main div[style*="background:rgba(255,255,255,0.03"],
+body.client-admin-theme main div[style*="background: rgba(255,255,255,0.04"],
+body.client-admin-theme main div[style*="background:rgba(255,255,255,0.04"],
+body.client-admin-theme main div[style*="background: #0f172a"],
+body.client-admin-theme main div[style*="background:#0f172a"],
+body.client-admin-theme main div[style*="background: #060b18"],
+body.client-admin-theme main div[style*="background:#060b18"],
+body.client-admin-theme main div[style*="background: #1e293b"],
+body.client-admin-theme main div[style*="background:#1e293b"],
+body.client-admin-theme main div[style*="background:rgba(99,102,241,0.03)"],
+body.client-admin-theme main div[style*="background: rgba(99,102,241,0.03)"],
+body.client-admin-theme main div[style*="border-radius"]:not([style*="background: #090d16"]):not([style*="background:#090d16"]):not([style*="linear-gradient"]):not(.welcome-banner-card):not(.welcome-banner-card *),
+body.client-admin-theme main div[style*="borderRadius"]:not([style*="background: #090d16"]):not([style*="background:#090d16"]):not([style*="linear-gradient"]):not(.welcome-banner-card):not(.welcome-banner-card *),
+body.client-admin-theme main div[style*="border-radius:"]:not([style*="background: #090d16"]):not([style*="background:#090d16"]):not([style*="linear-gradient"]):not(.welcome-banner-card):not(.welcome-banner-card *),
+body.client-admin-theme main div[style*="borderRadius:"]:not([style*="background: #090d16"]):not([style*="background:#090d16"]):not([style*="linear-gradient"]):not(.welcome-banner-card):not(.welcome-banner-card *) {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+  color: #1e293b !important;
+}
+
+/* Table rows border colors and list line connectors */
+body.client-admin-theme main div[style*="border-bottom"],
+body.client-admin-theme main div[style*="borderBottom"],
+body.client-admin-theme main div[style*="border: 1px solid rgba(255,255,255"],
+body.client-admin-theme main div[style*="border:1px solid rgba(255,255,255"],
+body.client-admin-theme main div[style*="border: 1px solid rgba(99,102,241"],
+body.client-admin-theme main div[style*="border:1px solid rgba(99,102,241"] {
+  border-color: #cbd5e1 !important;
+}
+
+/* Welcome Banner Card premium high-visibility gradient styling */
+.welcome-banner-card,
+body.client-admin-theme main div[style*="background: #090d16"],
+body.client-admin-theme main div[style*="background:#090d16"],
+main div[style*="background: #090d16"],
+main div[style*="background:#090d16"] {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* All text inside the welcome banner must be white */
+.welcome-banner-card span,
+.welcome-banner-card div,
+body.client-admin-theme main div[style*="background: #090d16"] span,
+body.client-admin-theme main div[style*="background:#090d16"] span,
+main div[style*="background: #090d16"] span,
+main div[style*="background:#090d16"] span {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* Light text color overrides to dark slate inside main content cards (e.g. employee names, labels) */
+body.client-admin-theme main *:not(button):not(a):not(.welcome-banner-card *):not(.welcome-banner-card) {
+  color: #1e293b; /* default fallback for all texts */
+}
+
+body.client-admin-theme main span[style*="color: #cbd5e1"],
+body.client-admin-theme main span[style*="color:#cbd5e1"],
+body.client-admin-theme main span[style*="color: #f1f5f9"],
+body.client-admin-theme main span[style*="color:#f1f5f9"],
+body.client-admin-theme main span[style*="color: #e2e8f0"],
+body.client-admin-theme main span[style*="color:#e2e8f0"],
+body.client-admin-theme main div[style*="color: #cbd5e1"],
+body.client-admin-theme main div[style*="color:#cbd5e1"],
+body.client-admin-theme main div[style*="color: #f1f5f9"],
+body.client-admin-theme main div[style*="color:#f1f5f9"],
+body.client-admin-theme main div[style*="color: #e2e8f0"],
+body.client-admin-theme main div[style*="color:#e2e8f0"] {
+  color: #1e293b !important;
+}
+
+/* Muted colors (description, dates, meta data) */
+body.client-admin-theme main span[style*="color: #64748b"],
+body.client-admin-theme main span[style*="color:#64748b"],
+body.client-admin-theme main div[style*="color: #64748b"],
+body.client-admin-theme main div[style*="color:#64748b"],
+body.client-admin-theme main div[style*="color: #475569"],
+body.client-admin-theme main div[style*="color:#475569"] {
+  color: #475569 !important;
+}
+
+/* Table header row */
+body.client-admin-theme main div[style*="background: rgba(30,41,59,0.5)"],
+body.client-admin-theme main div[style*="background:rgba(30,41,59,0.5)"],
+body.client-admin-theme main tr[style*="background: rgba(255,255,255,0.02)"],
+body.client-admin-theme main tr[style*="background:rgba(255,255,255,0.02)"] {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Column headers text */
+body.client-admin-theme main div[style*="color: #475569"],
+body.client-admin-theme main div[style*="color:#475569"],
+body.client-admin-theme main th {
+  color: #475569 !important;
+}
+
+/* Inputs, textareas, selects */
+body.client-admin-theme main input,
+body.client-admin-theme main select,
+body.client-admin-theme main textarea,
+body.client-admin-theme div[style*="position: fixed"] input,
+body.client-admin-theme div[style*="position: fixed"] select,
+body.client-admin-theme div[style*="position: fixed"] textarea,
+body.client-admin-theme div[style*="position: fixed"] option,
+body.client-admin-theme div[style*="position:fixed"] input,
+body.client-admin-theme div[style*="position:fixed"] select,
+body.client-admin-theme div[style*="position:fixed"] textarea,
+body.client-admin-theme div[style*="position:fixed"] option {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+body.client-admin-theme main input:focus,
+body.client-admin-theme main select:focus,
+body.client-admin-theme main textarea:focus,
+body.client-admin-theme div[style*="position: fixed"] input:focus,
+body.client-admin-theme div[style*="position: fixed"] select:focus,
+body.client-admin-theme div[style*="position: fixed"] textarea:focus,
+body.client-admin-theme div[style*="position:fixed"] input:focus,
+body.client-admin-theme div[style*="position:fixed"] select:focus,
+body.client-admin-theme div[style*="position:fixed"] textarea:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+  outline: none !important;
+}
+
+/* Modals */
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div,
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div *,
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div * {
+  color: #1e293b;
+}
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button,
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button {
+  color: #ffffff; /* keep buttons readable */
+}
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button[style*="background: none"],
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button[style*="background:none"],
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button[style*="background: rgba(255,255,255,0.05)"],
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button[style*="background:rgba(255,255,255,0.05)"] {
+  color: #64748b !important; /* cancel/close buttons */
+}
+
+/* Popups / dropdown select menus */
+body.client-admin-theme div[style*="position: fixed"][style*="z-index: 2000"],
+body.client-admin-theme div[style*="position: fixed"][style*="zIndex: 2000"] {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+}
+body.client-admin-theme div[style*="position: fixed"][style*="z-index: 2000"] button,
+body.client-admin-theme div[style*="position: fixed"][style*="zIndex: 2000"] button {
+  background: none !important;
+  color: #1e293b !important;
+}
+body.client-admin-theme div[style*="position: fixed"][style*="z-index: 2000"] button:hover,
+body.client-admin-theme div[style*="position: fixed"][style*="zIndex: 2000"] button:hover {
+  background: #f1f5f9 !important;
+}
+
+
+/* High-visibility placeholder styling for the sidebar searchbox input */
+.no-scrollbar input::placeholder {
+  color: rgba(255, 255, 255, 0.75) !important;
+  opacity: 1 !important;
+}
+
+/* -------------------------------------------------------------
+   Global Hiding of Number Input Spinner Arrows
+------------------------------------------------------------- */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input[type=number] {
+  -moz-appearance: textfield !important;
+}
+
+/* -------------------------------------------------------------
+   Groww-Style Input Box UI
+------------------------------------------------------------- */
+.groww-input-box {
+  display: inline-flex;
+  align-items: center;
+  background: #eefcf6;
+  border: 1px solid #a7f3d0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  transition: all 0.2s ease;
+}
+
+.groww-input-box:focus-within {
+  border-color: #10b981;
+  background: #e6f7ef;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+}
+
+.groww-input-box .groww-prefix,
+.groww-input-box .groww-suffix {
+  color: #00b386;
+  font-weight: 700;
+  font-size: 13px;
+  user-select: none;
+}
+
+.groww-input-box input {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #00b386 !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  width: 100%;
+}

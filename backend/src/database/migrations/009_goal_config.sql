@@ -1,0 +1,4 @@
+ALTER TABLE client_admins
+  ADD COLUMN IF NOT EXISTS allow_employee_goal BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS allow_manager_goal  BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS allow_admin_goal    BOOLEAN NOT NULL DEFAULT true;
