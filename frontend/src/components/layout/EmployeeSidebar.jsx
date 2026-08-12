@@ -78,6 +78,7 @@ export default function EmployeeSidebar({ active }) {
   const baseLinks = [
     { id: 'dashboard',      icon: '🏠', label: 'Dashboard',        path: '/employee/dashboard' },
     (isEnabled('goals') || isEnabled('performance')) && { id: 'performance', icon: '🎯', label: 'My Performance', path: '/employee/performance' },
+    isEnabled('performance') && { id: 'pip', icon: '📈', label: 'My PIP', path: '/employee/pip' },
     isEnabled('attendance')  && { id: 'attendance',     icon: '🕐', label: 'My Attendance',    path: '/employee/attendance' },
     isEnabled('leave')       && {
       id: 'leave-management-group',

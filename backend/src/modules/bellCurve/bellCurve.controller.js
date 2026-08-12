@@ -78,8 +78,8 @@ async function handleGetBuckets(req, res, next) {
 async function handleGenerateBellCurve(req, res, next) {
   try {
     const orgId = req.user.organizationId;
-    const { cycleId, configId } = req.body;
-    const data = await service.generateBellCurve(orgId, cycleId, configId, req.user);
+    const { cycleId, configId, scopeType, scopeReferenceId } = req.body;
+    const data = await service.generateBellCurve(orgId, { cycleId, configurationId: configId, scopeType, scopeReferenceId }, req.user);
     res.json({ success: true, data });
   } catch (err) {
     next(err);

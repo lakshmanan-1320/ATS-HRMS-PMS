@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Typography, Row, Col, Select, Button, Space, Tag, Divider, Empty, Spin, message, Alert } from 'antd';
 import {
   FiPlay, FiLock, FiUnlock, FiCheckCircle, FiUsers, FiSliders, FiCheck,
-  FiGrid, FiLayers, FiArrowRight, FiInfo, FiActivity, FiStar, FiAlertCircle
+  FiGrid, FiLayers, FiArrowRight, FiInfo, FiActivity, FiStar, FiAlertCircle, FiGlobe
 } from 'react-icons/fi';
 import * as api from '../../api/bellCurve.api';
 import BellCurveResults from './BellCurveResults';
@@ -26,6 +26,11 @@ export default function BellCurveDashboard() {
   const [results, setResults] = useState([]);
   const [buckets, setBuckets] = useState([]);
 
+  // Calibration Scope selectors state
+  const [scopeType, setScopeType] = useState('ORGANIZATION');
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
+  const [departments, setDepartments] = useState([]);
+
   // Active Workspace Sub-Tab ('board' or 'grid')
   const [workspaceTab, setWorkspaceTab] = useState('board');
 
@@ -44,14 +49,16 @@ export default function BellCurveDashboard() {
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      const [fyRes, configRes, cycleRes] = await Promise.all([
+      const [fyRes, configRes, cycleRes, deptRes] = await Promise.all([
         api.getFinancialYears(),
         api.listConfigurations(),
-        api.getAppraisalCycles()
+        api.getAppraisalCycles(),
+        api.getDepartments()
       ]);
 
       setFys(fyRes.data || []);
       setConfigs(configRes.data || []);
+      setDepartments(deptRes || []);
 
       if (configRes.data && configRes.data.length > 0) {
         const def = configRes.data.find(c => c.is_default) || configRes.data[0];
@@ -150,10 +157,19 @@ export default function BellCurveDashboard() {
       message.warning('Please select a configuration template first.');
       return;
     }
+    if (scopeType === 'DEPARTMENT' && !selectedDepartmentId) {
+      message.warning('Please select a department for department-scoped calibration.');
+      return;
+    }
 
     try {
       setLoadingResults(true);
-      const res = await api.generateBellCurve(selectedCycleId, selectedConfigId);
+      const res = await api.generateBellCurve({
+        cycleId: selectedCycleId,
+        configId: selectedConfigId,
+        scopeType,
+        scopeReferenceId: scopeType === 'DEPARTMENT' ? selectedDepartmentId : null
+      });
       message.success(`Bell Curve Run #${res.data.run_number} generated successfully.`);
       await loadRunsForCycle(selectedCycleId);
     } catch (err) {
@@ -358,7 +374,38 @@ export default function BellCurveDashboard() {
         
         {/* Step-based Top Toolbar */}
         <Card style={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)', background: '#fff' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+          {/* Calibration Scope selector row */}
+          <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 24, borderBottom: '1px dashed #e2e8f0', paddingBottom: 16 }}>
+            <div>
+              <Text style={{ fontSize: 11, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Calibration Scope</Text>
+              <Select
+                value={scopeType}
+                onChange={(val) => {
+                  setScopeType(val);
+                  if (val === 'ORGANIZATION') setSelectedDepartmentId(null);
+                }}
+                style={{ width: 180 }}
+                options={[
+                  { value: 'ORGANIZATION', label: <Space><FiGlobe style={{ verticalAlign: 'middle', color: '#6366f1' }} /> Organization</Space> },
+                  { value: 'DEPARTMENT', label: <Space><FiLayers style={{ verticalAlign: 'middle', color: '#0f766e' }} /> Department</Space> }
+                ]}
+              />
+            </div>
+            {scopeType === 'DEPARTMENT' && (
+              <div>
+                <Text style={{ fontSize: 11, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Department</Text>
+                <Select
+                  placeholder="Select department..."
+                  value={selectedDepartmentId}
+                  onChange={(val) => setSelectedDepartmentId(val)}
+                  style={{ width: 240 }}
+                  options={departments.map(d => ({ value: d.department_id, label: d.name }))}
+                />
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justify: 'space-between', flexWrap: 'wrap', gap: 20 }}>
             {/* Step 1 */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '1 1 200px' }}>
               <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#6366f1', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 13 }}>
@@ -502,6 +549,17 @@ export default function BellCurveDashboard() {
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 12px' }}>
+                      <div style={{ gridColumn: 'span 2' }}>
+                        <Text style={{ fontSize: 11, color: '#94a3b8', display: 'block', fontWeight: 700 }}>CALIBRATION SCOPE</Text>
+                        <Text style={{ fontSize: 13, fontWeight: 800, color: '#4f46e5' }}>
+                          {selectedRun.scope_type === 'DEPARTMENT' ? (
+                            <Space><FiLayers style={{ verticalAlign: 'middle', color: '#0f766e' }} /> Department: {selectedRun.department_name || '—'}</Space>
+                          ) : (
+                            <Space><FiGlobe style={{ verticalAlign: 'middle', color: '#6366f1' }} /> Organization</Space>
+                          )}
+                        </Text>
+                      </div>
+
                       <div>
                         <Text style={{ fontSize: 11, color: '#94a3b8', display: 'block', fontWeight: 700 }}>RUN STATUS</Text>
                         <Tag color={selectedRun.status === 'FROZEN' ? 'blue' : selectedRun.status === 'PUBLISHED' ? 'green' : 'orange'} style={{ margin: '4px 0 0 0', fontWeight: 700, borderRadius: 6 }}>

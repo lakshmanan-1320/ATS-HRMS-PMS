@@ -147,21 +147,22 @@ async function getLatestRunNumber(cycleId) {
   return parseInt(res.rows[0].max_run, 10);
 }
 
-async function createRun(configId, cycleId, runNumber, status, userId) {
+async function createRun(configId, cycleId, runNumber, status, userId, scopeType = 'ORGANIZATION', scopeReferenceId = null) {
   const res = await query(
-    `INSERT INTO bell_curve_runs (configuration_id, appraisal_cycle_id, run_number, status, generated_by)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO bell_curve_runs (configuration_id, appraisal_cycle_id, run_number, status, generated_by, scope_type, scope_reference_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING *`,
-    [configId, cycleId, runNumber, status || 'DRAFT', userId]
+    [configId, cycleId, runNumber, status || 'DRAFT', userId, scopeType, scopeReferenceId]
   );
   return res.rows[0];
 }
 
 async function getRunById(orgId, runId) {
   const res = await query(
-    `SELECT r.*, c.organization_id
+    `SELECT r.*, c.organization_id, d.name AS department_name
      FROM bell_curve_runs r
      JOIN bell_curve_configurations c ON r.configuration_id = c.configuration_id
+     LEFT JOIN departments d ON r.scope_reference_id = d.department_id
      WHERE r.run_id = $1 AND c.organization_id = $2`,
     [runId, orgId]
   );
@@ -170,10 +171,11 @@ async function getRunById(orgId, runId) {
 
 async function getRunsByCycle(orgId, cycleId) {
   const res = await query(
-    `SELECT r.*, u.email AS generated_by_email
+    `SELECT r.*, u.email AS generated_by_email, d.name AS department_name
      FROM bell_curve_runs r
      JOIN bell_curve_configurations c ON r.configuration_id = c.configuration_id
      LEFT JOIN users u ON r.generated_by = u.user_id
+     LEFT JOIN departments d ON r.scope_reference_id = d.department_id
      WHERE r.appraisal_cycle_id = $1 AND c.organization_id = $2
      ORDER BY r.run_number DESC`,
     [cycleId, orgId]
@@ -192,21 +194,35 @@ async function updateRunStatus(runId, status) {
   return res.rows[0];
 }
 
-async function getFinalizedAppraisalScores(orgId, cycleId) {
-  const res = await query(
-    `SELECT ma.employee_id, ma.final_score
+async function getEmployeesForCalibration({ organizationId, appraisalCycleId, scopeType, scopeReferenceId }) {
+  let sql = `
+     SELECT ma.employee_id, ma.final_score
      FROM manager_appraisals ma
      JOIN employees e ON ma.employee_id = e.employee_id
      WHERE e.organization_id = $1 
        AND ma.cycle_id = $2 
        AND ma.status = 'submitted' 
-       AND ma.final_score IS NOT NULL`,
-    [orgId, cycleId]
-  );
+       AND ma.final_score IS NOT NULL
+  `;
+  const params = [organizationId, appraisalCycleId];
+  if (scopeType === 'DEPARTMENT' && scopeReferenceId) {
+    sql += ` AND e.department_id = $3`;
+    params.push(scopeReferenceId);
+  }
+
+  const res = await query(sql, params);
   return res.rows.map(r => ({
     employee_id: r.employee_id,
     final_score: parseFloat(r.final_score)
   }));
+}
+
+async function verifyDepartmentBelongsToOrg(orgId, deptId) {
+  const res = await query(
+    `SELECT department_id FROM departments WHERE department_id = $1 AND organization_id = $2`,
+    [deptId, orgId]
+  );
+  return res.rows.length > 0;
 }
 
 async function bulkInsertResults(orgId, runId, results) {
@@ -294,7 +310,8 @@ module.exports = {
   getRunById,
   getRunsByCycle,
   updateRunStatus,
-  getFinalizedAppraisalScores,
+  getEmployeesForCalibration,
+  verifyDepartmentBelongsToOrg,
   bulkInsertResults,
   getResultsByRun,
   updateResultOverride,
