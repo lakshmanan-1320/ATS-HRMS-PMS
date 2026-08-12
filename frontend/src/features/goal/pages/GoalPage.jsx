@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { FiBriefcase, FiBarChart2, FiBook, FiTrendingUp, FiLock, FiUsers, FiGrid, FiGlobe, FiUpload, FiUser, FiAlertTriangle } from 'react-icons/fi'
-import { useAuthStore } from '../../auth/store'
+import { useAuthStore } from '../../../store/auth.store'
 import { useGoalStore } from '../goal.store'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar'

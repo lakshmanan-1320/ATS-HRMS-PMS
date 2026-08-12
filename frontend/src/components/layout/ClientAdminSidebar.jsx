@@ -61,6 +61,12 @@ export default function ClientAdminSidebar({ active }) {
       icon: FiTrendingUp,
       label: 'Bell Curve Calibration',
       path: '/client-admin/bell-curve'
+    },
+    isEnabled('performance') && {
+      id: 'pip',
+      icon: FiActivity,
+      label: 'Performance PIP',
+      path: '/client-admin/pip'
     }
   ].filter(Boolean)
 

@@ -105,7 +105,20 @@ async function getBuckets(orgId, configId) {
   return await repo.getBuckets(configId);
 }
 
-async function generateBellCurve(orgId, cycleId, configId, userContext) {
+async function generateBellCurve(orgId, { cycleId, configurationId, scopeType = 'ORGANIZATION', scopeReferenceId = null }, userContext) {
+  // Validate department_id if scope_type is DEPARTMENT
+  if (scopeType === 'DEPARTMENT') {
+    if (!scopeReferenceId) {
+      throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Department ID is required for department-scoped calibration.');
+    }
+    const belongs = await repo.verifyDepartmentBelongsToOrg(orgId, scopeReferenceId);
+    if (!belongs) {
+      throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Selected department does not exist or belong to this organization.');
+    }
+  } else {
+    scopeReferenceId = null; // Ensure null if organization scope
+  }
+
   // 1. Fetch Cycle details and validate finalized status
   const cycle = await repo.getAppraisalCycleDetails(orgId, cycleId);
   if (!cycle) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Appraisal cycle not found.');
@@ -114,6 +127,7 @@ async function generateBellCurve(orgId, cycleId, configId, userContext) {
   }
 
   // 2. Fetch Config & Buckets
+  const configId = configurationId;
   const config = await repo.getConfiguration(orgId, configId);
   if (!config) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Bell Curve Configuration not found.');
 
@@ -128,10 +142,16 @@ async function generateBellCurve(orgId, cycleId, configId, userContext) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Total bucket percentages must equal exactly 100%.');
   }
 
-  // 3. Fetch Final Appraisal Scores
-  const scores = await repo.getFinalizedAppraisalScores(orgId, cycleId);
-  if (scores.length === 0) {
-    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'No completed appraisal scores found for this cycle.');
+  // 3. Fetch Final Appraisal Scores with scope filtering
+  const scores = await repo.getEmployeesForCalibration({
+    organizationId: orgId,
+    appraisalCycleId: cycleId,
+    scopeType,
+    scopeReferenceId
+  });
+  
+  if (scores.length < 5) {
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, `Calibration scope must contain at least 5 completed appraisals. Found: ${scores.length}`);
   }
 
   // 4. Sort scores descending
@@ -200,7 +220,7 @@ async function generateBellCurve(orgId, cycleId, configId, userContext) {
 
   // 6. Create run index version
   const nextRunNumber = (await repo.getLatestRunNumber(cycleId)) + 1;
-  const run = await repo.createRun(configId, cycleId, nextRunNumber, 'DRAFT', userContext.id);
+  const run = await repo.createRun(configId, cycleId, nextRunNumber, 'DRAFT', userContext.id, scopeType, scopeReferenceId);
 
   // 7. Bulk Insert Results linked to run
   await repo.bulkInsertResults(orgId, run.run_id, results);

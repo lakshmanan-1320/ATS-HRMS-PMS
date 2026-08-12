@@ -90,6 +90,8 @@ router.use('/reports', requireAuth, reportsRoutes.routes);
 router.use('/permissions', permissionRoutes.routes);
 router.use('/notifications', notificationRoutes);
 router.use('/client-admin/bell-curve', requireAuth, requireModule('performance'), requireRoles('client_admin', 'hr'), bellCurveRoutes.routes);
+const pipRoutes = require('../modules/pip');
+router.use('/pip', requireAuth, requireModule('performance'), pipRoutes.routes);
 router.use('/profile', profileRoutes.routes);
 router.use('/audit-logs', auditLogRoutes.routes);
 

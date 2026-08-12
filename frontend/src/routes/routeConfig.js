@@ -73,6 +73,8 @@ import ShiftsSchedules from '../features/client-admin/pages/ShiftsSchedules.jsx'
 import ShiftDetails from '../features/client-admin/pages/ShiftDetails.jsx'
 import EmployeeOvertime from '../features/employee-portal/pages/EmployeeOvertime.jsx'
 import ManagerOvertimeApprovals from '../features/employee-portal/pages/ManagerOvertimeApprovals.jsx'
+import PipPortal from '../features/performance/pip/pages/PipPortal.jsx'
+import PipEmployeeView from '../features/performance/pip/pages/PipEmployeeView.jsx'
 
 
 export const publicRoutes = [
@@ -117,6 +119,7 @@ export const employeeRoutes = [
   { path: '/employee/overtime-approvals',     component: ManagerOvertimeApprovals },
   { path: '/employee/team',                   component: MyTeam },
   { path: '/employee/profile',                component: MyProfile },
+  { path: '/employee/pip',                    component: PipEmployeeView },
   { path: '/settings/audit',                  component: AuditLogs },
 ]
 
@@ -155,4 +158,5 @@ export const clientAdminRoutes = [
   { path: '/client-admin/reports',          component: ClientAdminReports },
   { path: '/client-admin/change-password',  component: ClientAdminChangePassword },
   { path: '/client-admin/permissions',      component: PermissionManagement },
+  { path: '/client-admin/pip',              component: PipPortal },
 ]
