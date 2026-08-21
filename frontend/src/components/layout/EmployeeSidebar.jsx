@@ -112,6 +112,10 @@ export default function EmployeeSidebar({ active }) {
     }
   }
 
+  if (sessionStorage.getItem('is_manager') === 'true') {
+    links.push({ id: 'team', icon: '👥', label: 'My Team', path: '/employee/team' })
+  }
+
   // Map emojis to React Icons
   const processedLinks = links.map(link => {
     const icon = iconMap[link.icon] || FiHome
@@ -138,6 +142,8 @@ export default function EmployeeSidebar({ active }) {
 
   processedLinks.forEach(link => {
     if (link.id === 'admin-dashboard' || link.id === 'dashboard') {
+      sections[0].links.push(link)
+    } else if (link.id === 'team') {
       sections[0].links.push(link)
     } else if (['goals', 'appraisal', 'manager-goals', 'manager-appraisal', 'kpi-reviews', 'performance'].includes(link.id)) {
       sections[1].links.push(link)

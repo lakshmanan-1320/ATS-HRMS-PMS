@@ -24,7 +24,8 @@ async function getSettings(orgId) {
       enable_recommendation_engine: true,
       close_threshold_pct: 80.00,
       extend_threshold_pct: 50.00,
-      escalate_threshold_pct: 50.00
+      escalate_threshold_pct: 50.00,
+      appraisal_trigger_threshold_pct: 50.00
     });
   }
   const buckets = await repo.getBellCurveSettings(orgId);
@@ -87,7 +88,7 @@ async function createCandidate(orgId, data, userContext) {
 
   const candidate = await repo.createCandidate(orgId, {
     ...data,
-    appraisal_score: appraisalScore,
+    appraisal_score: data.appraisal_score !== undefined && data.appraisal_score !== null ? data.appraisal_score : appraisalScore,
     created_by: userContext.id
   });
 
@@ -106,7 +107,7 @@ async function createCandidate(orgId, data, userContext) {
   if (candidate.source === 'MANAGER_RECOMMENDATION') {
     await notificationService.notifyApprovalPending(orgId, candidate.employee_id, candidate.candidate_id);
   } else {
-    await notificationService.notifyCandidateIdentified(orgId, candidate.employee_id, source);
+    await notificationService.notifyCandidateIdentified(orgId, candidate.employee_id, candidate.source);
   }
 
   return candidate;

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
@@ -13,6 +13,10 @@ api.interceptors.request.use(cfg => {
 export default function MyTeam() {
   const [team, setTeam] = useState([])
   const [loading, setLoading] = useState(true)
+  const [settings, setSettings] = useState(null)
+  const [selectedMember, setSelectedMember] = useState(null)
+  const [reason, setReason] = useState('')
+  const [submitting, setSubmitting] = useState(false)
   const isManager = sessionStorage.getItem('is_manager') === 'true'
 
   useEffect(() => {
@@ -22,6 +26,33 @@ export default function MyTeam() {
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [isManager])
+
+  useEffect(() => {
+    if (!isManager) return
+    api.get('/pip/settings')
+      .then(res => setSettings(res.data?.data || null))
+      .catch(err => console.error('Failed to load PIP settings:', err))
+  }, [isManager])
+
+  const handleRecommend = async () => {
+    if (!reason.trim()) return
+    setSubmitting(true)
+    try {
+      await api.post('/pip/candidates', {
+        employee_id: selectedMember.id,
+        source: 'MANAGER_RECOMMENDATION',
+        recommendation_reason: reason.trim()
+      })
+      alert(`Successfully recommended ${selectedMember.first_name} ${selectedMember.last_name} for a PIP.`)
+      setSelectedMember(null)
+      setReason('')
+    } catch (err) {
+      console.error(err)
+      alert(err.response?.data?.message || 'Failed to submit recommendation.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
@@ -94,12 +125,119 @@ export default function MyTeam() {
                       Also a Manager
                     </div>
                   )}
+                  {settings?.allow_manager_initiation && (
+                    <button 
+                      onClick={() => setSelectedMember(member)}
+                      style={{
+                        marginTop: '12px',
+                        width: '100%',
+                        padding: '8px 12px',
+                        background: '#fee2e2',
+                        border: '1px solid #fca5a5',
+                        borderRadius: '8px',
+                        color: '#b91c1c',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseOver={(e) => { e.currentTarget.style.background = '#fecaca' }}
+                      onMouseOut={(e) => { e.currentTarget.style.background = '#fee2e2' }}
+                    >
+                      ⚠️ Recommend for PIP
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
           </>
         )}
       </main>
+      
+      {selectedMember && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(15, 23, 42, 0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1000,
+          padding: '16px'
+        }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '12px',
+            width: '100%',
+            maxWidth: '450px',
+            padding: '24px',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          }}>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>
+              Recommend for PIP
+            </h3>
+            <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#64748b' }}>
+              Recommend <strong>{selectedMember.first_name} {selectedMember.last_name}</strong> for a Performance Improvement Plan.
+            </p>
+            
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#334155', marginBottom: '6px' }}>
+                Reason for Recommendation *
+              </label>
+              <textarea
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                rows={4}
+                placeholder="Please describe the performance issues or reasons for recommending a PIP..."
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  border: '1px solid #cbd5e1',
+                  fontSize: '13px',
+                  fontFamily: 'inherit',
+                  resize: 'vertical',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button
+                onClick={() => { setSelectedMember(null); setReason(''); }}
+                disabled={submitting}
+                style={{
+                  padding: '8px 16px',
+                  background: '#f1f5f9',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#475569',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRecommend}
+                disabled={submitting || !reason.trim()}
+                style={{
+                  padding: '8px 16px',
+                  background: '#dc2626',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#ffffff',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  opacity: (submitting || !reason.trim()) ? 0.6 : 1
+                }}
+              >
+                {submitting ? 'Submitting...' : 'Submit'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   </div>
   )

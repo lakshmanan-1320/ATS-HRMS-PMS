@@ -2,6 +2,33 @@ const ApiError = require('../../utils/apiError');
 const { STATUS_CODES } = require('../../constants/statusCodes');
 
 function validateSettings(req, res, next) {
+  // Set defaults for optional boolean parameters if undefined
+  if (req.body.enable_pip === undefined) req.body.enable_pip = true;
+  if (req.body.allow_manager_initiation === undefined) req.body.allow_manager_initiation = false;
+  if (req.body.require_hr_approval === undefined) req.body.require_hr_approval = false;
+  if (req.body.allow_manual_creation === undefined) req.body.allow_manual_creation = false;
+  if (req.body.enable_monitoring === undefined) req.body.enable_monitoring = true;
+  if (req.body.allow_extension === undefined) req.body.allow_extension = false;
+  if (req.body.enable_recommendation_engine === undefined) req.body.enable_recommendation_engine = false;
+
+  // Set defaults for optional numeric/frequency parameters if undefined or null
+  if (req.body.max_extension_count === undefined || req.body.max_extension_count === null) req.body.max_extension_count = 2;
+  if (req.body.default_duration_days === undefined || req.body.default_duration_days === null) req.body.default_duration_days = 60;
+  if (req.body.default_checkin_frequency === undefined || req.body.default_checkin_frequency === null) req.body.default_checkin_frequency = 'WEEKLY';
+  if (req.body.reminder_frequency_days === undefined || req.body.reminder_frequency_days === null) req.body.reminder_frequency_days = 7;
+  
+  if (req.body.close_threshold_pct === undefined || req.body.close_threshold_pct === null) req.body.close_threshold_pct = 80.00;
+  if (req.body.extend_threshold_pct === undefined || req.body.extend_threshold_pct === null) req.body.extend_threshold_pct = 50.00;
+  if (req.body.escalate_threshold_pct === undefined || req.body.escalate_threshold_pct === null) req.body.escalate_threshold_pct = 50.00;
+  
+  if (req.body.monitoring_duration_days === undefined || req.body.monitoring_duration_days === null) req.body.monitoring_duration_days = 30;
+  if (req.body.monitoring_checkin_frequency === undefined || req.body.monitoring_checkin_frequency === null) req.body.monitoring_checkin_frequency = 'WEEKLY';
+  if (req.body.monitoring_max_extension_count === undefined || req.body.monitoring_max_extension_count === null) req.body.monitoring_max_extension_count = 1;
+  if (req.body.monitoring_close_threshold_pct === undefined || req.body.monitoring_close_threshold_pct === null) req.body.monitoring_close_threshold_pct = 80.00;
+  if (req.body.monitoring_extend_threshold_pct === undefined || req.body.monitoring_extend_threshold_pct === null) req.body.monitoring_extend_threshold_pct = 50.00;
+  if (req.body.monitoring_convert_threshold_pct === undefined || req.body.monitoring_convert_threshold_pct === null) req.body.monitoring_convert_threshold_pct = 50.00;
+  if (req.body.appraisal_trigger_threshold_pct === undefined || req.body.appraisal_trigger_threshold_pct === null) req.body.appraisal_trigger_threshold_pct = 50.00;
+
   const {
     enable_pip,
     allow_manager_initiation,
@@ -22,7 +49,8 @@ function validateSettings(req, res, next) {
     monitoring_max_extension_count,
     monitoring_close_threshold_pct,
     monitoring_extend_threshold_pct,
-    monitoring_convert_threshold_pct
+    monitoring_convert_threshold_pct,
+    appraisal_trigger_threshold_pct
   } = req.body;
 
   if (typeof enable_pip !== 'boolean') return next(new ApiError(STATUS_CODES.BAD_REQUEST, 'enable_pip must be a boolean.'));
@@ -50,10 +78,14 @@ function validateSettings(req, res, next) {
   const closePct = parseFloat(close_threshold_pct);
   const extendPct = parseFloat(extend_threshold_pct);
   const escalatePct = parseFloat(escalate_threshold_pct);
+  const appraisalTriggerPct = parseFloat(appraisal_trigger_threshold_pct);
 
   if (isNaN(closePct) || closePct < 0 || closePct > 100) return next(new ApiError(STATUS_CODES.BAD_REQUEST, 'close_threshold_pct must be between 0 and 100.'));
   if (isNaN(extendPct) || extendPct < 0 || extendPct > 100) return next(new ApiError(STATUS_CODES.BAD_REQUEST, 'extend_threshold_pct must be between 0 and 100.'));
   if (isNaN(escalatePct) || escalatePct < 0 || escalatePct > 100) return next(new ApiError(STATUS_CODES.BAD_REQUEST, 'escalate_threshold_pct must be between 0 and 100.'));
+  if (!isNaN(appraisalTriggerPct) && (appraisalTriggerPct < 0 || appraisalTriggerPct > 100)) {
+    return next(new ApiError(STATUS_CODES.BAD_REQUEST, 'appraisal_trigger_threshold_pct must be between 0 and 100.'));
+  }
 
   if (monitoring_duration_days !== undefined) {
     if (typeof monitoring_duration_days !== 'number' || monitoring_duration_days <= 0) {
