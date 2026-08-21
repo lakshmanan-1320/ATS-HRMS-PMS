@@ -1,0 +1,179 @@
+/* src/features/ats/pipeline/pages/Pipeline.css */
+
+.pipeline-page {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+.pipeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.pipeline-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.pipeline-header p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+.pipeline-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.pipeline-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ================= BOARD ================= */
+
+.pipeline-board {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.pipeline-board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.pipeline-board::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 20px;
+}
+
+/* ================= COLUMN ================= */
+
+.pipeline-column {
+  min-width: 300px;
+  background: #eef3fa;
+  border-radius: 14px;
+}
+
+.pipeline-column-header {
+  background: white;
+  padding: 18px;
+  border-radius: 14px 14px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pipeline-column-header h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #111827;
+}
+
+.pipeline-column-header span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ================= LIST ================= */
+
+.pipeline-list {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ================= CARD ================= */
+
+.pipeline-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  transition: .25s;
+}
+
+.pipeline-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.candidate-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.candidate-details {
+  flex: 1;
+}
+
+.candidate-details h5 {
+  margin: 0;
+  font-size: 15px;
+  color: #111827;
+}
+
+.candidate-details p {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.pipeline-card button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #2563eb;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.pipeline-card button:hover {
+  background: #2563eb;
+  color: white;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .pipeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .pipeline-column {
+    min-width: 280px;
+  }
+
+}
