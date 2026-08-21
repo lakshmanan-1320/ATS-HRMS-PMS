@@ -40,6 +40,7 @@ import AppraisalCycles from '../features/appraisal/pages/AppraisalCycles.jsx'
 import GoalCategoryConfig from '../features/client-admin/pages/GoalCategoryConfig.jsx'
 import PerformanceHub from '../features/client-admin/pages/PerformanceHub.jsx'
 import BellCurvePage from '../features/client-admin/pages/BellCurve/BellCurvePage.jsx'
+import NineBoxPage from '../features/client-admin/pages/NineBoxGrid/NineBoxPage.jsx';
 import EmployeePerformanceHub from '../features/employee-portal/pages/EmployeePerformanceHub.jsx'
 import LeaveTypesConfig from '../features/client-admin/pages/LeaveTypesConfig.jsx'
 import LeaveSettingsConfig from '../features/client-admin/pages/LeaveSettingsConfig.jsx'
@@ -134,6 +135,7 @@ export const clientAdminRoutes = [
   { path: '/client-admin/org-chart', component: OrgChart },
   { path: '/client-admin/performance', component: PerformanceHub },
   { path: '/client-admin/bell-curve', component: BellCurvePage },
+  { path: '/client-admin/nine-box', component: NineBoxPage },
   { path: '/client-admin/leave',          component: LeaveTypesConfig },
   { path: '/client-admin/leave-settings', component: LeaveSettingsConfig },
   { path: '/client-admin/leave/plans',    component: LeavePlansConfig },

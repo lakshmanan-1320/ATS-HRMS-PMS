@@ -1,0 +1,231 @@
+/* src/features/ats/offer/pages/Offers.css */
+
+.offers-page {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+.offers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.offers-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.offers-header p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+.offer-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.offer-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ================= SEARCH ================= */
+
+.offers-toolbar {
+  margin-bottom: 24px;
+}
+
+.offer-search {
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #dbe3ee;
+  border-radius: 10px;
+  padding: 0 15px;
+}
+
+.offer-search svg {
+  color: #6b7280;
+}
+
+.offer-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 13px;
+  background: transparent;
+  font-size: 15px;
+}
+
+/* ================= GRID ================= */
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* ================= CARD ================= */
+
+.offer-card {
+  background: white;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+  transition: .3s;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.offer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.offer-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+.offer-card h3 {
+  margin: 18px 0 6px;
+  color: #111827;
+}
+
+.offer-card p {
+  margin: 0;
+  color: #6b7280;
+}
+
+/* ================= DETAILS ================= */
+
+.offer-details {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.offer-details div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #374151;
+}
+
+.offer-details svg {
+  color: #2563eb;
+  width: 18px;
+}
+
+/* ================= STATUS ================= */
+
+.offer-status {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.offer-status.accepted {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.offer-status.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.offer-status.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ================= ACTIONS ================= */
+
+.offer-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.offer-actions button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.offer-actions button:first-child {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.offer-actions button:last-child {
+  background: #2563eb;
+  color: white;
+}
+
+.offer-actions button:hover {
+  transform: translateY(-2px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .offers-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-search {
+    max-width: 100%;
+  }
+
+  .offer-actions {
+    flex-direction: column;
+  }
+
+}
