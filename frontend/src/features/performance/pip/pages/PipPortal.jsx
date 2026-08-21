@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Tag, Progress, Button, Space, Typography, Spin, Modal, Form, Input, Select, Switch, Row, Col, Statistic, Alert, InputNumber, Divider, List, message } from 'antd';
+import { Card, Table, Tag, Progress, Button, Space, Typography, Spin, Modal, Form, Input, Select, Switch, Row, Col, Statistic, Alert, InputNumber, Divider, List, message, Tabs, Collapse } from 'antd';
 import { 
   FiActivity, FiUsers, FiClipboard, FiSettings, FiCheckCircle, FiXCircle, 
   FiAlertTriangle, FiPlus, FiTrash2, FiFileText, FiRefreshCw, FiBook, FiUpload, FiDownload, FiUser
@@ -47,6 +47,8 @@ export default function PipPortal() {
   const [isLaunchModalOpen, setIsLaunchModalOpen] = useState(false);
   const [launchCandidate, setLaunchCandidate] = useState(null);
   const [launchForm] = Form.useForm();
+  const [selectedMetrics, setSelectedMetrics] = useState([]);
+  const [totalWeight, setTotalWeight] = useState(0);
 
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
   const [selectedCheckin, setSelectedCheckin] = useState(null);
@@ -142,6 +144,18 @@ export default function PipPortal() {
   };
 
   const handleSaveTemplate = async (values) => {
+    const maxDuration = settings?.default_duration_days || 60;
+    if (values.duration_days > maxDuration) {
+      message.error(`Template duration (${values.duration_days} days) cannot exceed the default PIP duration limit of ${maxDuration} days configured in Settings.`);
+      return;
+    }
+
+    const sum = (values.metrics || []).reduce((acc, m) => acc + (parseFloat(m.weight) || 0), 0);
+    if (values.metrics && values.metrics.length > 0 && Math.round(sum) !== 100) {
+      message.error(`Total metric weights must sum to exactly 100%. Current sum is ${sum}%.`);
+      return;
+    }
+
     try {
       if (editingTemplate) {
         await updateTemplate(editingTemplate.template_id, values);
@@ -235,11 +249,13 @@ export default function PipPortal() {
         launchForm.resetFields();
         launchForm.setFieldsValue({
           status: values.status, // APPROVED_PIP or MONITORING
-          checkin_frequency: 'WEEKLY',
+          checkin_frequency: undefined,
           start_date: new Date().toISOString().split('T')[0],
-          end_date: new Date(Date.now() + 60*24*60*60*1000).toISOString().split('T')[0],
+          end_date: undefined,
           reason: selectedCandidate.recommendation_reason || 'Performance improvement required.'
         });
+        setSelectedMetrics([]);
+        setTotalWeight(0);
         setIsReviewModalOpen(false);
         setIsLaunchModalOpen(true);
       }
@@ -248,40 +264,110 @@ export default function PipPortal() {
     }
   };
 
-  const handleLaunchPip = async (values) => {
-    try {
-      let selectedTemplateMetrics = [];
-      if (values.template_id) {
-        const temp = templates.find(t => t.template_id === values.template_id);
-        if (temp) {
-          selectedTemplateMetrics = temp.metrics.map(m => ({
-            metric_name: m.metric_name,
-            metric_source: m.metric_source,
-            metric_key: m.metric_key,
-            target_type: m.target_type,
-            target_value: m.default_target,
-            weight: m.weight,
-            display_order: m.display_order,
-            required: m.required,
-            direction: m.direction || 'HIGHER_IS_BETTER',
-            calculation_type: m.calculation_type || 'HIGHER_IS_BETTER',
-            measurement_frequency: m.measurement_frequency || 'WEEKLY',
-            is_active: m.is_active !== false
-          }));
-        }
-      }
+  const handleTemplateChange = (templateId) => {
+    const temp = templates.find(t => t.template_id === templateId);
+    if (temp) {
+      const today = new Date();
+      const start = today.toISOString().split('T')[0];
+      const end = new Date(today.getTime() + temp.duration_days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      
+      launchForm.setFieldsValue({
+        checkin_frequency: temp.checkin_frequency || 'WEEKLY',
+        start_date: start,
+        end_date: end
+      });
 
-      if (selectedTemplateMetrics.length === 0) {
-        selectedTemplateMetrics = [{
-          metric_name: 'Overall Core Deliverables',
-          metric_source: 'MANUAL',
-          target_type: 'PERCENTAGE',
-          target_value: 100,
-          weight: 100,
-          display_order: 1,
-          required: true
-        }];
+      // Map template metrics (exclude CUSTOM sources)
+      const mappedMetrics = (temp.metrics || [])
+        .filter(m => m.metric_source !== 'CUSTOM')
+        .map((m, idx) => ({
+          id: m.metric_id || `temp-${idx}-${Date.now()}`,
+          metric_name: m.metric_name,
+          metric_source: m.metric_source,
+          metric_key: m.metric_key,
+          target_type: m.target_type || 'PERCENTAGE',
+          target_value: m.default_target,
+          weight: m.weight,
+          display_order: m.display_order,
+          required: m.required
+        }));
+
+      setSelectedMetrics(mappedMetrics);
+      
+      const sum = mappedMetrics.reduce((acc, m) => acc + (parseFloat(m.weight) || 0), 0);
+      setTotalWeight(sum);
+    } else {
+      setSelectedMetrics([]);
+      setTotalWeight(0);
+    }
+  };
+
+  const handleMetricRowChange = (index, field, value) => {
+    const updated = [...selectedMetrics];
+    updated[index] = { ...updated[index], [field]: value };
+    setSelectedMetrics(updated);
+
+    const sum = updated.reduce((acc, m) => acc + (parseFloat(m.weight) || 0), 0);
+    setTotalWeight(sum);
+  };
+
+  const handleMetricRowDelete = (index) => {
+    const updated = selectedMetrics.filter((_, idx) => idx !== index);
+    setSelectedMetrics(updated);
+    const sum = updated.reduce((acc, m) => acc + (parseFloat(m.weight) || 0), 0);
+    setTotalWeight(sum);
+  };
+
+  const handleAddCustomObjective = () => {
+    const newMetric = {
+      id: `custom-row-${Date.now()}`,
+      metric_name: '',
+      metric_source: 'MANUAL',
+      target_type: 'PERCENTAGE',
+      target_value: 100,
+      weight: 0,
+      required: false
+    };
+    const updated = [...selectedMetrics, newMetric];
+    setSelectedMetrics(updated);
+    const sum = updated.reduce((acc, m) => acc + (parseFloat(m.weight) || 0), 0);
+    setTotalWeight(sum);
+  };
+
+  const handleLaunchPip = async (values) => {
+    if (selectedMetrics.length === 0) {
+      message.error('Please select a template or add at least one metric.');
+      return;
+    }
+
+    const sum = selectedMetrics.reduce((acc, m) => acc + (parseFloat(m.weight) || 0), 0);
+    if (Math.round(sum) !== 100) {
+      message.error(`Total metric weight must be exactly 100%. Current total is ${sum}%.`);
+      return;
+    }
+
+    for (const m of selectedMetrics) {
+      if (!m.metric_name || !m.metric_name.trim()) {
+        message.error('Metric name cannot be empty.');
+        return;
       }
+    }
+
+    try {
+      const metricsPayload = selectedMetrics.map((m, idx) => ({
+        metric_name: m.metric_name,
+        metric_source: m.metric_source,
+        metric_key: m.metric_key || null,
+        target_type: m.target_type || 'PERCENTAGE',
+        target_value: parseFloat(m.target_value) || 0,
+        weight: parseFloat(m.weight) || 0,
+        direction: m.direction || 'HIGHER_IS_BETTER',
+        calculation_type: m.calculation_type || 'HIGHER_IS_BETTER',
+        measurement_frequency: m.measurement_frequency || 'WEEKLY',
+        required: m.required || false,
+        display_order: idx + 1,
+        is_active: true
+      }));
 
       await reviewCandidate(launchCandidate.candidate_id, {
         status: values.status,
@@ -291,7 +377,7 @@ export default function PipPortal() {
         start_date: values.start_date,
         end_date: values.end_date,
         checkin_frequency: values.checkin_frequency,
-        metrics: selectedTemplateMetrics
+        metrics: metricsPayload
       });
 
       message.success('Performance Improvement Plan initiated successfully.');
@@ -299,7 +385,7 @@ export default function PipPortal() {
       fetchPips();
       fetchStatistics();
     } catch (e) {
-      message.error(error || 'Launch failed.');
+      message.error(error || 'Failed to launch plan.');
     }
   };
 
@@ -375,11 +461,51 @@ export default function PipPortal() {
 
   const handleSaveSettings = async (values) => {
     try {
-      await saveSettings(values);
+      const payload = {
+        ...values,
+        enable_pip: settings?.enable_pip !== false
+      };
+      await saveSettings(payload);
       message.success('Settings saved successfully.');
     } catch (e) {
       message.error(error || 'Failed to save settings.');
     }
+  };
+
+  const handleExportCSV = () => {
+    if (!reports || reports.length === 0) {
+      message.warning('No historical reports available to export.');
+      return;
+    }
+
+    message.success('Exporting PIP history to CSV...');
+
+    const headers = ['Employee Name', 'Template', 'Status', 'Start Date', 'End Date', 'Final Progress %', 'HR Remarks'];
+
+    const rows = reports.map(r => [
+      r.employee_name || `${r.first_name || ''} ${r.last_name || ''}`.trim() || '-',
+      r.template_name || '-',
+      r.status || '-',
+      r.start_date || '-',
+      r.end_date || '-',
+      r.overall_progress !== undefined ? `${r.overall_progress}%` : '-',
+      (r.hr_decision_remarks || '-').replace(/"/g, '""')
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(val => `"${val}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `PIP_History_Report_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // --- Render Sections ---
@@ -673,7 +799,7 @@ export default function PipPortal() {
         render: (_, r) => (
           <Space>
             <Button size="small" onClick={() => fetchPip(r.pip_id)}>Manage & Logs</Button>
-            <Button size="small" type="primary" ghost onClick={async () => { await refreshMetrics(r.pip_id); fetchPips(); }}>Sync Metrics</Button>
+            <Button size="small" type="primary" ghost onClick={async () => { await refreshMetrics(r.pip_id); fetchPips(); }}>Sync & Refresh</Button>
           </Space>
         )
       }
@@ -706,7 +832,7 @@ export default function PipPortal() {
         render: (_, r) => (
           <Space>
             <Button size="small" onClick={() => fetchPip(r.pip_id)}>Manage & Logs</Button>
-            <Button size="small" type="primary" ghost onClick={async () => { await refreshMetrics(r.pip_id); fetchPips(); }}>Sync Metrics</Button>
+            <Button size="small" type="primary" ghost onClick={async () => { await refreshMetrics(r.pip_id); fetchPips(); }}>Sync & Refresh</Button>
           </Space>
         )
       }
@@ -769,7 +895,7 @@ export default function PipPortal() {
       <Card 
         title="Historical & Closed Reports" 
         style={{ borderRadius: 12 }}
-        extra={<Button icon={<FiDownload />} onClick={() => message.success('Exporting PIP history to CSV...')}>Export CSV</Button>}
+        extra={<Button icon={<FiDownload />} onClick={handleExportCSV}>Export CSV</Button>}
       >
         <Table columns={columns} dataSource={reports} loading={loading} rowKey="pip_id" />
       </Card>
@@ -786,105 +912,178 @@ export default function PipPortal() {
           onFinish={handleSaveSettings}
           style={{ maxWidth: 800 }}
         >
-          <Form.Item label="Enable PIP Module" name="enable_pip" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Allow Manager Initiated Recommendation" name="allow_manager_initiation" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Require HR Review & Approval" name="require_hr_approval" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Allow Manual HR Candidate Creation" name="allow_manual_creation" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Enable Monitoring State Option" name="enable_monitoring" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Allow PIP Extension" name="allow_extension" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item label="Max Extension Count" name="max_extension_count">
-            <InputNumber min={0} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Default Duration (Days)" name="default_duration_days">
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Default Check-in Frequency" name="default_checkin_frequency">
-            <Select>
-              <Option value="WEEKLY">Weekly</Option>
-              <Option value="BIWEEKLY">Bi-weekly</Option>
-              <Option value="MONTHLY">Monthly</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="Reminder Frequency (Days)" name="reminder_frequency_days">
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Enable Automatic Recommendation Engine" name="enable_recommendation_engine" valuePropName="checked">
-            <Switch />
-          </Form.Item>
+          <Tabs defaultActiveKey="general" type="card" style={{ marginBottom: 24 }}>
+            <Tabs.TabPane tab="General" key="general">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Allow Manager Recommendation" name="allow_manager_initiation" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Require HR Review & Approval" name="require_hr_approval" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </Col>
+              </Row>
 
-          <Divider orientation="left">Recommendation Engine Thresholds</Divider>
-          
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item label="Close Threshold (%)" name="close_threshold_pct">
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Extend Threshold (%)" name="extend_threshold_pct">
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Escalate Threshold (%)" name="escalate_threshold_pct">
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-          </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Allow Manual HR Candidate Creation" name="allow_manual_creation" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Allow PIP Extension" name="allow_extension" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </Col>
+              </Row>
 
-          <Divider orientation="left">Performance Monitoring Configurations</Divider>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Max Extension Count" name="max_extension_count">
+                    <InputNumber min={0} style={{ width: '100%' }} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Default PIP Duration (Days)" name="default_duration_days">
+                    <InputNumber min={1} style={{ width: '100%' }} />
+                  </Form.Item>
+                </Col>
+              </Row>
 
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item label="Default Duration (Days)" name="monitoring_duration_days">
-                <InputNumber min={1} style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Check-in Frequency" name="monitoring_checkin_frequency">
-                <Select style={{ width: '100%' }}>
-                  <Option value="WEEKLY">Weekly</Option>
-                  <Option value="BIWEEKLY">Bi-weekly</Option>
-                  <Option value="MONTHLY">Monthly</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Max Extensions allowed" name="monitoring_max_extension_count">
-                <InputNumber min={0} style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-          </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Default Check-in Frequency" name="default_checkin_frequency">
+                    <Select style={{ width: '100%' }}>
+                      <Select.Option value="WEEKLY">Weekly</Select.Option>
+                      <Select.Option value="BIWEEKLY">Bi-weekly</Select.Option>
+                      <Select.Option value="MONTHLY">Monthly</Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Reminder Frequency (Days)" name="reminder_frequency_days">
+                    <InputNumber min={1} style={{ width: '100%' }} />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Tabs.TabPane>
 
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item label="Closure Success Threshold (%)" name="monitoring_close_threshold_pct">
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+            <Tabs.TabPane tab="Recommendation Rules" key="recommendation">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Enable Automatic Recommendation" name="enable_recommendation_engine" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item 
+                    label="Auto-Flag Appraisal Score Threshold (%)" 
+                    name="appraisal_trigger_threshold_pct"
+                    extra="Automatically flag employee as a PIP Candidate if their final manager appraisal score falls below this percentage."
+                  >
+                    <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.enable_recommendation_engine !== currentValues.enable_recommendation_engine}>
+                {({ getFieldValue }) => {
+                  const isEnabled = getFieldValue('enable_recommendation_engine');
+                  if (!isEnabled) return null;
+                  return (
+                    <Collapse ghost style={{ marginTop: 16 }}>
+                      <Collapse.Panel header="Advanced Threshold Settings (Click to expand)" key="advanced_thresholds">
+                        <Row gutter={16}>
+                          <Col span={8}>
+                            <Form.Item label="Close Threshold (%)" name="close_threshold_pct">
+                              <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item label="Extend Threshold (%)" name="extend_threshold_pct">
+                              <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item label="Escalate Threshold (%)" name="escalate_threshold_pct">
+                              <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Collapse.Panel>
+                    </Collapse>
+                  );
+                }}
               </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="Extension Threshold (%)" name="monitoring_extend_threshold_pct">
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+            </Tabs.TabPane>
+
+            <Tabs.TabPane tab="Monitoring Configuration" key="monitoring">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Enable Monitoring State Option" name="enable_monitoring" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.enable_monitoring !== currentValues.enable_monitoring}>
+                {({ getFieldValue }) => {
+                  const isEnabled = getFieldValue('enable_monitoring');
+                  if (!isEnabled) return null;
+                  return (
+                    <>
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item label="Monitoring Duration (Days)" name="monitoring_duration_days">
+                            <InputNumber min={1} style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Monitoring Check-in Frequency" name="monitoring_checkin_frequency">
+                            <Select style={{ width: '100%' }}>
+                              <Select.Option value="WEEKLY">Weekly</Select.Option>
+                              <Select.Option value="BIWEEKLY">Bi-weekly</Select.Option>
+                              <Select.Option value="MONTHLY">Monthly</Select.Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Monitoring Max Extensions" name="monitoring_max_extension_count">
+                            <InputNumber min={0} style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+
+                      <Collapse ghost style={{ marginTop: 16 }}>
+                        <Collapse.Panel header="Advanced Monitoring Thresholds (Click to expand)" key="advanced_monitoring">
+                          <Row gutter={16}>
+                            <Col span={8}>
+                              <Form.Item label="Closure Success Threshold (%)" name="monitoring_close_threshold_pct">
+                                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                              <Form.Item label="Extension Threshold (%)" name="monitoring_extend_threshold_pct">
+                                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                              <Form.Item label="PIP Conversion Threshold (%)" name="monitoring_convert_threshold_pct">
+                                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        </Collapse.Panel>
+                      </Collapse>
+                    </>
+                  );
+                }}
               </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="PIP Conversion Threshold (%)" name="monitoring_convert_threshold_pct">
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-          </Row>
+            </Tabs.TabPane>
+          </Tabs>
 
           <Button type="primary" htmlType="submit" loading={saving}>Save Settings</Button>
         </Form>
@@ -998,7 +1197,6 @@ export default function PipPortal() {
                         <Option value="GOAL">Goals Progress</Option>
                         <Option value="KPI">KPI Target Completion</Option>
                         <Option value="COMPETENCY">Competency Rating</Option>
-                        <Option value="CUSTOM">Custom Source</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item
@@ -1067,12 +1265,13 @@ export default function PipPortal() {
         open={isLaunchModalOpen}
         onCancel={() => setIsLaunchModalOpen(false)}
         onOk={() => launchForm.submit()}
-        width={600}
+        width={700}
+        okButtonProps={{ disabled: selectedMetrics.length > 0 && Math.round(totalWeight) !== 100 }}
       >
         <Form form={launchForm} layout="vertical" onFinish={handleLaunchPip}>
           <Form.Item name="status" hidden><Input /></Form.Item>
           <Form.Item label="Select Plan Template" name="template_id" rules={[{ required: true, message: 'Please select template' }]}>
-            <Select placeholder="Choose a metric template...">
+            <Select placeholder="Choose a metric template..." onChange={handleTemplateChange}>
               {templates.map(t => <Option key={t.template_id} value={t.template_id}>{t.name}</Option>)}
             </Select>
           </Form.Item>
@@ -1098,6 +1297,84 @@ export default function PipPortal() {
           <Form.Item label="Goal/Objective Description" name="reason" rules={[{ required: true }]}>
             <Input.TextArea placeholder="Describe the specific objectives or development areas..." />
           </Form.Item>
+
+          {selectedMetrics.length > 0 && (
+            <>
+              <Divider orientation="left" style={{ margin: '16px 0 8px 0' }}>Configure Metric Targets & Weights</Divider>
+              
+              <div style={{ maxHeight: 250, overflowY: 'auto', marginBottom: 16 }}>
+                {selectedMetrics.map((metric, index) => (
+                  <Row key={metric.id} gutter={8} align="middle" style={{ marginBottom: 8 }}>
+                    <Col span={8}>
+                      <Input 
+                        value={metric.metric_name}
+                        placeholder="Metric Name"
+                        onChange={(e) => handleMetricRowChange(index, 'metric_name', e.target.value)}
+                      />
+                    </Col>
+                    <Col span={6}>
+                      <Select
+                        value={metric.metric_source}
+                        style={{ width: '100%' }}
+                        onChange={(val) => handleMetricRowChange(index, 'metric_source', val)}
+                      >
+                        <Option value="MANUAL">Manual Input</Option>
+                        <Option value="ATTENDANCE">Attendance %</Option>
+                        <Option value="GOAL">Goals Progress</Option>
+                        <Option value="KPI">KPI Target Completion</Option>
+                        <Option value="COMPETENCY">Competency Rating</Option>
+                      </Select>
+                    </Col>
+                    <Col span={4}>
+                      <InputNumber
+                        value={metric.target_value}
+                        placeholder="Target"
+                        style={{ width: '100%' }}
+                        min={0}
+                        onChange={(val) => handleMetricRowChange(index, 'target_value', val)}
+                      />
+                    </Col>
+                    <Col span={4}>
+                      <InputNumber
+                        value={metric.weight}
+                        placeholder="Weight"
+                        style={{ width: '100%' }}
+                        min={0}
+                        max={100}
+                        onChange={(val) => handleMetricRowChange(index, 'weight', val)}
+                      />
+                    </Col>
+                    <Col span={2} style={{ textAlign: 'center' }}>
+                      <Button 
+                        type="text" 
+                        danger 
+                        icon={<FiTrash2 />} 
+                        onClick={() => handleMetricRowDelete(index)}
+                      />
+                    </Col>
+                  </Row>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <Button type="dashed" icon={<FiPlus />} onClick={handleAddCustomObjective}>
+                  Add Custom Objective
+                </Button>
+                <Typography.Text strong style={{ color: Math.round(totalWeight) === 100 ? '#52c41a' : '#ff4d4f' }}>
+                  Total Weight: {totalWeight}% (Must be 100%)
+                </Typography.Text>
+              </div>
+
+              {Math.round(totalWeight) !== 100 && (
+                <Alert 
+                  type="warning" 
+                  message="Sum of all metric weights must equal exactly 100% to submit." 
+                  showIcon 
+                  style={{ marginBottom: 16 }}
+                />
+              )}
+            </>
+          )}
         </Form>
       </Modal>
 
@@ -1276,7 +1553,6 @@ export default function PipPortal() {
                         <Option value="GOAL">Goals Progress</Option>
                         <Option value="KPI">KPI Target Completion</Option>
                         <Option value="COMPETENCY">Competency Rating</Option>
-                        <Option value="CUSTOM">Custom Source</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item

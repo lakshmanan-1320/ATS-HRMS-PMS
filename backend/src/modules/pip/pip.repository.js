@@ -30,7 +30,8 @@ async function saveSettings(orgId, data) {
     monitoring_max_extension_count,
     monitoring_close_threshold_pct,
     monitoring_extend_threshold_pct,
-    monitoring_convert_threshold_pct
+    monitoring_convert_threshold_pct,
+    appraisal_trigger_threshold_pct
   } = data;
 
   const res = await query(
@@ -41,8 +42,9 @@ async function saveSettings(orgId, data) {
       enable_recommendation_engine, close_threshold_pct, extend_threshold_pct, escalate_threshold_pct,
       monitoring_duration_days, monitoring_checkin_frequency, monitoring_max_extension_count,
       monitoring_close_threshold_pct, monitoring_extend_threshold_pct, monitoring_convert_threshold_pct,
+      appraisal_trigger_threshold_pct,
       updated_at
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, NOW())
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, NOW())
     ON CONFLICT (organization_id) DO UPDATE SET
       enable_pip = EXCLUDED.enable_pip,
       allow_manager_initiation = EXCLUDED.allow_manager_initiation,
@@ -64,6 +66,7 @@ async function saveSettings(orgId, data) {
       monitoring_close_threshold_pct = EXCLUDED.monitoring_close_threshold_pct,
       monitoring_extend_threshold_pct = EXCLUDED.monitoring_extend_threshold_pct,
       monitoring_convert_threshold_pct = EXCLUDED.monitoring_convert_threshold_pct,
+      appraisal_trigger_threshold_pct = EXCLUDED.appraisal_trigger_threshold_pct,
       updated_at = NOW()
     RETURNING *`,
     [
@@ -72,7 +75,8 @@ async function saveSettings(orgId, data) {
       default_duration_days, default_checkin_frequency, reminder_frequency_days,
       enable_recommendation_engine, close_threshold_pct, extend_threshold_pct, escalate_threshold_pct,
       monitoring_duration_days || 30, monitoring_checkin_frequency || 'WEEKLY', monitoring_max_extension_count || 1,
-      monitoring_close_threshold_pct || 80.00, monitoring_extend_threshold_pct || 50.00, monitoring_convert_threshold_pct || 50.00
+      monitoring_close_threshold_pct || 80.00, monitoring_extend_threshold_pct || 50.00, monitoring_convert_threshold_pct || 50.00,
+      appraisal_trigger_threshold_pct || 50.00
     ]
   );
   return res.rows[0];
