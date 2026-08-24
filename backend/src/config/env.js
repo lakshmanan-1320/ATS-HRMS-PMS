@@ -6,9 +6,9 @@ const isDeployed = process.platform !== 'win32';
 const prodEnvPath = path.resolve(__dirname, '../../.env.production');
 
 if (isDeployed && fs.existsSync(prodEnvPath)) {
-  require('dotenv').config({ path: prodEnvPath });
+  require('dotenv').config({ path: prodEnvPath, override: true });
 } else {
-  require('dotenv').config();
+  require('dotenv').config({ override: true });
 }
 
 const requiredEnv = [];

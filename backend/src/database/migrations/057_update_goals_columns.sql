@@ -19,6 +19,7 @@ ALTER TABLE goals ALTER COLUMN client_admin_id DROP NOT NULL;
 -- 3. Update existing FK constraints to map to users(user_id)
 ALTER TABLE goals DROP CONSTRAINT IF EXISTS goals_approved_by_fkey;
 ALTER TABLE goals ALTER COLUMN approved_by SET DATA TYPE UUID;
+UPDATE goals SET approved_by = NULL WHERE approved_by NOT IN (SELECT user_id FROM users);
 ALTER TABLE goals ADD CONSTRAINT goals_approved_by_fkey FOREIGN KEY (approved_by) REFERENCES users(user_id) ON DELETE SET NULL;
 
 -- 4. Alter priority and status constraints
