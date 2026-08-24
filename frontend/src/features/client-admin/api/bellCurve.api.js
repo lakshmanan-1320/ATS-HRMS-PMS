@@ -38,8 +38,13 @@ export const saveBuckets = async (configId, buckets) => {
   return res.data
 }
 
-export const generateBellCurve = async (cycleId, configId) => {
-  const res = await api.post('/client-admin/bell-curve/generate', { cycleId, configId })
+export const generateBellCurve = async ({ cycleId, configId, scopeType, scopeReferenceId }) => {
+  const res = await api.post('/client-admin/bell-curve/generate', { cycleId, configId, scopeType, scopeReferenceId })
+  return res.data
+}
+
+export const getDepartments = async () => {
+  const res = await api.get('/client-admin/departments')
   return res.data
 }
 

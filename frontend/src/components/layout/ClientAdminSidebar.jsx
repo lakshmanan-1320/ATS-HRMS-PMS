@@ -19,6 +19,7 @@ import {
   FiSettings,
   FiLock,
   FiShield,
+  FiGrid
 } from 'react-icons/fi'
 import ExpandableSidebar from './ExpandableSidebar'
 import { useModules } from '../../hooks/useModules'
@@ -61,6 +62,18 @@ export default function ClientAdminSidebar({ active }) {
       icon: FiTrendingUp,
       label: 'Bell Curve Calibration',
       path: '/client-admin/bell-curve'
+    },
+      isEnabled('performance') && {
+    id: 'nine-box',
+    icon: FiGrid,
+    label: '9-Box Grid',
+    path: '/client-admin/nine-box'
+  },
+    isEnabled('performance') && {
+      id: 'pip',
+      icon: FiActivity,
+      label: 'Performance PIP',
+      path: '/client-admin/pip'
     }
   ].filter(Boolean)
 

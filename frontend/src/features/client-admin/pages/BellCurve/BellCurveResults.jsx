@@ -105,6 +105,11 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
     doc.text(`Generated On: ${new Date().toLocaleString()}`, 14, 28);
     doc.text(`Calibration Status: ${run.status}`, 14, 33);
     doc.text(`Tie-Breaker Strategy: ${run.tie_strategy || 'INCLUDE_ALL'}`, 120, 28);
+    
+    const scopeLabel = run.scope_type === 'DEPARTMENT' 
+      ? `Department: ${run.department_name || '—'}` 
+      : 'Organization';
+    doc.text(`Calibration Scope: ${scopeLabel}`, 120, 33);
 
     const tableHeaders = [['Employee', 'Code', 'Department', 'Manager', 'Final Score', 'Original Target', 'Calibrated Rating', 'Calibration Comments']];
     const tableRows = filteredData.map(r => [

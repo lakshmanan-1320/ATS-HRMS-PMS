@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { useAuthStore } from '../../auth/store'
+import { useAuthStore } from '../../../store/auth.store'
 
 const selSt = {
   width: '100%', padding: '10px 14px', borderRadius: 8, fontSize: 13,

@@ -14,6 +14,7 @@ const SYSTEM_MODULES = [
   { key: 'competency_assessment', name: 'Competency Assessment',              icon: '📝', description: 'Behavior-based assessment of competencies and core values', category: 'TECHNIQUE' },
   { key: 'self_assessment',       name: 'Self Assessment',                    icon: '🙋', description: 'Employee-first performance evaluation & manager review workflow', category: 'TECHNIQUE' },
   { key: '360_feedback',          name: '360° Feedback',                      icon: '🔄', description: 'Multi-rater feedback from managers, peers, direct reports & externals', category: 'TECHNIQUE' },
+  { key: 'pip',                   name: 'PIP (Performance Improvement Plan)', icon: '🚨', description: 'Structured performance corrective cycles and weekly progress reviews', category: 'TECHNIQUE' },
 ];
 
 async function getModulesForClient(clientAdminId) {

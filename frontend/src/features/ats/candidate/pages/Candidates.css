@@ -1,0 +1,264 @@
+/* src/features/ats/candidate/pages/Candidates.css */
+
+.candidate-page {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+.candidate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.candidate-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.candidate-header p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+.candidate-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.candidate-add-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ================= TOOLBAR ================= */
+
+.candidate-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.candidate-search {
+  flex: 1;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 10px;
+  padding: 0 14px;
+}
+
+.candidate-search svg {
+  color: #6b7280;
+}
+
+.candidate-search input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+}
+
+.candidate-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dbe3ee;
+  background: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.candidate-filter-btn:hover {
+  background: #f3f4f6;
+}
+
+/* ================= TABLE ================= */
+
+.candidate-table-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+
+.candidate-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.candidate-table thead {
+  background: #f8fafc;
+}
+
+.candidate-table th {
+  padding: 16px;
+  text-align: left;
+  color: #374151;
+  font-weight: 600;
+}
+
+.candidate-table td {
+  padding: 18px 16px;
+  border-top: 1px solid #edf2f7;
+  vertical-align: middle;
+}
+
+.candidate-table tbody tr:hover {
+  background: #fafcff;
+}
+
+/* ================= CANDIDATE INFO ================= */
+
+.candidate-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.candidate-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.candidate-info h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.candidate-info p,
+.candidate-info span {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* ================= STAGE ================= */
+
+.candidate-stage {
+  background: #dbeafe;
+  color: #2563eb;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ================= STATUS ================= */
+
+.candidate-status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.candidate-status.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.candidate-status.selected {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.candidate-status.pending {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ================= ACTIONS ================= */
+
+.candidate-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.candidate-actions button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #2563eb;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.candidate-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.candidate-actions .delete {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+
+  .candidate-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .candidate-search {
+    max-width: 100%;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .candidate-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .candidate-table-card {
+    overflow-x: auto;
+  }
+
+  .candidate-table {
+    min-width: 1100px;
+  }
+
+}

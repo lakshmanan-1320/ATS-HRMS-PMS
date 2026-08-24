@@ -78,6 +78,7 @@ export default function EmployeeSidebar({ active }) {
   const baseLinks = [
     { id: 'dashboard',      icon: '🏠', label: 'Dashboard',        path: '/employee/dashboard' },
     (isEnabled('goals') || isEnabled('performance')) && { id: 'performance', icon: '🎯', label: 'My Performance', path: '/employee/performance' },
+    isEnabled('performance') && { id: 'pip', icon: '📈', label: 'My PIP', path: '/employee/pip' },
     isEnabled('attendance')  && { id: 'attendance',     icon: '🕐', label: 'My Attendance',    path: '/employee/attendance' },
     isEnabled('leave')       && {
       id: 'leave-management-group',
@@ -111,6 +112,10 @@ export default function EmployeeSidebar({ active }) {
     }
   }
 
+  if (sessionStorage.getItem('is_manager') === 'true') {
+    links.push({ id: 'team', icon: '👥', label: 'My Team', path: '/employee/team' })
+  }
+
   // Map emojis to React Icons
   const processedLinks = links.map(link => {
     const icon = iconMap[link.icon] || FiHome
@@ -137,6 +142,8 @@ export default function EmployeeSidebar({ active }) {
 
   processedLinks.forEach(link => {
     if (link.id === 'admin-dashboard' || link.id === 'dashboard') {
+      sections[0].links.push(link)
+    } else if (link.id === 'team') {
       sections[0].links.push(link)
     } else if (['goals', 'appraisal', 'manager-goals', 'manager-appraisal', 'kpi-reviews', 'performance'].includes(link.id)) {
       sections[1].links.push(link)

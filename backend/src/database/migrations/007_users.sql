@@ -55,3 +55,8 @@ VALUES (
     'super_admin',
     true
 ) ON CONFLICT (email) WHERE organization_id IS NULL DO NOTHING;
+
+-- Restore foreign key constraint on client_admins created_by pointing to users
+ALTER TABLE client_admins 
+ADD CONSTRAINT client_admins_created_by_fkey 
+FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE SET NULL;

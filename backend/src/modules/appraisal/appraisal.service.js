@@ -465,7 +465,38 @@ async function submitManagerAppraisal(managerId, orgId, cycleId, employeeId) {
     appraisal.training_recommendation
   )
 
-  return repo.submitManagerAppraisal(cycleId, employeeId, managerId)
+  const submitted = await repo.submitManagerAppraisal(cycleId, employeeId, managerId)
+
+  // Auto-flag PIP Candidate Trigger
+  try {
+    const { getSettings, createCandidate } = require('../pip/pip.service');
+    const settings = await getSettings(orgId);
+    
+    if (settings && settings.enable_pip) {
+      const threshold = parseFloat(settings.appraisal_trigger_threshold_pct) !== undefined && settings.appraisal_trigger_threshold_pct !== null
+        ? parseFloat(settings.appraisal_trigger_threshold_pct)
+        : 50.00;
+        
+      if (finalScore < threshold) {
+        const userRes = await query(`SELECT user_id FROM users WHERE employee_id = $1 LIMIT 1`, [managerId]);
+        const managerUserId = userRes.rows[0]?.user_id || managerId;
+
+        await createCandidate(orgId, {
+          employee_id: employeeId,
+          source: 'APPRAISAL',
+          source_reference_id: cycleId,
+          appraisal_score: finalScore,
+          recommendation_reason: `System Auto-Flag: Final appraisal score (${finalScore}%) fell below the failure trigger threshold of ${threshold}%.`
+        }, { id: managerUserId, email: 'system-trigger@insight.local', role: 'manager' });
+        console.log(`[PIP Auto-Flag] Employee ${employeeId} auto-flagged for PIP (Score: ${finalScore}% < Threshold: ${threshold}%)`);
+      }
+    }
+  } catch (err) {
+    // We catch the error so we do not block or crash the core appraisal submission itself
+    console.error('[PIP Auto-Flag Error] Failed to evaluate/trigger automatic candidate creation:', err.message);
+  }
+
+  return submitted;
 }
 
 module.exports = {

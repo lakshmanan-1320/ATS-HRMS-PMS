@@ -590,12 +590,15 @@ async function seed() {
         if (!adminUserId) {
           console.log('  ⚠️  No client admin user found, skipping payroll seeding.')
         } else {
-          // Fetch week-off settings
+          // Fetch week-off settings from the week_off_days table
           const woRes = await client.query(
-            'SELECT week_off_days FROM week_off_settings WHERE organization_id = $1',
+            `SELECT DISTINCT wod.weekday FROM week_off_days wod
+             JOIN week_off_settings wos ON wod.week_off_setting_id = wos.week_off_setting_id
+             WHERE wos.organization_id = $1 AND wos.is_enabled = true
+               AND wod.off_type = 'FULL' AND wod.week_number = 'ALL'`,
             [organizationId]
           )
-          const weekOffs = woRes.rows[0]?.week_off_days || [0, 6]
+          const weekOffs = woRes.rows.length > 0 ? woRes.rows.map(r => r.weekday) : [0, 6]
 
           // Holidays in May 2026
           const mayHolidays = await client.query(

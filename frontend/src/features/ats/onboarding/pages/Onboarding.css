@@ -1,0 +1,233 @@
+/* src/features/ats/onboarding/pages/Onboarding.css */
+
+.onboarding-page {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+.onboarding-header {
+  margin-bottom: 30px;
+}
+
+.onboarding-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.onboarding-header p {
+  margin-top: 8px;
+  color: #6b7280;
+}
+
+/* ================= GRID ================= */
+
+.onboarding-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* ================= CARDS ================= */
+
+.employee-list-card,
+.checklist-card,
+.summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.section-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 20px;
+}
+
+/* ================= EMPLOYEE ================= */
+
+.employee-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.employee-card:last-child {
+  border-bottom: none;
+}
+
+.employee-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+.employee-details {
+  flex: 1;
+}
+
+.employee-details h4 {
+  margin: 0;
+  color: #111827;
+}
+
+.employee-details p {
+  margin: 5px 0;
+  color: #6b7280;
+}
+
+.employee-details span {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.employee-status {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.employee-status.completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.employee-status.inprogress {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.employee-status.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* ================= CHECKLIST ================= */
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #f8fafc;
+  transition: .25s;
+}
+
+.checklist-item:hover {
+  background: #eef4ff;
+}
+
+.checklist-item span {
+  flex: 1;
+  color: #374151;
+  font-weight: 500;
+}
+
+.check-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #e5e7eb;
+  color: #6b7280;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.check-icon.completed {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.checklist-item svg:last-child {
+  color: #9ca3af;
+}
+
+/* ================= SUMMARY ================= */
+
+.summary-card {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.summary-item svg {
+  font-size: 28px;
+  color: #2563eb;
+}
+
+.summary-item h3 {
+  margin: 0;
+  font-size: 28px;
+  color: #111827;
+}
+
+.summary-item p {
+  margin-top: 5px;
+  color: #6b7280;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+
+  .onboarding-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .employee-card {
+    flex-wrap: wrap;
+  }
+
+  .employee-status {
+    margin-left: 70px;
+  }
+
+  .checklist-item {
+    padding: 12px;
+  }
+
+}
