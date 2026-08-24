@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS nine_box_assessments (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_nine_box_employee
+CREATE INDEX IF NOT EXISTS idx_nine_box_employee
 ON nine_box_assessments(employee_id);
 
-CREATE INDEX idx_nine_box_cycle
+CREATE INDEX IF NOT EXISTS idx_nine_box_cycle
 ON nine_box_assessments(appraisal_cycle_id);

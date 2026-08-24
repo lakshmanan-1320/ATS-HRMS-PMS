@@ -1,5 +1,24 @@
 -- Migration 076: Cycle Hierarchy Redesign (Financial Year, Performance Cycle & Appraisal Cycle)
 
+-- Create dummy performance_configurations table if it was dropped previously, so migrations run smoothly
+CREATE TABLE IF NOT EXISTS performance_configurations (
+    performance_configuration_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_id                UUID,
+    cycle_name                     VARCHAR(255),
+    cycle_type                     VARCHAR(50),
+    start_date                     DATE,
+    end_date                       DATE,
+    status                         VARCHAR(20) DEFAULT 'DRAFT',
+    max_goals_per_employee         INTEGER,
+    goal_setting_direction         VARCHAR(50),
+    goal_approval_required         BOOLEAN,
+    allow_goal_edit_after_approval BOOLEAN,
+    allow_employee_goal_creation   BOOLEAN,
+    allow_manager_goal_creation    BOOLEAN,
+    require_goal_weight_validation BOOLEAN,
+    updated_at                     TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- 1. Create financial_years table
 DROP TABLE IF EXISTS financial_years CASCADE;
 CREATE TABLE IF NOT EXISTS financial_years (
@@ -34,12 +53,29 @@ ALTER TABLE appraisal_cycles DROP COLUMN IF EXISTS financial_year_id CASCADE;
 ALTER TABLE appraisal_cycles
   ADD COLUMN IF NOT EXISTS financial_year_id UUID REFERENCES financial_years(financial_year_id) ON DELETE SET NULL;
 
--- 4. Create join table for Appraisal Cycle and Performance Cycles Many-to-Many relationship
-CREATE TABLE IF NOT EXISTS appraisal_cycle_performance_cycles (
-    appraisal_cycle_id            INTEGER REFERENCES appraisal_cycles(appraisal_cycle_id) ON DELETE CASCADE,
-    performance_configuration_id  UUID REFERENCES performance_configurations(performance_configuration_id) ON DELETE CASCADE,
-    PRIMARY KEY (appraisal_cycle_id, performance_configuration_id)
-);
+-- 4. Create join table for Appraisal Cycle and Performance Cycles Many-to-Many relationship dynamically
+DO $$
+DECLARE
+    col_type TEXT;
+BEGIN
+    SELECT data_type INTO col_type 
+    FROM information_schema.columns 
+    WHERE table_name = 'appraisal_cycles' AND column_name = 'appraisal_cycle_id';
+
+    IF col_type = 'uuid' THEN
+        EXECUTE 'CREATE TABLE IF NOT EXISTS appraisal_cycle_performance_cycles (
+            appraisal_cycle_id            UUID REFERENCES appraisal_cycles(appraisal_cycle_id) ON DELETE CASCADE,
+            performance_configuration_id  UUID REFERENCES performance_configurations(performance_configuration_id) ON DELETE CASCADE,
+            PRIMARY KEY (appraisal_cycle_id, performance_configuration_id)
+        )';
+    ELSE
+        EXECUTE 'CREATE TABLE IF NOT EXISTS appraisal_cycle_performance_cycles (
+            appraisal_cycle_id            INTEGER REFERENCES appraisal_cycles(appraisal_cycle_id) ON DELETE CASCADE,
+            performance_configuration_id  UUID REFERENCES performance_configurations(performance_configuration_id) ON DELETE CASCADE,
+            PRIMARY KEY (appraisal_cycle_id, performance_configuration_id)
+        )';
+    END IF;
+END $$;
 
 -- 5. Data Migration: Create default Financial Year and map existing configurations
 DO $$

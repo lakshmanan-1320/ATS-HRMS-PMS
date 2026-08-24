@@ -1,5 +1,21 @@
 -- Migration 079: Remove Performance Cycles, map Goals directly to Financial Year, and create goal_settings per Financial Year.
 
+-- Ensure all expected columns exist on performance_configurations before querying it
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'performance_configurations') THEN
+        ALTER TABLE performance_configurations 
+          ADD COLUMN IF NOT EXISTS max_goals_per_employee INTEGER DEFAULT 5,
+          ADD COLUMN IF NOT EXISTS goal_setting_direction VARCHAR(50) DEFAULT 'TOP_DOWN',
+          ADD COLUMN IF NOT EXISTS goal_approval_required BOOLEAN DEFAULT TRUE,
+          ADD COLUMN IF NOT EXISTS allow_goal_edit_after_approval BOOLEAN DEFAULT FALSE,
+          ADD COLUMN IF NOT EXISTS allow_employee_goal_creation BOOLEAN DEFAULT TRUE,
+          ADD COLUMN IF NOT EXISTS allow_manager_goal_creation BOOLEAN DEFAULT TRUE,
+          ADD COLUMN IF NOT EXISTS require_goal_weight_validation BOOLEAN DEFAULT TRUE,
+          ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+    END IF;
+END $$;
+
 -- 1. Create goal_settings table
 CREATE TABLE IF NOT EXISTS goal_settings (
     goal_setting_id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -79,11 +95,13 @@ ALTER TABLE goals ADD COLUMN financial_year_id UUID REFERENCES financial_years(f
 DO $$
 BEGIN
     IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'performance_configurations') THEN
-        UPDATE goals g
-        SET financial_year_id = pc.financial_year_id
-        FROM performance_configurations pc
-        WHERE g.performance_configuration_id = pc.performance_configuration_id
-          AND g.financial_year_id IS NULL;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'goals' AND column_name = 'performance_configuration_id') THEN
+            EXECUTE 'UPDATE goals g
+                     SET financial_year_id = pc.financial_year_id
+                     FROM performance_configurations pc
+                     WHERE g.performance_configuration_id = pc.performance_configuration_id
+                       AND g.financial_year_id IS NULL';
+        END IF;
     END IF;
 END $$;
 

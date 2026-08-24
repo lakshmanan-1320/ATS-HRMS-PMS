@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS client_admins (
                     CHECK (plan IN ('basic', 'professional', 'enterprise')),
     employee_limit  INTEGER DEFAULT 50,
     notes           TEXT,
-    created_by      UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    created_by      UUID,
     created_at      TIMESTAMPTZ DEFAULT NOW(),
     updated_at      TIMESTAMPTZ DEFAULT NOW()
 );
