@@ -92,7 +92,9 @@ router.use('/notifications', notificationRoutes);
 router.use('/client-admin/bell-curve', requireAuth, requireModule('performance'), requireRoles('client_admin', 'hr'), bellCurveRoutes.routes);
 router.use('/client-admin/nine-box', nineBoxRoutes.routes);
 const pipRoutes = require('../modules/pip');
+const policyRoutes = require('../modules/policy/policy.routes');
 router.use('/pip', requireAuth, requireModule('performance'), pipRoutes.routes);
+router.use('/policies', requireAuth, policyRoutes.routes);
 router.use('/profile', profileRoutes.routes);
 router.use('/audit-logs', auditLogRoutes.routes);
 

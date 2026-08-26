@@ -220,9 +220,14 @@ export default function VerifyOtp() {
       verifiedRef.current = true
       
       const role = res.data.role || 'super_admin'
+      const redirectUrl = sessionStorage.getItem('redirect_after_login')
+      sessionStorage.removeItem('redirect_after_login')
+
       if (res.data.passwordResetRequired) {
         sessionStorage.setItem('password_reset_required', 'true')
         navigate('/force-change-password', { replace: true })
+      } else if (redirectUrl && redirectUrl !== '/login') {
+        navigate(redirectUrl, { replace: true })
       } else {
         if (role === 'client_admin') {
           navigate('/client-admin/dashboard', { replace: true })

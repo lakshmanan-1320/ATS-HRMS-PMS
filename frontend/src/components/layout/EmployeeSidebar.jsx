@@ -14,7 +14,8 @@ import {
   FiCheckSquare,
   FiClipboard,
   FiUsers,
-  FiLock
+  FiLock,
+  FiFileText
 } from 'react-icons/fi'
 import ExpandableSidebar from './ExpandableSidebar'
 import { useModules } from '../../hooks/useModules'
@@ -35,6 +36,7 @@ const iconMap = {
   '📅': FiClock,
   '🔒': FiLock,
   '⏰': FiClock,
+  '📄': FiFileText
 }
 
 export default function EmployeeSidebar({ active }) {
@@ -77,6 +79,7 @@ export default function EmployeeSidebar({ active }) {
 
   const baseLinks = [
     { id: 'dashboard',      icon: '🏠', label: 'Dashboard',        path: '/employee/dashboard' },
+    { id: 'policies',       icon: '📄', label: 'Company Policies', path: '/employee/policies' },
     (isEnabled('goals') || isEnabled('performance')) && { id: 'performance', icon: '🎯', label: 'My Performance', path: '/employee/performance' },
     isEnabled('performance') && { id: 'pip', icon: '📈', label: 'My PIP', path: '/employee/pip' },
     isEnabled('attendance')  && { id: 'attendance',     icon: '🕐', label: 'My Attendance',    path: '/employee/attendance' },
@@ -141,7 +144,7 @@ export default function EmployeeSidebar({ active }) {
   ]
 
   processedLinks.forEach(link => {
-    if (link.id === 'admin-dashboard' || link.id === 'dashboard') {
+    if (link.id === 'admin-dashboard' || link.id === 'dashboard' || link.id === 'policies') {
       sections[0].links.push(link)
     } else if (link.id === 'team') {
       sections[0].links.push(link)

@@ -10,6 +10,7 @@ function SuperAdminRoute({ children }) {
   console.log('[SuperAdminRoute] token:', !!token, 'role:', role, 'forceReset:', forceReset)
   useInactivityLogout()
   if (!token) {
+    sessionStorage.setItem('redirect_after_login', window.location.pathname + window.location.search)
     console.log('[SuperAdminRoute] Redirecting to /login because no token')
     return <Navigate to="/login" replace />
   }
@@ -39,6 +40,7 @@ function ClientAdminRoute({ children }) {
   }, [])
 
   if (!token) {
+    sessionStorage.setItem('redirect_after_login', window.location.pathname + window.location.search)
     console.log('[ClientAdminRoute] Redirecting to /login because no token')
     return <Navigate to="/login" replace />
   }
@@ -60,6 +62,7 @@ function EmployeeRoute({ children }) {
   console.log('[EmployeeRoute] token:', !!token, 'role:', role, 'forceReset:', forceReset)
   useInactivityLogout()
   if (!token) {
+    sessionStorage.setItem('redirect_after_login', window.location.pathname + window.location.search)
     console.log('[EmployeeRoute] Redirecting to /login because no token')
     return <Navigate to="/login" replace />
   }

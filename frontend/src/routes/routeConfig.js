@@ -76,6 +76,8 @@ import EmployeeOvertime from '../features/employee-portal/pages/EmployeeOvertime
 import ManagerOvertimeApprovals from '../features/employee-portal/pages/ManagerOvertimeApprovals.jsx'
 import PipPortal from '../features/performance/pip/pages/PipPortal.jsx'
 import PipEmployeeView from '../features/performance/pip/pages/PipEmployeeView.jsx'
+import ClientAdminPolicies from '../features/client-admin/pages/ClientAdminPolicies.jsx'
+import EmployeePolicies from '../features/employee-portal/pages/EmployeePolicies.jsx'
 
 
 export const publicRoutes = [
@@ -121,6 +123,8 @@ export const employeeRoutes = [
   { path: '/employee/team',                   component: MyTeam },
   { path: '/employee/profile',                component: MyProfile },
   { path: '/employee/pip',                    component: PipEmployeeView },
+  { path: '/employee/policies',               component: EmployeePolicies },
+  { path: '/employee/policies/:id',           component: EmployeePolicies },
   { path: '/settings/audit',                  component: AuditLogs },
 ]
 
@@ -136,6 +140,7 @@ export const clientAdminRoutes = [
   { path: '/client-admin/performance', component: PerformanceHub },
   { path: '/client-admin/bell-curve', component: BellCurvePage },
   { path: '/client-admin/nine-box', component: NineBoxPage },
+  { path: '/client-admin/policies', component: ClientAdminPolicies },
   { path: '/client-admin/leave',          component: LeaveTypesConfig },
   { path: '/client-admin/leave-settings', component: LeaveSettingsConfig },
   { path: '/client-admin/leave/plans',    component: LeavePlansConfig },

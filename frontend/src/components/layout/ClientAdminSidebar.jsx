@@ -19,7 +19,8 @@ import {
   FiSettings,
   FiLock,
   FiShield,
-  FiGrid
+  FiGrid,
+  FiFileText
 } from 'react-icons/fi'
 import ExpandableSidebar from './ExpandableSidebar'
 import { useModules } from '../../hooks/useModules'
@@ -126,6 +127,7 @@ export default function ClientAdminSidebar({ active }) {
         { id: 'departments', icon: FiFolder,   label: 'Departments',      path: '/client-admin/departments' },
         { id: 'hierarchy',   icon: FiGitMerge, label: 'Hierarchy Levels', path: '/client-admin/hierarchy' },
         { id: 'employees',   icon: FiUsers,    label: 'Employees',        path: '/client-admin/employees' },
+        { id: 'policies',    icon: FiFileText, label: 'HR Policies',      path: '/client-admin/policies' },
       ]
     },
     ...(performanceLinks.length > 0       ? [{ title: 'Performance',      links: performanceLinks       }] : []),

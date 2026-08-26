@@ -9,6 +9,7 @@
     "build": "echo 'No build step needed'",
     "db:migrate": "node src/database/runMigrations.js",
     "db:seed": "node src/database/runSeeds.js",
+    "seed:hrms": "node src/database/seeders/run_hrms_seeders.js",
     "test": "jest --runInBand",
     "lint": "eslint . --ext .js"
   },

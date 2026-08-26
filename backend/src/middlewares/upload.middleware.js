@@ -47,6 +47,23 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+const policyUploadDir = path.resolve('uploads/hr_policies');
+if (!fs.existsSync(policyUploadDir)) {
+  fs.mkdirSync(policyUploadDir, { recursive: true });
+}
+
+const policyStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, policyUploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    const safeBaseName = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '_');
+    cb(null, `${safeBaseName}-${uniqueSuffix}${ext}`);
+  }
+});
+
 const uploadEvidence = multer({
   storage: storage,
   limits: {
@@ -55,7 +72,26 @@ const uploadEvidence = multer({
   fileFilter: fileFilter
 }).array('attachments', 10);
 
+const uploadPolicyDoc = multer({
+  storage: policyStorage,
+  limits: {
+    fileSize: 15 * 1024 * 1024, // 15 MB max for policy PDF/DOCX
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf' || 
+        file.mimetype === 'application/msword' || 
+        file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        file.originalname.match(/\.(pdf|doc|docx)$/i)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF and DOC/DOCX documents are allowed for company policies.'), false);
+    }
+  }
+}).single('document');
+
 module.exports = {
   uploadEvidence,
-  uploadDir
+  uploadPolicyDoc,
+  uploadDir,
+  policyUploadDir
 };
