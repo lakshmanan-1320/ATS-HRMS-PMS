@@ -71,10 +71,11 @@ coverage
 .cache
 
 # =========================
-# Optional uploads (backend)
+# Uploads (backend & root)
 # =========================
-uploads/*
-!uploads/.gitkeep
+uploads/
+**/uploads/*
+!**/uploads/.gitkeep
 
 # =========================
 # Docker (if used)
