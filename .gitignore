@@ -22,7 +22,7 @@ dist
 dist-ssr
 build
 out
-
+uploads
 # =========================
 # Environment files
 # =========================
