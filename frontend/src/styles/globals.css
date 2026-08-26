@@ -210,9 +210,6 @@ body.client-admin-theme div[style*="position:fixed"] option {
   border: 1px solid #cbd5e1 !important;
 }
 
-body.client-admin-theme main input:focus,
-body.client-admin-theme main select:focus,
-body.client-admin-theme main textarea:focus,
 body.client-admin-theme div[style*="position: fixed"] input:focus,
 body.client-admin-theme div[style*="position: fixed"] select:focus,
 body.client-admin-theme div[style*="position: fixed"] textarea:focus,
@@ -222,6 +219,19 @@ body.client-admin-theme div[style*="position:fixed"] textarea:focus {
   border-color: #6366f1 !important;
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
   outline: none !important;
+}
+
+/* Chatbot textarea override - remove global border with higher specificity */
+body.client-admin-theme div[style*="position: fixed"] textarea.chatbot-textarea,
+body.client-admin-theme div[style*="position:fixed"] textarea.chatbot-textarea,
+body.client-admin-theme div[style*="position: fixed"] textarea.chatbot-textarea:focus,
+body.client-admin-theme div[style*="position:fixed"] textarea.chatbot-textarea:focus,
+textarea.chatbot-textarea,
+textarea.chatbot-textarea:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent !important;
 }
 
 /* Modals */
