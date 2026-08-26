@@ -18,6 +18,7 @@ import {
 } from 'react-icons/fi';
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx';
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar';
+import PolicyAiChatModal from '../components/PolicyAiChatModal.jsx';
 
 const CATEGORIES = [
   'All',
@@ -38,6 +39,8 @@ export default function EmployeePolicies() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [aiChatModalOpen, setAiChatModalOpen] = useState(false);
+  const [aiChatPolicy, setAiChatPolicy] = useState(null);
 
   useEffect(() => {
     fetchPolicies();
@@ -302,6 +305,29 @@ export default function EmployeePolicies() {
 
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                       <button
+                        onClick={() => {
+                          setAiChatPolicy(policy);
+                          setAiChatModalOpen(true);
+                        }}
+                        title="Ask AI Assistant about this policy"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 5,
+                          padding: '6px 10px',
+                          background: policy.category === 'IT & Data Security' ? 'rgba(99, 102, 241, 0.12)' : '#f8fafc',
+                          border: policy.category === 'IT & Data Security' ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid #cbd5e1',
+                          borderRadius: 8,
+                          cursor: 'pointer',
+                          fontSize: 11,
+                          fontWeight: 700,
+                          color: policy.category === 'IT & Data Security' ? '#4f46e5' : '#475569'
+                        }}
+                      >
+                        <FiZap size={13} color={policy.category === 'IT & Data Security' ? '#4f46e5' : '#64748b'} /> Ask AI
+                      </button>
+
+                      <button
                         onClick={(e) => copyDirectLink(policy, e)}
                         title="Copy Direct Link to Policy"
                         style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 10px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#475569' }}
@@ -390,6 +416,26 @@ export default function EmployeePolicies() {
           </div>
         </div>
       )}
+
+      {/* Policy AI Assistant Chatbot Modal */}
+      <PolicyAiChatModal
+        isOpen={aiChatModalOpen}
+        onClose={() => setAiChatModalOpen(false)}
+        category="IT_SECURITY"
+        policyId={aiChatPolicy?.policy_id}
+        policyTitle={aiChatPolicy?.title || 'IT & Data Security AI Assistant'}
+        policyDocRef="POL-IT-001"
+        presetQuestions={[
+          'What is the password length and rotation requirement?',
+          'Who do I report phishing emails to and what is the SLA?',
+          'Are USB drives and unapproved cloud storage allowed?',
+          'What is the workstation locking key shortcut requirement?'
+        ]}
+        onOpenPolicyReader={() => {
+          setAiChatModalOpen(false);
+          if (aiChatPolicy) openPolicyReader(aiChatPolicy);
+        }}
+      />
     </div>
   );
 }
