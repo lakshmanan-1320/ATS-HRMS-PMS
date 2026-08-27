@@ -18,7 +18,6 @@ import {
 } from 'react-icons/fi';
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx';
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar';
-import PolicyAiChatModal from '../components/PolicyAiChatModal.jsx';
 
 const CATEGORIES = [
   'All',
@@ -39,8 +38,6 @@ export default function EmployeePolicies() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedPolicy, setSelectedPolicy] = useState(null);
-  const [aiChatModalOpen, setAiChatModalOpen] = useState(false);
-  const [aiChatPolicy, setAiChatPolicy] = useState(null);
 
   useEffect(() => {
     fetchPolicies();
@@ -417,25 +414,6 @@ export default function EmployeePolicies() {
         </div>
       )}
 
-      {/* Policy AI Assistant Chatbot Modal */}
-      <PolicyAiChatModal
-        isOpen={aiChatModalOpen}
-        onClose={() => setAiChatModalOpen(false)}
-        category="IT_SECURITY"
-        policyId={aiChatPolicy?.policy_id}
-        policyTitle={aiChatPolicy?.title || 'IT & Data Security AI Assistant'}
-        policyDocRef="POL-IT-001"
-        presetQuestions={[
-          'What is the password length and rotation requirement?',
-          'Who do I report phishing emails to and what is the SLA?',
-          'Are USB drives and unapproved cloud storage allowed?',
-          'What is the workstation locking key shortcut requirement?'
-        ]}
-        onOpenPolicyReader={() => {
-          setAiChatModalOpen(false);
-          if (aiChatPolicy) openPolicyReader(aiChatPolicy);
-        }}
-      />
     </div>
   );
 }

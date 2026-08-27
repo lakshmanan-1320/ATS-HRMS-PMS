@@ -1,54 +1,55 @@
 const { query } = require('../config/db');
 const { generateEmbedding } = require('./embedding.service');
 
-async function retrievePolicies(organizationId, question, limit = 5) {
+/**
+ * Retrieves the most relevant policy chunks based on vector similarity search
+ * Enforces strict tenant isolation, category scoping, active, and published status.
+ * 
+ * @param {string} organizationId - Authenticated tenant ID
+ * @param {string} question - Employee question string
+ * @param {string} category - Policy category/module scope (e.g. 'IT & Data Security')
+ * @param {number} limit - Maximum number of chunks to return
+ * @returns {Promise<Array<object>>} - List of matched policy chunks
+ */
+async function retrievePolicies(organizationId, question, category = 'IT & Data Security', limit = 5) {
   if (!organizationId) {
     throw new Error('Organization ID is required.');
   }
-
-  if (!question) {
+  if (!question || !question.trim()) {
     throw new Error('Question is required.');
   }
 
-  console.log('Policy Retriever');
-  console.log('Organization ID:', organizationId);
-  console.log('Question:', question);
-
-  // Generate embedding for the user's question
+  // Generate embedding vector for the question using embeddinggemma
   const questionEmbedding = await generateEmbedding(question);
 
   if (!questionEmbedding || !Array.isArray(questionEmbedding)) {
     throw new Error('Failed to generate question embedding.');
   }
 
-  console.log(
-    'Question embedding generated. Dimensions:',
-    questionEmbedding.length
-  );
-
+  // Retrieve matching chunks with strict tenant & category parameters
   const result = await query(
     `
-      SELECT
-        embedding_id,
-        policy_id,
-        chunk_index,
-        chunk_text,
-        1 - (embedding <=> $1::vector) AS similarity
-      FROM hr_policy_embeddings
-      WHERE organization_id = $2
-      ORDER BY embedding <=> $1::vector
-      LIMIT $3
+    SELECT
+      e.policy_id AS "policyId",
+      e.policy_key AS "policyKey",
+      e.section_ref AS "sectionRef",
+      e.chunk_text AS "chunkText",
+      1 - (e.embedding <=> $1::vector) AS "similarity"
+    FROM policy_embeddings e
+    INNER JOIN hr_policies p ON e.policy_id = p.policy_id
+    WHERE e.organization_id = $2
+      AND e.category = $3
+      AND p.is_active = true
+      AND p.is_published = true
+    ORDER BY e.embedding <=> $1::vector
+    LIMIT $4
     `,
     [
       JSON.stringify(questionEmbedding),
       organizationId,
+      category,
       limit
     ]
-  );
-
-  console.log(
-    'Policy chunks retrieved:',
-    result.rows.length
   );
 
   return result.rows;
