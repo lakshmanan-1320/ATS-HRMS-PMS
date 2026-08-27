@@ -1,17 +1,14 @@
 const { query } = require('../config/db');
-
-const policyRetriever = require('./policyRetriever.service');
-const { buildHRPrompt } = require('./prompt.service');
-const { generateAnswer } = require('./gemma.service');
+const chatbotService = require('./chatbot.service');
 
 async function chat(body, user) {
-  const { message } = body;
+  const { message, category } = body;
 
   if (!message) {
     throw new Error('Message is required.');
   }
 
-  let organizationId = user?.organizationId;
+  let organizationId = user?.organizationId || user?.organization_id;
 
   // Fallback: get organization from users table
   if (!organizationId && user?.userId) {
@@ -32,57 +29,22 @@ async function chat(body, user) {
     throw new Error('Organization ID is required.');
   }
 
-  console.log('================ AI SERVICE ================');
-  console.log('Organization ID:', organizationId);
-  console.log('User question:', message);
-  console.log('============================================');
+  // Determine categories to search (search specific category or default to both targets)
+  const targetCategory = category === 'IT_SECURITY' ? 'IT & Data Security' : 'Leave & Employee Conduct';
 
-  // 1. Retrieve relevant policy chunks
-  const searchCategory = body.category === 'IT_SECURITY' ? 'IT & Data Security' : 'Leave & Employee Conduct';
-  const policies = await policyRetriever.retrievePolicies(
+  // Call the unified chatbot service
+  const result = await chatbotService.getChatbotResponse(
     organizationId,
     message,
-    searchCategory,
-    5
+    targetCategory
   );
 
-  console.log('Retrieved policy chunks:', policies.length);
-
-  // 2. If nothing was retrieved, do not ask Gemma to invent an answer
-  if (!policies.length) {
-    return {
-      success: true,
-      question: message,
-      answer: 'I could not find this information in the available HR policies.',
-      sources: []
-    };
-  }
-
-  // 3. Build RAG prompt using retrieved policies
-  const prompt = buildHRPrompt(message, policies);
-
-  console.log('Generating answer using Gemma...');
-
-  // 4. Generate answer locally using Ollama + Gemma
-  const answer = await generateAnswer(prompt);
-
-  console.log('Gemma answer generated.');
-
-  // 5. Return source information
-  const sources = policies.map((policy) => ({
-    policyId: policy.policyId || policy.policy_id,
-    policyKey: policy.policyKey || 'POL-HR-002',
-    section: policy.sectionRef || 'General',
-    chunk_index: policy.chunk_index !== undefined ? policy.chunk_index : 0,
-    similarity: policy.similarity,
-    text: policy.chunkText || policy.chunk_text
-  }));
-
   return {
-    success: true,
+    success: result.success,
     question: message,
-    answer: answer?.trim() || 'I could not generate an answer.',
-    sources
+    answer: result.answer,
+    sources: result.sources,
+    metrics: result.metrics
   };
 }
 

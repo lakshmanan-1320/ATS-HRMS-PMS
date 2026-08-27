@@ -150,7 +150,7 @@ async function indexTenantPolicies(organizationId, category) {
   // Fetch active & published policies matching organization and category
   const policiesRes = await query(
     `
-    SELECT policy_id, title, category, content_text
+    SELECT policy_id, organization_id, title, category, content_text
     FROM hr_policies
     WHERE organization_id = $1
       AND category = $2

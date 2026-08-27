@@ -33,7 +33,11 @@ export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
 
   function renderFormattedText(text) {
     if (!text) return null;
-    const parts = text.split(/(\*\*.*?\*\*)/g);
+
+    // Remove policy citation brackets (e.g. [POL-IT-001 | Section 1.1])
+    const cleanText = text.replace(/\[POL-[A-Z]+-\d+\s*(?:\|\s*[^\]]*)?\]/gi, '').trim();
+
+    const parts = cleanText.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return <strong key={i}>{part.slice(2, -2)}</strong>;
@@ -65,45 +69,6 @@ export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
         }}
       >
         <div style={styles.text}>{renderFormattedText(message.text)}</div>
-
-        {/* Citations */}
-        {(() => {
-          if (!message.sources || message.sources.length === 0) return null;
-          
-          const uniqueSources = [];
-          const seen = new Set();
-          message.sources.forEach(src => {
-            const key = `${src.policyKey}-${src.section}`;
-            if (!seen.has(key)) {
-              seen.add(key);
-              uniqueSources.push(src);
-            }
-          });
-
-          if (uniqueSources.length === 0) return null;
-
-          return (
-            <div style={styles.citationsContainer}>
-              <div style={styles.citationsHeader}>
-                <FiBookOpen size={11} /> Source Sections:
-              </div>
-              <div style={styles.citationsGrid}>
-                {uniqueSources.map((src, idx) => (
-                  <div
-                    key={idx}
-                    style={styles.citationBadge}
-                    onClick={() => onOpenPolicyReader && onOpenPolicyReader(src)}
-                    title="Click to view policy section"
-                  >
-                    <FiShield size={11} color="#5856d6" />
-                    <span>{src.policyKey} · {src.section}</span>
-                    <FiExternalLink size={9} color="#94a3b8" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
 
         {/* Footer Meta & Actions */}
         <div style={styles.footer}>

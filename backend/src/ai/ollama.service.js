@@ -54,7 +54,12 @@ async function generateCompletion(prompt) {
     body: JSON.stringify({
       model: CHAT_MODEL,
       prompt,
-      stream: false
+      stream: false,
+      options: {
+        temperature: 0.1,
+        num_ctx: 1024,
+        num_predict: 180
+      }
     })
   });
 
