@@ -94,9 +94,11 @@ router.use('/client-admin/nine-box', nineBoxRoutes.routes);
 const pipRoutes = require('../modules/pip');
 const policyRoutes = require('../modules/policy/policy.routes');
 const chatbotRoutes = require('../ai/chatbot.routes');
+const aiRoutes = require('../ai/ai.routes');
 router.use('/pip', requireAuth, requireModule('performance'), pipRoutes.routes);
 router.use('/policies', requireAuth, policyRoutes.routes);
 router.use('/policies', requireAuth, chatbotRoutes.routes);
+router.use('/ai', requireAuth, aiRoutes);
 router.use('/profile', profileRoutes.routes);
 router.use('/audit-logs', auditLogRoutes.routes);
 
@@ -110,7 +112,6 @@ router.get('/client-admin/performance-configurations', requireAuth, (req, res, n
 router.use('/', continuousFeedbackRoutes);
 router.use('/', selfAssessmentRoutes.routes);
 router.use('/', feedback360Routes.routes);
-
 // ─── Shared Employee Search (any authenticated role) ─────────────────────
 router.get('/employees/search', requireAuth, async (req, res, next) => {
   try {

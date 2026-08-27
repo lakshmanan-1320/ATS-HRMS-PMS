@@ -42,6 +42,98 @@ function parseSectionRef(chunkText) {
 }
 
 /**
+ * Index a single policy object (used by custom scripts / Code of Conduct seeder)
+ * @param {object} policy - Database policy object
+ * @returns {Promise<object>} - Result metadata
+ */
+async function indexPolicy(policy) {
+  const {
+    policy_id,
+    organization_id,
+    content_text,
+    category
+  } = policy;
+
+  if (!policy_id || !organization_id || !content_text) {
+    throw new Error('Invalid policy data.');
+  }
+
+  const chunks = chunkText(content_text);
+
+  if (!chunks.length) {
+    throw new Error('Policy contains no searchable content.');
+  }
+
+  const policyKey = getPolicyKey(policy);
+  const policyCategory = category || policy.category || 'Leave & Employee Conduct';
+
+  // Remove previous embeddings for this policy from the unified table
+  await query(
+    `
+    DELETE FROM policy_embeddings
+    WHERE policy_id = $1
+      AND organization_id = $2
+    `,
+    [policy_id, organization_id]
+  );
+
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i];
+    const sectionRef = parseSectionRef(chunk);
+    const embedding = await generateEmbedding(chunk);
+
+    await query(
+      `
+      INSERT INTO policy_embeddings (
+        organization_id,
+        policy_id,
+        policy_key,
+        category,
+        section_ref,
+        chunk_index,
+        chunk_text,
+        embedding
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8::vector)
+      `,
+      [
+        organization_id,
+        policy_id,
+        policyKey,
+        policyCategory,
+        sectionRef,
+        i,
+        chunk,
+        JSON.stringify(embedding)
+      ]
+    );
+  }
+
+  // Update policy index status if columns exist
+  try {
+    await query(
+      `
+      UPDATE hr_policies
+      SET
+        ai_status = 'indexed',
+        ai_indexed_at = NOW(),
+        updated_at = NOW()
+      WHERE policy_id = $1
+        AND organization_id = $2
+      `,
+      [policy_id, organization_id]
+    );
+  } catch (err) {
+    // Non-fatal if staging database does not have ai_status column yet
+  }
+
+  return {
+    policyId: policy_id,
+    chunksIndexed: chunks.length
+  };
+}
+
+/**
  * Index policies of a specific category for a tenant
  * @param {string} organizationId - Tenant ID
  * @param {string} category - Policy category filter
@@ -72,58 +164,8 @@ async function indexTenantPolicies(organizationId, category) {
   let totalChunks = 0;
 
   for (const policy of policies) {
-    const { policy_id, content_text } = policy;
-    const policyKey = getPolicyKey(policy);
-
-    const chunks = chunkText(content_text);
-    if (!chunks.length) {
-      continue;
-    }
-
-    // Delete existing chunks to prevent duplicates
-    await query(
-      `
-      DELETE FROM policy_embeddings
-      WHERE policy_id = $1
-        AND organization_id = $2
-      `,
-      [policy_id, organizationId]
-    );
-
-    // Index chunks sequentially
-    for (let i = 0; i < chunks.length; i++) {
-      const chunk = chunks[i];
-      const sectionRef = parseSectionRef(chunk);
-
-      const embedding = await generateEmbedding(chunk);
-
-      await query(
-        `
-        INSERT INTO policy_embeddings (
-          organization_id,
-          policy_id,
-          policy_key,
-          category,
-          section_ref,
-          chunk_index,
-          chunk_text,
-          embedding
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8::vector)
-        `,
-        [
-          organizationId,
-          policy_id,
-          policyKey,
-          category,
-          sectionRef,
-          i,
-          chunk,
-          JSON.stringify(embedding)
-        ]
-      );
-      totalChunks++;
-    }
+    const indexed = await indexPolicy(policy);
+    totalChunks += indexed.chunksIndexed;
   }
 
   return {
@@ -134,6 +176,7 @@ async function indexTenantPolicies(organizationId, category) {
 
 module.exports = {
   indexTenantPolicies,
+  indexPolicy,
   getPolicyKey,
   parseSectionRef
 };
