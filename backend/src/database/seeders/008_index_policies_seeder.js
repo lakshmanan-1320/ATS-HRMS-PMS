@@ -13,10 +13,22 @@ async function seedPolicyEmbeddings() {
 
     for (const row of orgRes.rows) {
       const orgId = row.organization_id;
+      
       console.log(`[Seeder] Indexing Data Security policies for Organization: ${orgId}`);
+      const result1 = await indexTenantPolicies(orgId, 'IT & Data Security');
+      console.log(`[Seeder] Successful: Indexed ${result1.policiesIndexed} policies, created ${result1.chunksIndexed} vectors.`);
 
-      const result = await indexTenantPolicies(orgId, 'IT & Data Security');
-      console.log(`[Seeder] Successful: Indexed ${result.policiesIndexed} policies, created ${result.chunksIndexed} vectors.`);
+      console.log(`[Seeder] Indexing Leave & Employee Conduct policies for Organization: ${orgId}`);
+      const result2 = await indexTenantPolicies(orgId, 'Leave & Employee Conduct');
+      console.log(`[Seeder] Successful: Indexed ${result2.policiesIndexed} policies, created ${result2.chunksIndexed} vectors.`);
+
+      console.log(`[Seeder] Indexing Attendance & Working Hours policies for Organization: ${orgId}`);
+      const result3 = await indexTenantPolicies(orgId, 'Attendance & Working Hours');
+      console.log(`[Seeder] Successful: Indexed ${result3.policiesIndexed} policies, created ${result3.chunksIndexed} vectors.`);
+
+      console.log(`[Seeder] Indexing Benefits & Compensation policies for Organization: ${orgId}`);
+      const result4 = await indexTenantPolicies(orgId, 'Benefits & Compensation');
+      console.log(`[Seeder] Successful: Indexed ${result4.policiesIndexed} policies, created ${result4.chunksIndexed} vectors.`);
     }
 
     console.log('[Seeder] Policy embeddings indexing completed successfully!');

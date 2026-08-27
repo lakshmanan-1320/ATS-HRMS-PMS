@@ -7,19 +7,21 @@ import axios from 'axios';
  */
 export async function sendChatMessage(
   message,
-  category = 'IT_SECURITY',
+  category = null,
   policyId = null
 ) {
   const token = sessionStorage.getItem('sa_token');
 
   // Route to the appropriate backend controller dynamically based on the category
-  const endpoint = category === 'IT_SECURITY' ? '/api/policies/ai-chat' : '/api/ai/chat';
+  const endpoint = category === 'IT_SECURITY'
+    ? '/api/policies/ai-chat'
+    : (category === 'LEAVE_CONDUCT' ? '/api/ai/chat' : '/api/policies/ai-chat');
 
-  // Supply both message and question properties to satisfy both controllers
+  // Supply both message and question properties, and only include category if explicitly selected
   const requestBody = {
     question: message,
     message,
-    category,
+    ...(category ? { category } : {}),
     policyId
   };
 

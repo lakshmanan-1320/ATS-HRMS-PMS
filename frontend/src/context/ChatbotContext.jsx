@@ -18,8 +18,8 @@ export function ChatbotProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [activeCategory, setActiveCategory] = useState('IT_SECURITY');
-  const [activePolicyTitle, setActivePolicyTitle] = useState('IT & Data Security AI Assistant');
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [activePolicyTitle, setActivePolicyTitle] = useState('AI Assistant');
 
   // Persist chat history to sessionStorage
   useEffect(() => {
@@ -37,7 +37,7 @@ export function ChatbotProvider({ children }) {
     }
   }, [isOpen, isMinimized]);
 
-  function openChat(category = 'IT_SECURITY', title = 'IT & Data Security AI Assistant') {
+  function openChat(category = null, title = 'AI Assistant') {
     setActiveCategory(category);
     setActivePolicyTitle(title);
     setIsOpen(true);

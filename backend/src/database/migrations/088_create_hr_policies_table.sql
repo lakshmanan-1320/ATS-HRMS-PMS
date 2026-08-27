@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS hr_policies (
                         'Attendance & Working Hours',
                         'Leave & Employee Conduct',
                         'IT & Data Security',
+                        'Benefits & Compensation',
                         'General'
                     )),
     summary         TEXT,

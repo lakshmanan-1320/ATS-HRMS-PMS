@@ -18,6 +18,7 @@ import {
 } from 'react-icons/fi';
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx';
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar';
+import { useChatbot } from '../../../context/ChatbotContext.jsx';
 
 const CATEGORIES = [
   'All',
@@ -32,6 +33,7 @@ export default function EmployeePolicies() {
   const { id: routePolicyId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { openChat } = useChatbot();
 
   const [policies, setPolicies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -303,8 +305,14 @@ export default function EmployeePolicies() {
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                       <button
                         onClick={() => {
-                          setAiChatPolicy(policy);
-                          setAiChatModalOpen(true);
+                          const categoryMap = {
+                            'IT & Data Security': 'IT_SECURITY',
+                            'Leave & Employee Conduct': 'LEAVE_CONDUCT',
+                            'Attendance & Working Hours': 'ATTENDANCE_LEAVE',
+                            'Benefits & Compensation': 'BENEFITS_COMPENSATION'
+                          };
+                          const mappedCat = categoryMap[policy.category] || null;
+                          openChat(mappedCat, `${policy.title} AI Assistant`);
                         }}
                         title="Ask AI Assistant about this policy"
                         style={{

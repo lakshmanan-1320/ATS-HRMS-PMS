@@ -23,11 +23,16 @@ async function handleChatQuery(req, res, next) {
       });
     }
 
-    // Call chatbot RAG pipeline, locked to 'IT & Data Security' category
+    let searchCategory = undefined;
+    if (req.body.category) {
+      searchCategory = req.body.category === 'IT_SECURITY' ? 'IT & Data Security' : 'Leave & Employee Conduct';
+    }
+
+    // Call chatbot RAG pipeline, passing mapped category filter (or undefined to default to both targets)
     const result = await chatbotService.getChatbotResponse(
       organizationId,
       question.trim(),
-      'IT & Data Security'
+      searchCategory
     );
 
     return res.json(result);
