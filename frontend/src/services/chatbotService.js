@@ -2,21 +2,31 @@ import axios from 'axios';
 
 /**
  * chatbotService.js
- * Service layer encapsulating API calls to backend AI chat endpoints.
+ * Service layer for local AI / RAG chatbot.
  */
-export async function sendChatMessage(message, category = 'IT_SECURITY', policyId = null) {
+
+const API_BASE_URL = 'http://localhost:5000';
+
+export async function sendChatMessage(
+  message,
+  category = 'IT_SECURITY',
+  policyId = null
+) {
   const token = sessionStorage.getItem('sa_token');
-  
+
   const response = await axios.post(
-    '/api/ai/chat',
+    `${API_BASE_URL}/api/ai/chat`,
     {
       message,
       category,
       policyId
     },
     {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-      timeout: 45000 // 45 sec timeout for AI inference
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        'Content-Type': 'application/json'
+      },
+      timeout: 60000
     }
   );
 
