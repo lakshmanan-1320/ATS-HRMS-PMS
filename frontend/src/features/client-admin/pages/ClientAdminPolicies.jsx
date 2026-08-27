@@ -22,7 +22,6 @@ import {
 } from 'react-icons/fi';
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx';
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx';
-import PolicyAiChatModal from '../../employee-portal/components/PolicyAiChatModal.jsx';
 import { FiZap } from 'react-icons/fi';
 
 const STATUS_META = {
@@ -50,8 +49,6 @@ export default function ClientAdminPolicies() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPolicy, setEditingPolicy] = useState(null);
   const [viewingPolicy, setViewingPolicy] = useState(null);
-  const [aiChatModalOpen, setAiChatModalOpen] = useState(false);
-  const [aiChatPolicy, setAiChatPolicy] = useState(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -320,27 +317,6 @@ export default function ClientAdminPolicies() {
 
             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
               <button
-                onClick={() => setAiChatModalOpen(true)}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  padding: '11px 18px',
-                  background: 'rgba(99, 102, 241, 0.1)',
-                  border: '1px solid rgba(99, 102, 241, 0.3)',
-                  borderRadius: 12,
-                  cursor: 'pointer',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: '#4f46e5',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <FiZap size={16} color="#4f46e5" /> Ask Data Security AI
-              </button>
-
-              <button
                 onClick={handleOpenCreateModal}
                 style={{
                   display: 'inline-flex',
@@ -551,17 +527,6 @@ export default function ClientAdminPolicies() {
                           {/* Action Buttons */}
                           <td style={{ padding: '16px 20px', textAlign: 'right', whitespaceNowrap: 'nowrap' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
-                              <button
-                                onClick={() => {
-                                  setAiChatPolicy(policy);
-                                  setAiChatModalOpen(true);
-                                }}
-                                title="Ask AI Assistant"
-                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '6px 10px', background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.25)', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: '#4f46e5', transition: 'all 0.15s' }}
-                              >
-                                <FiZap size={13} color="#4f46e5" /> Ask AI
-                              </button>
-
                               <button
                                 onClick={() => setViewingPolicy(policy)}
                                 title="Read Policy"
@@ -854,25 +819,6 @@ export default function ClientAdminPolicies() {
         </div>
       )}
 
-      {/* Policy AI Assistant Chatbot Modal */}
-      <PolicyAiChatModal
-        isOpen={aiChatModalOpen}
-        onClose={() => setAiChatModalOpen(false)}
-        category="IT_SECURITY"
-        policyId={aiChatPolicy?.policy_id}
-        policyTitle={aiChatPolicy?.title || 'IT & Data Security AI Assistant'}
-        policyDocRef="POL-IT-001"
-        presetQuestions={[
-          'What is the password length and rotation requirement?',
-          'Who do I report phishing emails to and what is the SLA?',
-          'Are USB drives and unapproved cloud storage allowed?',
-          'What is the workstation locking key shortcut requirement?'
-        ]}
-        onOpenPolicyReader={() => {
-          setAiChatModalOpen(false);
-          if (aiChatPolicy) setViewingPolicy(aiChatPolicy);
-        }}
-      />
     </div>
   );
 }

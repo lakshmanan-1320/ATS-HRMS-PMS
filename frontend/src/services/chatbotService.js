@@ -4,19 +4,17 @@ import axios from 'axios';
  * chatbotService.js
  * Service layer encapsulating API calls to backend AI chat endpoints.
  */
-export async function sendChatMessage(message, category = 'IT_SECURITY', policyId = null) {
+export async function sendChatMessage(message) {
   const token = sessionStorage.getItem('sa_token');
   
   const response = await axios.post(
-    '/api/ai/chat',
+    '/api/policies/ai-chat',
     {
-      message,
-      category,
-      policyId
+      question: message
     },
     {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
-      timeout: 45000 // 45 sec timeout for AI inference
+      timeout: 90000 // 90 sec timeout for AI inference
     }
   );
 
