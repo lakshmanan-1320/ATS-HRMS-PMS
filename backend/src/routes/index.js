@@ -93,8 +93,10 @@ router.use('/client-admin/bell-curve', requireAuth, requireModule('performance')
 router.use('/client-admin/nine-box', nineBoxRoutes.routes);
 const pipRoutes = require('../modules/pip');
 const policyRoutes = require('../modules/policy/policy.routes');
+const chatbotRoutes = require('../ai/chatbot.routes');
 router.use('/pip', requireAuth, requireModule('performance'), pipRoutes.routes);
 router.use('/policies', requireAuth, policyRoutes.routes);
+router.use('/policies', requireAuth, chatbotRoutes.routes);
 router.use('/profile', profileRoutes.routes);
 router.use('/audit-logs', auditLogRoutes.routes);
 

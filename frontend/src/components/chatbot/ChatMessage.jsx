@@ -67,27 +67,43 @@ export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
         <div style={styles.text}>{renderFormattedText(message.text)}</div>
 
         {/* Citations */}
-        {message.sources && message.sources.length > 0 && (
-          <div style={styles.citationsContainer}>
-            <div style={styles.citationsHeader}>
-              <FiBookOpen size={11} /> Source Sections:
+        {(() => {
+          if (!message.sources || message.sources.length === 0) return null;
+          
+          const uniqueSources = [];
+          const seen = new Set();
+          message.sources.forEach(src => {
+            const key = `${src.policyKey}-${src.section}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              uniqueSources.push(src);
+            }
+          });
+
+          if (uniqueSources.length === 0) return null;
+
+          return (
+            <div style={styles.citationsContainer}>
+              <div style={styles.citationsHeader}>
+                <FiBookOpen size={11} /> Source Sections:
+              </div>
+              <div style={styles.citationsGrid}>
+                {uniqueSources.map((src, idx) => (
+                  <div
+                    key={idx}
+                    style={styles.citationBadge}
+                    onClick={() => onOpenPolicyReader && onOpenPolicyReader(src)}
+                    title="Click to view policy section"
+                  >
+                    <FiShield size={11} color="#5856d6" />
+                    <span>{src.policyKey} · {src.section}</span>
+                    <FiExternalLink size={9} color="#94a3b8" />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div style={styles.citationsGrid}>
-              {message.sources.map((src, idx) => (
-                <div
-                  key={idx}
-                  style={styles.citationBadge}
-                  onClick={() => onOpenPolicyReader && onOpenPolicyReader(src)}
-                  title="Click to view policy section"
-                >
-                  <FiShield size={11} color="#5856d6" />
-                  <span>Section {src.chunk_index + 1}</span>
-                  <FiExternalLink size={9} color="#94a3b8" />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Footer Meta & Actions */}
         <div style={styles.footer}>
