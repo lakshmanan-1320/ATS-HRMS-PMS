@@ -373,10 +373,100 @@ async function seedHRPolicies() {
       }
     ];
 
+    /* =========================================================================
+       POLICY 4: EMPLOYEE BONUS & INCENTIVE POLICY (POL-HR-BONUS-001)
+       ========================================================================= */
+    const bonusDocControl = {
+      docRef: 'POL-HR-BONUS-001',
+      title: 'Employee Bonus & Incentive Policy',
+      version: '1.0',
+      effectiveDate: '2026-01-01',
+      reviewDate: '2027-01-01',
+      owner: 'Human Resources Department',
+      approver: 'Executive Management / Board',
+      scope: 'All eligible permanent employees, subject to employment terms',
+      classification: 'Internal Corporate HR Policy'
+    };
+
+    const bonusVersionHistory = [
+      { version: '1.0', date: '2026-01-01', author: 'Human Resources', summary: 'Initial employee bonus & incentive policy release', approvedBy: 'Executive Management' }
+    ];
+
+    const bonusSections = [
+      {
+        heading: 'Purpose & Policy Governance',
+        body: 'This policy establishes a clear and consistent framework for awarding employee bonuses and performance incentives. The purpose is to recognize measurable contribution, encourage achievement of business objectives, reward exceptional performance, and maintain transparency in the company\'s reward process.\n\n' +
+              'Policy principle: A bonus is an incentive payment and is not automatically guaranteed unless expressly stated in an employee\'s employment agreement or an applicable written compensation plan.'
+      },
+      {
+        heading: 'Eligibility for Bonus',
+        body: '• 2.1 Employment Status: Employees must meet the eligibility requirements communicated for the applicable bonus cycle.\n\n' +
+              '• 2.2 Minimum Service: Employees who have completed the applicable minimum service period may be considered for the bonus, subject to company rules.\n\n' +
+              '• 2.3 Active Employment: Employees generally must be actively employed on the applicable bonus payout/approval date unless an approved exception applies.\n\n' +
+              '• 2.4 Performance Standing: Employees must meet required performance and conduct standards and must not be under a disqualifying disciplinary action.\n\n' +
+              '• 2.5 New Joiners / Transfers: Bonus eligibility may be prorated based on joining date, role change, or time spent in an eligible position.'
+      },
+      {
+        heading: 'Bonus Components & Calculation',
+        body: 'The company may determine bonus payouts using a combination of individual performance, team/business performance, and company financial performance. The exact target percentage may vary by role, grade, business unit, and compensation plan.\n\n' +
+              '• Individual Performance (Illustrative Weight: 50%): Achievement of agreed KPIs, goals and responsibilities.\n' +
+              '• Team / Department Performance (Illustrative Weight: 25%): Delivery against team or departmental objectives.\n' +
+              '• Company Performance (Illustrative Weight: 25%): Business results, profitability and strategic objectives.\n\n' +
+              'Illustrative calculation: Bonus Payout = Eligible Salary × Target Bonus % × Overall Bonus Achievement %. Actual formulas and weights are governed by the applicable compensation plan.'
+      },
+      {
+        heading: 'Performance Rating & Bonus Achievement',
+        body: 'Performance Outcome and Illustrative Achievement Factor:\n' +
+              '• Exceptional: 120%–150% of target\n' +
+              '• Exceeds Expectations: 100%–119% of target\n' +
+              '• Meets Expectations: 80%–99% of target\n' +
+              '• Partially Meets: 40%–79% of target\n' +
+              '• Does Not Meet: 0%–39% of target\n\n' +
+              'The ranges above are illustrative and may be replaced by the company\'s approved performance-to-payout matrix.'
+      },
+      {
+        heading: 'Bonus Approval & Payout Process',
+        body: '• 5.1 Goal Setting: Eligible employees receive performance objectives at the beginning of the applicable performance cycle.\n\n' +
+              '• 5.2 Performance Review: Managers assess results using documented KPIs, objectives, role expectations and relevant evidence.\n\n' +
+              '• 5.3 Calibration: HR and management may conduct calibration to promote consistency across teams and grades.\n\n' +
+              '• 5.4 Approval: Final bonus recommendations require approval through the company\'s designated management and HR approval process.\n\n' +
+              '• 5.5 Payroll: Approved bonuses are processed through payroll and are subject to applicable statutory deductions and taxes.\n\n' +
+              '• 5.6 Payout Timing: Bonus payments are normally made in the designated payroll cycle following final approval.'
+      },
+      {
+        heading: 'Proration & Special Employment Events',
+        body: '• New Joiners: Bonus may be prorated according to eligible service during the performance period.\n\n' +
+              '• Internal Transfers: Performance may be assessed across roles or departments based on the time spent in each eligible position.\n\n' +
+              '• Leave of Absence: Eligibility and proration will follow applicable company rules and employment terms.\n\n' +
+              '• Resignation / Termination: Bonus eligibility upon separation depends on the applicable compensation plan, employment agreement and company policy.\n\n' +
+              '• Promotion: Target bonus percentage may be adjusted from the effective date of the new grade, where applicable.'
+      },
+      {
+        heading: 'Bonus Governance, Discretion & Adjustments',
+        body: 'Bonus recommendations are subject to business conditions, approved budgets, individual performance evidence, and management review. The company may adjust, defer, reduce, or withhold a discretionary bonus where permitted by applicable law and the governing compensation plan. Any such decision should be documented through the company\'s approved HR process.\n\n' +
+              'Employees must not make unauthorized commitments about bonus amounts, payout dates, or eligibility on behalf of the company.'
+      },
+      {
+        heading: 'Performance, Conduct & Disqualification',
+        body: '• Material misconduct, falsification of performance information, fraud, conflict-of-interest violations, or serious policy breaches may affect bonus eligibility.\n\n' +
+              '• Performance data used for bonus decisions must be accurate, supported by appropriate evidence, and submitted within required timelines.\n\n' +
+              '• Managers must apply the policy consistently and escalate disputed or exceptional cases to HR.'
+      },
+      {
+        heading: 'Employee Communication & Review',
+        body: 'HR is responsible for communicating applicable bonus plans, eligibility criteria, target opportunities, review timelines, and payout procedures. Employees may raise questions or request clarification through their manager or HR within the designated review period.'
+      },
+      {
+        heading: 'Legal & Tax Disclaimer',
+        body: 'This template is provided as a corporate HR framework and should be reviewed against applicable employment, tax, payroll, and labor laws before production use. Where an employment agreement, collective arrangement, or local law provides a different mandatory entitlement, the applicable legal requirement or governing agreement will control.'
+      }
+    ];
+
     const policiesBundle = [
       { docControl: attendanceLeaveDocControl, versionHistory: attendanceLeaveVersionHistory, sections: attendanceLeaveSections, category: 'Attendance & Working Hours', filename: 'Attendance_Working_Hours_and_Leave_Policy.pdf' },
       { docControl: conductDocControl, versionHistory: conductVersionHistory, sections: conductSections, category: 'Leave & Employee Conduct', filename: 'Code_of_Conduct_and_Workplace_Ethics_Policy.pdf' },
-      { docControl: itDocControl, versionHistory: itVersionHistory, sections: itSections, category: 'IT & Data Security', filename: 'IT_and_Data_Security_Policy.pdf' }
+      { docControl: itDocControl, versionHistory: itVersionHistory, sections: itSections, category: 'IT & Data Security', filename: 'IT_and_Data_Security_Policy.pdf' },
+      { docControl: bonusDocControl, versionHistory: bonusVersionHistory, sections: bonusSections, category: 'Benefits & Compensation', filename: 'Employee_Bonus_and_Incentive_Policy.pdf' }
     ];
 
     for (const ca of caRes.rows) {
@@ -401,7 +491,14 @@ async function seedHRPolicies() {
         const fileSize = await generatePDF(pdfPath, docControl, sections, versionHistory);
 
         // Build HTML content for online reader - CLEAN PROSE LAYOUT (NO RAW TABLES)
-        const summaryText = sections.find(s => s.heading.includes('Expectations') || s.heading.includes('Demeanor') || s.heading.includes('Password'))?.body.slice(0, 220) + '...';
+        const matchedSection = sections.find(s =>
+          s.heading.includes('Expectations') ||
+          s.heading.includes('Demeanor') ||
+          s.heading.includes('Password') ||
+          s.heading.includes('Purpose') ||
+          s.heading.includes('Eligibility')
+        ) || sections[0];
+        const summaryText = matchedSection ? matchedSection.body.slice(0, 220) + '...' : '';
         const keywords = [category.toLowerCase(), docControl.docRef.toLowerCase(), 'policy', 'acas framework', 'governance', 'compliance'];
 
         const contentHtml = `
