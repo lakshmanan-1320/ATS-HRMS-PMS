@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import useInactivityLogout from '../hooks/useInactivityLogout.js'
 import { clientAdminRoutes, publicRoutes, superAdminRoutes, employeeRoutes } from './routeConfig.js'
+import Chatbot from '../components/chatbot/Chatbot.jsx'
 
 function SuperAdminRoute({ children }) {
   const token = sessionStorage.getItem('sa_token')
@@ -126,6 +127,9 @@ export default function AppRoutes() {
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+
+      {/* Enterprise Global Floating Right-End AI Chatbot */}
+      <Chatbot />
     </BrowserRouter>
   )
 }
