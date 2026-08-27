@@ -95,6 +95,7 @@ const pipRoutes = require('../modules/pip');
 const policyRoutes = require('../modules/policy/policy.routes');
 router.use('/pip', requireAuth, requireModule('performance'), pipRoutes.routes);
 router.use('/policies', requireAuth, policyRoutes.routes);
+const aiRoutes = require('../ai/ai.routes');
 router.use('/profile', profileRoutes.routes);
 router.use('/audit-logs', auditLogRoutes.routes);
 
@@ -108,7 +109,7 @@ router.get('/client-admin/performance-configurations', requireAuth, (req, res, n
 router.use('/', continuousFeedbackRoutes);
 router.use('/', selfAssessmentRoutes.routes);
 router.use('/', feedback360Routes.routes);
-
+router.use('/ai', aiRoutes);
 // ─── Shared Employee Search (any authenticated role) ─────────────────────
 router.get('/employees/search', requireAuth, async (req, res, next) => {
   try {

@@ -1,4 +1,4 @@
-const { query } = require('../../config/db');
+const { query } = require('../config/db');
 
 const { generateEmbedding } = require('./embedding.service');
 const { chunkText } = require('./policyChunker.service');

@@ -2,32 +2,25 @@ const { query } = require('../config/db');
 const { generateEmbedding } = require('./embedding.service');
 
 async function retrievePolicies(organizationId, question, limit = 5) {
-  if (!organizationId) {
-    throw new Error('Organization ID is required.');
-  }
-
-  if (!question) {
-    throw new Error('Question is required.');
-  }
-
-  console.log('Policy Retriever');
+  console.log('\nPolicy Retriever');
   console.log('Organization ID:', organizationId);
   console.log('Question:', question);
 
-  // Generate embedding for the user's question
-  const questionEmbedding = await generateEmbedding(question);
+  try {
+    // ---------------------------------------------------------
+    // 1. Try vector retrieval
+    // ---------------------------------------------------------
+    const questionEmbedding = await generateEmbedding(question);
 
-  if (!questionEmbedding || !Array.isArray(questionEmbedding)) {
-    throw new Error('Failed to generate question embedding.');
-  }
+    console.log(
+      'Question embedding generated. Dimensions:',
+      questionEmbedding.length
+    );
 
-  console.log(
-    'Question embedding generated. Dimensions:',
-    questionEmbedding.length
-  );
+    const embeddingString = `[${questionEmbedding.join(',')}]`;
 
-  const result = await query(
-    `
+    const result = await query(
+      `
       SELECT
         embedding_id,
         policy_id,
@@ -38,20 +31,62 @@ async function retrievePolicies(organizationId, question, limit = 5) {
       WHERE organization_id = $2
       ORDER BY embedding <=> $1::vector
       LIMIT $3
-    `,
-    [
-      JSON.stringify(questionEmbedding),
-      organizationId,
-      limit
-    ]
-  );
+      `,
+      [embeddingString, organizationId, limit]
+    );
 
-  console.log(
-    'Policy chunks retrieved:',
-    result.rows.length
-  );
+    console.log('Policy chunks retrieved:', result.rows.length);
 
-  return result.rows;
+    if (result.rows.length > 0) {
+      return result.rows;
+    }
+
+    // ---------------------------------------------------------
+    // 2. FALLBACK: retrieve directly from hr_policies
+    // ---------------------------------------------------------
+    console.log('No embeddings found. Using policy content fallback...');
+
+const policies = await query(
+  `
+  SELECT
+    policy_id,
+    title,
+    content_text
+  FROM hr_policies
+  WHERE organization_id = $1
+    AND is_active = true
+    AND is_published = true
+    AND content_text IS NOT NULL
+    AND LENGTH(TRIM(content_text)) > 0
+    AND title ILIKE '%Code of Conduct%'
+  ORDER BY title
+  `,
+  [organizationId]
+);
+
+    console.log('Published policies found:', policies.rows.length);
+
+    const results = [];
+
+    for (const policy of policies.rows) {
+      results.push({
+        policy_id: policy.policy_id,
+        chunk_index: 0,
+        similarity: 1.0,
+        chunk_text: `
+POLICY: ${policy.title}
+
+${policy.content_text}
+        `.trim()
+      });
+    }
+
+    return results.slice(0, limit);
+
+  } catch (error) {
+    console.error('Policy retrieval failed:', error);
+    throw error;
+  }
 }
 
 module.exports = {
