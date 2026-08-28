@@ -62,10 +62,11 @@ function isUnauthorizedSensitiveQuery(text = '', role = 'employee') {
 
   // Regular employee asking for unnamed sensitive compensation data
   const isEmployee = role === 'employee';
+  const isSelfSalary = /\b(my\s+(salary|payroll|bonus|pay|ctc|compensation|earnings?|payslip)|what\s+is\s+my\s+(salary|pay|ctc)|how\s+much\s+(do\s+i|am\s+i)\s+(earn|paid)|me|mine|myself)\b/i.test(lower);
   const asksGenericSensitive =
     isEmployee &&
     SENSITIVE_FIELD_PATTERNS.some((p) => p.test(lower)) &&
-    !/\b(my\s+(salary|payroll|bonus|pay)|me|mine|myself)\b/i.test(lower);
+    !isSelfSalary;
 
   return asksOtherSalary || asksManagerSalaryDirectly || asksOtherOrg || asksGenericSensitive;
 }
@@ -82,37 +83,66 @@ function validateRoleAccess(context, intent) {
   const isManager = MANAGER_ROLES.has(role);
 
   switch (intent) {
+    // ── Organization-level queries (HR / Admins only) ──
+    case 'ORG_EMPLOYEE_COUNT':
     case 'EMPLOYEE_COUNT':
       if (!isAdmin) {
         return {
           allowed: false,
-          reason: 'Employee count is accessible to HR and Administrators.',
+          reason: 'Organization employee counts are accessible only to HR and Administrators.',
         };
       }
       return { allowed: true };
 
+    case 'ORG_CHECKINS':
     case 'CURRENT_CHECKINS':
       if (!isManager && !isAdmin) {
         return {
           allowed: false,
-          reason: 'Real-time check-in counts are accessible to Managers and HR.',
+          reason: 'Real-time check-in counts are accessible only to Managers and HR.',
         };
       }
       return { allowed: true };
 
-    case 'EMPLOYEES_ON_LEAVE':
-      // Employees only see their own status; Managers see team; HR/Admin see org
+    case 'ORG_ABSENCES':
+    case 'ORG_LEAVE':
+    case 'ORG_PENDING_APPROVALS':
+      if (!isAdmin) {
+        return {
+          allowed: false,
+          reason: 'Organization-wide attendance and leave statistics are restricted to HR and Administrators.',
+        };
+      }
       return { allowed: true };
 
+    // ── Manager Team-level queries (Managers / HR / Admins only) ──
+    case 'MANAGER_TEAM_MEMBERS':
+    case 'MANAGER_TEAM_ATTENDANCE':
+    case 'MANAGER_TEAM_ABSENCES':
+    case 'MANAGER_TEAM_CHECKINS':
+    case 'MANAGER_TEAM_LATE':
+    case 'MANAGER_TEAM_INCOMPLETE_PUNCHES':
+    case 'MANAGER_TEAM_LEAVE':
+    case 'MANAGER_TEAM_LEAVE_HISTORY':
+    case 'MANAGER_REGULARIZATION_PENDING':
+    case 'MANAGER_REGULARIZATION_HISTORY':
+    case 'MANAGER_PENDING_APPROVALS':
+    case 'MANAGER_PENDING_LEAVE_APPROVALS':
+    case 'MANAGER_PENDING_REGULARIZATION_APPROVALS':
+    case 'PENDING_APPROVALS':
     case 'TEAM_ATTENDANCE':
     case 'TEAM_LEAVE':
     case 'CURRENT_ABSENCES':
       if (!isManager && !isAdmin) {
         return {
           allowed: false,
-          reason: 'Team attendance and leave information are accessible to Managers and HR.',
+          reason: 'Team management information and approvals are accessible only to Managers and HR. You are not authorized to view team or peer records.',
         };
       }
+      return { allowed: true };
+
+    case 'EMPLOYEES_ON_LEAVE':
+      // Employees only see their own status; Managers see team; HR/Admin see org
       return { allowed: true };
 
     default:

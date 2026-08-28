@@ -60,7 +60,7 @@ async function getEmployeeProfile(employeeId, organizationId) {
       email: row.email,
       phone: row.phone,
       gender: row.gender,
-      dateOfJoining: row.date_of_joining,
+      dateOfJoining: row.date_of_joining ? String(row.date_of_joining).slice(0, 10) : null,
       status: row.status,
       employmentType: row.employment_type,
       designation: row.designation,
@@ -124,7 +124,149 @@ async function getReportingManager(employeeId, organizationId) {
   }
 }
 
+/**
+ * Retrieves current shift details for an employee.
+ * @param {string} employeeId
+ * @param {string} organizationId
+ * @returns {Promise<object>}
+ */
+async function getCurrentShift(employeeId, organizationId) {
+  if (!employeeId || !organizationId) return { hasShift: false };
+
+  try {
+    const sql = `
+      SELECT
+        s.shift_id,
+        s.shift_name,
+        s.shift_code,
+        s.start_time,
+        s.end_time,
+        s.grace_minutes,
+        s.early_exit_grace_minutes,
+        s.minimum_hours
+      FROM employees e
+      JOIN attendance_shifts s ON e.shift_id = s.shift_id
+      WHERE e.employee_id = $1 AND e.organization_id = $2
+      LIMIT 1
+    `;
+    const res = await query(sql, [employeeId, organizationId]);
+    const row = res.rows[0];
+    if (!row) {
+      return { hasShift: false };
+    }
+
+    return {
+      hasShift: true,
+      shiftId: row.shift_id,
+      shiftName: row.shift_name,
+      shiftCode: row.shift_code,
+      startTime: row.start_time,
+      endTime: row.end_time,
+      graceMinutes: row.grace_minutes || 0,
+      earlyExitGraceMinutes: row.early_exit_grace_minutes || 0,
+      minimumHours: row.minimum_hours ? parseFloat(row.minimum_hours) : 8,
+    };
+  } catch (err) {
+    logger.error('[Data:Employee] Error in getCurrentShift:', err.message);
+    return { hasShift: false, error: err.message };
+  }
+}
+
+/**
+ * Retrieves department for an employee.
+ */
+async function getDepartment(employeeId, organizationId) {
+  const profile = await getEmployeeProfile(employeeId, organizationId);
+  return {
+    departmentName: profile?.departmentName || null,
+    employeeName: profile?.fullName || null,
+  };
+}
+
+/**
+ * Retrieves designation for an employee.
+ */
+async function getDesignation(employeeId, organizationId) {
+  const profile = await getEmployeeProfile(employeeId, organizationId);
+  return {
+    designation: profile?.designation || null,
+    employeeName: profile?.fullName || null,
+  };
+}
+
+/**
+ * Retrieves joining date for an employee.
+ */
+async function getJoiningDate(employeeId, organizationId) {
+  const profile = await getEmployeeProfile(employeeId, organizationId);
+  return {
+    dateOfJoining: profile?.dateOfJoining || null,
+    employeeName: profile?.fullName || null,
+  };
+}
+
+/**
+ * Retrieves all active direct reports for a given manager.
+ * Strictly scoped to organization_id AND manager_employee_id.
+ * @param {string} managerEmployeeId - UUID of the manager employee
+ * @param {string} organizationId - UUID of the organization (tenant isolation)
+ * @returns {Promise<object>} { count, members }
+ */
+async function getTeamMembers(managerEmployeeId, organizationId) {
+  if (!managerEmployeeId || !organizationId) {
+    return { count: 0, members: [] };
+  }
+
+  try {
+    const sql = `
+      SELECT
+        e.employee_id,
+        e.employee_code,
+        e.first_name,
+        e.last_name,
+        e.email,
+        e.designation,
+        e.status,
+        e.date_of_joining,
+        d.name AS department_name
+      FROM employees e
+      LEFT JOIN departments d ON e.department_id = d.department_id
+      WHERE e.organization_id = $1
+        AND e.manager_employee_id = $2
+        AND e.status = 'active'
+      ORDER BY e.first_name, e.last_name
+    `;
+    const res = await query(sql, [organizationId, managerEmployeeId]);
+
+    logger.info(`[Team Data] Manager employee ID: ${managerEmployeeId} | Team members found: ${res.rows.length}`);
+
+    return {
+      count: res.rows.length,
+      members: res.rows.map((row) => ({
+        employeeId: row.employee_id,
+        employeeCode: row.employee_code,
+        firstName: row.first_name,
+        lastName: row.last_name,
+        fullName: `${row.first_name || ''} ${row.last_name || ''}`.trim(),
+        email: row.email,
+        designation: row.designation || null,
+        department: row.department_name || null,
+        dateOfJoining: row.date_of_joining ? String(row.date_of_joining).slice(0, 10) : null,
+        status: row.status,
+      })),
+    };
+  } catch (err) {
+    logger.error('[Data:Employee] Error in getTeamMembers:', err.message);
+    return { count: 0, members: [], error: err.message };
+  }
+}
+
 module.exports = {
   getEmployeeProfile,
   getReportingManager,
+  getCurrentShift,
+  getDepartment,
+  getDesignation,
+  getJoiningDate,
+  getTeamMembers,
 };

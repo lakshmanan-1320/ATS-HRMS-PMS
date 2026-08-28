@@ -264,8 +264,132 @@ async function getEmployeesCurrentlyOnLeave(organizationId, managerEmployeeId = 
   }
 }
 
+/**
+ * Retrieves pending leave requests for an employee.
+ */
+async function getEmployeePendingLeaveRequests(employeeId, organizationId) {
+  if (!employeeId || !organizationId) return { count: 0, requests: [] };
+
+  try {
+    const sql = `
+      SELECT
+        r.leave_request_id,
+        r.start_date,
+        r.end_date,
+        r.total_leave_days,
+        r.leave_reason,
+        r.created_at,
+        t.leave_type_name
+      FROM leave_requests r
+      JOIN leave_types t ON t.leave_type_id = r.leave_type_id
+      WHERE r.employee_id = $1
+        AND UPPER(r.current_status) = 'PENDING'
+      ORDER BY r.start_date ASC
+    `;
+    const res = await query(sql, [employeeId]);
+    return {
+      count: res.rows.length,
+      requests: res.rows.map((r) => ({
+        id: r.leave_request_id,
+        leaveType: r.leave_type_name,
+        startDate: String(r.start_date).slice(0, 10),
+        endDate: String(r.end_date).slice(0, 10),
+        days: parseFloat(r.total_leave_days) || 1,
+        reason: r.leave_reason,
+        createdAt: r.created_at,
+      })),
+    };
+  } catch (err) {
+    logger.error('[Data:Leave] Error in getEmployeePendingLeaveRequests:', err.message);
+    return { count: 0, requests: [], error: err.message };
+  }
+}
+
+/**
+ * Retrieves team leave history and summary of leaves taken per team member (for managers).
+ */
+async function getTeamLeaveHistory(managerEmployeeId, organizationId, limit = 30) {
+  if (!managerEmployeeId || !organizationId) return { count: 0, members: [], topLeaveTaker: null, records: [] };
+
+  try {
+    // 1. Grouped sum per team member
+    const summarySql = `
+      SELECT
+        e.employee_id,
+        CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+        e.employee_code,
+        e.designation,
+        COALESCE(SUM(r.total_leave_days), 0) AS total_leave_days,
+        COUNT(r.leave_request_id) AS leave_count
+      FROM employees e
+      LEFT JOIN leave_requests r ON r.employee_id = e.employee_id AND r.current_status = 'APPROVED'
+      WHERE e.organization_id = $1
+        AND e.manager_employee_id = $2
+        AND e.status = 'active'
+      GROUP BY e.employee_id, e.first_name, e.last_name, e.employee_code, e.designation
+      ORDER BY total_leave_days DESC, e.first_name ASC
+    `;
+    const summaryRes = await query(summarySql, [organizationId, managerEmployeeId]);
+
+    const members = summaryRes.rows.map((r) => ({
+      employeeId: r.employee_id,
+      employeeName: r.employee_name,
+      employeeCode: r.employee_code,
+      designation: r.designation,
+      totalLeaveDays: parseFloat(r.total_leave_days) || 0,
+      leaveCount: parseInt(r.leave_count || '0', 10),
+    }));
+
+    const topLeaveTaker = members.length > 0 && members[0].totalLeaveDays > 0 ? members[0] : null;
+
+    // 2. Recent approved leave requests
+    const recordsSql = `
+      SELECT
+        r.leave_request_id,
+        CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+        e.employee_code,
+        t.leave_type_name,
+        r.start_date,
+        r.end_date,
+        r.total_leave_days,
+        r.current_status
+      FROM leave_requests r
+      JOIN employees e ON e.employee_id = r.employee_id
+      JOIN leave_types t ON t.leave_type_id = r.leave_type_id
+      WHERE e.organization_id = $1
+        AND e.manager_employee_id = $2
+        AND r.current_status = 'APPROVED'
+      ORDER BY r.start_date DESC
+      LIMIT $3
+    `;
+    const recordsRes = await query(recordsSql, [organizationId, managerEmployeeId, limit]);
+
+    const records = recordsRes.rows.map((r) => ({
+      id: r.leave_request_id,
+      employeeName: r.employee_name,
+      employeeCode: r.employee_code,
+      leaveType: r.leave_type_name,
+      startDate: String(r.start_date).slice(0, 10),
+      endDate: String(r.end_date).slice(0, 10),
+      days: parseFloat(r.total_leave_days) || 0,
+    }));
+
+    return {
+      count: records.length,
+      members,
+      topLeaveTaker,
+      records,
+    };
+  } catch (err) {
+    logger.error('[Data:Leave] Error in getTeamLeaveHistory:', err.message);
+    return { count: 0, members: [], topLeaveTaker: null, records: [], error: err.message };
+  }
+}
+
 module.exports = {
   getEmployeeLeaveBalance,
   getEmployeeLeaveHistory,
   getEmployeesCurrentlyOnLeave,
+  getEmployeePendingLeaveRequests,
+  getTeamLeaveHistory,
 };

@@ -123,7 +123,11 @@ async function chat(body = {}, user = {}) {
 
   // ── 5. Intent Classification ───────────────────────────────────────────────
   const tIntent = performance.now();
-  const intentResult = classifyIntent(message, history);
+  const intentResult = classifyIntent(message, history, {
+    role,
+    employeeId: context.employeeId,
+    organizationId: context.organizationId,
+  });
   perf.intentMs = _ms(tIntent);
   const { intent } = intentResult;
 
