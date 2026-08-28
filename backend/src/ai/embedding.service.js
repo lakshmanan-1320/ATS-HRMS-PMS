@@ -1,7 +1,7 @@
 const ollamaService = require('./ollama.service');
 
 /**
- * Generate 768-dimensional vector embedding for the input text using embeddinggemma.
+ * Generate vector embedding for the input text using the configured Ollama embedding model.
  * @param {string} text - Clean text to embed
  * @returns {Promise<Array<number>>} - Vector array
  */
