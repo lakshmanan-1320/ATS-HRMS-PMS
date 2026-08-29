@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { FiCopy, FiCheck, FiThumbsUp, FiShield, FiExternalLink, FiBookOpen, FiRefreshCw, FiUser } from 'react-icons/fi';
+import { FiCopy, FiCheck, FiThumbsUp, FiFileText, FiRefreshCw, FiUser, FiDatabase } from 'react-icons/fi';
 
-// Exact Robot Face SVG matching reference image #2
 const RobotAvatarIcon = ({ size = 18, color = '#5856d6' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12 2V5" stroke={color} strokeWidth="2" strokeLinecap="round" />
@@ -15,15 +14,20 @@ const RobotAvatarIcon = ({ size = 18, color = '#5856d6' }) => (
   </svg>
 );
 
-/**
- * ChatMessage.jsx
- * Light lavender (#f0f3ff) & Indigo message bubbles matching reference design image #2.
- */
-export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
+function getSourceLabel(source) {
+  if (source.sourceType === 'EMPLOYEE_DATA') {
+    return source.label || 'Live HRMS record';
+  }
+
+  return source.policy_title || source.policyTitle || source.policy_key || source.policyKey || 'Policy source';
+}
+
+export default function ChatMessage({ message, onRetry }) {
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
 
   const isUser = message.sender === 'user';
+  const sources = (message.sources || []).filter(Boolean);
 
   function handleCopy() {
     navigator.clipboard.writeText(message.text);
@@ -34,8 +38,10 @@ export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
   function renderFormattedText(text) {
     if (!text) return null;
 
-    // Remove policy citation brackets (e.g. [POL-IT-001 | Section 1.1])
-    const cleanText = text.replace(/\[POL-[A-Z]+-\d+\s*(?:\|\s*[^\]]*)?\]/gi, '').trim();
+    const cleanText = text
+      .replace(/\[DOCUMENT\s+\d+:[^\]]*\]/gi, '')
+      .replace(/\[POL-[A-Z0-9-]+\s*(?:\|\s*[^\]]*)?\]/gi, '')
+      .trim();
 
     const parts = cleanText.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
@@ -70,7 +76,21 @@ export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
       >
         <div style={styles.text}>{renderFormattedText(message.text)}</div>
 
-        {/* Footer Meta & Actions */}
+        {!isUser && !message.isError && sources.length > 0 && (
+          <div style={styles.sources}>
+            {sources.slice(0, 4).map((source, idx) => {
+              const isEmployeeSource = source.sourceType === 'EMPLOYEE_DATA';
+              const IconComp = isEmployeeSource ? FiDatabase : FiFileText;
+              return (
+                <span key={idx} style={styles.sourceBadge}>
+                  <IconComp size={11} />
+                  {getSourceLabel(source)}
+                </span>
+              );
+            })}
+          </div>
+        )}
+
         <div style={styles.footer}>
           <span style={styles.time}>{message.timestamp}</span>
 
@@ -171,26 +191,15 @@ const styles = {
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word'
   },
-  citationsContainer: {
+  sources: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 5,
     marginTop: 10,
     paddingTop: 8,
     borderTop: '1px solid #e0e7ff'
   },
-  citationsHeader: {
-    fontSize: 11,
-    fontWeight: 700,
-    color: '#64748b',
-    marginBottom: 4,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4
-  },
-  citationsGrid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 5
-  },
-  citationBadge: {
+  sourceBadge: {
     display: 'inline-flex',
     alignItems: 'center',
     gap: 4,
@@ -200,8 +209,7 @@ const styles = {
     padding: '2px 7px',
     fontSize: 10.5,
     fontWeight: 600,
-    color: '#4338ca',
-    cursor: 'pointer'
+    color: '#4338ca'
   },
   footer: {
     display: 'flex',

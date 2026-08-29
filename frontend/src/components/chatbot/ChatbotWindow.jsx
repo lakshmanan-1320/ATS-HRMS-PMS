@@ -5,8 +5,7 @@ import ChatInput from './ChatInput.jsx';
 
 /**
  * ChatbotWindow.jsx
- * Pixel-perfect replica of reference design image #2:
- * Floating right-end panel (360px x 540px), rounded corners (28px), soft periwinkle shadow.
+ * Floating HR AI Assistant panel with smooth animations and responsive mobile support.
  */
 export default function ChatbotWindow({
   isOpen,
@@ -18,15 +17,13 @@ export default function ChatbotWindow({
   loading,
   onSendMessage,
   onRetry,
-  title,
   onOpenPolicyReader
 }) {
   if (!isOpen || isMinimized) return null;
 
   return (
-    <div style={styles.windowPanel} onClick={(e) => e.stopPropagation()}>
+    <div className="chat-window-responsive" style={styles.windowPanel} onClick={(e) => e.stopPropagation()}>
       <ChatHeader
-        title="AI Assistant"
         onMinimize={onMinimize}
         onClose={onClose}
         onClear={onClear}
@@ -44,7 +41,7 @@ export default function ChatbotWindow({
         @keyframes slideInUp {
           from {
             opacity: 0;
-            transform: translateY(20px) scale(0.96);
+            transform: translateY(18px) scale(0.97);
           }
           to {
             opacity: 1;
@@ -53,10 +50,11 @@ export default function ChatbotWindow({
         }
         @media (max-width: 640px) {
           .chat-window-responsive {
-            width: calc(100vw - 32px) !important;
-            height: 75vh !important;
-            right: 16px !important;
-            bottom: 84px !important;
+            width: calc(100vw - 24px) !important;
+            height: calc(100vh - 100px) !important;
+            right: 12px !important;
+            bottom: 80px !important;
+            border-radius: 20px !important;
           }
         }
       `}</style>
@@ -67,7 +65,7 @@ export default function ChatbotWindow({
 const styles = {
   windowPanel: {
     position: 'fixed',
-    bottom: 96,
+    bottom: 92,
     right: 28,
     width: 360,
     height: 540,
@@ -79,7 +77,6 @@ const styles = {
     overflow: 'hidden',
     zIndex: 9995,
     border: '1px solid rgba(224, 231, 255, 0.8)',
-    animation: 'slideInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-    className: 'chat-window-responsive'
+    animation: 'slideInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
   }
 };

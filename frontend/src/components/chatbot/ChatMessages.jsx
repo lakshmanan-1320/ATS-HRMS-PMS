@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FiCompass, FiMessageSquare, FiNavigation, FiHelpCircle, FiArrowDown } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiDollarSign, FiFileText, FiHelpCircle, FiMessageSquare, FiArrowDown } from 'react-icons/fi';
+import { useAuthStore } from '../../store/auth.store.js';
 import ChatMessage from './ChatMessage.jsx';
 import TypingIndicator from './TypingIndicator.jsx';
 
-// Exact Robot Face SVG matching screenshot #1
 const RobotAvatarIcon = ({ size = 20, color = '#5856d6' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12 2V5" stroke={color} strokeWidth="2" strokeLinecap="round" />
@@ -17,11 +17,27 @@ const RobotAvatarIcon = ({ size = 20, color = '#5856d6' }) => (
   </svg>
 );
 
-/**
- * ChatMessages.jsx
- * Pixel-perfect replica of reference screenshot #1:
- * Exact icons (Compass, MessageSquare, Navigation, HelpCircle), lavender welcome card, rounded chip buttons.
- */
+function getStarterPrompts(role, user) {
+  const hasEmployeeContext = Boolean(user?.employeeId || user?.employee_id || ['employee', 'manager'].includes(role));
+
+  if (!hasEmployeeContext && ['client_admin', 'hr', 'super_admin'].includes(role)) {
+    return [
+      { text: 'Employee leave status', icon: FiCalendar },
+      { text: 'Attendance issues', icon: FiClock },
+      { text: 'Policy questions', icon: FiFileText },
+      { text: 'Bonus rules', icon: FiDollarSign }
+    ];
+  }
+
+  return [
+    { text: 'How many leaves do I have?', icon: FiCalendar },
+    { text: 'Which days was I on leave?', icon: FiClock },
+    { text: 'What was my attendance this month?', icon: FiMessageSquare },
+    { text: 'Can I take leave next Friday?', icon: FiHelpCircle },
+    { text: 'What are the password requirements?', icon: FiFileText }
+  ];
+}
+
 export default function ChatMessages({
   messages,
   loading,
@@ -32,13 +48,8 @@ export default function ChatMessages({
   const bottomRef = useRef(null);
   const containerRef = useRef(null);
   const [showScrollBottom, setShowScrollBottom] = useState(false);
-
-  const referencePrompts = [
-    { text: 'How can you help me?', icon: FiCompass },
-    { text: 'Explain this feature', icon: FiMessageSquare },
-    { text: 'Help me navigate the system', icon: FiNavigation },
-    { text: 'I need assistance', icon: FiHelpCircle }
-  ];
+  const { role, user } = useAuthStore();
+  const starterPrompts = getStarterPrompts(role, user).slice(0, 5);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,7 +67,6 @@ export default function ChatMessages({
 
   return (
     <div ref={containerRef} onScroll={handleScroll} style={styles.container}>
-      {/* Welcome & Empty State - Exact Replica of Screenshot #1 */}
       {messages.length === 0 && (
         <div style={styles.welcomeSection}>
           <div style={styles.welcomeRow}>
@@ -66,15 +76,13 @@ export default function ChatMessages({
               </div>
             </div>
             <div style={styles.welcomeBubble}>
-              <div style={styles.welcomeTextHi}>
-                Hi! <span style={{ fontSize: 16 }}>👋</span>
-              </div>
+              <div style={styles.welcomeTextHi}>Hi! <span style={{ fontSize: 16 }}>👋</span></div>
               <div style={styles.welcomeTextQuestion}>How can I help you today?</div>
             </div>
           </div>
 
           <div style={styles.chipsContainer}>
-            {referencePrompts.map((item, idx) => {
+            {starterPrompts.map((item, idx) => {
               const IconComp = item.icon;
               return (
                 <button
@@ -83,7 +91,7 @@ export default function ChatMessages({
                   style={styles.chipBtn}
                   disabled={loading}
                 >
-                  <IconComp size={16} color="#5856d6" />
+                  <IconComp size={15} color="#5856d6" />
                   <span>{item.text}</span>
                 </button>
               );
@@ -92,7 +100,6 @@ export default function ChatMessages({
         </div>
       )}
 
-      {/* Messages Thread */}
       {messages.map((msg, idx) => (
         <ChatMessage
           key={idx}
@@ -102,12 +109,10 @@ export default function ChatMessages({
         />
       ))}
 
-      {/* Thinking State */}
       {loading && <TypingIndicator />}
 
       <div ref={bottomRef} />
 
-      {/* Scroll to Bottom Button */}
       {showScrollBottom && (
         <button onClick={scrollToBottom} style={styles.scrollBtn} title="Scroll to latest">
           <FiArrowDown size={14} color="#5856d6" />
@@ -189,12 +194,13 @@ const styles = {
     backgroundColor: '#f3f5ff',
     border: '1px solid #e0e7ff',
     borderRadius: 24,
-    padding: '10px 18px',
-    fontSize: 13.5,
+    padding: '9px 16px',
+    fontSize: 13,
     fontWeight: 600,
     color: '#4338ca',
     cursor: 'pointer',
     width: 'fit-content',
+    maxWidth: '100%',
     transition: 'all 0.2s ease',
     boxShadow: '0 2px 6px rgba(88, 86, 214, 0.04)'
   },

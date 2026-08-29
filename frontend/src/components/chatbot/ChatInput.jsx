@@ -1,18 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { FiRefreshCw } from 'react-icons/fi';
 
-// Exact Tilted Paper Plane Send Icon matching screenshot #2
-const PaperPlaneSendIcon = ({ size = 18, color = '#ffffff' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="22" y1="2" x2="11" y2="13" />
-    <polygon points="22 2 15 22 11 13 2 9 22 2" fill="none" />
+// Send Arrow Icon
+const SendArrowIcon = ({ size = 16, color = '#ffffff' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill={color} />
   </svg>
 );
 
 /**
  * ChatInput.jsx
- * Pixel-perfect replica of reference image #2:
- * Exact tilted paper plane send icon, rounded pill container, "🟢 I am here to assist you 24/7" footer.
+ * Professional input bar with auto-resizing textarea, keyboard handling, and send action.
  */
 export default function ChatInput({ onSendMessage, loading }) {
   const [text, setText] = useState('');
@@ -41,7 +39,7 @@ export default function ChatInput({ onSendMessage, loading }) {
     setText(e.target.value);
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 90)}px`;
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 80)}px`;
     }
   }
 
@@ -52,7 +50,7 @@ export default function ChatInput({ onSendMessage, loading }) {
           ref={textareaRef}
           className="chatbot-textarea"
           rows={1}
-          placeholder="Type your message..."
+          placeholder="Ask about an HR policy..."
           value={text}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -64,26 +62,30 @@ export default function ChatInput({ onSendMessage, loading }) {
           disabled={!text.trim() || loading}
           style={{
             ...styles.sendBtn,
-            opacity: !text.trim() || loading ? 0.5 : 1,
+            opacity: !text.trim() || loading ? 0.45 : 1,
             cursor: !text.trim() || loading ? 'not-allowed' : 'pointer'
           }}
-          title="Send message"
+          title="Send question"
         >
           {loading ? (
-            <FiRefreshCw size={17} style={{ animation: 'spin 1s linear infinite' }} />
+            <FiRefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} />
           ) : (
-            <PaperPlaneSendIcon size={18} color="#ffffff" />
+            <SendArrowIcon size={15} color="#ffffff" />
           )}
         </button>
       </form>
 
       <div style={styles.footerRow}>
         <span style={styles.footerDot} />
-        <span style={styles.footerText}>I am here to assist you 24/7</span>
+        <span style={styles.footerText}>Powered by internal verified HR policies</span>
       </div>
 
       <style>{`
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .chatbot-textarea::placeholder {
+          color: #94a3b8;
+          opacity: 1;
+        }
       `}</style>
     </div>
   );
@@ -91,19 +93,21 @@ export default function ChatInput({ onSendMessage, loading }) {
 
 const styles = {
   container: {
-    padding: '12px 16px 14px',
+    padding: '10px 14px 12px',
     backgroundColor: '#ffffff',
-    borderTop: '1px solid #f1f5f9'
+    borderTop: '1px solid #e2e8f0',
+    flexShrink: 0
   },
   form: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '#f8f9fc',
-    border: '1.5px solid #e8eaf0',
-    borderRadius: 50,
-    padding: '6px 6px 6px 16px',
+    backgroundColor: '#f8fafc',
+    border: '1.5px solid #e2e8f0',
+    borderRadius: 24,
+    padding: '4px 6px 4px 14px',
     boxShadow: 'none',
-    gap: 8
+    gap: 8,
+    transition: 'border-color 0.2s'
   },
   textarea: {
     flex: 1,
@@ -113,44 +117,45 @@ const styles = {
     boxShadow: 'none',
     WebkitAppearance: 'none',
     appearance: 'none',
-    fontSize: 13.5,
+    fontSize: 13,
     backgroundColor: 'transparent',
-    color: '#374151',
+    color: '#1e293b',
     resize: 'none',
     maxHeight: 80,
     fontFamily: 'inherit',
     lineHeight: 1.4,
-    caretColor: '#5856d6'
+    caretColor: '#4f46e5'
   },
   sendBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
+    width: 32,
+    height: 32,
+    borderRadius: '50%',
     border: 'none',
-    background: 'linear-gradient(135deg, #5856d6 0%, #7b78f6 100%)',
+    background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)',
     color: '#ffffff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-    boxShadow: '0 2px 8px rgba(88, 86, 214, 0.3)',
-    transition: 'opacity 0.2s ease'
+    boxShadow: '0 2px 6px rgba(79, 70, 229, 0.25)',
+    transition: 'all 0.2s ease',
+    outline: 'none'
   },
   footerRow: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    marginTop: 9
+    gap: 5,
+    marginTop: 6
   },
   footerDot: {
-    width: 6,
-    height: 6,
+    width: 5,
+    height: 5,
     borderRadius: '50%',
-    backgroundColor: '#34c759'
+    backgroundColor: '#22c55e'
   },
   footerText: {
-    fontSize: 11,
+    fontSize: 10.5,
     color: '#94a3b8',
     fontWeight: 500
   }

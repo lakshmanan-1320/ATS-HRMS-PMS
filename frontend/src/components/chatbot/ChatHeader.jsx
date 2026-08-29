@@ -1,56 +1,60 @@
 import React from 'react';
-import { FiMinus, FiX } from 'react-icons/fi';
+import { FiMinus, FiX, FiTrash2 } from 'react-icons/fi';
 
-// Exact Robot Face SVG matching reference image #2
-const RobotAvatarIcon = ({ size = 22, color = '#5856d6' }) => (
+// Sparkles / HR AI Assistant Icon
+const SparkleAvatarIcon = ({ size = 20, color = '#5856d6' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2V5" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <circle cx="12" cy="2" r="1.5" fill={color} />
-    <rect x="4" y="5" width="16" height="14" rx="5" stroke={color} strokeWidth="2" fill="none" />
-    <rect x="7.5" y="9.5" width="3" height="3" rx="1" fill={color} />
-    <rect x="13.5" y="9.5" width="3" height="3" rx="1" fill={color} />
-    <path d="M9.5 15H14.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <rect x="2" y="10" width="2" height="4" rx="1" fill={color} />
-    <rect x="20" y="10" width="2" height="4" rx="1" fill={color} />
+    <path d="M12 2L14.2 8.3L20.5 10.5L14.2 12.7L12 19L9.8 12.7L3.5 10.5L9.8 8.3L12 2Z" fill={color} />
+    <path d="M19 16L20.1 19.1L23.2 20.2L20.1 21.3L19 24.4L17.9 21.3L14.8 20.2L17.9 19.1L19 16Z" fill={color} opacity="0.7" />
+    <path d="M5 2L5.8 4.2L8 5L5.8 5.8L5 8L4.2 5.8L2 5L4.2 4.2L5 2Z" fill={color} opacity="0.7" />
   </svg>
 );
 
 /**
  * ChatHeader.jsx
- * Pixel-perfect replica of reference image #2:
- * Soft periwinkle gradient, white robot avatar in glow ring, AI Assistant title, 🟢 Online, circular minimize & close.
+ * Professional enterprise header for Insight HR Assistant.
  */
-export default function ChatHeader({ onMinimize, onClose }) {
+export default function ChatHeader({ onMinimize, onClose, onClear }) {
   return (
     <div style={styles.header}>
       <div style={styles.left}>
         <div style={styles.avatarGlow}>
           <div style={styles.avatarBg}>
-            <RobotAvatarIcon size={22} color="#5856d6" />
+            <SparkleAvatarIcon size={20} color="#5856d6" />
           </div>
         </div>
         <div>
-          <h3 style={styles.title}>AI Assistant</h3>
-          <div style={styles.statusRow}>
+          <div style={styles.titleRow}>
+            <h3 style={styles.title}>Insight HR Assistant</h3>
+            <span style={styles.sparkleTag}>AI</span>
+          </div>
+          <div style={styles.subtitleRow}>
             <span style={styles.statusDot} />
             <span style={styles.statusText}>Online</span>
+            <span style={styles.dotDivider}>•</span>
+            <span style={styles.subtitleText}>Your HR Policy Assistant</span>
           </div>
         </div>
       </div>
 
       <div style={styles.right}>
+        {onClear && (
+          <button onClick={onClear} style={styles.iconBtn} title="Clear conversation">
+            <FiTrash2 size={13} color="#ffffff" />
+          </button>
+        )}
         <button onClick={onMinimize} style={styles.iconBtn} title="Minimize chat">
-          <FiMinus size={15} color="#ffffff" />
+          <FiMinus size={14} color="#ffffff" />
         </button>
         <button onClick={onClose} style={styles.iconBtn} title="Close chat">
-          <FiX size={15} color="#ffffff" />
+          <FiX size={14} color="#ffffff" />
         </button>
       </div>
 
       <style>{`
         @keyframes pulseDot {
           0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.2); opacity: 0.7; }
+          50% { transform: scale(1.25); opacity: 0.75; }
         }
       `}</style>
     </div>
@@ -59,81 +63,106 @@ export default function ChatHeader({ onMinimize, onClose }) {
 
 const styles = {
   header: {
-    background: 'linear-gradient(135deg, #5856d6 0%, #7b78f6 100%)',
-    padding: '16px 20px',
+    background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #7c3aed 100%)',
+    padding: '14px 18px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     color: '#ffffff',
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    boxShadow: '0 2px 10px rgba(79, 70, 229, 0.2)'
   },
   left: {
     display: 'flex',
     alignItems: 'center',
-    gap: 12
+    gap: 10
   },
   avatarGlow: {
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 40,
     borderRadius: '50%',
-    backgroundColor: 'rgba(255, 255, 255, 0.22)',
-    backdropFilter: 'blur(8px)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backdropFilter: 'blur(6px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.1)'
+    boxShadow: '0 3px 10px rgba(0, 0, 0, 0.12)'
   },
   avatarBg: {
-    width: 36,
-    height: 36,
+    width: 32,
+    height: 32,
     borderRadius: '50%',
     backgroundColor: '#ffffff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
   },
-  title: {
-    margin: 0,
-    fontWeight: 700,
-    fontSize: 16.5,
-    color: '#ffffff',
-    letterSpacing: '-0.2px'
-  },
-  statusRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    marginTop: 2
-  },
-  statusDot: {
-    width: 7,
-    height: 7,
-    borderRadius: '50%',
-    backgroundColor: '#34c759',
-    boxShadow: '0 0 6px #34c759',
-    animation: 'pulseDot 2s infinite'
-  },
-  statusText: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.92)',
-    fontWeight: 500
-  },
-  right: {
+  titleRow: {
     display: 'flex',
     alignItems: 'center',
     gap: 6
   },
+  title: {
+    margin: 0,
+    fontWeight: 700,
+    fontSize: 15,
+    color: '#ffffff',
+    letterSpacing: '-0.2px'
+  },
+  sparkleTag: {
+    fontSize: 10,
+    fontWeight: 700,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    color: '#ffffff',
+    padding: '1px 5px',
+    borderRadius: 6,
+    letterSpacing: '0.3px'
+  },
+  subtitleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 2
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: '50%',
+    backgroundColor: '#22c55e',
+    boxShadow: '0 0 6px #22c55e',
+    animation: 'pulseDot 2s infinite'
+  },
+  statusText: {
+    fontSize: 11,
+    color: 'rgba(255, 255, 255, 0.95)',
+    fontWeight: 600
+  },
+  dotDivider: {
+    fontSize: 10,
+    color: 'rgba(255, 255, 255, 0.6)'
+  },
+  subtitleText: {
+    fontSize: 11,
+    color: 'rgba(255, 255, 255, 0.85)',
+    fontWeight: 400
+  },
+  right: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 5
+  },
   iconBtn: {
-    background: 'rgba(255, 255, 255, 0.22)',
+    background: 'rgba(255, 255, 255, 0.18)',
     border: 'none',
-    width: 28,
-    height: 28,
+    width: 26,
+    height: 26,
     borderRadius: '50%',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'background 0.2s'
+    transition: 'all 0.2s',
+    outline: 'none'
   }
 };
