@@ -355,10 +355,12 @@ async function routeAndFetch(plan, params) {
       (async () => {
         const tEmbed = performance.now();
         try {
-          const targetCat = getTargetPolicyCategory(intent, intentResult) || category;
-          const options = { category: targetCat };
-          if (targetCat) {
-            options.categories = [targetCat];
+          const explicitCategory = getTargetPolicyCategory(intent, intentResult);
+          const options = {};
+          if (explicitCategory) {
+            options.categories = [explicitCategory];
+          } else if (Array.isArray(category) && category.length > 0) {
+            options.categories = category;
           }
           policyChunks = (await policyRetriever.retrievePolicies(organizationId, message, 3, options)) || [];
           perf.embeddingMs = Math.round(performance.now() - tEmbed);

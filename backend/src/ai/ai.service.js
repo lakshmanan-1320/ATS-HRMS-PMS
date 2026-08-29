@@ -233,9 +233,11 @@ async function chat(body = {}, user = {}) {
     });
   }
 
+  const topChunks = (policyChunks || []).slice(0, 4);
+
   const prompt = buildUserAwareHRPrompt({
     question: message,
-    policyChunks,
+    policyChunks: topChunks,
     employeeDataText,
     user: {
       role,
@@ -253,7 +255,10 @@ async function chat(body = {}, user = {}) {
   let gemmaFailed = false;
 
   try {
-    rawCompletion = await gemmaService.generateCompletion(prompt);
+    rawCompletion = await gemmaService.generateCompletion(prompt, {
+      timeoutMs: 60000,
+      num_predict: 350,
+    });
     perf.gemmaMs = _ms(tGemma);
   } catch (err) {
     perf.gemmaMs = _ms(tGemma);
@@ -270,7 +275,12 @@ async function chat(body = {}, user = {}) {
     if (liveData) {
       finalAnswer = `${employeeDataText}\n\nNote: The policy explanation engine is temporarily busy. The above HRMS data is verified from your live records.`;
     } else if (policyChunks.length > 0) {
-      finalAnswer = 'Relevant HR policy information was retrieved, but a generated summary is temporarily unavailable. Please refer to company HR policy documents or contact HR.';
+      const topChunks = policyChunks.slice(0, 2);
+      const quotes = topChunks.map((c) => {
+        const sec = c.sectionRef ? `${c.sectionRef} of ` : '';
+        return `• ${sec}${c.policyTitle || 'Company Policy'}:\n"${(c.chunkText || '').trim()}"`;
+      }).join('\n\n');
+      finalAnswer = `According to official company policy:\n\n${quotes}`;
     } else {
       finalAnswer = 'The HR assistant is temporarily unable to process this request. Please try again shortly.';
     }

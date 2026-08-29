@@ -51,9 +51,9 @@ module.exports = {
     ollamaUrl: process.env.OLLAMA_URL || 'http://localhost:11434',
     chatModel: process.env.OLLAMA_CHAT_MODEL || 'gemma3:4b',
     embeddingModel: process.env.OLLAMA_EMBEDDING_MODEL || 'nomic-embed-text',
-    timeoutMs: parseInt(process.env.AI_TIMEOUT_MS || '20000', 10),
-    topK: parseInt(process.env.RAG_TOP_K || '8', 10),
-    minSimilarity: parseFloat(process.env.RAG_MIN_SIMILARITY || '0.45'),
+    timeoutMs: parseInt(process.env.AI_TIMEOUT_MS || '60000', 10),
+    topK: parseInt(process.env.RAG_TOP_K || '4', 10),
+    minSimilarity: parseFloat(process.env.RAG_MIN_SIMILARITY || '0.35'),
   },
   mailFallback: {
     host: process.env.MAIL_HOST,
