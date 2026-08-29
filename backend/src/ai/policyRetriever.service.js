@@ -42,6 +42,7 @@ async function retrievePolicies(organizationId, question, categories = null, lim
       SELECT
         e.policy_id AS "policyId",
         e.policy_key AS "policyKey",
+        p.title AS "policyTitle",
         e.section_ref AS "sectionRef",
         e.chunk_text AS "chunkText",
         1 - (e.embedding <=> $1::vector) AS "similarity"

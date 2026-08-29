@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { FiCopy, FiCheck, FiThumbsUp, FiShield, FiExternalLink, FiBookOpen, FiRefreshCw, FiUser } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { useChatbot } from '../../context/ChatbotContext.jsx';
+import { FiCopy, FiCheck, FiThumbsUp, FiShield, FiExternalLink, FiBookOpen, FiRefreshCw, FiUser, FiFileText } from 'react-icons/fi';
 
 // Exact Robot Face SVG matching reference image #2
 const RobotAvatarIcon = ({ size = 18, color = '#5856d6' }) => (
@@ -22,6 +24,8 @@ const RobotAvatarIcon = ({ size = 18, color = '#5856d6' }) => (
 export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
+  const { allPolicies } = useChatbot();
 
   const isUser = message.sender === 'user';
 
@@ -31,18 +35,103 @@ export default function ChatMessage({ message, onRetry, onOpenPolicyReader }) {
     setTimeout(() => setCopied(false), 2000);
   }
 
+  const handleCitationClick = (policyTitle, sectionRef) => {
+    let policyId = null;
+    const cleanTitle = (policyTitle || '').trim().toLowerCase();
+
+    console.log('[ChatbotClick] Clicked citation:', { policyTitle: cleanTitle, sectionRef });
+    console.log('[ChatbotClick] Message sources:', message.sources);
+    console.log('[ChatbotClick] Context allPolicies:', allPolicies);
+
+    // 1. Resolve from message sources first
+    if (message.sources && message.sources.length > 0) {
+      const match = message.sources.find(s => {
+        const sTitle = (s.policyTitle || '').trim().toLowerCase();
+        const sKey = (s.policyKey || '').trim().toLowerCase();
+        return sTitle === cleanTitle || sKey === cleanTitle;
+      });
+      if (match) {
+        policyId = match.policyId;
+        console.log('[ChatbotClick] Resolved policy ID from message sources:', policyId);
+      }
+    }
+
+    // 2. Fallback to global policies list
+    if (!policyId && allPolicies && allPolicies.length > 0) {
+      const match = allPolicies.find(p => {
+        const pTitle = (p.title || '').trim().toLowerCase();
+        const pKey = (p.policy_key || '').trim().toLowerCase();
+        return pTitle === cleanTitle || pKey === cleanTitle;
+      });
+      if (match) {
+        policyId = match.policy_id;
+        console.log('[ChatbotClick] Resolved policy ID from global policies fallback:', policyId);
+      }
+    }
+
+    if (policyId) {
+      const targetUrl = `/employee/policies/${policyId}?section=${encodeURIComponent(sectionRef)}`;
+      console.log('[ChatbotClick] Navigating to URL:', targetUrl);
+      navigate(targetUrl);
+    } else {
+      console.warn(`[Chatbot] Could not resolve policy ID for citation: "${policyTitle}"`);
+    }
+  };
+
   function renderFormattedText(text) {
     if (!text) return null;
 
-    // Remove policy citation brackets (e.g. [POL-IT-001 | Section 1.1])
-    const cleanText = text.replace(/\[POL-[A-Z]+-\d+\s*(?:\|\s*[^\]]*)?\]/gi, '').trim();
+    // Strip any raw 📄 placeholders from the text to prevent them from showing
+    const cleanText = text.replace(/📄/g, '').trim();
 
-    const parts = cleanText.split(/(\*\*.*?\*\*)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i}>{part.slice(2, -2)}</strong>;
+    // Split text by premium citations pattern: [Policy Title · Section Ref — Section Title]
+    const citationRegex = /(\[[^\]]+?\s*·\s*[^·\]]+?\s*—\s*[^\]]+?\])/gi;
+    const parts = cleanText.split(citationRegex);
+
+    return parts.map((part, index) => {
+      if (part.match(citationRegex)) {
+        // Parse title, section, and clean heading
+        const match = part.match(/\[([^\]]+?)\s*·\s*([^·\]]+?)\s*—\s*([^\]]+?)\]/i);
+        if (match) {
+          const policyTitle = match[1].trim();
+          const sectionRef = match[2].trim();
+          const sectionTitle = match[3].trim();
+          return (
+            <div
+              key={index}
+              onClick={() => handleCitationClick(policyTitle, sectionRef)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#f1f5f9';
+                e.currentTarget.style.borderColor = '#4f46e5';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(88, 86, 214, 0.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.borderColor = '#cbd5e1';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+              style={styles.citationCard}
+              title={`View ${policyTitle} ${sectionRef}`}
+            >
+              <FiFileText size={13} style={{ color: '#4f46e5', flexShrink: 0 }} />
+              <div style={styles.citationText}>
+                <span style={styles.citationSection}>{sectionRef}</span>
+                <span style={styles.citationDivider}>—</span>
+                <span style={styles.citationTitle}>{sectionTitle}</span>
+              </div>
+            </div>
+          );
+        }
       }
-      return part;
+
+      // Parse bold text for non-citation parts
+      const boldParts = part.split(/(\*\*.*?\*\*)/g);
+      return boldParts.map((subPart, subIndex) => {
+        if (subPart.startsWith('**') && subPart.endsWith('**')) {
+          return <strong key={`${index}-${subIndex}`}>{subPart.slice(2, -2)}</strong>;
+        }
+        return subPart;
+      });
     });
   }
 
@@ -170,6 +259,43 @@ const styles = {
   text: {
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word'
+  },
+  citationCard: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#ffffff',
+    border: '1px solid #cbd5e1',
+    borderRadius: 10,
+    padding: '8px 14px',
+    fontSize: 12.5,
+    fontWeight: 600,
+    color: '#4f46e5',
+    cursor: 'pointer',
+    marginTop: 6,
+    marginBottom: 6,
+    transition: 'all 0.2s ease',
+    userSelect: 'none',
+    width: 'fit-content',
+    maxWidth: '100%',
+    boxSizing: 'border-box'
+  },
+  citationText: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+    flexWrap: 'wrap'
+  },
+  citationSection: {
+    color: '#4f46e5',
+    fontWeight: 750
+  },
+  citationDivider: {
+    color: '#94a3b8'
+  },
+  citationTitle: {
+    color: '#334155',
+    fontWeight: 600
   },
   citationsContainer: {
     marginTop: 10,

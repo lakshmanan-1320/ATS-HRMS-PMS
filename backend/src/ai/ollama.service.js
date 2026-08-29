@@ -57,8 +57,8 @@ async function generateCompletion(prompt) {
       stream: false,
       options: {
         temperature: 0.1,
-        num_ctx: 1024,
-        num_predict: 180
+        num_ctx: 4096,
+        num_predict: 1024
       }
     })
   });
@@ -69,7 +69,16 @@ async function generateCompletion(prompt) {
   }
 
   const data = await response.json();
-  return data.response;
+  return {
+    response: data.response,
+    metadata: {
+      total_duration: data.total_duration,
+      prompt_eval_duration: data.prompt_eval_duration,
+      eval_duration: data.eval_duration,
+      prompt_eval_count: data.prompt_eval_count,
+      eval_count: data.eval_count
+    }
+  };
 }
 
 module.exports = {

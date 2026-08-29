@@ -42,6 +42,45 @@ function parseSectionRef(chunkText) {
 }
 
 /**
+ * Splits a policy's plain text content dynamically into clean, semantic sections using SECTION headers.
+ * @param {string} contentText - Complete policy plain text
+ * @returns {Array|null} - Array of sections { sectionRef, text } or null if no headers are found
+ */
+function splitPolicyIntoSections(contentText) {
+  const sectionRegex = /\n\nSECTION\s+(\d+)[:\s]/gi;
+  const matches = [...contentText.matchAll(sectionRegex)];
+  
+  if (matches.length === 0) {
+    return null;
+  }
+  
+  const sections = [];
+  
+  // Extract text before first SECTION header as General header preamble
+  if (matches[0].index > 0) {
+    sections.push({
+      sectionRef: 'General',
+      text: contentText.slice(0, matches[0].index).trim()
+    });
+  }
+  
+  for (let i = 0; i < matches.length; i++) {
+    const match = matches[i];
+    const currentIndex = match.index;
+    const nextIndex = (i + 1 < matches.length) ? matches[i + 1].index : contentText.length;
+    const sectionText = contentText.slice(currentIndex, nextIndex).trim();
+    const sectionNum = match[1];
+    
+    sections.push({
+      sectionRef: `Section ${sectionNum}`,
+      text: sectionText
+    });
+  }
+  
+  return sections;
+}
+
+/**
  * Index a single policy object (used by custom scripts / Code of Conduct seeder)
  * @param {object} policy - Database policy object
  * @returns {Promise<object>} - Result metadata
@@ -58,14 +97,22 @@ async function indexPolicy(policy) {
     throw new Error('Invalid policy data.');
   }
 
-  const chunks = chunkText(content_text);
-
-  if (!chunks.length) {
-    throw new Error('Policy contains no searchable content.');
-  }
-
   const policyKey = getPolicyKey(policy);
   const policyCategory = category || policy.category || 'Leave & Employee Conduct';
+
+  // Split policy content semantically by sections, falling back to character chunking if no headers
+  let sections = splitPolicyIntoSections(content_text);
+  if (!sections) {
+    const chunks = chunkText(content_text);
+    sections = chunks.map((chunk, i) => ({
+      sectionRef: parseSectionRef(chunk),
+      text: chunk
+    }));
+  }
+
+  if (!sections.length) {
+    throw new Error('Policy contains no searchable content.');
+  }
 
   // Remove previous embeddings for this policy from the unified table
   await query(
@@ -77,10 +124,9 @@ async function indexPolicy(policy) {
     [policy_id, organization_id]
   );
 
-  for (let i = 0; i < chunks.length; i++) {
-    const chunk = chunks[i];
-    const sectionRef = parseSectionRef(chunk);
-    const embedding = await generateEmbedding(chunk);
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i];
+    const embedding = await generateEmbedding(section.text);
 
     await query(
       `
@@ -101,9 +147,9 @@ async function indexPolicy(policy) {
         policy_id,
         policyKey,
         policyCategory,
-        sectionRef,
+        section.sectionRef,
         i,
-        chunk,
+        section.text,
         JSON.stringify(embedding)
       ]
     );
@@ -129,7 +175,7 @@ async function indexPolicy(policy) {
 
   return {
     policyId: policy_id,
-    chunksIndexed: chunks.length
+    chunksIndexed: sections.length
   };
 }
 

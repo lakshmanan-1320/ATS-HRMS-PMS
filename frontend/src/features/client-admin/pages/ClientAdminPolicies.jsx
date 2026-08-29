@@ -35,7 +35,7 @@ const CATEGORIES = [
   'Leave & Employee Conduct',
   'IT & Data Security',
   'Benefits & Compensation',
-  'General HR'
+  'General'
 ];
 
 export default function ClientAdminPolicies() {
@@ -94,7 +94,7 @@ export default function ClientAdminPolicies() {
       title: '',
       category: 'Attendance & Working Hours',
       summary: '',
-      contentHtml: '<h3>1. Purpose & Scope</h3>\n<p>Enter detailed policy rules and guidelines here...</p>\n<h3>2. Compliance & Rules</h3>\n<p>Enter key expectations and standards...</p>',
+      contentHtml: '',
       keywords: 'policy, hr, guidelines',
       versionNumber: '1.0',
       effectiveDate: new Date().toISOString().split('T')[0],
@@ -718,17 +718,21 @@ export default function ClientAdminPolicies() {
                 </div>
               </div>
 
-              {/* HTML Content Editor */}
+              {/* Optional Text Overview */}
               <div>
                 <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 4 }}>
-                  Policy Content HTML (Formatted Text for Employee Reader & Future RAG)
+                  Policy Text Overview (Optional)
                 </label>
                 <textarea
-                  rows={6}
+                  rows={4}
+                  placeholder="Optional plain text overview for web readers... (Full PDF text is extracted automatically for AI search)"
                   value={formData.contentHtml}
                   onChange={(e) => setFormData({ ...formData, contentHtml: e.target.value })}
-                  style={{ ...iStyle, fontFamily: 'monospace', fontSize: 12, background: '#0f172a', color: '#38bdf8', resize: 'vertical' }}
+                  style={{ ...iStyle, fontSize: 13, resize: 'vertical' }}
                 />
+                <span style={{ fontSize: 11, color: '#64748b', marginTop: 2, display: 'block' }}>
+                  When a PDF is attached, the system automatically extracts all text from the PDF file for AI chatbot answers.
+                </span>
               </div>
 
               {/* Publish Toggle */}

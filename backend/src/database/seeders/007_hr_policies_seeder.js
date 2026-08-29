@@ -266,7 +266,9 @@ async function seedHRPolicies() {
         heading: 'Protection of Intellectual Property, Source Code & Trade Secrets',
         body: '2.1 Data & IP Confidentiality:\n' +
               'All proprietary source code, software architectures, customer records, strategic financial models, employee PII, and trade secrets remain strictly confidential during and post-employment.\n\n' +
-              '2.2 Public Representation & Media Ban:\n' +
+              '2.2 Intellectual Property Ownership:\n' +
+              'The Company owns all intellectual property, work products, source code, designs, and innovations created by employees in the course of their employment. Employees hereby assign all rights and titles in such materials exclusively to the Company.\n\n' +
+              '2.3 Public Representation & Media Ban:\n' +
               'Employees are forbidden from speaking to media outlets, making public statements, or publishing corporate information on social media without explicit written authorization from Corporate Communications.'
       },
       {
@@ -282,7 +284,9 @@ async function seedHRPolicies() {
         heading: 'Conflict of Interest, Anti-Bribery & Absolute Moonlighting Ban',
         body: '4.1 Absolute Moonlighting Prohibition:\n' +
               'Employees shall not engage in secondary paid employment, commercial freelancing, consulting, or side businesses during active employment without prior written approval from the Chief Executive Officer.\n\n' +
-              '4.2 Gifts & Corporate Hospitality Threshold:\n' +
+              '4.2 Conflict of Interest & Competition:\n' +
+              'Employees must avoid any financial, business, or professional activity that conflicts with the Company\'s interests or competes with the Company\'s business. Engaging in external business activities that compete with the Company is strictly prohibited.\n\n' +
+              '4.3 Gifts & Corporate Hospitality Threshold:\n' +
               'Soliciting or accepting cash, gifts, or lavish entertainment from business contacts exceeding ₹2,000 / $25 in value is strictly prohibited. Any unsolicited gift exceeding this limit must be declared to HR Operations within 48 hours.'
       },
       {
@@ -355,11 +359,11 @@ async function seedHRPolicies() {
       },
       {
         heading: 'Remote Access, Always-On VPN & BYOD MDM Security',
-        body: '4.1 Always-On Corporate VPN Requirement:\n' +
+        body: '5.1 Always-On Corporate VPN Requirement:\n' +
               'Connecting to company databases, cloud servers, or code repositories from WFH or remote locations requires logging in via the mandatory Always-On Corporate VPN.\n\n' +
-              '4.2 Unencrypted Public Wi-Fi Ban:\n' +
+              '5.2 Unencrypted Public Wi-Fi Ban:\n' +
               'Accessing company resources over open public Wi-Fi without VPN protection is strictly prohibited.\n\n' +
-              '4.3 BYOD Mobile Device Management (MDM):\n' +
+              '5.3 BYOD Mobile Device Management (MDM):\n' +
               'Personal mobile devices accessing corporate email or Slack must enroll in Mobile Device Management (MDM), allowing remote wipe of corporate container data upon employee departure.'
       },
       {
