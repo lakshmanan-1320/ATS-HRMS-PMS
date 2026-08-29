@@ -109,11 +109,12 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       minWidth: 0,
     },
     brandLogo: {
-      width: '32px',
-      height: '32px',
-      borderRadius: '8px',
+      width: isCollapsed ? '36px' : '180px',
+      height: isCollapsed ? '36px' : '48px',
+      borderRadius: '6px',
       flexShrink: 0,
       objectFit: 'contain',
+      filter: 'brightness(0) invert(1)',
     },
     brandName: {
       fontSize: '17px',
@@ -427,8 +428,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
         ) : (
           <>
             <div style={styles.brandArea}>
-              <img src="/favicon.svg" alt="Logo" style={styles.brandLogo} />
-              <span style={styles.brandName}>{companyName}</span>
+              <img src="/logo.png" alt="Logo" style={styles.brandLogo} />
             </div>
             <button
               style={styles.hamburger}

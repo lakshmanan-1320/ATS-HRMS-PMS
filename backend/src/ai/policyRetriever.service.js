@@ -54,6 +54,8 @@ async function retrievePolicies(organizationId, question, limit = DEFAULT_TOP_K,
         p.title AS "policyTitle",
         p.category AS "category",
         e.chunk_index AS "chunkIndex",
+        'POL-' || UPPER(SUBSTRING(e.policy_id::text, 1, 8)) AS "policyKey",
+        'Section ' || (e.chunk_index + 1) AS "sectionRef",
         e.chunk_text AS "chunkText",
         1 - (e.embedding <=> $1::vector) AS "similarity"
       FROM hr_policy_embeddings e

@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const policyService = require('./policy.service');
+const policyDocumentProcessor = require('../../ai/policyDocumentProcessor.service');
 const logger = require('../../config/logger');
 
 // Helper to extract clean plain text from HTML for content_text
@@ -75,8 +76,8 @@ async function createPolicy(req, res, next) {
       isPublished
     } = req.body;
 
-    if (!title || !category || !contentHtml) {
-      return res.status(400).json({ success: false, message: 'Title, category, and content are required.' });
+    if (!title || !category) {
+      return res.status(400).json({ success: false, message: 'Title and category are required.' });
     }
 
     // Determine document parameters
@@ -96,8 +97,19 @@ async function createPolicy(req, res, next) {
       return res.status(400).json({ success: false, message: 'A PDF or DOCX policy document file is required.' });
     }
 
+    // Format contentHtml: auto-wrap plain text in <p> tags if no HTML present
+    let finalHtml = (contentHtml || '').trim();
+    if (!finalHtml) {
+      finalHtml = '<p>Official policy document attached below.</p>';
+    } else if (!/<[a-z][\s\S]*>/i.test(finalHtml)) {
+      finalHtml = finalHtml
+        .split(/\n\n+/)
+        .map(p => `<p>${p.replace(/\n/g, '<br/>').trim()}</p>`)
+        .join('\n');
+    }
+
     // Extract plain text if not explicitly sent
-    const finalPlainContent = contentText && contentText.trim() ? contentText : stripHtmlTags(contentHtml);
+    const finalPlainContent = contentText && contentText.trim() ? contentText : stripHtmlTags(finalHtml);
 
     // Parse keywords
     let keywordArray = [];
@@ -111,7 +123,7 @@ async function createPolicy(req, res, next) {
       title: title.trim(),
       category: category.trim(),
       summary: summary ? summary.trim() : '',
-      contentHtml: contentHtml.trim(),
+      contentHtml: finalHtml,
       contentText: finalPlainContent,
       keywords: keywordArray,
       documentUrl,
@@ -123,6 +135,11 @@ async function createPolicy(req, res, next) {
     };
 
     const newPolicy = await policyService.createPolicy(organizationId, policyData, userId);
+
+    // Trigger PDF text extraction & vector embedding auto-indexing asynchronously
+    policyDocumentProcessor.processAndIndexPolicy(newPolicy).catch(idxErr => {
+      logger.error('[PolicyController] Async policy indexing error:', idxErr);
+    });
 
     if (req.logActivity) {
       await req.logActivity({
@@ -176,7 +193,14 @@ async function updatePolicy(req, res, next) {
       documentSize = req.file.size;
     }
 
-    const finalHtml = contentHtml !== undefined ? contentHtml.trim() : existing.content_html;
+    let finalHtml = contentHtml !== undefined ? contentHtml.trim() : existing.content_html;
+    if (finalHtml && !/<[a-z][\s\S]*>/i.test(finalHtml)) {
+      finalHtml = finalHtml
+        .split(/\n\n+/)
+        .map(p => `<p>${p.replace(/\n/g, '<br/>').trim()}</p>`)
+        .join('\n');
+    }
+
     const finalPlainContent = contentText !== undefined && contentText.trim()
       ? contentText.trim()
       : stripHtmlTags(finalHtml);
@@ -206,6 +230,11 @@ async function updatePolicy(req, res, next) {
     };
 
     const updated = await policyService.updatePolicy(organizationId, id, policyData, userId);
+
+    // Trigger PDF text extraction & vector embedding re-indexing asynchronously
+    policyDocumentProcessor.processAndIndexPolicy(updated).catch(idxErr => {
+      logger.error('[PolicyController] Async policy indexing error:', idxErr);
+    });
 
     if (req.logActivity) {
       await req.logActivity({
@@ -237,6 +266,11 @@ async function updatePolicyStatus(req, res, next) {
     if (!updated) {
       return res.status(404).json({ success: false, message: 'Policy not found or access denied.' });
     }
+
+    // Trigger vector re-indexing on status changes
+    policyDocumentProcessor.processAndIndexPolicy(updated).catch(idxErr => {
+      logger.error('[PolicyController] Async policy status indexing error:', idxErr);
+    });
 
     if (req.logActivity) {
       await req.logActivity({

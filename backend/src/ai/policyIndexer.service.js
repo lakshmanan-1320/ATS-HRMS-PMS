@@ -19,6 +19,53 @@ function getPolicyKey(policy) {
   return 'POL-GEN';
 }
 
+
+function parseSectionRef(chunkText) {
+  const bulletMatch = chunkText.match(/(\d+\.\d+)\s+[A-Z]/);
+  if (bulletMatch) {
+    return `Section ${bulletMatch[1]}`;
+  }
+  
+  const sectionHeaderMatch = chunkText.match(/SECTION\s+(\d+)/i);
+  if (sectionHeaderMatch) {
+    return `Section ${sectionHeaderMatch[1]}`;
+  }
+
+  return 'General';
+}
+
+function splitPolicyIntoSections(contentText) {
+  const sectionRegex = /\n\nSECTION\s+(\d+)[:\s]/gi;
+  const matches = [...contentText.matchAll(sectionRegex)];
+  
+  if (matches.length === 0) {
+    return null;
+  }
+  
+  const sections = [];
+  if (matches[0].index > 0) {
+    sections.push({
+      sectionRef: 'General',
+      text: contentText.slice(0, matches[0].index).trim()
+    });
+  }
+  
+  for (let i = 0; i < matches.length; i++) {
+    const match = matches[i];
+    const currentIndex = match.index;
+    const nextIndex = (i + 1 < matches.length) ? matches[i + 1].index : contentText.length;
+    const sectionText = contentText.slice(currentIndex, nextIndex).trim();
+    const sectionNum = match[1];
+    
+    sections.push({
+      sectionRef: `Section ${sectionNum}`,
+      text: sectionText
+    });
+  }
+  
+  return sections;
+}
+
 /**
  * Index a single policy object into hr_policy_embeddings with vector embeddings
  * @param {object} policy - Database policy object
@@ -36,14 +83,30 @@ async function indexPolicy(policy) {
     throw new Error('Invalid policy data: policy_id, organization_id, and content_text are required.');
   }
 
-  const chunks = chunkPolicyText(content_text);
+  const policyKey = (getPolicyKey(policy) || 'POL-GEN').slice(0, 50);
+  const policyCategory = (category || policy.category || 'General').slice(0, 100);
+
+  // Split policy content semantically by sections if available, falling back to character chunking
+  let chunks = [];
+  const sectionChunks = splitPolicyIntoSections(content_text);
+  if (sectionChunks && sectionChunks.length > 0) {
+    chunks = sectionChunks.map((s, i) => ({
+      chunkIndex: i,
+      chunkText: s.text,
+      sectionRef: s.sectionRef
+    }));
+  } else {
+    const textChunks = chunkPolicyText(content_text);
+    chunks = textChunks.map((c, i) => ({
+      chunkIndex: c.chunkIndex !== undefined ? c.chunkIndex : i,
+      chunkText: typeof c === 'string' ? c : (c.chunkText || c.text || ''),
+      sectionRef: parseSectionRef(typeof c === 'string' ? c : (c.chunkText || c.text || ''))
+    }));
+  }
 
   if (!chunks.length) {
     throw new Error('Policy contains no searchable text content.');
   }
-
-  const policyKey = (getPolicyKey(policy) || 'POL-GEN').slice(0, 50);
-  const policyCategory = (category || policy.category || 'General').slice(0, 100);
 
   // 1. Remove previous embeddings for this policy from the authoritative table
   await query(
@@ -55,7 +118,7 @@ async function indexPolicy(policy) {
     [policy_id, organization_id]
   );
 
-  // 2. Insert new chunk embeddings
+  // 2. Insert new chunk embeddings into hr_policy_embeddings
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
     const chunkText = chunk.chunkText;

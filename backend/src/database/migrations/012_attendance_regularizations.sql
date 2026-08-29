@@ -42,10 +42,17 @@ CREATE TABLE IF NOT EXISTS attendance_regularizations (
 );
 
 -- Associate punches regularization tracking back to regularization requests
-ALTER TABLE attendance_punches 
-ADD CONSTRAINT fk_punches_regularization 
-FOREIGN KEY (regularization_id) REFERENCES attendance_regularizations(regularization_id) 
-ON DELETE SET NULL;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'fk_punches_regularization'
+    ) THEN
+        ALTER TABLE attendance_punches 
+        ADD CONSTRAINT fk_punches_regularization 
+        FOREIGN KEY (regularization_id) REFERENCES attendance_regularizations(regularization_id) 
+        ON DELETE SET NULL;
+    END IF;
+END $$;
 
 -- Create Attendance Regularizations status transition audit logs
 CREATE TABLE IF NOT EXISTS attendance_regularization_logs (

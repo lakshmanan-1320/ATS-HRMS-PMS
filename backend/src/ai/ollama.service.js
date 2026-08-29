@@ -66,9 +66,9 @@ async function generateCompletion(prompt, options = {}) {
         prompt,
         stream: false,
         options: {
-          temperature: 0.1,
-          num_ctx: 2048,
-          num_predict: 220
+          temperature: options.temperature || 0.1,
+          num_ctx: options.num_ctx || 4096,
+          num_predict: options.num_predict || 1024
         }
       })
     });
@@ -79,7 +79,19 @@ async function generateCompletion(prompt, options = {}) {
     }
 
     const data = await response.json();
-    return data && data.response ? data.response.trim() : '';
+    const responseText = (data && data.response ? data.response : '').trim();
+
+    return {
+      response: responseText,
+      toString() { return responseText; },
+      metadata: {
+        total_duration: data.total_duration,
+        prompt_eval_duration: data.prompt_eval_duration,
+        eval_duration: data.eval_duration,
+        prompt_eval_count: data.prompt_eval_count,
+        eval_count: data.eval_count
+      }
+    };
   } catch (error) {
     if (error.name === 'AbortError') {
       throw new Error('Gemma generation timed out.');

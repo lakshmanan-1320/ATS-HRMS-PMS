@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -26,7 +26,7 @@ const CATEGORIES = [
   'Leave & Employee Conduct',
   'IT & Data Security',
   'Benefits & Compensation',
-  'General HR'
+  'General'
 ];
 
 export default function EmployeePolicies() {
@@ -40,6 +40,7 @@ export default function EmployeePolicies() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const modalContentRef = useRef(null);
 
   useEffect(() => {
     fetchPolicies();
@@ -58,6 +59,52 @@ export default function EmployeePolicies() {
       }
     }
   }, [routePolicyId, location.search, policies]);
+
+  useEffect(() => {
+    if (selectedPolicy) {
+      const queryParams = new URLSearchParams(location.search);
+      const targetSection = queryParams.get('section');
+
+      if (targetSection) {
+        // Extract section number (e.g. "Section 4.2" -> "4.2")
+        const sectionNumMatch = targetSection.match(/[\d.]+/);
+        const sectionNum = sectionNumMatch ? sectionNumMatch[0] : targetSection;
+
+        setTimeout(() => {
+          if (!modalContentRef.current) return;
+          
+          if (sectionNum.toLowerCase() === 'general') {
+            modalContentRef.current.scrollTop = 0;
+            return;
+          }
+
+          const h3s = modalContentRef.current.querySelectorAll('h3');
+          let found = false;
+          for (const h3 of h3s) {
+            if (h3.textContent.includes(sectionNum)) {
+              h3.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              found = true;
+              
+              const originalBg = h3.style.backgroundColor;
+              h3.style.transition = 'background-color 0.3s ease';
+              h3.style.backgroundColor = '#fef08a';
+              
+              setTimeout(() => {
+                if (h3) {
+                  h3.style.transition = 'background-color 1s ease';
+                  h3.style.backgroundColor = originalBg || 'transparent';
+                }
+              }, 3000);
+              break;
+            }
+          }
+          if (!found) {
+            modalContentRef.current.scrollTop = 0;
+          }
+        }, 200);
+      }
+    }
+  }, [selectedPolicy, location.search]);
 
   const getHeaders = () => {
     const token = sessionStorage.getItem('sa_token');
@@ -393,7 +440,7 @@ export default function EmployeePolicies() {
               </div>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div ref={modalContentRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
               {selectedPolicy.summary && (
                 <div style={{ padding: 14, background: 'rgba(99, 102, 241, 0.06)', border: '1px solid rgba(99, 102, 241, 0.2)', borderRadius: 12 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#4f46e5', textTransform: 'uppercase', marginBottom: 4 }}>Executive Overview</div>
