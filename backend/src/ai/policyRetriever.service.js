@@ -1,115 +1,178 @@
 const { query } = require('../config/db');
 const { generateEmbedding } = require('./embedding.service');
 
+const DEFAULT_MIN_SIMILARITY = 0.45;
+const DEFAULT_TOP_K = 8;
+
 /**
- * Retrieves the most relevant policy chunks based on vector similarity search.
- * Enforces strict tenant isolation, dynamic category scoping, active, and published status.
+ * Retrieves the most relevant policy chunks based on generic vector similarity search.
+ * Enforces strict tenant isolation, cross-policy balancing, active, and published status.
  * 
  * @param {string} organizationId - Authenticated tenant ID
  * @param {string} question - Employee question string
- * @param {string|Array<string>} categories - Optional category or array of categories to filter by
- * @param {number} limit - Maximum number of chunks to return
+ * @param {number} [limit] - Maximum number of chunks to return (default: 8)
+ * @param {object} [options] - Optional filters/options ({ minSimilarity, categories, policyId, perf })
  * @returns {Promise<Array<object>>} - List of matched policy chunks
  */
-async function retrievePolicies(organizationId, question, categories = null, limit = 5, perf = {}) {
+async function retrievePolicies(organizationId, question, limit = DEFAULT_TOP_K, options = {}) {
   if (!organizationId) {
-    throw new Error('Organization ID is required.');
+    throw new Error('Organization ID is required for policy retrieval.');
   }
   if (!question || !question.trim()) {
-    throw new Error('Question is required.');
+    throw new Error('Question is required for policy retrieval.');
   }
 
-  // Normalize categories parameter into an array of strings (or null)
-  let categoriesArray = null;
-  if (categories) {
-    categoriesArray = Array.isArray(categories) ? categories : [categories];
-  }
+  const effectiveLimit = typeof limit === 'number' ? limit : (parseInt(process.env.RAG_TOP_K, 10) || DEFAULT_TOP_K);
+  const minSimilarity = typeof options.minSimilarity === 'number'
+    ? options.minSimilarity
+    : (parseFloat(process.env.RAG_MIN_SIMILARITY) || DEFAULT_MIN_SIMILARITY);
+
+  const perf = options.perf || {};
+  const categoriesArray = options.categories
+    ? (Array.isArray(options.categories) ? options.categories : [options.categories])
+    : null;
+  const policyIdFilter = options.policyId || null;
 
   try {
-    // Generate embedding vector for the question using embeddinggemma
+    // 1. Generate 768-dimensional question embedding via nomic-embed-text
     const tEmbeddingStart = performance.now();
-    const questionEmbedding = await generateEmbedding(question);
-    perf.embeddingTimeMs = performance.now() - tEmbeddingStart;
+    const questionEmbedding = await generateEmbedding(question.trim());
+    perf.embeddingTimeMs = Math.round(performance.now() - tEmbeddingStart);
 
-    if (!questionEmbedding || !Array.isArray(questionEmbedding)) {
+    if (!questionEmbedding || !Array.isArray(questionEmbedding) || questionEmbedding.length === 0) {
       throw new Error('Failed to generate question embedding.');
     }
 
-    // Retrieve matching chunks with strict tenant isolation and dynamic categories array parameter
+    const embeddingString = JSON.stringify(questionEmbedding);
+    const candidatePoolSize = Math.max(effectiveLimit * 3, 15);
+
+    // 2. Vector search across all active & published policies belonging to the authenticated organization
     const tRetrievalStart = performance.now();
-    const result = await query(
-      `
+    let sql = `
       SELECT
         e.policy_id AS "policyId",
-        e.policy_key AS "policyKey",
         p.title AS "policyTitle",
-        e.section_ref AS "sectionRef",
+        p.category AS "category",
+        e.chunk_index AS "chunkIndex",
+        'POL-' || UPPER(SUBSTRING(e.policy_id::text, 1, 8)) AS "policyKey",
+        'Section ' || (e.chunk_index + 1) AS "sectionRef",
         e.chunk_text AS "chunkText",
         1 - (e.embedding <=> $1::vector) AS "similarity"
-      FROM policy_embeddings e
+      FROM hr_policy_embeddings e
       INNER JOIN hr_policies p ON e.policy_id = p.policy_id
       WHERE e.organization_id = $2
-        AND ($3::text[] IS NULL OR e.category = ANY($3::text[]))
+        AND p.organization_id = $2
         AND p.is_active = true
         AND p.is_published = true
-      ORDER BY e.embedding <=> $1::vector
-      LIMIT $4
-      `,
-      [
-        JSON.stringify(questionEmbedding),
-        organizationId,
-        categoriesArray,
-        limit
-      ]
-    );
-    perf.retrievalTimeMs = performance.now() - tRetrievalStart;
+    `;
+    const params = [embeddingString, organizationId];
 
-    if (result.rows.length > 0) {
-      return result.rows;
+    if (categoriesArray && categoriesArray.length > 0) {
+      params.push(categoriesArray);
+      sql += ` AND p.category = ANY($${params.length}::text[])`;
     }
 
-    // ---------------------------------------------------------
-    // FALLBACK: Retrieve text directly from hr_policies
-    // ---------------------------------------------------------
-    console.log(`[Retriever] No embeddings found for categories ${JSON.stringify(categoriesArray)}. Using policy content fallback...`);
-
-    const tFallbackStart = performance.now();
-    const fallbackPolicies = await query(
-      `
-      SELECT policy_id, title, category, content_text
-      FROM hr_policies
-      WHERE organization_id = $1
-        AND ($2::text[] IS NULL OR category = ANY($2::text[]))
-        AND is_active = true
-        AND is_published = true
-        AND content_text IS NOT NULL
-        AND LENGTH(TRIM(content_text)) > 0
-      ORDER BY title
-      `,
-      [organizationId, categoriesArray]
-    );
-    perf.retrievalTimeMs = (perf.retrievalTimeMs || 0) + (performance.now() - tFallbackStart);
-
-    const fallbackResults = [];
-    for (const policy of fallbackPolicies.rows) {
-      const policyKey = policy.category === 'IT & Data Security' ? 'POL-IT-001' : 'POL-HR-002';
-      fallbackResults.push({
-        policyId: policy.policy_id,
-        policyKey,
-        sectionRef: 'General',
-        chunkText: `POLICY: ${policy.title}\n\n${policy.content_text}`.trim(),
-        similarity: 1.0
-      });
+    if (policyIdFilter) {
+      params.push(policyIdFilter);
+      sql += ` AND e.policy_id = $${params.length}`;
     }
 
-    return fallbackResults.slice(0, limit);
+    params.push(candidatePoolSize);
+    sql += `
+      ORDER BY e.embedding <=> $1::vector ASC
+      LIMIT $${params.length}
+    `;
 
+    const result = await query(sql, params);
+    perf.retrievalTimeMs = Math.round(performance.now() - tRetrievalStart);
+
+    const candidates = result.rows;
+
+    // 3. Filter candidates by relevance threshold
+    const relevantCandidates = candidates.filter((row) => Number(row.similarity) >= minSimilarity);
+
+    // 4. Cross-Policy Balancing & Diversity
+    // For queries touching multiple policies (e.g. Bonus + Attendance), guarantee fair representation
+    const finalChunks = balanceCrossPolicyChunks(relevantCandidates, effectiveLimit);
+
+    // 5. Diagnostic Logging
+    console.log('\n[Retriever]');
+    console.log(`Organization ID:        ${organizationId}`);
+    console.log(`Question:               "${question.trim()}"`);
+    console.log(`Candidate chunks found: ${candidates.length}`);
+    console.log(`Above threshold (>=${minSimilarity}): ${relevantCandidates.length}`);
+    console.log(`Selected final chunks:  ${finalChunks.length}`);
+
+    finalChunks.forEach((c) => {
+      console.log(`[Retriever] Retrieved: ${c.policyTitle} | ${c.category || 'General'} | similarity: ${Number(c.similarity).toFixed(4)}`);
+    });
+    console.log('------------------------------------------------\n');
+
+    return finalChunks;
   } catch (error) {
-    console.error('Policy retrieval failed:', error);
+    console.error('[Retriever] Policy retrieval failed:', error);
     throw error;
   }
 }
 
+/**
+ * Balances chunk selection across policies to support cross-policy reasoning
+ * without allowing irrelevant policies to crowd out high-scoring policies.
+ * 
+ * @param {Array<object>} candidates - List of candidate chunks sorted by similarity desc
+ * @param {number} maxTotal - Max total chunks to select
+ * @returns {Array<object>} - Balanced list of chunks
+ */
+function balanceCrossPolicyChunks(candidates, maxTotal) {
+  if (!candidates || candidates.length === 0) return [];
+  if (candidates.length <= maxTotal) return candidates;
+
+  const topScore = Number(candidates[0].similarity);
+
+  // Group candidate chunks by policyId
+  const byPolicy = new Map();
+  for (const c of candidates) {
+    if (!byPolicy.has(c.policyId)) {
+      byPolicy.set(c.policyId, []);
+    }
+    byPolicy.get(c.policyId).push(c);
+  }
+
+  // Filter for genuinely relevant policies:
+  // A policy is considered relevant if its best chunk is within a close relative margin of the top match
+  const relevantPolicyChunks = new Map();
+  for (const [policyId, chunks] of byPolicy) {
+    const bestChunkScore = Number(chunks[0].similarity);
+    if (bestChunkScore >= topScore - 0.08) {
+      relevantPolicyChunks.set(policyId, chunks);
+    }
+  }
+
+  // If only 1 policy meets the relevance threshold, return top chunks strictly from that policy
+  if (relevantPolicyChunks.size === 1) {
+    const onlyPolicyChunks = [...relevantPolicyChunks.values()][0];
+    return onlyPolicyChunks.slice(0, maxTotal);
+  }
+
+  // If multiple policies are relevant (cross-policy question):
+  // Allocate proportional slots per relevant policy
+  const selected = [];
+  const maxPerPolicy = Math.max(Math.ceil(maxTotal / relevantPolicyChunks.size), 3);
+
+  for (const [, chunks] of relevantPolicyChunks) {
+    const takeCount = Math.min(chunks.length, maxPerPolicy);
+    for (let i = 0; i < takeCount; i++) {
+      selected.push(chunks[i]);
+    }
+  }
+
+  // Sort overall selected chunks by similarity descending and cap at maxTotal
+  selected.sort((a, b) => Number(b.similarity) - Number(a.similarity));
+  return selected.slice(0, maxTotal);
+}
+
 module.exports = {
-  retrievePolicies
+  retrievePolicies,
+  DEFAULT_MIN_SIMILARITY,
+  DEFAULT_TOP_K
 };

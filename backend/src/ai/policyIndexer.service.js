@@ -1,33 +1,26 @@
 const { query } = require('../config/db');
 const { generateEmbedding } = require('./embedding.service');
-const { chunkText } = require('./policyChunker.service');
+const { chunkPolicyText } = require('./policyChunker.service');
 
 /**
- * Determine document reference key (policy_key) based on the policy title
- * @param {object} policy - Database policy object
- * @returns {string} - Policy key (e.g. 'POL-IT-001')
+ * Policy indexing for the authoritative hr_policy_embeddings table.
+ * The DB schema stores only policy_id, organization_id, chunk_index, chunk_text and embedding.
+ * Additional metadata is read from hr_policies when needed.
  */
 function getPolicyKey(policy) {
-  const title = (policy.title || '').toLowerCase();
-  if (title.includes('attendance') || title.includes('working hours') || title.includes('leave')) {
-    return 'POL-HR-001';
+  if (policy.policy_key && typeof policy.policy_key === 'string' && policy.policy_key.trim()) {
+    return policy.policy_key.trim();
   }
-  if (title.includes('conduct') || title.includes('ethics')) {
-    return 'POL-HR-002';
+
+  if (policy.policy_id) {
+    return `POL-${String(policy.policy_id).slice(0, 8).toUpperCase()}`;
   }
-  if (title.includes('it') || title.includes('security') || title.includes('acceptable use')) {
-    return 'POL-IT-001';
-  }
-  return 'POL-GEN-001';
+
+  return 'POL-GEN';
 }
 
 /**
- * Parse section reference from chunk text
- * @param {string} chunkText - Chunk text content
- * @returns {string} - Section reference string (e.g. 'Section 1.1')
- */
 function parseSectionRef(chunkText) {
-  // Look for section numbers like "1.1", "2.3", "Section 5.1"
   const bulletMatch = chunkText.match(/(\d+\.\d+)\s+[A-Z]/);
   if (bulletMatch) {
     return `Section ${bulletMatch[1]}`;
@@ -41,11 +34,6 @@ function parseSectionRef(chunkText) {
   return 'General';
 }
 
-/**
- * Splits a policy's plain text content dynamically into clean, semantic sections using SECTION headers.
- * @param {string} contentText - Complete policy plain text
- * @returns {Array|null} - Array of sections { sectionRef, text } or null if no headers are found
- */
 function splitPolicyIntoSections(contentText) {
   const sectionRegex = /\n\nSECTION\s+(\d+)[:\s]/gi;
   const matches = [...contentText.matchAll(sectionRegex)];
@@ -55,8 +43,6 @@ function splitPolicyIntoSections(contentText) {
   }
   
   const sections = [];
-  
-  // Extract text before first SECTION header as General header preamble
   if (matches[0].index > 0) {
     sections.push({
       sectionRef: 'General',
@@ -81,7 +67,7 @@ function splitPolicyIntoSections(contentText) {
 }
 
 /**
- * Index a single policy object (used by custom scripts / Code of Conduct seeder)
+ * Index a single policy object into hr_policy_embeddings with vector embeddings
  * @param {object} policy - Database policy object
  * @returns {Promise<object>} - Result metadata
  */
@@ -94,68 +80,72 @@ async function indexPolicy(policy) {
   } = policy;
 
   if (!policy_id || !organization_id || !content_text) {
-    throw new Error('Invalid policy data.');
+    throw new Error('Invalid policy data: policy_id, organization_id, and content_text are required.');
   }
 
-  const policyKey = getPolicyKey(policy);
-  const policyCategory = category || policy.category || 'Leave & Employee Conduct';
+  const policyKey = (getPolicyKey(policy) || 'POL-GEN').slice(0, 50);
+  const policyCategory = (category || policy.category || 'General').slice(0, 100);
 
-  // Split policy content semantically by sections, falling back to character chunking if no headers
-  let sections = splitPolicyIntoSections(content_text);
-  if (!sections) {
-    const chunks = chunkText(content_text);
-    sections = chunks.map((chunk, i) => ({
-      sectionRef: parseSectionRef(chunk),
-      text: chunk
+  // Split policy content semantically by sections if available, falling back to character chunking
+  let chunks = [];
+  const sectionChunks = splitPolicyIntoSections(content_text);
+  if (sectionChunks && sectionChunks.length > 0) {
+    chunks = sectionChunks.map((s, i) => ({
+      chunkIndex: i,
+      chunkText: s.text,
+      sectionRef: s.sectionRef
+    }));
+  } else {
+    const textChunks = chunkPolicyText(content_text);
+    chunks = textChunks.map((c, i) => ({
+      chunkIndex: c.chunkIndex !== undefined ? c.chunkIndex : i,
+      chunkText: typeof c === 'string' ? c : (c.chunkText || c.text || ''),
+      sectionRef: parseSectionRef(typeof c === 'string' ? c : (c.chunkText || c.text || ''))
     }));
   }
 
-  if (!sections.length) {
-    throw new Error('Policy contains no searchable content.');
+  if (!chunks.length) {
+    throw new Error('Policy contains no searchable text content.');
   }
 
-  // Remove previous embeddings for this policy from the unified table
+  // 1. Remove previous embeddings for this policy from the authoritative table
   await query(
     `
-    DELETE FROM policy_embeddings
+    DELETE FROM hr_policy_embeddings
     WHERE policy_id = $1
       AND organization_id = $2
     `,
     [policy_id, organization_id]
   );
 
-  for (let i = 0; i < sections.length; i++) {
-    const section = sections[i];
-    const embedding = await generateEmbedding(section.text);
+  // 2. Insert new chunk embeddings into hr_policy_embeddings
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i];
+    const chunkText = chunk.chunkText;
+    const embedding = await generateEmbedding(chunkText);
 
     await query(
       `
-      INSERT INTO policy_embeddings (
+      INSERT INTO hr_policy_embeddings (
         organization_id,
         policy_id,
-        policy_key,
-        category,
-        section_ref,
         chunk_index,
         chunk_text,
         embedding
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8::vector)
+      VALUES ($1, $2, $3, $4, $5::vector)
       `,
       [
         organization_id,
         policy_id,
-        policyKey,
-        policyCategory,
-        section.sectionRef,
-        i,
-        section.text,
+        chunk.chunkIndex !== undefined ? chunk.chunkIndex : i,
+        chunkText,
         JSON.stringify(embedding)
       ]
     );
   }
 
-  // Update policy index status if columns exist
+  // 3. Update policy index status in hr_policies
   try {
     await query(
       `
@@ -170,42 +160,53 @@ async function indexPolicy(policy) {
       [policy_id, organization_id]
     );
   } catch (err) {
-    // Non-fatal if staging database does not have ai_status column yet
+    console.warn(`[Indexer] Could not update ai_status on hr_policies for ${policy_id}:`, err.message);
   }
 
   return {
     policyId: policy_id,
-    chunksIndexed: sections.length
+    policyKey,
+    chunksIndexed: chunks.length
   };
 }
 
 /**
- * Index policies of a specific category for a tenant
- * @param {string} organizationId - Tenant ID
- * @param {string} category - Policy category filter
+ * Index all active and published policies for a specific organization or across all tenants
+ * @param {string} [organizationId] - Optional Tenant ID filter
+ * @param {string} [policyId] - Optional specific policy ID filter
  * @returns {Promise<object>} - Count of policies and chunks indexed
  */
-async function indexTenantPolicies(organizationId, category) {
-  if (!organizationId) {
-    throw new Error('Organization ID is required.');
-  }
-  if (!category) {
-    throw new Error('Category is required.');
-  }
-
-  // Fetch active & published policies matching organization and category
-  const policiesRes = await query(
-    `
+async function indexTenantPolicies(organizationId = null, filter = null) {
+  let sql = `
     SELECT policy_id, organization_id, title, category, content_text
     FROM hr_policies
-    WHERE organization_id = $1
-      AND category = $2
-      AND is_active = true
+    WHERE is_active = true
       AND is_published = true
-    `,
-    [organizationId, category]
-  );
+      AND content_text IS NOT NULL
+      AND LENGTH(TRIM(content_text)) > 0
+  `;
+  const params = [];
 
+  if (organizationId) {
+    params.push(organizationId);
+    sql += ` AND organization_id = $${params.length}`;
+  }
+
+  if (filter) {
+    // If filter is a UUID, filter by policy_id; otherwise filter by category
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(filter);
+    if (isUUID) {
+      params.push(filter);
+      sql += ` AND policy_id = $${params.length}`;
+    } else {
+      params.push(filter);
+      sql += ` AND category = $${params.length}`;
+    }
+  }
+
+  sql += ` ORDER BY organization_id, title`;
+
+  const policiesRes = await query(sql, params);
   const policies = policiesRes.rows;
   let totalChunks = 0;
 
@@ -223,6 +224,5 @@ async function indexTenantPolicies(organizationId, category) {
 module.exports = {
   indexTenantPolicies,
   indexPolicy,
-  getPolicyKey,
-  parseSectionRef
+  getPolicyKey
 };

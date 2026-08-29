@@ -1,19 +1,24 @@
-const policyRetriever = require('./policyRetriever.service');
-const contextService = require('./context.service');
-const ollamaService = require('./ollama.service');
-
-// Similarity threshold below which we refuse to answer (to prevent hallucination)
-const RELEVANCE_THRESHOLD = 0.25;
+const aiService = require('./ai.service');
 
 /**
- * Main RAG orchestrator for policy questions
+ * Main entrypoint for policy questions
  * 
  * @param {string} organizationId - Tenant organization ID
  * @param {string} question - Employee question
- * @param {string} category - Policy category filter (defaults to 'IT & Data Security')
  * @returns {Promise<object>} - AI Answer and source metadata
  */
 async function getChatbotResponse(organizationId, question, category = ['IT & Data Security', 'Leave & Employee Conduct', 'Attendance & Working Hours', 'Benefits & Compensation', 'General']) {
+  if (aiService && typeof aiService.chat === 'function') {
+    try {
+      const aiRes = await aiService.chat({ message: question, category }, { organizationId });
+      if (aiRes && aiRes.answer) {
+        return aiRes;
+      }
+    } catch (err) {
+      console.warn('[ChatbotService] aiService.chat error, falling back to direct RAG engine:', err.message);
+    }
+  }
+
   const tTotalStart = performance.now();
 
   if (!organizationId) {
@@ -256,8 +261,6 @@ async function getChatbotResponse(organizationId, question, category = ['IT & Da
       similarity: chunk.similarity,
       text: chunk.chunkText
     })),
-    model: 'gemma3:4b',
-    metrics
   };
 }
 

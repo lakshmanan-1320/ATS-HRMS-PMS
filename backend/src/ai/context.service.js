@@ -1,7 +1,9 @@
 /**
  * context.service.js
- * Formats retrieved policy chunks into grounded context and constructs the strict LLM prompt.
+ * Formats policy chunks and employee HRMS data into grounded context and constructs LLM prompts.
  */
+
+const { buildUserAwareHRPrompt, buildHRPrompt, formatPolicyChunks } = require('./prompt.service');
 
 /**
  * Formats a list of database policy chunks into a clean, annotated reference context string.
@@ -9,24 +11,21 @@
  * @returns {string} - Formatted context string
  */
 function formatPolicyContext(chunks) {
-  if (!chunks || chunks.length === 0) {
-    return 'NO POLICY CONTEXT AVAILABLE';
-  }
-
-  return chunks
-    .map((chunk) => {
-      return `[${chunk.policyKey} | ${chunk.sectionRef}]\n${chunk.chunkText}`;
-    })
-    .join('\n\n');
+  return formatPolicyChunks(chunks);
 }
 
 /**
- * Builds the strict, grounded system prompt for Gemma 3 4B.
+ * Builds the strict, grounded system prompt for Gemma 3 4B supporting both policy and live user data.
  * @param {string} question - Employee question
- * @param {Array<object>} chunks - Relevant policy chunks
+ * @param {Array<object>} [chunks] - Relevant policy chunks
+ * @param {string} [employeeDataText] - Formatted employee HRMS data text
  * @returns {string} - Complete prompt string
  */
-function buildGroundedPrompt(question, chunks) {
+function buildGroundedPrompt(question, chunks = [], employeeDataText = '') {
+  if (employeeDataText && typeof employeeDataText === 'string' && employeeDataText.trim()) {
+    return buildUserAwareHRPrompt(question, chunks, employeeDataText);
+  }
+
   const contextText = formatPolicyContext(chunks);
 
   return `### SYSTEM INSTRUCTIONS

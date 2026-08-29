@@ -71,7 +71,7 @@ export default function Chatbot({ onOpenPolicyReader }) {
     setLoading(true);
 
     try {
-      const data = await sendChatMessage(query, activeCategory);
+      const data = await sendChatMessage(query, activeCategory, null, messages);
 
       let aiText = '';
       let sources = [];
@@ -84,7 +84,7 @@ export default function Chatbot({ onOpenPolicyReader }) {
         aiText = `Here is the relevant excerpt from the official policy records:\n\n${excerpt}`;
         sources = data.policies;
       } else {
-        aiText = `I searched the official company policy records, but could not find a specific section answering your question. Please consult your HR administrator or manager.`;
+        aiText = 'I could not find this information in the available HR policies.';
       }
 
       addMessage({
@@ -95,13 +95,12 @@ export default function Chatbot({ onOpenPolicyReader }) {
       });
     } catch (err) {
       console.error('AI Chat Error:', err);
-      const errorMsg =
+      const errorText =
         err.response?.data?.message ||
-        'Sorry, I couldn\'t process that request right now. Please verify Ollama is active on http://localhost:11434 and try again.';
-
+        'I could not process that request right now because the HR assistant service is unavailable.';
       addMessage({
         sender: 'ai',
-        text: `⚠️ ${errorMsg}`,
+        text: errorText,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isError: true
       });
