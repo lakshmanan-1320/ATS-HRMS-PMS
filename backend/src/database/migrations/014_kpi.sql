@@ -25,14 +25,22 @@ CREATE TABLE IF NOT EXISTS kpi_library (
   UNIQUE (client_admin_id, code)
 );
 
-CREATE INDEX IF NOT EXISTS idx_kpi_library_client ON kpi_library(client_admin_id);
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'kpi_library' AND column_name = 'client_admin_id'
+    ) THEN
+        CREATE INDEX IF NOT EXISTS idx_kpi_library_client ON kpi_library(client_admin_id);
+    END IF;
+END $$;
 
 -- KPI Assignments: KPIs assigned to specific goals with target/actual values
 CREATE TABLE IF NOT EXISTS kpi_assignments (
   id                       SERIAL PRIMARY KEY,
   client_admin_id          UUID         NOT NULL REFERENCES client_admins(client_admin_id) ON DELETE CASCADE,
-  goal_id                  INTEGER      NOT NULL REFERENCES goals(id) ON DELETE CASCADE,
-  kpi_library_id           INTEGER      NOT NULL REFERENCES kpi_library(id) ON DELETE RESTRICT,
+  goal_id                  TEXT         NOT NULL,
+  kpi_library_id           UUID         NOT NULL,
 
   -- Per-assignment overrides
   name                     VARCHAR(255),          -- override display name (falls back to library name)

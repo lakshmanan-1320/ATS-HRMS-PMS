@@ -7,6 +7,10 @@ async function runMigrations() {
   const pool = getPool();
   const client = await pool.connect();
   try {
+    // 0. Ensure public schema exists and search_path is set
+    await client.query(`CREATE SCHEMA IF NOT EXISTS public;`);
+    await client.query(`SET search_path TO public;`);
+
     // 1. Create migrations tracking table if not exists
     await client.query(`
       CREATE TABLE IF NOT EXISTS schema_migrations (

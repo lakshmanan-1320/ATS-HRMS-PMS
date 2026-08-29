@@ -17,11 +17,16 @@ BEGIN
         EXECUTE format('ALTER TABLE %I.%I DROP CONSTRAINT IF EXISTS %I;', r.table_schema, r.table_name, r.constraint_name);
     END LOOP;
 
-    -- 3. Drop sequence default on id column before altering type
-    ALTER TABLE goals ALTER COLUMN id DROP DEFAULT;
-    ALTER TABLE goals RENAME COLUMN id TO goal_id;
-    ALTER TABLE goals ALTER COLUMN goal_id SET DATA TYPE UUID USING gen_random_uuid();
-    ALTER TABLE goals ALTER COLUMN goal_id SET DEFAULT gen_random_uuid();
+    -- 3. Drop sequence default on id column before altering type if id exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'goals' AND column_name = 'id'
+    ) THEN
+        ALTER TABLE goals ALTER COLUMN id DROP DEFAULT;
+        ALTER TABLE goals RENAME COLUMN id TO goal_id;
+        ALTER TABLE goals ALTER COLUMN goal_id SET DATA TYPE UUID USING gen_random_uuid();
+        ALTER TABLE goals ALTER COLUMN goal_id SET DEFAULT gen_random_uuid();
+    END IF;
 
     -- 4. Convert parent_goal_id in goals table to UUID
     ALTER TABLE goals ALTER COLUMN parent_goal_id SET DATA TYPE UUID USING NULL;

@@ -117,5 +117,19 @@ CREATE TABLE IF NOT EXISTS payroll_run_logs (
 -- Indexing for performance
 CREATE INDEX IF NOT EXISTS idx_salary_structures_org ON salary_structures (organization_id);
 CREATE INDEX IF NOT EXISTS idx_salary_assignments_emp ON employee_salary_assignments (employee_id);
-CREATE INDEX IF NOT EXISTS idx_employee_payrolls_run ON employee_payrolls (payroll_run_id);
-CREATE INDEX IF NOT EXISTS idx_payroll_adjustments_run ON payroll_adjustments (payroll_run_id);
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'employee_payrolls' AND column_name = 'payroll_run_id'
+    ) THEN
+        CREATE INDEX IF NOT EXISTS idx_employee_payrolls_run ON employee_payrolls (payroll_run_id);
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'payroll_adjustments' AND column_name = 'payroll_run_id'
+    ) THEN
+        CREATE INDEX IF NOT EXISTS idx_payroll_adjustments_run ON payroll_adjustments (payroll_run_id);
+    END IF;
+END $$;

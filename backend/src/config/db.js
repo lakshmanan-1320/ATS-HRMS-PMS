@@ -29,6 +29,10 @@ function getPool() {
 
     pool = new Pool(config);
 
+    pool.on('connect', (client) => {
+      client.query('SET search_path TO public;').catch(() => {});
+    });
+
     pool.on('error', (err) => {
       logger.error('Unexpected error on idle client', err);
       // Do NOT exit — let the pool recover the connection automatically

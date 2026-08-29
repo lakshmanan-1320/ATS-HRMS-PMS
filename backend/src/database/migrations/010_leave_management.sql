@@ -1,6 +1,19 @@
--- Rename existing manager column to prevent duplicate columns
-ALTER TABLE employees RENAME COLUMN manager_id TO manager_employee_id;
-ALTER TABLE employees ADD CONSTRAINT chk_manager_self CHECK (manager_employee_id != employee_id);
+-- Rename existing manager column to prevent duplicate columns if it exists
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'employees' AND column_name = 'manager_id'
+    ) THEN
+        ALTER TABLE employees RENAME COLUMN manager_id TO manager_employee_id;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'chk_manager_self'
+    ) THEN
+        ALTER TABLE employees ADD CONSTRAINT chk_manager_self CHECK (manager_employee_id != employee_id);
+    END IF;
+END $$;
 
 -- Leave Types Table
 CREATE TABLE IF NOT EXISTS leave_types (

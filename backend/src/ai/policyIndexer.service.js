@@ -19,7 +19,7 @@ function getPolicyKey(policy) {
   return 'POL-GEN';
 }
 
-/**
+
 function parseSectionRef(chunkText) {
   const bulletMatch = chunkText.match(/(\d+\.\d+)\s+[A-Z]/);
   if (bulletMatch) {
