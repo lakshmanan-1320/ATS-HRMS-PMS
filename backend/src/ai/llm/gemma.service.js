@@ -15,9 +15,9 @@ const ollamaService = require('./ollama.service');
  */
 async function generateCompletion(prompt, options = {}) {
   return ollamaService.generateCompletion(prompt, {
-    num_ctx: options.num_ctx || 4096,
-    num_predict: options.num_predict || 512,
-    timeoutMs: options.timeoutMs,
+    num_ctx: options.num_ctx || 1536,
+    num_predict: options.num_predict || 200,
+    timeoutMs: options.timeoutMs || 60000,
   });
 }
 
