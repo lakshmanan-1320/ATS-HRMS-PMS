@@ -10,11 +10,7 @@ const { query } = require('../../config/db');
 const logger = require('../../config/logger');
 
 function getCurrentLeaveYear() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  if (month >= 4) return `${year}-${year + 1}`;
-  return `${year - 1}-${year}`;
+  return new Date().getFullYear();
 }
 
 /**
@@ -32,46 +28,49 @@ async function getEmployeeLeaveBalance(employeeId, organizationId, leaveTypeFilt
 
   try {
     const empRes = await query(
-      `SELECT leave_plan_id FROM employees WHERE employee_id = $1 AND organization_id = $2`,
+      `SELECT employee_id FROM employees WHERE employee_id = $1 AND organization_id = $2`,
       [employeeId, organizationId]
     );
     if (!empRes.rows.length) {
       return { employeeId, balances: [], totalAllocated: 0, totalRemaining: 0, financialYear: fy };
     }
 
-    let leavePlanId = empRes.rows[0].leave_plan_id;
-    if (!leavePlanId) {
-      const defaultPlan = await query(
-        `SELECT leave_plan_id FROM leave_plans WHERE organization_id = $1 AND is_active = true ORDER BY created_at ASC LIMIT 1`,
-        [organizationId]
-      );
-      leavePlanId = defaultPlan.rows[0]?.leave_plan_id;
-    }
-
-    const planRes = await query(
+    let balanceSql =
       `SELECT
         t.leave_type_id,
         t.leave_type_name,
         t.leave_type_code,
         t.is_paid_leave,
         t.allows_half_day,
-        COALESCE(lpt.quota_days, t.annual_quota_days, 12) AS quota_days,
-        COALESCE(b.allocated_days, lpt.quota_days, t.annual_quota_days, 12) AS allocated_days,
-        COALESCE(b.used_days, 0) AS used_days
-      FROM leave_types t
-      LEFT JOIN leave_plan_types lpt ON lpt.leave_type_id = t.leave_type_id AND lpt.leave_plan_id = $1
-      LEFT JOIN employee_leave_balances b ON b.leave_type_id = t.leave_type_id AND b.employee_id = $2
-      WHERE t.is_active = true
-      ORDER BY t.leave_type_name ASC`,
-      [leavePlanId || null, employeeId]
-    );
+        b.allocated_days,
+        b.used_days,
+        b.financial_year
+      FROM employee_leave_balances b
+      JOIN employees e ON e.employee_id = b.employee_id
+      JOIN leave_types t ON t.leave_type_id = b.leave_type_id
+      WHERE b.employee_id = $1
+        AND e.organization_id = $2
+        AND t.is_active = true`;
+    const balanceParams = [employeeId, organizationId];
+
+    if (leaveTypeFilter) {
+      balanceParams.push(`%${leaveTypeFilter.toLowerCase()}%`, leaveTypeFilter.toLowerCase());
+      balanceSql += ` AND (LOWER(t.leave_type_name) LIKE $${balanceParams.length - 1} OR LOWER(t.leave_type_code) = $${balanceParams.length})`;
+    }
+
+    balanceSql += ` ORDER BY b.financial_year DESC, t.leave_type_name ASC`;
+
+    const balanceRes = await query(balanceSql, balanceParams);
 
     const pendingRes = await query(
       `SELECT leave_type_id, COALESCE(SUM(total_leave_days), 0) AS pending_days
-       FROM leave_requests
-       WHERE employee_id = $1 AND current_status = 'PENDING'
+       FROM leave_requests r
+       JOIN employees e ON e.employee_id = r.employee_id
+       WHERE r.employee_id = $1
+         AND e.organization_id = $2
+         AND UPPER(r.current_status) = 'PENDING'
        GROUP BY leave_type_id`,
-      [employeeId]
+      [employeeId, organizationId]
     );
     const pendingMap = new Map(pendingRes.rows.map((r) => [r.leave_type_id, parseFloat(r.pending_days)]));
 
@@ -80,7 +79,11 @@ async function getEmployeeLeaveBalance(employeeId, organizationId, leaveTypeFilt
     let totalPending = 0;
     let totalRemaining = 0;
 
-    const balances = planRes.rows.map((row) => {
+    const seenTypeIds = new Set();
+    const balances = [];
+    for (const row of balanceRes.rows) {
+      if (seenTypeIds.has(row.leave_type_id)) continue;
+      seenTypeIds.add(row.leave_type_id);
       const allocated = parseFloat(row.allocated_days) || 0;
       const used = parseFloat(row.used_days) || 0;
       const pending = pendingMap.get(row.leave_type_id) || 0;
@@ -91,31 +94,24 @@ async function getEmployeeLeaveBalance(employeeId, organizationId, leaveTypeFilt
       totalPending += pending;
       totalRemaining += remaining;
 
-      return {
-        leaveTypeId: row.leave_type_id,
-        leaveType: row.leave_type_name,
-        code: row.leave_type_code,
-        allocated,
-        used,
-        pending,
-        remaining,
-        isPaid: row.is_paid_leave,
-        allowsHalfDay: row.allows_half_day,
-      };
-    });
+const balance = {
+  leaveTypeId: row.leave_type_id,
+  leaveType: row.leave_type_name,
+  code: row.leave_type_code,
+  allocated,
+  used,
+  pending,
+  remaining,
+  isPaid: row.is_paid_leave,
+  allowsHalfDay: row.allows_half_day,
+};
 
-    const filtered = leaveTypeFilter
-      ? balances.filter(
-          (b) =>
-            b.leaveType.toLowerCase().includes(leaveTypeFilter.toLowerCase()) ||
-            b.code.toLowerCase() === leaveTypeFilter.toLowerCase()
-        )
-      : balances;
-
+balances.push(balance);
+    }
     return {
       employeeId,
       financialYear: fy,
-      balances: filtered.length > 0 ? filtered : balances,
+      balances,
       totalAllocated,
       totalUsed,
       totalPending,
@@ -140,10 +136,12 @@ async function getEmployeeLeaveHistory(employeeId, organizationId, dateRange = n
     return { employeeId, records: [], count: 0, totalApprovedDays: 0 };
   }
 
-  const params = [employeeId];
+  const params = [employeeId, organizationId];
   let dateClause = '';
   if (dateRange && dateRange.startDate && dateRange.endDate && dateRange.explicit) {
-    dateClause = ` AND (r.start_date <= $${params.length + 2} AND r.end_date >= $${params.length + 1})`;
+    const startParam = params.length + 1;
+    const endParam = params.length + 2;
+    dateClause = ` AND (r.start_date <= $${endParam} AND r.end_date >= $${startParam})`;
     params.push(dateRange.startDate, dateRange.endDate);
   }
 
@@ -163,7 +161,9 @@ async function getEmployeeLeaveHistory(employeeId, organizationId, dateRange = n
       t.is_paid_leave
     FROM leave_requests r
     JOIN leave_types t ON r.leave_type_id = t.leave_type_id
+    JOIN employees e ON e.employee_id = r.employee_id
     WHERE r.employee_id = $1
+      AND e.organization_id = $2
       ${dateClause}
     ORDER BY r.start_date DESC
     LIMIT $${params.length + 1}
@@ -282,11 +282,13 @@ async function getEmployeePendingLeaveRequests(employeeId, organizationId) {
         t.leave_type_name
       FROM leave_requests r
       JOIN leave_types t ON t.leave_type_id = r.leave_type_id
+      JOIN employees e ON e.employee_id = r.employee_id
       WHERE r.employee_id = $1
+        AND e.organization_id = $2
         AND UPPER(r.current_status) = 'PENDING'
       ORDER BY r.start_date ASC
     `;
-    const res = await query(sql, [employeeId]);
+    const res = await query(sql, [employeeId, organizationId]);
     return {
       count: res.rows.length,
       requests: res.rows.map((r) => ({

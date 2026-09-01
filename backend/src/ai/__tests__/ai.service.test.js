@@ -1,4 +1,4 @@
-const { buildUserAwareHRPrompt } = require('../prompt.service');
+const { buildUserAwareHRPrompt } = require('../llm/prompt.service');
 const aiService = require('../ai.service');
 
 jest.mock('../employeeContext.service', () => ({
@@ -15,15 +15,13 @@ jest.mock('../employeeContext.service', () => ({
   })),
 }));
 
-jest.mock('../employeeData.service', () => ({
-  fetchEmployeeHRMSData: jest.fn(async () => ({
-    isAvailable: true,
-    data: { leaveBalances: { balances: [{ leaveType: 'Earned Leave', code: 'EL', remaining: 8 }] } },
+jest.mock('../data/hrmsDataRetriever.service', () => ({
+  fetchHrmsData: jest.fn(async () => ({
+    leaveBalance: { balances: [{ leaveType: 'Earned Leave', code: 'EL', remaining: 8 }] },
   })),
-  formatEmployeeDataForPrompt: jest.fn(() => 'EMPLOYEE DATA: 8 days remaining'),
 }));
 
-jest.mock('../policyRetriever.service', () => ({
+jest.mock('../rag/policyRetriever.service', () => ({
   retrievePolicies: jest.fn(async () => [{
     policyId: 'policy-1',
     policyTitle: 'Leave Policy',
@@ -34,17 +32,22 @@ jest.mock('../policyRetriever.service', () => ({
   }]),
 }));
 
-jest.mock('../ollama.service', () => ({
+jest.mock('../llm/gemma.service', () => ({
   generateCompletion: jest.fn(async () => 'You currently have 8 days remaining and can apply subject to manager approval.'),
 }));
 
 describe('AI chatbot safeguards', () => {
   test('buildUserAwareHRPrompt uses a structured role/org prompt contract', () => {
-    const prompt = buildUserAwareHRPrompt('How many leaves do I have?', [{ policyId: 'p1', policyTitle: 'Leave Policy', chunkText: 'Policy text' }], 'EMPLOYEE DATA');
+    const prompt = buildUserAwareHRPrompt({
+      question: 'How many leaves do I have?',
+      policyChunks: [{ policyId: 'p1', policyTitle: 'Leave Policy', chunkText: 'Policy text' }],
+      employeeDataText: 'EMPLOYEE DATA',
+      user: { role: 'employee', fullName: 'Jane Doe' },
+      mode: 'HYBRID',
+    });
 
-    expect(prompt).toContain('SYSTEM:');
-    expect(prompt).toContain('ROLE:');
-    expect(prompt).toContain('ORGANIZATION:');
+    expect(prompt).toContain('ROLE CONTEXT');
+    expect(prompt).toContain('User Role: employee');
     expect(prompt).toContain('USER QUESTION');
     expect(prompt).toContain('RULES:');
     expect(prompt).not.toContain('SELECT');
@@ -52,9 +55,12 @@ describe('AI chatbot safeguards', () => {
   });
 
   test('employee is refused when asking for another person\'s salary information', async () => {
-    const result = await aiService.chat({ message: "What is my manager's salary?" }, { role: 'employee', userId: 'user-1', employeeId: 'emp-1', organizationId: 'org-1' });
+    const result = await aiService.chat(
+      { message: "What is my manager's salary?" },
+      { role: 'employee', userId: 'user-1', employeeId: 'emp-1', organizationId: 'org-1' }
+    );
 
     expect(result.success).toBe(true);
-    expect(result.answer).toMatch(/not available|unauthorized|cannot provide|cannot access/i);
+    expect(result.answer).toMatch(/not available|unauthorized|cannot provide|cannot access|not accessible/i);
   });
 });
