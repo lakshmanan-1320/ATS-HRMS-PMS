@@ -23,7 +23,9 @@ router.delete('/companies/:id', handleDeleteCompany);
 
 // --- Client Admins ---
 router.get('/', handleGetClientAdmins);
+router.get('', handleGetClientAdmins);
 router.post('/', handleCreateClientAdmin);
+router.post('', handleCreateClientAdmin);
 router.put('/:id', handleUpdateClientAdmin);
 router.patch('/:id/status', handlePatchClientAdminStatus);
 router.patch('/:id/goal-mode', handlePatchClientAdminGoalMode);
