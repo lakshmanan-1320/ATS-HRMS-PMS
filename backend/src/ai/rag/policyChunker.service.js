@@ -1,12 +1,14 @@
 /**
  * policyChunker.service.js
+ *
  * Splits policy documents into semantically coherent, section-aware chunks.
+ * Preserves section headers, subsection boundaries, and rule conditions.
  */
 
 'use strict';
 
-const CHUNK_SIZE = 1400;
-const CHUNK_OVERLAP = 200;
+const CHUNK_SIZE = 1200;
+const CHUNK_OVERLAP = 150;
 
 function extractSectionRef(text) {
   const match = text.match(/SECTION\s+([0-9A-Z\.]+)(?:\s*:\s*([^\n\r]+))?/i);
@@ -14,9 +16,8 @@ function extractSectionRef(text) {
     const num = match[1];
     const rawTitle = match[2] ? match[2].trim() : '';
     if (rawTitle) {
-      const title = rawTitle.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
-      const fullTitle = `Section ${num}: ${title}`;
-      return fullTitle.length > 50 ? fullTitle.slice(0, 50) : fullTitle;
+      const fullTitle = `Section ${num}: ${rawTitle}`;
+      return fullTitle.length > 60 ? fullTitle.slice(0, 60) : fullTitle;
     }
     return `Section ${num}`.slice(0, 50);
   }
@@ -24,13 +25,19 @@ function extractSectionRef(text) {
   const bulletMatch = text.match(/(\d+\.\d+)\s+([A-Z][^\n\r:]{2,50})/);
   if (bulletMatch) {
     const bulletTitle = `Section ${bulletMatch[1]}: ${bulletMatch[2].trim()}`;
-    return bulletTitle.length > 50 ? bulletTitle.slice(0, 50) : bulletTitle;
+    return bulletTitle.length > 60 ? bulletTitle.slice(0, 60) : bulletTitle;
   }
 
-  return 'General';
+  return 'General Policy';
 }
 
-function chunkPolicyText(text) {
+/**
+ * Splits policy text into section-aware chunks.
+ * @param {string} text - Raw policy content
+ * @param {string} [policyTitle] - Policy title to prepend
+ * @returns {Array<{ chunkIndex: number, sectionRef: string, chunkText: string }>}
+ */
+function chunkPolicyText(text, policyTitle = '', metadata = {}) {
   if (!text || !text.trim()) {
     return [];
   }
@@ -40,11 +47,19 @@ function chunkPolicyText(text) {
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
+  const titlePrefix = [
+    policyTitle ? `[Policy: ${policyTitle}]` : null,
+    metadata.category ? `[Category: ${metadata.category}]` : null,
+    metadata.version ? `[Version: ${metadata.version}]` : null,
+  ].filter(Boolean).join('\n');
+  const metadataPrefix = titlePrefix ? `${titlePrefix}\n` : '';
+
+  // Match SECTION headers (e.g. SECTION 1: PURPOSE & SCOPE)
   const sectionHeaderRegex = /(?:^|\n\n)(SECTION\s+\d+[^:\n]*:[^\n]+)/gi;
   const matches = [...normalized.matchAll(sectionHeaderRegex)];
 
   if (matches.length === 0) {
-    return fallbackSlidingWindow(normalized);
+    return fallbackSlidingWindow(normalized, metadataPrefix);
   }
 
   const chunks = [];
@@ -63,10 +78,10 @@ function chunkPolicyText(text) {
       chunks.push({
         chunkIndex: chunkIndex++,
         sectionRef,
-        chunkText: sectionFullText,
+        chunkText: `${metadataPrefix}[Section: ${sectionRef}]\n${sectionFullText}`,
       });
     } else {
-      const subChunks = splitLargeSection(sectionFullText, headerTitle, sectionRef);
+      const subChunks = splitLargeSection(sectionFullText, headerTitle, sectionRef, metadataPrefix);
       for (const sc of subChunks) {
         chunks.push({
           chunkIndex: chunkIndex++,
@@ -80,7 +95,7 @@ function chunkPolicyText(text) {
   return chunks;
 }
 
-function splitLargeSection(sectionText, headerTitle, sectionRef) {
+function splitLargeSection(sectionText, headerTitle, sectionRef, titlePrefix) {
   const paragraphs = sectionText.split(/\n\n+/).filter((p) => p.trim().length > 0);
   const subChunks = [];
 
@@ -91,7 +106,7 @@ function splitLargeSection(sectionText, headerTitle, sectionRef) {
     if ((currentText + '\n\n' + para).length > CHUNK_SIZE && currentText.length > 0) {
       subChunks.push({
         sectionRef: `${sectionRef} (Part ${subIndex++})`,
-        chunkText: `${headerTitle}\n\n${currentText}`.trim(),
+        chunkText: `${titlePrefix}${headerTitle}\n\n${currentText}`.trim(),
       });
 
       const overlapSlice = currentText.slice(-CHUNK_OVERLAP).trim();
@@ -104,14 +119,14 @@ function splitLargeSection(sectionText, headerTitle, sectionRef) {
   if (currentText.trim().length > 0) {
     subChunks.push({
       sectionRef: subIndex > 1 ? `${sectionRef} (Part ${subIndex})` : sectionRef,
-      chunkText: `${headerTitle}\n\n${currentText}`.trim(),
+      chunkText: `${titlePrefix}${headerTitle}\n\n${currentText}`.trim(),
     });
   }
 
   return subChunks;
 }
 
-function fallbackSlidingWindow(text) {
+function fallbackSlidingWindow(text, titlePrefix) {
   const paragraphs = text.split(/\n\n+/).filter((p) => p.trim().length > 0);
   const chunks = [];
   let chunkIndex = 0;
@@ -121,8 +136,8 @@ function fallbackSlidingWindow(text) {
     if ((currentBuffer + '\n\n' + para).length > CHUNK_SIZE && currentBuffer.length > 0) {
       chunks.push({
         chunkIndex: chunkIndex++,
-        sectionRef: 'General',
-        chunkText: currentBuffer.trim(),
+        sectionRef: 'General Policy',
+        chunkText: `${titlePrefix}${currentBuffer.trim()}`,
       });
       const overlap = currentBuffer.slice(-CHUNK_OVERLAP).trim();
       currentBuffer = overlap ? `${overlap}\n\n${para}` : para;
@@ -134,8 +149,8 @@ function fallbackSlidingWindow(text) {
   if (currentBuffer.trim().length > 0) {
     chunks.push({
       chunkIndex: chunkIndex++,
-      sectionRef: 'General',
-      chunkText: currentBuffer.trim(),
+      sectionRef: 'General Policy',
+      chunkText: `${titlePrefix}${currentBuffer.trim()}`,
     });
   }
 

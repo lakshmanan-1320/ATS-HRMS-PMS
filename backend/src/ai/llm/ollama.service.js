@@ -105,6 +105,8 @@ async function generateEmbedding(promptText) {
 
 /**
  * Generates text completion using Gemma.
+ * Optimized for CPU inference with compact context and constrained predictions.
+ *
  * @param {string} prompt
  * @param {object} [options]
  * @returns {Promise<string>}
@@ -125,8 +127,8 @@ async function generateCompletion(prompt, options = {}) {
         stream: false,
         options: {
           temperature: 0.1,
-          num_ctx: options.num_ctx || 2048,
-          num_predict: options.num_predict || 220,
+          num_ctx: options.num_ctx || 1536,
+          num_predict: options.num_predict || 200,
           top_p: 0.9,
         },
       }),

@@ -8,16 +8,7 @@
 const { query } = require('../../config/db');
 const { generateEmbedding } = require('./embedding.service');
 const { chunkPolicyText } = require('./policyChunker.service');
-
-function getPolicyKey(policy) {
-  if (policy.policy_key && typeof policy.policy_key === 'string' && policy.policy_key.trim()) {
-    return policy.policy_key.trim();
-  }
-  if (policy.policy_id) {
-    return `POL-${String(policy.policy_id).slice(0, 8).toUpperCase()}`;
-  }
-  return 'POL-GEN';
-}
+const logger = require('../../config/logger');
 
 /**
  * Index a single policy object into hr_policy_embeddings with vector embeddings
@@ -25,13 +16,16 @@ function getPolicyKey(policy) {
  * @returns {Promise<object>} - Result metadata
  */
 async function indexPolicy(policy) {
-  const { policy_id, organization_id, content_text } = policy;
+  const { policy_id, organization_id, title, category, version_number, content_text } = policy;
 
   if (!policy_id || !organization_id || !content_text) {
     throw new Error('Invalid policy data: policy_id, organization_id, and content_text are required.');
   }
 
-  const chunks = chunkPolicyText(content_text);
+  const chunks = chunkPolicyText(content_text, title || '', {
+    category,
+    version: version_number,
+  });
   if (!chunks.length) {
     throw new Error('Policy contains no searchable text content.');
   }
@@ -80,7 +74,7 @@ async function indexPolicy(policy) {
       [policy_id, organization_id]
     );
   } catch (err) {
-    console.warn(`[Indexer] Could not update ai_status on hr_policies for ${policy_id}:`, err.message);
+    logger.warn(`[Indexer] Could not update ai_status on hr_policies for ${policy_id}:`, err.message);
   }
 
   return {
@@ -91,25 +85,25 @@ async function indexPolicy(policy) {
 }
 
 /**
- * Re-indexes all published and active policies for an organization
- * @param {string} organizationId
+ * Re-indexes all published and active policies for an organization or all organizations.
+ * @param {string} [organizationId]
  * @returns {Promise<object>}
  */
-async function indexAllOrganizationPolicies(organizationId) {
-  if (!organizationId) {
-    throw new Error('Organization ID is required to batch-index policies.');
-  }
-
-  const result = await query(
-    `SELECT policy_id, organization_id, title, category, content_text
+async function indexAllOrganizationPolicies(organizationId = null) {
+  let sql = `
+    SELECT policy_id, organization_id, title, category, version_number, content_text
     FROM hr_policies
-    WHERE organization_id = $1
-      AND is_active = true
+    WHERE is_active = true
       AND is_published = true
-    ORDER BY created_at ASC`,
-    [organizationId]
-  );
+  `;
+  const params = [];
+  if (organizationId) {
+    params.push(organizationId);
+    sql += ` AND organization_id = $1`;
+  }
+  sql += ` ORDER BY created_at ASC`;
 
+  const result = await query(sql, params);
   const policies = result.rows;
   let totalChunks = 0;
   let successCount = 0;
@@ -121,7 +115,7 @@ async function indexAllOrganizationPolicies(organizationId) {
       totalChunks += res.chunksIndexed;
       successCount++;
     } catch (err) {
-      console.error(`[Indexer] Failed to index policy ${policy.policy_id}:`, err.message);
+      logger.error(`[Indexer] Failed to index policy ${policy.policy_id}:`, err.message);
       errors.push({ policyId: policy.policy_id, error: err.message });
     }
   }
