@@ -58,6 +58,12 @@ router.use('/master-data', masterDataRoutes.routes);
 // Enforce session timeout on all subsequent authenticated routes
 router.use(enforceSessionTimeout);
 
+// ── System Metadata & Module Capability Discovery ─────────────────────────────
+router.get('/modules/my', requireAuth, handleGetMyModules);
+router.get('/client-admin/organization/modules', requireAuth, handleGetOrganizationModules);
+router.get('/settings/session-timeout', requireAuth, handleGetSessionTimeout);
+router.get('/settings/company-name', requireAuth, handleGetCompanyName);
+
 router.use('/super-admin', superAdminRoutes.routes);
 router.use('/super-admin/company', companyRoutes.routes);
 router.use('/super-admin/client-admins', clientAdminRoutes.routes);
@@ -68,7 +74,7 @@ router.use('/client-admin/employees', employeeRoutes.routes);
 router.use('/client-admin/goals', requireAuth, requireModule('goals'), goalRoutes.routes);
 router.use('/client-admin/goal-categories', requireAuth, requireModule('goals'), goalCategoryRoutes.routes);
 router.use('/client-admin/financial-years', requireAuth, requireModule('performance'), financialYearRoutes.routes);
-router.use('/client-admin/competency-assessment', requireAuth, requireModule('goals'), competencyAssessmentRoutes.routes);
+router.use('/client-admin/competency-assessment', requireAuth, requireModule('competency_assessment'), competencyAssessmentRoutes.routes);
 router.use('/employee', employeePortalRoutes.routes);
 router.use('/goals', requireAuth, requireModule('goals'), goalCompletionRoutes.routes);
 router.use('/employee/goals',   requireAuth, requireModule('goals'),       employeeGoalRoutes.routes);
@@ -76,7 +82,7 @@ router.use('/employee/goals',   requireAuth, requireModule('goals'),       goalC
 router.use('/employee/manager', requireAuth, requireModule('goals'),       managerGoalRoutes.routes);
 router.use('/employee/manager', requireAuth, requireModule('goals'),       goalCompletionRoutes.routes);
 router.use('/client-admin/dashboard', dashboardRoutes.routes);
-router.use('/', requireAuth, requireModule('goals'), kpiRoutes.routes);
+router.use('/', requireAuth, kpiRoutes.routes);
 router.use('/client-admin/appraisal', requireAuth, requireModule('performance'), appraisalRoutes.adminRouter);
 router.use('/employee/appraisal',     requireAuth, requireModule('performance'), appraisalRoutes.employeeRouter);
 router.use('/attendance', requireAuth, requireModule('attendance'), attendanceRoutes.routes);
@@ -87,15 +93,16 @@ router.use('/manager/regularizations', requireAuth, requireModule('attendance'),
 router.use('/admin/regularizations',   requireAuth, requireModule('attendance'), regularizationRoutes.adminRoutes);
 router.use('/payroll', requireAuth, requireModule('payroll'), payrollRoutes);
 router.use('/reports', requireAuth, reportsRoutes.routes);
+router.use('/client-admin/reports', requireAuth, reportsRoutes.routes);
 router.use('/permissions', permissionRoutes.routes);
 router.use('/notifications', notificationRoutes);
-router.use('/client-admin/bell-curve', requireAuth, requireModule('performance'), requireRoles('client_admin', 'hr'), bellCurveRoutes.routes);
-router.use('/client-admin/nine-box', nineBoxRoutes.routes);
+router.use('/client-admin/bell-curve', requireAuth, requireModule('bell_curve'), requireRoles('client_admin', 'hr'), bellCurveRoutes.routes);
+router.use('/client-admin/nine-box', requireAuth, requireModule('nine_box'), nineBoxRoutes.routes);
 const pipRoutes = require('../modules/pip');
 const policyRoutes = require('../modules/policy/policy.routes');
 const chatbotRoutes = require('../ai/chatbot.routes');
 const aiRoutes = require('../ai/ai.routes');
-router.use('/pip', requireAuth, requireModule('performance'), pipRoutes.routes);
+router.use('/pip', requireAuth, requireModule('pip'), pipRoutes.routes);
 router.use('/policies', requireAuth, policyRoutes.routes);
 router.use('/policies', requireAuth, chatbotRoutes.routes);
 router.use('/ai', requireAuth, aiRoutes);
@@ -128,12 +135,7 @@ router.get('/employees/search', requireAuth, async (req, res, next) => {
   }
 });
 
-router.get('/modules/my', requireAuth, handleGetMyModules);
-router.get('/client-admin/organization/modules', requireAuth, handleGetOrganizationModules);
 router.get('/client-admin/audit-logs', requireClientAdmin, handleGetClientAdminAuditLogs);
-
-router.get('/settings/session-timeout', requireAuth, handleGetSessionTimeout)
-router.get('/settings/company-name', requireAuth, handleGetCompanyName);
 
 router.get('/health', (req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
 

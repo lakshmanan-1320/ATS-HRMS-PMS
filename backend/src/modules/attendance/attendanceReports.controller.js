@@ -99,7 +99,7 @@ async function getExportData(orgId, reportType, queryParams, user) {
   switch (reportType) {
     case 'summary':
       const sum = await service.getSummaryReport(orgId, queryParams, user);
-      return [sum];
+      return sum.records;
     case 'daily':
       return await service.getDailyReport(orgId, queryParams, user);
     case 'monthly':

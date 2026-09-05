@@ -3,7 +3,9 @@ import axios from 'axios'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar'
+import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar'
 import Sidebar from '../../../components/layout/Sidebar'
+import { useModules } from '../../../hooks/useModules'
 import { useJsApiLoader } from '@react-google-maps/api'
 
 import {
@@ -89,6 +91,9 @@ export default function EmployeeDashboard() {
   const userRole  = sessionStorage.getItem('user_role') || 'employee'
   const isEmployee = userRole !== 'client_admin' && userRole !== 'super_admin'
 
+  const { isEnabled } = useModules()
+  const isPmsActive = isEnabled('pms') && isEnabled('goals')
+
   function showToast(message, type = 'success') {
     if (type === 'error') {
       toast.error(message)
@@ -107,36 +112,27 @@ export default function EmployeeDashboard() {
     return `${displayH.toString().padStart(2, '0')}:${m} ${ampm}`
   }
 
-  async function resolveAddress(lat, lon) {
-    if (!lat || !lon) { setLocationAddress('—'); return }
-    const fallbackCoords = `${parseFloat(lat).toFixed(4)}, ${parseFloat(lon).toFixed(4)}`
-
-    if (!window.google || !window.google.maps) {
+  const resolveAddress = (lat, lon) => {
+    const fallbackCoords = `${Number(lat).toFixed(4)}, ${Number(lon).toFixed(4)}`
+    if (!window.google || !window.google.maps || !window.google.maps.Geocoder) {
       setLocationAddress(fallbackCoords)
       return
     }
 
     try {
       const geocoder = new window.google.maps.Geocoder()
-      geocoder.geocode({ location: { lat: parseFloat(lat), lng: parseFloat(lon) } }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          const place = results[0]
-          const { suburb, city, state } = parseGoogleGeocodeAddress(place.address_components)
-          const parts = [suburb, city, state].filter(Boolean)
-          setLocationAddress(parts.join(', ') || place.formatted_address)
+      geocoder.geocode({ location: { lat: Number(lat), lng: Number(lon) } }, (results, status) => {
+        if (status === 'OK' && results && results[0]) {
+          const { suburb, city, state, country } = parseGoogleGeocodeAddress(results[0].address_components)
+          const parts = [suburb, city, state, country].filter(Boolean)
+          if (parts.length > 0) {
+            setLocationAddress(parts.join(', '))
+          } else {
+            setLocationAddress(results[0].formatted_address || fallbackCoords)
+          }
         } else {
-          // Handle specific geocoding errors
           if (status === 'ZERO_RESULTS') {
-            console.warn('Geocoding status: ZERO_RESULTS for coords', lat, lon)
-            setLocationAddress(`No address found (${fallbackCoords})`)
-          } else if (status === 'OVER_QUERY_LIMIT') {
-            console.warn('Geocoding status: OVER_QUERY_LIMIT (quota exceeded)')
-            setLocationAddress(fallbackCoords)
-          } else if (status === 'REQUEST_DENIED') {
-            console.warn('Geocoding status: REQUEST_DENIED (API key restriction or invalid key)')
-            setLocationAddress(fallbackCoords)
-          } else if (status === 'INVALID_REQUEST') {
-            console.warn('Geocoding status: INVALID_REQUEST')
+            console.warn('Geocoder returned ZERO_RESULTS for coords:', lat, lon)
             setLocationAddress(fallbackCoords)
           } else {
             console.warn('Geocoding failed with status:', status)
@@ -157,11 +153,12 @@ export default function EmployeeDashboard() {
   }, [isLoaded, attendanceCoords])
 
   useEffect(() => {
-    const teamCall = isManager ? getMyTeam() : Promise.resolve({ data: [] })
+    const teamCall = isManager ? getMyTeam().catch(() => ({ data: [] })) : Promise.resolve({ data: [] })
+    const goalsCall = (isEnabled('pms') && isEnabled('goals')) ? getMyGoals().catch(() => ({ data: [] })) : Promise.resolve({ data: [] })
 
     Promise.all([
-      getMyProfile(),
-      getMyGoals(),
+      getMyProfile().catch(() => ({ data: null })),
+      goalsCall,
       teamCall,
       getTodayAttendance().catch(() => null),
       getAuthMe().catch(() => null),
@@ -171,9 +168,9 @@ export default function EmployeeDashboard() {
       getMyRegularizations().catch(() => null),
       getTeamMembers().catch(() => null),
     ]).then(([profileRes, goalsRes, teamRes, attRes, authMeRes, leaveRes, holidaysRes, myLeavesRes, regsRes, teamAttRes]) => {
-      setProfile(profileRes.data)
-      setGoals(goalsRes.data || [])
-      setTeam(teamRes.data || [])
+      setProfile(profileRes?.data || null)
+      setGoals(goalsRes?.data || [])
+      setTeam(teamRes?.data || [])
       setAuthMe(authMeRes?.data || null)
 
       const lb = leaveRes?.data?.data || leaveRes?.data || []
@@ -220,7 +217,7 @@ export default function EmployeeDashboard() {
         }).slice(0, 5)
       )
 
-      if (profileRes.data) {
+      if (profileRes?.data) {
         sessionStorage.setItem('employee_name', `${profileRes.data.first_name} ${profileRes.data.last_name}`)
       }
 
@@ -257,7 +254,7 @@ export default function EmployeeDashboard() {
         setLocationAddress('—')
       }
     }).catch(err => {
-      showToast(err.message || 'Failed to load dashboard data', 'error')
+      console.warn('Dashboard data fetch warning:', err)
     }).finally(() => setLoading(false))
   }, [isManager])
 
@@ -373,7 +370,12 @@ export default function EmployeeDashboard() {
           : <EmployeeSidebar active="dashboard" />
       }
 
-      <main style={{ flex: 1, padding: '28px 30px', overflowY: 'auto', minWidth: 0 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        {userRole === 'client_admin'
+          ? <ClientAdminTopBar title="Dashboard" />
+          : <EmployeeTopBar title="Dashboard" />
+        }
+        <main style={{ flex: 1, padding: '28px 30px', overflowY: 'auto', minWidth: 0 }}>
 
         {/* ── Welcome Banner ───────────────────────────────────────────────── */}
         <div style={{
@@ -399,20 +401,37 @@ export default function EmployeeDashboard() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
-              {[
-                { val: `${completionPct}%`, label: 'Goal Completion', color: '#a5b4fc' },
-                { val: `${avgProgress}%`,   label: 'Avg Progress',    color: '#34d399' },
-                { val: goals.length,        label: 'Total Goals',     color: '#fbbf24' },
-                ...(isManager ? [{ val: team.length, label: 'Team Size', color: '#f0abfc' }] : []),
-              ].map((m, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.1)' }} />}
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '22px', fontWeight: '800', color: m.color }}>{m.val}</div>
-                    <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.55)', marginTop: '2px' }}>{m.label}</div>
-                  </div>
-                </React.Fragment>
-              ))}
+              {isPmsActive ? (
+                [
+                  { val: `${completionPct}%`, label: 'Goal Completion', color: '#a5b4fc' },
+                  { val: `${avgProgress}%`,   label: 'Avg Progress',    color: '#34d399' },
+                  { val: goals.length,        label: 'Total Goals',     color: '#fbbf24' },
+                  ...(isManager ? [{ val: team.length, label: 'Team Size', color: '#f0abfc' }] : []),
+                ].map((m, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.1)' }} />}
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '22px', fontWeight: '800', color: m.color }}>{m.val}</div>
+                      <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.55)', marginTop: '2px' }}>{m.label}</div>
+                    </div>
+                  </React.Fragment>
+                ))
+              ) : (
+                [
+                  { val: `${totalLeaveAvail}d`, label: 'Leave Balance', color: '#a5b4fc' },
+                  { val: pendingLeaves.length, label: 'Pending Leaves', color: '#fbbf24' },
+                  { val: pendingRegs.length,   label: 'Pending Regs',   color: '#34d399' },
+                  ...(isManager ? [{ val: team.length, label: 'Team Size', color: '#f0abfc' }] : []),
+                ].map((m, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.1)' }} />}
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '22px', fontWeight: '800', color: m.color }}>{m.val}</div>
+                      <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.55)', marginTop: '2px' }}>{m.label}</div>
+                    </div>
+                  </React.Fragment>
+                ))
+              )}
             </div>
           </div>
 
@@ -468,71 +487,122 @@ export default function EmployeeDashboard() {
 
         {/* ── KPI Cards ─────────────────────────────────────────────────────── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: '14px', marginBottom: '22px' }}>
-          <KpiCard icon={<TargetIcon />}      label="Total Goals"      value={goals.length}   sub={`${completionPct}% complete`}  gradient={GRADIENTS.primary} />
-          <KpiCard icon={<ClockIcon />}       label="Active Goals"     value={activeGoals}    sub="In progress"                   gradient={GRADIENTS.blue}    />
-          <KpiCard icon={<CheckCircleIcon />} label="Completed"        value={completedGoals} sub={`of ${goals.length} total`}    gradient={GRADIENTS.green}   />
-          <KpiCard icon={<BellIcon />}        label="Pending Approval" value={pendingGoals}   sub="Awaiting review"               gradient={GRADIENTS.amber}   />
-          {isManager
-            ? <KpiCard icon={<UsersIcon />} label="Team Members"  value={team.length}        sub="Direct reports"                gradient={GRADIENTS.pink}    />
-            : <KpiCard icon={<LeafIcon />}  label="Leave Balance" value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '—'} sub="Available days" gradient={GRADIENTS.purple} />
-          }
+          {isPmsActive ? (
+            <>
+              <KpiCard icon={<TargetIcon />}      label="Total Goals"      value={goals.length}   sub={`${completionPct}% complete`}  gradient={GRADIENTS.primary} />
+              <KpiCard icon={<ClockIcon />}       label="Active Goals"     value={activeGoals}    sub="In progress"                   gradient={GRADIENTS.blue}    />
+              <KpiCard icon={<CheckCircleIcon />} label="Completed"        value={completedGoals} sub={`of ${goals.length} total`}    gradient={GRADIENTS.green}   />
+              <KpiCard icon={<BellIcon />}        label="Pending Approval" value={pendingGoals}   sub="Awaiting review"               gradient={GRADIENTS.amber}   />
+              {isManager
+                ? <KpiCard icon={<UsersIcon />} label="Team Members"  value={team.length}        sub="Direct reports"                gradient={GRADIENTS.pink}    />
+                : <KpiCard icon={<LeafIcon />}  label="Leave Balance" value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '—'} sub="Available days" gradient={GRADIENTS.purple} />
+              }
+            </>
+          ) : (
+            <>
+              <KpiCard icon={<LeafIcon />}        label="Leave Balance"    value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '0d'} sub="Available days"    gradient={GRADIENTS.purple}  />
+              <KpiCard icon={<ClockIcon />}       label="Pending Leaves"   value={pendingLeaves.length} sub="Awaiting approval"         gradient={GRADIENTS.amber}   />
+              <KpiCard icon={<CheckCircleIcon />} label="Regularizations"  value={pendingRegs.length}   sub="Pending review"           gradient={GRADIENTS.blue}    />
+              <KpiCard icon={<BellIcon />}        label="Upcoming Holiday" value={upcomingHolidays.length} sub="In coming weeks"       gradient={GRADIENTS.green}   />
+              {isManager && (
+                <KpiCard icon={<UsersIcon />} label="Team Members"  value={team.length}        sub="Direct reports"                gradient={GRADIENTS.pink}    />
+              )}
+            </>
+          )}
         </div>
 
         {/* ── Analytics Row ─────────────────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? '1fr 1fr 1fr' : '1fr 1fr', gap: '18px', marginBottom: '18px' }}>
-          {isEmployee && (
-            <AttendanceCard
-              isCheckIn={isCheckIn}
-              hasCheckedOut={hasCheckedOut}
-              punchTime={punchTime}
-              checkoutTime={checkoutTime}
-              elapsedSeconds={elapsedSeconds}
-              locationAddress={locationAddress}
-              punching={punching}
-              isHoliday={isHoliday}
-              holidayName={holidayName}
-              isOnLeave={isOnLeave}
-              attendanceEnabled={attendanceEnabled}
-              formattedDate={formattedDate}
-              onPunch={handlePunch}
-              shiftName={profile?.shift_name}
-              shiftCode={profile?.shift_code}
-              shiftStartTime={profile?.shift_start_time}
-              shiftEndTime={profile?.shift_end_time}
-              shiftColorCode={profile?.shift_color_code}
-              shiftGraceMinutes={profile?.shift_grace_minutes}
-            />
-          )}
+        {isPmsActive ? (
+          <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? '1fr 1fr 1fr' : '1fr 1fr', gap: '18px', marginBottom: '18px' }}>
+            {isEmployee && (
+              <AttendanceCard
+                isCheckIn={isCheckIn}
+                hasCheckedOut={hasCheckedOut}
+                punchTime={punchTime}
+                checkoutTime={checkoutTime}
+                elapsedSeconds={elapsedSeconds}
+                locationAddress={locationAddress}
+                punching={punching}
+                isHoliday={isHoliday}
+                holidayName={holidayName}
+                isOnLeave={isOnLeave}
+                attendanceEnabled={attendanceEnabled}
+                formattedDate={formattedDate}
+                onPunch={handlePunch}
+                shiftName={profile?.shift_name}
+                shiftCode={profile?.shift_code}
+                shiftStartTime={profile?.shift_start_time}
+                shiftEndTime={profile?.shift_end_time}
+                shiftColorCode={profile?.shift_color_code}
+                shiftGraceMinutes={profile?.shift_grace_minutes}
+              />
+            )}
 
-          <GoalDistributionCard
-            goals={goals}
-            avgProgress={avgProgress}
-            completionPct={completionPct}
-            onTrack={onTrack}
-          />
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <PerformanceScoreCard
+            <GoalDistributionCard
+              goals={goals}
               avgProgress={avgProgress}
               completionPct={completionPct}
-              totalGoals={goals.length}
-              completedGoals={completedGoals}
               onTrack={onTrack}
             />
-            <UpcomingDeadlinesCard goals={upcomingGoals} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <PerformanceScoreCard
+                avgProgress={avgProgress}
+                completionPct={completionPct}
+                totalGoals={goals.length}
+                completedGoals={completedGoals}
+                onTrack={onTrack}
+              />
+              <UpcomingDeadlinesCard goals={upcomingGoals} />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? '1.2fr 1fr' : '1fr', gap: '18px', marginBottom: '18px' }}>
+            {isEmployee && (
+              <AttendanceCard
+                isCheckIn={isCheckIn}
+                hasCheckedOut={hasCheckedOut}
+                punchTime={punchTime}
+                checkoutTime={checkoutTime}
+                elapsedSeconds={elapsedSeconds}
+                locationAddress={locationAddress}
+                punching={punching}
+                isHoliday={isHoliday}
+                holidayName={holidayName}
+                isOnLeave={isOnLeave}
+                attendanceEnabled={attendanceEnabled}
+                formattedDate={formattedDate}
+                onPunch={handlePunch}
+                shiftName={profile?.shift_name}
+                shiftCode={profile?.shift_code}
+                shiftStartTime={profile?.shift_start_time}
+                shiftEndTime={profile?.shift_end_time}
+                shiftColorCode={profile?.shift_color_code}
+                shiftGraceMinutes={profile?.shift_grace_minutes}
+              />
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <PendingLeavesWidget leaves={pendingLeaves} />
+              <PendingRegsWidget   regs={pendingRegs}     />
+            </div>
+          </div>
+        )}
 
         {/* ── Quick Info Widgets ─────────────────────────────────────────────── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
           <HolidaysWidget       holidays={upcomingHolidays} />
           <BirthdaysWidget      birthdays={birthdays}       />
           {isManager && <TeamAttendanceWidget members={teamMembers} />}
-          <PendingLeavesWidget  leaves={pendingLeaves}      />
-          <PendingRegsWidget    regs={pendingRegs}          />
+          {isPmsActive && (
+            <>
+              <PendingLeavesWidget  leaves={pendingLeaves}      />
+              <PendingRegsWidget    regs={pendingRegs}          />
+            </>
+          )}
         </div>
 
-      </main>
+        </main>
+      </div>
     </div>
   )
 }

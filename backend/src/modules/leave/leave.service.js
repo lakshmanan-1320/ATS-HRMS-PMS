@@ -962,18 +962,27 @@ async function applyLeave(employeeId, organizationId, data) {
     return request;
   });
 
-  getNotifSettings().then(ns => {
+  getNotifSettings().then(async ns => {
     if (!ns.leave_submitted) return;
     const empName = `${currentEmp.first_name || ''} ${currentEmp.last_name || ''}`.trim() || 'An employee';
     const leaveTypeName = leaveType.leave_type_name || leaveType.leave_type_code;
-    notifRepo.createNotification(
-      currentEmp.manager_id,
-      'leave_submitted',
-      'Leave Request Submitted',
-      `${empName} submitted a ${leaveTypeName} request (${start_date} – ${end_date}).`,
-      result.leave_request_id,
-      'leave'
-    ).catch(() => { });
+    const managerId = currentEmp.manager_id || currentEmp.manager_employee_id;
+    const recipients = new Set();
+    if (managerId) recipients.add(managerId);
+    const adminEmpIds = await notifRepo.getClientAdminEmployeeIds(organizationId).catch(() => []);
+    adminEmpIds.forEach(id => recipients.add(id));
+    recipients.delete(employeeId);
+
+    for (const rId of recipients) {
+      notifRepo.createNotification(
+        rId,
+        'leave_submitted',
+        'Leave Request Submitted',
+        `${empName} submitted a ${leaveTypeName} request (${start_date} – ${end_date}).`,
+        result.leave_request_id,
+        'leave'
+      ).catch(() => { });
+    }
 
     getLeaveEmailRecipients(organizationId, currentEmp.manager_id).then(recipients => {
       const emailPayload = {

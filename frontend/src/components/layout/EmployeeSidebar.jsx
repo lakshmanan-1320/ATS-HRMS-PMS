@@ -77,11 +77,13 @@ export default function EmployeeSidebar({ active }) {
     leaveChildren.push({ id: 'leave-approvals', icon: '📋', label: 'Leave Approvals', path: '/employee/leave-approvals' })
   }
 
+  const isPmsActive = isEnabled('pms')
+
   const baseLinks = [
     { id: 'dashboard',      icon: '🏠', label: 'Dashboard',        path: '/employee/dashboard' },
     { id: 'policies',       icon: '📄', label: 'Company Policies', path: '/employee/policies' },
-    (isEnabled('goals') || isEnabled('performance')) && { id: 'performance', icon: '🎯', label: 'My Performance', path: '/employee/performance' },
-    isEnabled('performance') && { id: 'pip', icon: '📈', label: 'My PIP', path: '/employee/pip' },
+    isPmsActive && (isEnabled('goals') || isEnabled('performance') || isEnabled('kpi') || isEnabled('continuous_feedback') || isEnabled('competency_assessment') || isEnabled('self_assessment') || isEnabled('360_feedback')) && { id: 'performance', icon: '🎯', label: 'My Performance', path: '/employee/performance' },
+    isPmsActive && isEnabled('pip') && { id: 'pip', icon: '📈', label: 'My PIP', path: '/employee/pip' },
     isEnabled('attendance')  && { id: 'attendance',     icon: '🕐', label: 'My Attendance',    path: '/employee/attendance' },
     isEnabled('leave')       && {
       id: 'leave-management-group',
@@ -148,11 +150,11 @@ export default function EmployeeSidebar({ active }) {
       sections[0].links.push(link)
     } else if (link.id === 'team') {
       sections[0].links.push(link)
-    } else if (['goals', 'appraisal', 'manager-goals', 'manager-appraisal', 'kpi-reviews', 'performance'].includes(link.id)) {
+    } else if (['goals', 'appraisal', 'manager-goals', 'manager-appraisal', 'kpi-reviews', 'performance', 'pip'].includes(link.id)) {
       sections[1].links.push(link)
     } else if (['attendance', 'leave-management-group', 'regularization', 'payroll'].includes(link.id)) {
       sections[2].links.push(link)
-    } else if (['regularization-approvals', 'team-attendance'].includes(link.id)) {
+    } else if (['regularization-approvals', 'team-attendance', 'overtime-approvals'].includes(link.id)) {
       sections[3].links.push(link)
     } else if (link.id === 'change-password') {
       sections[4].links.push(link)

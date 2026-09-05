@@ -1,4 +1,5 @@
 const { query } = require('../../config/db');
+const notifRepo = require('../inAppNotification/inAppNotification.repository');
 
 /**
  * Fetch all policies scoped to tenant organization
@@ -111,7 +112,22 @@ async function createPolicy(organizationId, data, userId) {
   ];
 
   const result = await query(sql, params);
-  return result.rows[0];
+  const created = result.rows[0];
+
+  if (isPublished && created) {
+    notifRepo.getOrgEmployeeIds(organizationId).then(empIds => {
+      notifRepo.createNotificationForMany(
+        empIds,
+        'policy_published',
+        'New HR Policy Published',
+        `A new HR policy "${created.title}" (${created.category || 'General'}) has been published.`,
+        created.policy_id,
+        'policy'
+      );
+    }).catch(() => {});
+  }
+
+  return created;
 }
 
 /**

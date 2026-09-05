@@ -68,6 +68,8 @@ export default function AttendancePolicies() {
   const [effectiveFrom, setEffectiveFrom] = useState(new Date().toISOString().slice(0, 10))
   const [assignSaving, setAssignSaving] = useState(false)
   const [assignError, setAssignError] = useState('')
+  const [policyAssignedDeptIds, setPolicyAssignedDeptIds] = useState([])
+  const [policyAssignedEmpIds, setPolicyAssignedEmpIds] = useState([])
 
   // Search inside checklist
   const [empSearch, setEmpSearch] = useState('')
@@ -112,7 +114,7 @@ export default function AttendancePolicies() {
     setModalOpen(true)
   }
 
-  function handleOpenAssign(p) {
+  async function handleOpenAssign(p) {
     setAssigningPolicy(p)
     setAssignMode('DEPARTMENT')
     setSelectedDeptId('')
@@ -121,7 +123,22 @@ export default function AttendancePolicies() {
     setAssignError('')
     setAssignSaving(false)
     setEmpSearch('')
+    setPolicyAssignedDeptIds([])
+    setPolicyAssignedEmpIds([])
     setAssignOpen(true)
+
+    try {
+      const token = sessionStorage.getItem('sa_token')
+      const headers = token ? { Authorization: `Bearer ${token}` } : {}
+      const [dRes, mRes] = await Promise.all([
+        axios.get(`/api/attendance/policies/${p.attendance_policy_id}/departments`, { headers }),
+        axios.get(`/api/attendance/policies/${p.attendance_policy_id}/members`, { headers })
+      ])
+      setPolicyAssignedDeptIds((dRes.data?.data || []).map(d => d.department_id))
+      setPolicyAssignedEmpIds((mRes.data?.data || []).map(m => m.employee_id))
+    } catch (err) {
+      console.error('Failed to load existing policy assignments:', err)
+    }
   }
 
   async function handleSubmit(e) {
@@ -608,26 +625,6 @@ export default function AttendancePolicies() {
                 </div>
               </div>
 
-              {/* Coming Soon placeholders */}
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '14px 16px', marginBottom: '20px' }}>
-                <h4 style={{ margin: '0 0 8px', fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Coming Soon (Phase 3 & 4 Integration)</h4>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: '12px', color: '#94a3b8' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FiSettings /> Office IP Restrictions</span>
-                    <span style={soonBadgeStyle}>Phase 3</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FiClock /> Shift Clock-in Enforcements</span>
-                    <span style={soonBadgeStyle}>Phase 3</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FiCheckCircle /> Remote WFH Validation Rules</span>
-                    <span style={soonBadgeStyle}>Phase 4</span>
-                  </div>
-                </div>
-              </div>
-
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
                 <label style={{ cursor: 'pointer', fontSize: '13px', fontWeight: '600', color: '#334155', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
@@ -715,10 +712,20 @@ export default function AttendancePolicies() {
                     style={{ ...inputStyle, cursor: 'pointer' }}
                   >
                     <option value="">— Select Department —</option>
-                    {metadataDepartments.map(d => (
-                      <option key={d.department_id} value={d.department_id}>{d.name}</option>
-                    ))}
+                    {metadataDepartments.map(d => {
+                      const isAssigned = policyAssignedDeptIds.includes(d.department_id)
+                      return (
+                        <option key={d.department_id} value={d.department_id}>
+                          {d.name} {isAssigned ? '✓ (Already Assigned)' : ''}
+                        </option>
+                      )
+                    })}
                   </select>
+                  {selectedDeptId && policyAssignedDeptIds.includes(selectedDeptId) && (
+                    <div style={{ marginTop: '8px', padding: '10px 14px', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '9px', fontSize: '12.5px', color: '#1e40af', fontWeight: '600', display: 'flex', alignItems: 'center', gap: 7 }}>
+                      <span>ℹ️</span> All active employees in this department are already assigned to <strong>{assigningPolicy?.name}</strong>.
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -742,23 +749,33 @@ export default function AttendancePolicies() {
                     {filteredEmployees.length === 0 ? (
                       <div style={{ textAlign: 'center', padding: '20px', color: '#94a3b8', fontSize: '12px' }}>No employees found</div>
                     ) : (
-                      filteredEmployees.map(e => (
-                        <label key={e.employee_id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: '7px', cursor: 'pointer', transition: 'background 0.1s' }}
-                          onMouseEnter={ev => ev.currentTarget.style.background = '#f8fafc'}
-                          onMouseLeave={ev => ev.currentTarget.style.background = 'transparent'}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedEmployeeIds.includes(e.employee_id)}
-                            onChange={() => handleToggleEmployeeSelection(e.employee_id)}
-                            style={{ cursor: 'pointer' }}
-                          />
-                          <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{e.first_name} {e.last_name}</span>
-                            <span style={{ fontSize: '11px', color: '#64748b' }}>{e.employee_code} · {e.department_name || 'No Dept'}</span>
-                          </div>
-                        </label>
-                      ))
+                      filteredEmployees.map(e => {
+                        const isAssigned = policyAssignedEmpIds.includes(e.employee_id)
+                        return (
+                          <label key={e.employee_id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: '7px', cursor: 'pointer', transition: 'background 0.1s' }}
+                            onMouseEnter={ev => ev.currentTarget.style.background = '#f8fafc'}
+                            onMouseLeave={ev => ev.currentTarget.style.background = 'transparent'}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedEmployeeIds.includes(e.employee_id)}
+                              onChange={() => handleToggleEmployeeSelection(e.employee_id)}
+                              style={{ cursor: 'pointer' }}
+                            />
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <span style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{e.first_name} {e.last_name}</span>
+                                {isAssigned && (
+                                  <span style={{ fontSize: '10px', color: '#4338ca', background: '#e0e7ff', border: '1px solid #c7d2fe', padding: '1px 6px', borderRadius: '4px', fontWeight: '700' }}>
+                                    Already Assigned
+                                  </span>
+                                )}
+                              </div>
+                              <span style={{ fontSize: '11px', color: '#64748b' }}>{e.employee_code} · {e.department_name || 'No Dept'}</span>
+                            </div>
+                          </label>
+                        )
+                      })
                     )}
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748b', marginTop: 6, fontWeight: 500 }}>

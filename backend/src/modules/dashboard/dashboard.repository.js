@@ -123,46 +123,59 @@ async function getGoalCompletionTrend(clientId) {
   return r.rows
 }
 
-async function getRecentNotifications(clientId) {
-  const r = await query(`
-    (
-      SELECT 'goal_pending' AS type,
-             g.title,
-             CONCAT(e.first_name, ' ', e.last_name) AS actor,
-             g.updated_at AS created_at
-      FROM goals g
-      LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
-      WHERE g.client_admin_id = $1 AND g.status = 'pending_approval'
-        AND g.parent_goal_id IS NULL
-      ORDER BY g.updated_at DESC LIMIT 3
-    )
-    UNION ALL
-    (
-      SELECT 'kpi_submitted' AS type,
-             gk.title,
-             CONCAT(e.first_name, ' ', e.last_name) AS actor,
-             s.submitted_at AS created_at
-      FROM goal_kpi_submissions s
-      JOIN goal_kpis gk ON s.kpi_id = gk.kpi_id
-      JOIN client_admins ca ON s.organization_id = ca.organization_id
-      LEFT JOIN users u ON s.submitted_by = u.user_id
-      LEFT JOIN employees e ON u.employee_id = e.employee_id
-      WHERE ca.client_admin_id = $1 AND s.status = 'PENDING'
-      ORDER BY s.submitted_at DESC LIMIT 3
-    )
-    UNION ALL
-    (
-      SELECT 'goal_rejected' AS type,
-             g.title,
-             CONCAT(e.first_name, ' ', e.last_name) AS actor,
-             g.updated_at AS created_at
-      FROM goals g
-      LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
-      WHERE g.client_admin_id = $1 AND g.status = 'rejected'
-        AND g.parent_goal_id IS NULL
-      ORDER BY g.updated_at DESC LIMIT 2
-    )
-    UNION ALL
+async function getRecentNotifications(clientId, options = {}) {
+  const { includeGoals = true, includeKpi = true } = options;
+  const queries = [];
+  const params = [clientId];
+
+  if (includeGoals) {
+    queries.push(`
+      (
+        SELECT 'goal_pending' AS type,
+               g.title,
+               CONCAT(e.first_name, ' ', e.last_name) AS actor,
+               g.updated_at AS created_at
+        FROM goals g
+        LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
+        WHERE g.client_admin_id = $1 AND g.status = 'pending_approval'
+          AND g.parent_goal_id IS NULL
+        ORDER BY g.updated_at DESC LIMIT 3
+      )
+    `);
+    queries.push(`
+      (
+        SELECT 'goal_rejected' AS type,
+               g.title,
+               CONCAT(e.first_name, ' ', e.last_name) AS actor,
+               g.updated_at AS created_at
+        FROM goals g
+        LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
+        WHERE g.client_admin_id = $1 AND g.status = 'rejected'
+          AND g.parent_goal_id IS NULL
+        ORDER BY g.updated_at DESC LIMIT 2
+      )
+    `);
+  }
+
+  if (includeKpi) {
+    queries.push(`
+      (
+        SELECT 'kpi_submitted' AS type,
+               gk.title,
+               CONCAT(e.first_name, ' ', e.last_name) AS actor,
+               s.submitted_at AS created_at
+        FROM goal_kpi_submissions s
+        JOIN goal_kpis gk ON s.kpi_id = gk.kpi_id
+        JOIN client_admins ca ON s.organization_id = ca.organization_id
+        LEFT JOIN users u ON s.submitted_by = u.user_id
+        LEFT JOIN employees e ON u.employee_id = e.employee_id
+        WHERE ca.client_admin_id = $1 AND s.status = 'PENDING'
+        ORDER BY s.submitted_at DESC LIMIT 3
+      )
+    `);
+  }
+
+  queries.push(`
     (
       SELECT 'leave_pending' AS type,
              lt.leave_type_name AS title,
@@ -175,7 +188,9 @@ async function getRecentNotifications(clientId) {
       WHERE ca.client_admin_id = $1 AND lr.current_status = 'PENDING'
       ORDER BY lr.created_at DESC LIMIT 3
     )
-    UNION ALL
+  `);
+
+  queries.push(`
     (
       SELECT 'regularization_pending' AS type,
              ar.regularization_type AS title,
@@ -187,10 +202,11 @@ async function getRecentNotifications(clientId) {
       WHERE ca.client_admin_id = $1 AND ar.current_status = 'PENDING'
       ORDER BY ar.created_at DESC LIMIT 3
     )
-    ORDER BY created_at DESC
-    LIMIT 10
-  `, [clientId])
-  return r.rows
+  `);
+
+  const unionSql = queries.join(' UNION ALL ') + ' ORDER BY created_at DESC LIMIT 10';
+  const r = await query(unionSql, params);
+  return r.rows;
 }
 
 async function getPendingLeavesCount(orgId) {

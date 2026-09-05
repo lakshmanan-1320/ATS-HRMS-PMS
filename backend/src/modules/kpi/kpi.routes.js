@@ -1,5 +1,16 @@
 const router = require('express').Router();
 const c = require('./kpi.controller');
+const { requireModule } = require('../../middlewares/module.middleware');
+const kpiGate = requireModule('kpi');
+
+router.use((req, res, next) => {
+  const path = req.path;
+  const matches = path.includes('/kpi') || (path.includes('/goals/') && (path.includes('/kpis') || path.includes('/progress-history')));
+  if (matches) {
+    return kpiGate(req, res, next);
+  }
+  next();
+});
 
 // Create KPI
 router.post('/goals/:goalId/kpis', c.handleCreateKpi);

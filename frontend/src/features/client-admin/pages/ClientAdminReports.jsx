@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import { useModules, PMS_MODULE_KEYS } from '../../../hooks/useModules'
 import {
   FiTarget, FiActivity, FiTrendingUp, FiCreditCard,
   FiDownload, FiRefreshCw, FiSearch, FiFileText,
@@ -51,17 +52,36 @@ function downloadPDF(rows, columns, title, filename) {
   doc.setFont('helvetica', 'normal')
   doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, 200, 12)
 
+  const numCols = columns.length
+  // Dynamically scale font size & padding for wide tables so status (LOCKED) and headers stay on a single line
+  const fontSize = numCols > 12 ? 6.5 : numCols > 8 ? 7.5 : 8
+  const cellPadding = numCols > 12 ? 1.5 : 2
+
+  const columnStyles = {}
+  columns.forEach((col, idx) => {
+    if (col.label === 'Status' || col.label === 'Code') {
+      columnStyles[idx] = { minCellWidth: 16, fontStyle: 'bold' }
+    }
+  })
+
   autoTable(doc, {
     startY: 22,
     head: [columns.map(c => c.label)],
     body: rows.map(row => columns.map(c => String(c.value(row) ?? '—'))),
-    styles: { fontSize: 8, cellPadding: 3 },
+    styles: {
+      fontSize,
+      cellPadding,
+      overflow: 'linebreak',
+      valign: 'middle',
+    },
     headStyles: {
       fillColor: [99, 102, 241],
       textColor: 255,
       fontStyle: 'bold',
-      fontSize: 8,
+      fontSize,
+      cellPadding,
     },
+    columnStyles,
     alternateRowStyles: { fillColor: [248, 250, 252] },
     tableLineColor: [226, 232, 240],
     tableLineWidth: 0.1,
@@ -106,6 +126,7 @@ const STATUS_COLORS = {
   pending_approval: { bg: '#fef3c7', text: '#b45309' },
   approved:         { bg: '#dcfce7', text: '#15803d' },
   pending:          { bg: '#f1f5f9', text: '#475569' },
+  in_progress:      { bg: '#e0f2fe', text: '#0369a1' },
   DRAFT:            { bg: '#f1f5f9', text: '#475569' },
   APPROVED:         { bg: '#dcfce7', text: '#15803d' },
   LOCKED:           { bg: '#ede9fe', text: '#6d28d9' },
@@ -113,7 +134,8 @@ const STATUS_COLORS = {
 
 function Badge({ value }) {
   if (!value) return <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>
-  const c = STATUS_COLORS[value] || { bg: '#f1f5f9', text: '#475569' }
+  const key = String(value).toLowerCase()
+  const c = STATUS_COLORS[value] || STATUS_COLORS[key] || (key.includes('progress') ? { bg: '#e0f2fe', text: '#0369a1' } : { bg: '#f1f5f9', text: '#475569' })
   return (
     <span style={{
       fontSize: 11, fontWeight: 700, padding: '3px 9px', borderRadius: 6,
@@ -357,9 +379,14 @@ function GoalReport({ filters: filterData }) {
   useEffect(() => { load() }, [load])
 
   const total = rows.length
-  const byStatus = rows.reduce((m, r) => { m[r.status] = (m[r.status] || 0) + 1; return m }, {})
+  const byStatus = rows.reduce((m, r) => {
+    const s = String(r.status || '').toLowerCase()
+    m[s] = (m[s] || 0) + 1
+    if (s === 'in_progress') m['active'] = (m['active'] || 0) + 1
+    return m
+  }, {})
   const avgProgress = rows.length ? Math.round(rows.reduce((s, r) => s + Number(r.progress || 0), 0) / rows.length) : 0
-  const overdue = rows.filter(r => r.due_date && new Date(r.due_date) < new Date() && !['completed', 'rejected'].includes(r.status)).length
+  const overdue = rows.filter(r => r.due_date && new Date(r.due_date) < new Date() && !['completed', 'rejected'].includes(String(r.status || '').toLowerCase())).length
 
   const summaryPills = [
     { label: 'Total Goals',  value: total,                    bg: '#ede9fe', border: '#c4b5fd', color: '#5b21b6' },
@@ -476,9 +503,9 @@ function AppraisalReport({ filters: filterData }) {
 
   const selectedCycle = cycles.find(c => String(c.id) === String(cycleId))
   const total      = rows.length
-  const selfDone   = rows.filter(r => r.self_status === 'submitted').length
-  const mgrDone    = rows.filter(r => r.manager_status === 'submitted').length
-  const rated      = rows.filter(r => r.final_rating != null)
+  const selfDone   = rows.filter(r => String(r.self_status || '').toLowerCase() === 'submitted').length
+  const mgrDone    = rows.filter(r => ['submitted', 'completed', 'reviewed'].includes(String(r.manager_status || '').toLowerCase())).length
+  const rated      = rows.filter(r => r.final_rating != null && r.final_rating !== '')
   const avgRating  = rated.length ? (rated.reduce((s, r) => s + Number(r.final_rating), 0) / rated.length).toFixed(2) : '—'
 
   const summaryPills = [
@@ -584,7 +611,7 @@ function KpiReport({ filters: filterData }) {
   useEffect(() => { load() }, [load])
 
   const total          = rows.length
-  const approved       = rows.filter(r => r.status === 'approved').length
+  const approved       = rows.filter(r => ['approved', 'active', 'completed'].includes(String(r.status || '').toLowerCase())).length
   const withAch        = rows.filter(r => r.achievement_pct != null)
   const avgAchievement = withAch.length ? Math.round(withAch.reduce((s, r) => s + Number(r.achievement_pct), 0) / withAch.length) : 0
   const overAchievers  = rows.filter(r => r.achievement_pct != null && Number(r.achievement_pct) > 100).length
@@ -592,7 +619,7 @@ function KpiReport({ filters: filterData }) {
   const summaryPills = [
     { label: 'Total KPIs',       value: total,                                     bg: '#ede9fe', border: '#c4b5fd', color: '#5b21b6' },
     { label: 'Approved',         value: approved,                                  bg: '#d1fae5', border: '#6ee7b7', color: '#065f46' },
-    { label: 'Pending',          value: rows.filter(r => r.status === 'pending').length, bg: '#f1f5f9', border: '#e2e8f0', color: '#475569' },
+    { label: 'Pending',          value: rows.filter(r => ['pending', 'draft'].includes(String(r.status || '').toLowerCase())).length, bg: '#f1f5f9', border: '#e2e8f0', color: '#475569' },
     { label: 'Avg Achievement',  value: `${avgAchievement}%`,                      bg: '#e0f2fe', border: '#7dd3fc', color: '#0369a1' },
     { label: 'Over-achievers',   value: overAchievers,                             bg: '#fef3c7', border: '#fde68a', color: '#b45309' },
   ]
@@ -991,17 +1018,36 @@ function CompetencyReport({ filters: filterData }) {
    MAIN PAGE
 ═══════════════════════════════════════════════════════════════════════════ */
 const TABS = [
-  { id: 'goals',     label: 'Goals',            icon: FiTarget,     color: '#a855f7' },
-  { id: 'appraisal', label: 'Appraisal Cycles',  icon: FiTrendingUp, color: '#f59e0b' },
-  { id: 'kpi',       label: 'KPI',              icon: FiActivity,   color: '#10b981' },
-  { id: 'payroll',   label: 'Payroll Summary',   icon: FiCreditCard, color: '#6366f1' },
-  { id: 'competency', label: 'Competencies',     icon: FiAward,      color: '#4f46e5' },
+  { id: 'goals',      label: 'Goals',            icon: FiTarget,     color: '#a855f7', module: 'goals' },
+  { id: 'appraisal',  label: 'Appraisal Cycles',  icon: FiTrendingUp, color: '#f59e0b', module: 'performance' },
+  { id: 'kpi',        label: 'KPI',              icon: FiActivity,   color: '#10b981', module: 'kpi' },
+  { id: 'payroll',    label: 'Payroll Summary',   icon: FiCreditCard, color: '#6366f1', module: 'payroll' },
+  { id: 'competency', label: 'Competencies',     icon: FiAward,      color: '#4f46e5', module: 'competency_assessment' },
 ]
 
 export default function ClientAdminReports() {
-  const [activeTab, setActiveTab] = useState('goals')
+  const { isEnabled } = useModules()
+  const isPmsActive = isEnabled('pms')
+
+  const visibleTabs = TABS.filter(tab => {
+    if (!tab.module) return true
+    if (PMS_MODULE_KEYS.includes(tab.module)) {
+      return isPmsActive && isEnabled(tab.module)
+    }
+    return isEnabled(tab.module)
+  })
+
+  const [activeTab, setActiveTab] = useState(() => {
+    return isEnabled('pms') && isEnabled('goals') ? 'goals' : 'payroll'
+  })
   const [filterData, setFilterData] = useState({ departments: [], employees: [], kpiCategories: [], appraisalCycles: [], payrollRuns: [] })
   const [filtersLoading, setFiltersLoading] = useState(true)
+
+  useEffect(() => {
+    if (visibleTabs.length > 0 && !visibleTabs.some(t => t.id === activeTab)) {
+      setActiveTab(visibleTabs[0].id)
+    }
+  }, [visibleTabs, activeTab])
 
   useEffect(() => {
     api.get('/client-admin/reports/filters')
@@ -1023,7 +1069,7 @@ export default function ClientAdminReports() {
 
           {/* Tab Bar */}
           <div style={{ display: 'flex', gap: 4, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 4, marginBottom: 20, width: 'fit-content' }}>
-            {TABS.map(tab => {
+            {visibleTabs.map(tab => {
               const Icon = tab.icon
               const active = activeTab === tab.id
               return (
@@ -1049,11 +1095,11 @@ export default function ClientAdminReports() {
           {filtersLoading
             ? <div style={{ textAlign: 'center', padding: 60, color: '#6b7280' }}>Loading report filters...</div>
             : <>
-                {activeTab === 'goals'      && <GoalReport      filters={filterData} />}
-                {activeTab === 'appraisal'  && <AppraisalReport  filters={filterData} />}
-                {activeTab === 'kpi'        && <KpiReport        filters={filterData} />}
-                {activeTab === 'payroll'    && <PayrollReport    filters={filterData} />}
-                {activeTab === 'competency' && <CompetencyReport filters={filterData} />}
+                {activeTab === 'goals'      && isPmsActive && <GoalReport      filters={filterData} />}
+                {activeTab === 'appraisal'  && isPmsActive && <AppraisalReport  filters={filterData} />}
+                {activeTab === 'kpi'        && isPmsActive && <KpiReport        filters={filterData} />}
+                {activeTab === 'payroll'    && isEnabled('payroll') && <PayrollReport filters={filterData} />}
+                {activeTab === 'competency' && isPmsActive && <CompetencyReport filters={filterData} />}
               </>
           }
         </main>

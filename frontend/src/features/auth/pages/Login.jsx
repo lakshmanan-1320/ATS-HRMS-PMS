@@ -422,36 +422,18 @@ export default function Login() {
         <div style={{ position:'relative', zIndex:1 }}>
 
           {/* Company logo */}
-          <div style={{ marginBottom:'28px', display:'flex', justifyContent:'center' }}>
-            {logo ? (
-              <div style={{
-                width:'88px', height:'88px', borderRadius:'20px',
-                overflow:'hidden', flexShrink:0,
-                boxShadow:'0 4px 20px rgba(79,70,229,.18)',
-                border:'1.5px solid rgba(79,70,229,.12)',
-                background:'#fff',
-                display:'flex', alignItems:'center', justifyContent:'center',
-              }}>
-                <img
-                  src={logo}
-                  alt="Company logo"
-                  style={{ width:'100%', height:'100%', objectFit:'contain', padding:'6px' }}
-                />
-              </div>
-            ) : (
-              <div style={{
-                width:'88px', height:'88px', borderRadius:'20px',
-                background:'linear-gradient(135deg,#eef2ff,#ede9fe)',
-                border:'1.5px solid rgba(79,70,229,.15)',
-                display:'flex', alignItems:'center', justifyContent:'center',
-                boxShadow:'0 4px 20px rgba(79,70,229,.1)',
-              }}>
-                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                  <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-              </div>
-            )}
+          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'center' }}>
+            <img
+              src={logo || '/insight-tech-logo.png'}
+              alt="Insight Tech Logo"
+              style={{
+                height: '52px',
+                maxWidth: '220px',
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+              }}
+            />
           </div>
 
           {/* Badge */}

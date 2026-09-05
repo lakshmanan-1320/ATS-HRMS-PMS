@@ -1462,22 +1462,37 @@ async function assignPolicy(organizationId, policyId, body) {
   }
 
   if (!finalEmployeeIds.length) {
-    return { success: true, message: 'No employees to assign.' };
+    return { success: true, message: 'No active employees found to assign.' };
   }
 
+  // Check how many target employees already have this policy assigned
+  const alreadyAssignedRes = await query(
+    `SELECT employee_id FROM employees 
+     WHERE employee_id = ANY($1::uuid[]) AND attendance_policy_id = $2 AND organization_id = $3`,
+    [finalEmployeeIds, policyId, organizationId]
+  );
+
+  const alreadyAssignedSet = new Set(alreadyAssignedRes.rows.map(r => r.employee_id));
+
+  if (alreadyAssignedSet.size === finalEmployeeIds.length) {
+    const targetDesc = department_id ? 'All active employees in this department' : 'All selected employees';
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, `${targetDesc} are already assigned to policy "${policy.name}".`);
+  }
+
+  const toAssignIds = finalEmployeeIds.filter(id => !alreadyAssignedSet.has(id));
   const effectiveDate = effective_from || new Date().toISOString().split('T')[0];
 
   await withTransaction(async (client) => {
-    // Enforce that employees can have only one active policy (we update the employees cache table)
+    // Enforce that employees can have only one active policy
     await client.query(
       `UPDATE employees 
        SET attendance_policy_id = $1, updated_at = NOW() 
        WHERE employee_id = ANY($2::uuid[]) AND organization_id = $3`,
-      [policyId, finalEmployeeIds, organizationId]
+      [policyId, toAssignIds, organizationId]
     );
 
-    // Insert history tracking
-    for (const empId of finalEmployeeIds) {
+    // Insert history tracking for newly assigned employees
+    for (const empId of toAssignIds) {
       const assignmentType = departmentEmployeeIds.includes(empId) ? 'DEPARTMENT' : 'EMPLOYEE';
       await client.query(
         `INSERT INTO attendance_policy_assignments (policy_id, employee_id, assignment_type, effective_from)
@@ -1487,7 +1502,8 @@ async function assignPolicy(organizationId, policyId, body) {
     }
   });
 
-  return { success: true, message: `Successfully assigned policy to ${finalEmployeeIds.length} employee(s).` };
+  const alreadyMsg = alreadyAssignedSet.size > 0 ? ` (${alreadyAssignedSet.size} were already on this policy)` : '';
+  return { success: true, message: `Successfully assigned policy to ${toAssignIds.length} employee(s)${alreadyMsg}.` };
 }
 
 async function getEmployeePolicy(userId) {

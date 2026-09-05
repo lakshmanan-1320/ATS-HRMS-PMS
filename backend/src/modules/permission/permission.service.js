@@ -3,6 +3,7 @@ const { withTransaction } = require('../../config/db');
 const ApiError = require('../../utils/apiError');
 const { STATUS_CODES } = require('../../constants/statusCodes');
 const employeeRepository = require('../employee/employee.repository');
+const notifRepo = require('../inAppNotification/inAppNotification.repository');
 
 // ── Settings helpers ─────────────────────────────────────────────
 
@@ -87,7 +88,7 @@ async function applyPermission(employeeId, organizationId, data) {
   const month = date.getMonth() + 1;
   const year  = date.getFullYear();
 
-  return await withTransaction(async (client) => {
+  const created = await withTransaction(async (client) => {
     let balance = await permissionRepository.lockBalance(employeeId, month, year, client);
     if (!balance) {
       await permissionRepository.upsertBalance(employeeId, month, year, settings.monthly_count, client);
@@ -114,6 +115,21 @@ async function applyPermission(employeeId, organizationId, data) {
       year,
     }, client);
   });
+
+  // Fire-and-forget: notify manager
+  if (emp.manager_id) {
+    const empName = `${emp.first_name || ''} ${emp.last_name || ''}`.trim() || 'An employee';
+    notifRepo.createNotification(
+      emp.manager_id,
+      'permission_submitted',
+      'Permission Request Submitted',
+      `${empName} submitted a permission request for ${permission_date} (${start_time} - ${end_time}).`,
+      created.permission_request_id,
+      'permission'
+    ).catch(() => {});
+  }
+
+  return created;
 }
 
 async function cancelRequest(requestId, employeeId) {
@@ -137,7 +153,7 @@ async function approveRequest(requestId, approverEmployeeId) {
   if (!request) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Permission request not found.');
   if (request.status !== 'PENDING') throw new ApiError(STATUS_CODES.BAD_REQUEST, `Request is already ${request.status}.`);
 
-  return await withTransaction(async (client) => {
+  const result = await withTransaction(async (client) => {
     const balance = await permissionRepository.lockBalance(request.employee_id, request.month, request.year, client);
     if (!balance) throw new ApiError(STATUS_CODES.BAD_REQUEST, 'No permission balance found for this employee/month.');
 
@@ -154,6 +170,18 @@ async function approveRequest(requestId, approverEmployeeId) {
       rejection_reason: null,
     }, client);
   });
+
+  // Fire-and-forget: notify applicant employee
+  notifRepo.createNotification(
+    request.employee_id,
+    'permission_approved',
+    'Permission Request Approved',
+    `Your permission request for ${request.permission_date} (${request.start_time?.slice(0, 5)} - ${request.end_time?.slice(0, 5)}) was approved.`,
+    requestId,
+    'permission'
+  ).catch(() => {});
+
+  return result;
 }
 
 async function rejectRequest(requestId, approverEmployeeId, rejectionReason) {
@@ -161,12 +189,25 @@ async function rejectRequest(requestId, approverEmployeeId, rejectionReason) {
   if (!request) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Permission request not found.');
   if (request.status !== 'PENDING') throw new ApiError(STATUS_CODES.BAD_REQUEST, `Request is already ${request.status}.`);
 
-  return permissionRepository.updateRequest(requestId, {
+  const result = await permissionRepository.updateRequest(requestId, {
     status: 'REJECTED',
     approved_by_employee_id: approverEmployeeId,
     approved_at: new Date(),
     rejection_reason: rejectionReason || null,
   });
+
+  // Fire-and-forget: notify applicant employee
+  const reasonMsg = rejectionReason ? ` Reason: ${rejectionReason}` : '';
+  notifRepo.createNotification(
+    request.employee_id,
+    'permission_rejected',
+    'Permission Request Rejected',
+    `Your permission request for ${request.permission_date} (${request.start_time?.slice(0, 5)} - ${request.end_time?.slice(0, 5)}) was rejected.${reasonMsg}`,
+    requestId,
+    'permission'
+  ).catch(() => {});
+
+  return result;
 }
 
 // ── New employee provisioning ────────────────────────────────────

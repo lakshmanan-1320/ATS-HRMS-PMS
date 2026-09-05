@@ -67,11 +67,20 @@ const handleGetWeekOff = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const toggles = await service.getWeekOffToggles(orgId);
   const settings = await service.listWeekOffSettings(orgId);
+
+  // Flatten days from organization level week-off settings for quick UI toggle binding
+  let week_off_days = [];
+  const orgSetting = settings.find(s => s.scope === 'ORGANIZATION') || settings[0];
+  if (orgSetting && Array.isArray(orgSetting.days)) {
+    week_off_days = [...new Set(orgSetting.days.map(d => parseInt(d.weekday)))].sort();
+  }
+
   res.status(STATUS_CODES.OK).json({
     success: true,
     data: {
       toggles,
-      settings
+      settings,
+      week_off_days
     }
   });
 });
@@ -87,7 +96,29 @@ const handleUpdateWeekOffToggles = catchAsync(async (req, res) => {
 
 const handleUpsertWeekOffSetting = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
-  const result = await service.upsertWeekOffSetting(orgId, req.body);
+  let payload = req.body;
+
+  // Handle simplified UI payload: { week_off_days: [0, 6] }
+  if (Array.isArray(payload.week_off_days)) {
+    const existingSettings = await service.listWeekOffSettings(orgId);
+    const orgSetting = existingSettings.find(s => s.scope === 'ORGANIZATION');
+    payload = {
+      week_off_setting_id: orgSetting ? orgSetting.week_off_setting_id : undefined,
+      rule_name: orgSetting?.rule_name || 'Standard Corporate Week-Off',
+      scope: 'ORGANIZATION',
+      scope_id: null,
+      effective_from: orgSetting?.effective_from ? (typeof orgSetting.effective_from === 'string' ? orgSetting.effective_from.split('T')[0] : new Date(orgSetting.effective_from).toISOString().split('T')[0]) : '2026-01-01',
+      effective_to: null,
+      is_enabled: true,
+      days: payload.week_off_days.map(d => ({
+        weekday: parseInt(d),
+        week_number: 'ALL',
+        off_type: 'FULL'
+      }))
+    };
+  }
+
+  const result = await service.upsertWeekOffSetting(orgId, payload);
   res.status(STATUS_CODES.OK).json({
     success: true,
     data: result

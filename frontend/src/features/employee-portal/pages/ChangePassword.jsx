@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { FiLock, FiEye, FiEyeOff, FiCheck, FiAlertCircle, FiX, FiShield } from 'react-icons/fi'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx'
+import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
 
 function validateAgainstPolicy(password, policy) {
   const rules = []
@@ -167,7 +168,10 @@ export default function ChangePassword() {
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <EmployeeSidebar active="change-password" />
 
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <EmployeeTopBar title="Change Password" />
+
+        <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
 
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
@@ -511,7 +515,8 @@ export default function ChangePassword() {
         </form>
 
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </main>
+        </main>
+      </div>
     </div>
   )
 }

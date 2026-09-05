@@ -51,32 +51,33 @@ export default function ClientAdminSidebar({ active }) {
     navigate('/login')
   }
 
-  const performanceLinks = [
-    (isEnabled('goals') || isEnabled('performance')) && {
+  const isPmsActive = isEnabled('pms')
+  const performanceLinks = isPmsActive ? [
+    (isEnabled('goals') || isEnabled('performance') || isEnabled('kpi') || isEnabled('continuous_feedback') || isEnabled('competency_assessment') || isEnabled('self_assessment') || isEnabled('360_feedback')) && {
       id: 'performance',
       icon: FiTarget,
       label: 'Performance Hub',
       path: '/client-admin/performance'
     },
-    isEnabled('performance') && {
+    isEnabled('bell_curve') && {
       id: 'bell-curve',
       icon: FiTrendingUp,
       label: 'Bell Curve Calibration',
       path: '/client-admin/bell-curve'
     },
-      isEnabled('performance') && {
-    id: 'nine-box',
-    icon: FiGrid,
-    label: '9-Box Grid',
-    path: '/client-admin/nine-box'
-  },
-    isEnabled('performance') && {
+    isEnabled('nine_box') && {
+      id: 'nine-box',
+      icon: FiGrid,
+      label: '9-Box Grid',
+      path: '/client-admin/nine-box'
+    },
+    isEnabled('pip') && {
       id: 'pip',
       icon: FiActivity,
       label: 'Performance PIP',
       path: '/client-admin/pip'
     }
-  ].filter(Boolean)
+  ].filter(Boolean) : []
 
   const attendanceLeaveLinks = [
     isEnabled('attendance') && {

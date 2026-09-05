@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
+import { useModules, PMS_MODULE_KEYS } from '../../../hooks/useModules'
 import axios from 'axios'
-import { FiBell, FiRefreshCw, FiX, FiCheckCircle, FiAlertCircle, FiInfo, FiClock, FiTrendingUp, FiTrendingDown, FiMinus, FiUsers, FiTarget, FiBarChart2, FiAward, FiArrowRight } from 'react-icons/fi'
+import { FiBell, FiRefreshCw, FiX, FiCheckCircle, FiAlertCircle, FiInfo, FiClock, FiTrendingUp, FiTrendingDown, FiMinus, FiUsers, FiTarget, FiBarChart2, FiAward, FiArrowRight, FiCheck, FiCalendar, FiFileText } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -28,14 +29,15 @@ const KPI_COLORS = {
 }
 
 const QUICK_LINKS = [
-  { icon: '👥', label: 'Employees',   path: '/client-admin/employees',      color: '#6366f1', desc: 'Manage team' },
-  { icon: '🎯', label: 'Goals',       path: '/client-admin/goals',          color: '#a855f7', desc: 'Track OKRs' },
-  { icon: '📈', label: 'KPI',         path: '/client-admin/kpi',            color: '#0ea5e9', desc: 'Metrics' },
-  { icon: '📋', label: 'Appraisal',   path: '/client-admin/appraisal',      color: '#f59e0b', desc: 'Reviews' },
-  { icon: '🏢', label: 'Departments', path: '/client-admin/departments',    color: '#10b981', desc: 'Org structure' },
-  { icon: '📊', label: 'Org Chart',   path: '/client-admin/org-chart',      color: '#ec4899', desc: 'Hierarchy' },
-  { icon: '📅', label: 'Leave',       path: '/client-admin/leave',          color: '#8b5cf6', desc: 'Leave mgmt' },
-  { icon: '🗓️', label: 'Attendance',  path: '/client-admin/attendance',     color: '#14b8a6', desc: 'Daily logs' },
+  { icon: '👥', label: 'Employees',   path: '/client-admin/employees',      color: '#6366f1', desc: 'Manage team',    module: null },
+  { icon: '🎯', label: 'Goals',       path: '/client-admin/goals',          color: '#a855f7', desc: 'Track OKRs',     module: 'goals' },
+  { icon: '📈', label: 'KPI',         path: '/client-admin/kpi',            color: '#0ea5e9', desc: 'Metrics',        module: 'kpi' },
+  { icon: '📋', label: 'Appraisal',   path: '/client-admin/appraisal',      color: '#f59e0b', desc: 'Reviews',        module: 'performance' },
+  { icon: '🏢', label: 'Departments', path: '/client-admin/departments',    color: '#10b981', desc: 'Org structure', module: null },
+  { icon: '📊', label: 'Org Chart',   path: '/client-admin/org-chart',      color: '#ec4899', desc: 'Hierarchy',     module: null },
+  { icon: '📅', label: 'Leave',       path: '/client-admin/leave',          color: '#8b5cf6', desc: 'Leave mgmt',     module: 'leave' },
+  { icon: '🗓️', label: 'Attendance',  path: '/client-admin/attendance',     color: '#14b8a6', desc: 'Daily logs',     module: 'attendance' },
+  { icon: '💰', label: 'Payroll',     path: '/client-admin/payroll',        color: '#10b981', desc: 'Salary & pay',   module: 'payroll' },
 ]
 
 const NOTIF_META = {
@@ -321,6 +323,7 @@ const saveReadIds = ids => localStorage.setItem(READ_KEY, JSON.stringify([...ids
 
 export default function ClientAdminDashboard() {
   const navigate = useNavigate()
+  const { isEnabled } = useModules()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -328,6 +331,16 @@ export default function ClientAdminDashboard() {
   const [notifications, setNotifications] = useState([])
   const [showNotifications, setShowNotifications] = useState(false)
   const notifRef = useRef(null)
+
+  const isPmsActive = isEnabled('pms') && (isEnabled('goals') || isEnabled('performance') || isEnabled('kpi'))
+
+  const visibleQuickLinks = QUICK_LINKS.filter(l => {
+    if (!l.module) return true
+    if (PMS_MODULE_KEYS.includes(l.module)) {
+      return isPmsActive && isEnabled(l.module)
+    }
+    return isEnabled(l.module)
+  })
 
   const companyName = stats?.company_name || sessionStorage.getItem('company_name') || 'Your Organisation'
   const userEmail = sessionStorage.getItem('sa_email') || ''
@@ -383,21 +396,26 @@ export default function ClientAdminDashboard() {
     setShowNotifications(v => !v)
   }
 
-  const goalStatuses = stats ? Object.entries(stats.goals.by_status).sort((a, b) => b[1] - a[1]) : []
-  const kpiStatuses = stats ? Object.entries(stats.kpis.by_status).sort((a, b) => b[1] - a[1]) : []
+  const goalStatuses = stats?.goals?.by_status ? Object.entries(stats.goals.by_status).sort((a, b) => b[1] - a[1]) : []
+  const kpiStatuses = stats?.kpis?.by_status ? Object.entries(stats.kpis.by_status).sort((a, b) => b[1] - a[1]) : []
   const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-  const overallScore = stats ? Math.round((stats.goals.completion_rate + stats.kpis.completion_rate) / 2) : 0
+
+  const goalRate = Number(stats?.goals?.completion_rate || 0)
+  const kpiRate = Number(stats?.kpis?.completion_rate || 0)
+  const overallScore = stats ? Math.round((goalRate + kpiRate) / 2) : 0
   const perfLabel = overallScore >= 75 ? 'Excellent' : overallScore >= 50 ? 'Good' : 'Needs Focus'
   const perfColor = overallScore >= 75 ? '#16a34a' : overallScore >= 50 ? '#d97706' : '#dc2626'
   const perfBg = overallScore >= 75 ? '#dcfce7' : overallScore >= 50 ? '#fef3c7' : '#fee2e2'
 
-  const pendingGoals = stats ? (stats.goals.by_status.pending_approval || 0) : 0
-  const activeGoals = stats ? (stats.goals.by_status.active || 0) : 0
-  const overdueGoals = stats ? (stats.goals.by_status.overdue || 0) : 0
-  const rejectedGoals = stats ? (stats.goals.by_status.rejected || 0) : 0
+  const pendingGoals = stats?.goals?.by_status?.pending_approval || 0
+  const activeGoals = stats?.goals?.by_status?.active || 0
+  const overdueGoals = stats?.goals?.by_status?.overdue || 0
+  const rejectedGoals = stats?.goals?.by_status?.rejected || 0
 
-  const employeeUtilization = stats && stats.employees.active > 0
-    ? Math.round((stats.goals.total / stats.employees.active) * 10) / 10
+  const activeEmpCount = Number(stats?.employees?.active || 0)
+  const totalGoalsCount = Number(stats?.goals?.total || 0)
+  const employeeUtilization = activeEmpCount > 0
+    ? Math.round((totalGoalsCount / activeEmpCount) * 10) / 10
     : 0
 
   return (
@@ -477,7 +495,9 @@ export default function ClientAdminDashboard() {
                   Welcome back, {companyName}!
                 </h2>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', margin: 0, fontWeight: '400' }}>
-                  Here's your organisation's performance snapshot for today.
+                  {isPmsActive
+                    ? "Here's your organisation's performance snapshot for today."
+                    : "Here's your organisation's workforce & HR operations snapshot for today."}
                 </p>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0, flexWrap: 'wrap' }}>
@@ -494,7 +514,7 @@ export default function ClientAdminDashboard() {
                     </button>
                   ))}
                 </div>
-                {stats && (
+                {stats && isPmsActive ? (
                   <>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '36px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>{overallScore}%</div>
@@ -504,7 +524,7 @@ export default function ClientAdminDashboard() {
                       <span style={{ fontSize: '14px', fontWeight: '800', color: '#fff' }}>{perfLabel}</span>
                     </div>
                   </>
-                )}
+                ) : null}
                 <button
                   onClick={loadStats}
                   style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '10px', padding: '9px 16px', cursor: 'pointer', color: '#fff', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -521,7 +541,7 @@ export default function ClientAdminDashboard() {
           <div style={{ marginBottom: '28px' }}>
             <SectionLabel>Quick Access</SectionLabel>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '10px' }}>
-              {QUICK_LINKS.map((link) => (
+              {visibleQuickLinks.map((link) => (
                 <button
                   key={link.path}
                   onClick={() => navigate(link.path)}
@@ -565,62 +585,115 @@ export default function ClientAdminDashboard() {
           ) : (
             <>
               {/* ── KPI Summary Row: 3 ring cards ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-
-                {/* Overall Performance */}
-                <div style={{
-                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                  borderRadius: '16px', padding: '24px',
-                  boxShadow: '0 8px 28px rgba(79,70,229,0.25)',
-                  display: 'flex', alignItems: 'center', gap: '20px',
-                }}>
-                  <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <svg width="76" height="76" style={{ transform: 'rotate(-90deg)' }}>
-                      <circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="7" />
-                      <circle cx="38" cy="38" r="30" fill="none" stroke="#ffffff" strokeWidth="7"
-                        strokeDasharray={`${2 * Math.PI * 30}`}
-                        strokeDashoffset={`${2 * Math.PI * 30 * (1 - overallScore / 100)}`}
-                        strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease' }} />
-                    </svg>
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontSize: '14px', fontWeight: '900', color: '#fff' }}>{overallScore}%</span>
+              {isPmsActive ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  {/* Overall Performance */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                    borderRadius: '16px', padding: '24px',
+                    boxShadow: '0 8px 28px rgba(79,70,229,0.25)',
+                    display: 'flex', alignItems: 'center', gap: '20px',
+                  }}>
+                    <div style={{ position: 'relative', flexShrink: 0 }}>
+                      <svg width="76" height="76" style={{ transform: 'rotate(-90deg)' }}>
+                        <circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="7" />
+                        <circle cx="38" cy="38" r="30" fill="none" stroke="#ffffff" strokeWidth="7"
+                          strokeDasharray={`${2 * Math.PI * 30}`}
+                          strokeDashoffset={`${2 * Math.PI * 30 * (1 - overallScore / 100)}`}
+                          strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease' }} />
+                      </svg>
+                      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontSize: '14px', fontWeight: '900', color: '#fff' }}>{overallScore}%</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', marginBottom: '4px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Overall Performance</div>
+                      <div style={{ fontSize: '22px', fontWeight: '900', color: '#fff' }}>{perfLabel}</div>
+                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', marginTop: '4px' }}>Goals + KPI composite score</div>
                     </div>
                   </div>
-                  <div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', marginBottom: '4px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Overall Performance</div>
-                    <div style={{ fontSize: '22px', fontWeight: '900', color: '#fff' }}>{perfLabel}</div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', marginTop: '4px' }}>Goals + KPI composite score</div>
-                  </div>
-                </div>
 
-                {/* Goal Completion */}
-                <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
-                  <RingChart pct={stats.goals.completion_rate} color="#a855f7" size={84} label={`${stats.goals.completion_rate}%`} sublabel="done" />
-                  <div>
-                    <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Goal Completion</div>
-                    <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{stats.goals.by_status.completed || 0}</div>
-                    <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>of {stats.goals.total} goals done</div>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#f3e8ff' }}>
-                      <FiTarget size={11} color="#a855f7" />
-                      <span style={{ fontSize: '11px', fontWeight: '700', color: '#7e22ce' }}>{pendingGoals} pending approval</span>
+                  {/* Goal Completion */}
+                  <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <RingChart pct={stats.goals.completion_rate} color="#a855f7" size={84} label={`${stats.goals.completion_rate}%`} sublabel="done" />
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Goal Completion</div>
+                      <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{stats.goals.by_status.completed || 0}</div>
+                      <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>of {stats.goals.total} goals done</div>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#f3e8ff' }}>
+                        <FiTarget size={11} color="#a855f7" />
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#7e22ce' }}>{pendingGoals} pending approval</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* KPI Approval */}
+                  <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <RingChart pct={stats.kpis.completion_rate} color="#10b981" size={84} label={`${stats.kpis.completion_rate}%`} sublabel="approved" />
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>KPI Approval</div>
+                      <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{stats.kpis.by_status.approved || 0}</div>
+                      <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>of {stats.kpis.total} assignments</div>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#d1fae5' }}>
+                        <FiBarChart2 size={11} color="#10b981" />
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#065f46' }}>{stats.kpis.by_status.submitted || 0} awaiting review</span>
+                      </div>
                     </div>
                   </div>
                 </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  {/* Today's Attendance Ring */}
+                  {(() => {
+                    const att = stats.attendance_today || { total: stats.employees?.active || 0, present: 0, absent: 0 }
+                    const attRate = att.total > 0 ? Math.round((att.present / att.total) * 100) : 0
+                    return (
+                      <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
+                        <RingChart pct={attRate} color="#10b981" size={84} label={`${attRate}%`} sublabel="present" />
+                        <div>
+                          <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Attendance Rate</div>
+                          <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{att.present}</div>
+                          <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>of {att.total} employees present</div>
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#dcfce7' }}>
+                            <FiCheck size={11} color="#15803d" />
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#15803d' }}>{att.absent} absent today</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
 
-                {/* KPI Approval */}
-                <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
-                  <RingChart pct={stats.kpis.completion_rate} color="#10b981" size={84} label={`${stats.kpis.completion_rate}%`} sublabel="approved" />
-                  <div>
-                    <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>KPI Approval</div>
-                    <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{stats.kpis.by_status.approved || 0}</div>
-                    <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>of {stats.kpis.total} assignments</div>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#d1fae5' }}>
-                      <FiBarChart2 size={11} color="#10b981" />
-                      <span style={{ fontSize: '11px', fontWeight: '700', color: '#065f46' }}>{stats.kpis.by_status.submitted || 0} awaiting review</span>
+                  {/* Leave Requests */}
+                  <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ width: 84, height: 84, borderRadius: '50%', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <FiCalendar size={36} color="#7c3aed" />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Leave Approvals</div>
+                      <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{stats.pending_leaves || 0}</div>
+                      <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>pending requests</div>
+                      <button onClick={() => navigate('/client-admin/leave-approvals')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#ede9fe', border: 'none', cursor: 'pointer' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#6d28d9' }}>Review Leaves →</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Regularization Approvals */}
+                  <div style={{ ...cardBase, display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ width: 84, height: 84, borderRadius: '50%', background: '#e0f7fa', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <FiClock size={36} color="#0891b2" />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Regularizations</div>
+                      <div style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a', lineHeight: 1 }}>{stats.pending_regularizations || 0}</div>
+                      <div style={{ fontSize: '13px', color: '#374151', marginTop: '4px', fontWeight: '500' }}>pending adjustments</div>
+                      <button onClick={() => navigate('/client-admin/regularizations')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', padding: '3px 10px', borderRadius: '20px', background: '#e0f7fa', border: 'none', cursor: 'pointer' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#0891b2' }}>Review Requests →</span>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* ── 4 Metric Cards ── */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '20px' }}>
@@ -630,31 +703,59 @@ export default function ClientAdminDashboard() {
                   sub={`${stats.employees.inactive} inactive · ${stats.departments} depts`}
                   accent="#6366f1"
                   icon={FiUsers}
-                  trendLabel={`${employeeUtilization} goals/employee avg`}
+                  trendLabel={isPmsActive ? `${employeeUtilization} goals/employee avg` : `${stats.departments || 0} departments`}
                 />
-                <MetricCard
-                  label="Total Goals"
-                  value={stats.goals.total}
-                  sub={`${stats.goals.by_status.completed || 0} completed`}
-                  accent="#a855f7"
-                  icon={FiTarget}
-                  trend={stats.goals.completion_rate}
-                />
-                <MetricCard
-                  label="KPI Assignments"
-                  value={stats.kpis.total}
-                  sub={`${stats.kpis.completion_rate}% approved`}
-                  accent="#0ea5e9"
-                  icon={FiBarChart2}
-                  trend={stats.kpis.completion_rate}
-                />
-                <MetricCard
-                  label="Appraisal Cycles"
-                  value={stats.appraisals.total_cycles}
-                  sub={`${stats.appraisals.active_cycles} active · ${stats.appraisals.closed_cycles} closed`}
-                  accent="#f59e0b"
-                  icon={FiAward}
-                />
+                {isPmsActive ? (
+                  <>
+                    <MetricCard
+                      label="Total Goals"
+                      value={stats.goals.total}
+                      sub={`${stats.goals.by_status.completed || 0} completed`}
+                      accent="#a855f7"
+                      icon={FiTarget}
+                      trend={goalRate}
+                    />
+                    <MetricCard
+                      label="KPI Assignments"
+                      value={stats.kpis.total}
+                      sub={`${kpiRate}% approved`}
+                      accent="#0ea5e9"
+                      icon={FiBarChart2}
+                      trend={kpiRate}
+                    />
+                    <MetricCard
+                      label="Appraisal Cycles"
+                      value={stats.appraisals.total_cycles}
+                      sub={`${stats.appraisals.active_cycles} active · ${stats.appraisals.closed_cycles} closed`}
+                      accent="#f59e0b"
+                      icon={FiAward}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <MetricCard
+                      label="Present Today"
+                      value={stats.attendance_today?.present || 0}
+                      sub={`${stats.attendance_today?.absent || 0} absent · ${stats.attendance_today?.half_day || 0} half-day`}
+                      accent="#10b981"
+                      icon={FiCheckCircle}
+                    />
+                    <MetricCard
+                      label="Pending Leaves"
+                      value={stats.pending_leaves || 0}
+                      sub="Awaiting admin approval"
+                      accent="#8b5cf6"
+                      icon={FiCalendar}
+                    />
+                    <MetricCard
+                      label="Pending Regularizations"
+                      value={stats.pending_regularizations || 0}
+                      sub="Correction requests"
+                      accent="#0891b2"
+                      icon={FiClock}
+                    />
+                  </>
+                )}
               </div>
 
               {/* ── Today's Attendance Banner ── */}
@@ -697,12 +798,14 @@ export default function ClientAdminDashboard() {
                   <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>Pending Actions</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {[
-                      { label: 'Goals to Approve', value: pendingGoals, color: '#d97706', bg: '#fef3c7' },
-                      { label: 'KPIs to Review', value: stats.kpis.by_status.submitted || 0, color: '#0284c7', bg: '#e0f2fe' },
+                      ...(isPmsActive ? [
+                        { label: 'Goals to Approve', value: pendingGoals, color: '#d97706', bg: '#fef3c7' },
+                        { label: 'KPIs to Review', value: stats.kpis?.by_status?.submitted || 0, color: '#0284c7', bg: '#e0f2fe' },
+                        { label: 'Rejected Goals', value: rejectedGoals, color: '#dc2626', bg: '#fee2e2' },
+                      ] : []),
                       { label: 'Leave Requests', value: stats.pending_leaves || 0, color: '#7c3aed', bg: '#ede9fe' },
                       { label: 'Regularizations', value: stats.pending_regularizations || 0, color: '#0891b2', bg: '#e0f7fa' },
-                      { label: 'Rejected Goals', value: rejectedGoals, color: '#dc2626', bg: '#fee2e2' },
-                      { label: 'Inactive Accounts', value: stats.employees.inactive, color: '#475569', bg: '#f1f5f9' },
+                      { label: 'Inactive Accounts', value: stats.employees?.inactive || 0, color: '#475569', bg: '#f1f5f9' },
                     ].map(item => (
                       <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
@@ -712,92 +815,137 @@ export default function ClientAdminDashboard() {
                   </div>
                 </div>
 
-                {/* Goal Health */}
-                <div style={{ ...cardBase, borderLeft: '4px solid #a855f7' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>Goal Health</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {[
-                      { label: 'Active', value: activeGoals, color: '#15803d', bg: '#dcfce7' },
-                      { label: 'Completed', value: stats.goals.by_status.completed || 0, color: '#6d28d9', bg: '#ede9fe' },
-                      { label: 'Overdue', value: overdueGoals, color: '#c2410c', bg: '#ffedd5' },
-                      { label: 'Draft', value: stats.goals.by_status.draft || 0, color: '#475569', bg: '#f1f5f9' },
-                    ].map(item => (
-                      <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
-                        <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                {isPmsActive ? (
+                  <>
+                    {/* Goal Health */}
+                    <div style={{ ...cardBase, borderLeft: '4px solid #a855f7' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>Goal Health</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {[
+                          { label: 'Active', value: activeGoals, color: '#15803d', bg: '#dcfce7' },
+                          { label: 'Completed', value: stats.goals?.by_status?.completed || 0, color: '#6d28d9', bg: '#ede9fe' },
+                          { label: 'Overdue', value: overdueGoals, color: '#c2410c', bg: '#ffedd5' },
+                          { label: 'Draft', value: stats.goals?.by_status?.draft || 0, color: '#475569', bg: '#f1f5f9' },
+                        ].map(item => (
+                          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* Appraisal Status */}
-                <div style={{ ...cardBase, borderLeft: '4px solid #f59e0b' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>Appraisal Status</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {[
-                      { label: 'Active Cycles', value: stats.appraisals.active_cycles, color: '#15803d', bg: '#dcfce7' },
-                      { label: 'Draft Cycles', value: stats.appraisals.draft_cycles, color: '#475569', bg: '#f1f5f9' },
-                      { label: 'Closed Cycles', value: stats.appraisals.closed_cycles, color: '#6d28d9', bg: '#ede9fe' },
-                      { label: 'Total Cycles', value: stats.appraisals.total_cycles, color: '#b45309', bg: '#fef3c7' },
-                    ].map(item => (
-                      <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
-                        <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                    {/* Appraisal Status */}
+                    <div style={{ ...cardBase, borderLeft: '4px solid #f59e0b' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>Appraisal Status</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {[
+                          { label: 'Active Cycles', value: stats.appraisals?.active_cycles || 0, color: '#15803d', bg: '#dcfce7' },
+                          { label: 'Draft Cycles', value: stats.appraisals?.draft_cycles || 0, color: '#475569', bg: '#f1f5f9' },
+                          { label: 'Closed Cycles', value: stats.appraisals?.closed_cycles || 0, color: '#6d28d9', bg: '#ede9fe' },
+                          { label: 'Total Cycles', value: stats.appraisals?.total_cycles || 0, color: '#b45309', bg: '#fef3c7' },
+                        ].map(item => (
+                          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* KPI Breakdown */}
-                <div style={{ ...cardBase, borderLeft: '4px solid #10b981' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>KPI Breakdown</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {[
-                      { label: 'Approved', value: stats.kpis.by_status.approved || 0, color: '#15803d', bg: '#dcfce7' },
-                      { label: 'Submitted', value: stats.kpis.by_status.submitted || 0, color: '#b45309', bg: '#fef3c7' },
-                      { label: 'Pending', value: stats.kpis.by_status.pending || 0, color: '#475569', bg: '#f1f5f9' },
-                      { label: 'Rejected', value: stats.kpis.by_status.rejected || 0, color: '#b91c1c', bg: '#fee2e2' },
-                    ].map(item => (
-                      <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
-                        <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                    {/* KPI Breakdown */}
+                    <div style={{ ...cardBase, borderLeft: '4px solid #10b981' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>KPI Breakdown</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {[
+                          { label: 'Approved', value: stats.kpis?.by_status?.approved || 0, color: '#15803d', bg: '#dcfce7' },
+                          { label: 'Submitted', value: stats.kpis?.by_status?.submitted || 0, color: '#b45309', bg: '#fef3c7' },
+                          { label: 'Pending', value: stats.kpis?.by_status?.pending || 0, color: '#475569', bg: '#f1f5f9' },
+                          { label: 'Rejected', value: stats.kpis?.by_status?.rejected || 0, color: '#b91c1c', bg: '#fee2e2' },
+                        ].map(item => (
+                          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Attendance Overview Card */}
+                    <div style={{ ...cardBase, borderLeft: '4px solid #10b981' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>Attendance Overview</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {[
+                          { label: 'Present Today', value: stats.attendance_today?.present || 0, color: '#15803d', bg: '#dcfce7' },
+                          { label: 'Absent Today', value: stats.attendance_today?.absent || 0, color: '#dc2626', bg: '#fee2e2' },
+                          { label: 'Half Day', value: stats.attendance_today?.half_day || 0, color: '#d97706', bg: '#fef3c7' },
+                          { label: 'Total Scheduled', value: stats.attendance_today?.total || stats.employees?.active || 0, color: '#4f46e5', bg: '#ede9fe' },
+                        ].map(item => (
+                          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* HR Operations Status Card */}
+                    <div style={{ ...cardBase, borderLeft: '4px solid #6366f1' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '14px' }}>HR Operations</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {[
+                          { label: 'Active Employees', value: stats.employees?.active || 0, color: '#15803d', bg: '#dcfce7' },
+                          { label: 'Departments', value: stats.departments || 0, color: '#6366f1', bg: '#ede9fe' },
+                          { label: 'Pending Leave Req.', value: stats.pending_leaves || 0, color: '#7c3aed', bg: '#ede9fe' },
+                          { label: 'Pending Regularizations', value: stats.pending_regularizations || 0, color: '#0891b2', bg: '#e0f7fa' },
+                        ].map(item => (
+                          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '800', color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* ── Charts Row ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isPmsActive ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                {isPmsActive && (
+                  <>
+                    {/* Goals by Status */}
+                    <div style={cardBase}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+                        <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Goals by Status</h3>
+                        <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 10px', borderRadius: '20px' }}>{stats.goals?.total || 0} total</span>
+                      </div>
+                      {goalStatuses.length === 0 ? (
+                        <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No goals yet</p>
+                      ) : goalStatuses.map(([status, count]) => (
+                        <ProgressBar key={status} label={status} value={count} max={stats.goals?.total || 1} color={STATUS_COLORS[status]?.bar || '#6366f1'} count={count} />
+                      ))}
+                    </div>
 
-                {/* Goals by Status */}
-                <div style={cardBase}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                    <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Goals by Status</h3>
-                    <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 10px', borderRadius: '20px' }}>{stats.goals.total} total</span>
-                  </div>
-                  {goalStatuses.length === 0 ? (
-                    <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No goals yet</p>
-                  ) : goalStatuses.map(([status, count]) => (
-                    <ProgressBar key={status} label={status} value={count} max={stats.goals.total} color={STATUS_COLORS[status]?.bar || '#6366f1'} count={count} />
-                  ))}
-                </div>
-
-                {/* KPI Status Ring */}
-                <div style={cardBase}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                    <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>KPI Status</h3>
-                    <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 10px', borderRadius: '20px' }}>{stats.kpis.total} assignments</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
-                    <RingChart pct={stats.kpis.completion_rate} color="#10b981" size={96} label={`${stats.kpis.completion_rate}%`} sublabel="approved" />
-                  </div>
-                  {kpiStatuses.length === 0 ? (
-                    <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No KPIs yet</p>
-                  ) : kpiStatuses.map(([status, count]) => (
-                    <ProgressBar key={status} label={status} value={count} max={stats.kpis.total} color={KPI_COLORS[status]?.bar || '#6366f1'} count={count} />
-                  ))}
-                </div>
+                    {/* KPI Status Ring */}
+                    <div style={cardBase}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+                        <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>KPI Status</h3>
+                        <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 10px', borderRadius: '20px' }}>{stats.kpis?.total || 0} assignments</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
+                        <RingChart pct={kpiRate} color="#10b981" size={96} label={`${kpiRate}%`} sublabel="approved" />
+                      </div>
+                      {kpiStatuses.length === 0 ? (
+                        <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No KPIs yet</p>
+                      ) : kpiStatuses.map(([status, count]) => (
+                        <ProgressBar key={status} label={status} value={count} max={stats.kpis?.total || 1} color={KPI_COLORS[status]?.bar || '#6366f1'} count={count} />
+                      ))}
+                    </div>
+                  </>
+                )}
 
                 {/* Employees by Department */}
                 <div style={cardBase}>
@@ -805,7 +953,7 @@ export default function ClientAdminDashboard() {
                     <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Employees by Dept</h3>
                     <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 10px', borderRadius: '20px' }}>Top 5</span>
                   </div>
-                  {stats.department_breakdown.length === 0 ? (
+                  {!stats.department_breakdown || stats.department_breakdown.length === 0 ? (
                     <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No departments yet</p>
                   ) : (() => {
                     const maxCount = Math.max(...stats.department_breakdown.map(d => Number(d.employee_count)))
@@ -815,127 +963,166 @@ export default function ClientAdminDashboard() {
                     ))
                   })()}
                 </div>
-              </div>
 
-              {/* ── Bottom Row: Trend + Alerts + Performance ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-
-                {/* Goal Trend */}
-                <div style={cardBase}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                    <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Goal Trend</h3>
-                    <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 8px', borderRadius: '12px' }}>Last 6 months</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#374151', fontWeight: '500' }}>
-                      <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#e0e7ff', display: 'inline-block' }} /> Total
-                    </span>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#374151', fontWeight: '500' }}>
-                      <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#6366f1', display: 'inline-block' }} /> Completed
-                    </span>
-                  </div>
-                  <TrendBarChart data={stats.goal_trend} />
-                </div>
-
-                {/* Latest Alerts — real data from server */}
-                <div style={cardBase}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                    <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Latest Alerts</h3>
-                    {unreadCount > 0 && (
-                      <span style={{ fontSize: '11px', background: '#fee2e2', color: '#b91c1c', border: '1px solid #fecaca', padding: '3px 10px', borderRadius: '20px', fontWeight: '700' }}>
-                        {unreadCount} unread
-                      </span>
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {notifications.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '16px 0', color: '#6b7280', fontSize: '13px' }}>
-                        <FiCheckCircle size={22} color="#10b981" style={{ marginBottom: 6, display: 'block', margin: '0 auto 6px' }} />
-                        No pending actions
-                      </div>
-                    ) : notifications.slice(0, 5).map((n, i) => {
-                      const meta = NOTIF_META[n.type] || { icon: FiInfo, color: '#6366f1' }
-                      const Icon = meta.icon
-                      return (
-                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 12px', background: n.read ? '#f8fafc' : `${meta.color}10`, border: `1px solid ${n.read ? '#e2e8f0' : meta.color + '25'}`, borderRadius: '10px' }}>
-                          <Icon size={14} color={meta.color} style={{ flexShrink: 0, marginTop: '2px' }} />
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: '12px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title}</div>
-                            <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px', fontWeight: '500' }}>{formatRelative(n.created_at)}</div>
+                {/* In HRMS Mode, show Latest Alerts here side by side */}
+                {!isPmsActive && (
+                  <div style={cardBase}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                      <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Latest Alerts</h3>
+                      {unreadCount > 0 && (
+                        <span style={{ fontSize: '11px', background: '#fee2e2', color: '#b91c1c', border: '1px solid #fecaca', padding: '3px 10px', borderRadius: '20px', fontWeight: '700' }}>
+                          {unreadCount} unread
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {notifications.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '16px 0', color: '#6b7280', fontSize: '13px' }}>
+                          <FiCheckCircle size={22} color="#10b981" style={{ marginBottom: 6, display: 'block', margin: '0 auto 6px' }} />
+                          No pending actions
+                        </div>
+                      ) : notifications.slice(0, 4).map((n, i) => {
+                        const meta = NOTIF_META[n.type] || { icon: FiInfo, color: '#6366f1' }
+                        const Icon = meta.icon
+                        return (
+                          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 12px', background: n.read ? '#f8fafc' : `${meta.color}10`, border: `1px solid ${n.read ? '#e2e8f0' : meta.color + '25'}`, borderRadius: '10px' }}>
+                            <Icon size={14} color={meta.color} style={{ flexShrink: 0, marginTop: '2px' }} />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: '12px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title}</div>
+                              <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px', fontWeight: '500' }}>{formatRelative(n.created_at)}</div>
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 10, width: '100%', padding: '7px', background: 'none', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#6366f1', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                    View all activity <FiArrowRight size={12} />
-                  </button>
-                </div>
-
-                {/* Performance Overview */}
-                <div style={cardBase}>
-                  <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: '0 0 16px' }}>Performance Overview</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '18px' }}>
-                    <RingChart pct={stats.goals.completion_rate} color="#a855f7" size={84} label={`${stats.goals.completion_rate}%`} sublabel="goals" />
-                    <div style={{ flex: 1 }}>
-                      {[
-                        { label: 'Active Goals', value: activeGoals, color: '#15803d', bg: '#dcfce7' },
-                        { label: 'Pending Approval', value: pendingGoals, color: '#b45309', bg: '#fef3c7' },
-                        { label: 'Completed', value: stats.goals.by_status.completed || 0, color: '#4f46e5', bg: '#ede9fe' },
-                      ].map(item => (
-                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                          <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
-                          <span style={{ fontSize: '14px', fontWeight: '800', color: item.color, background: item.bg, padding: '1px 10px', borderRadius: '8px' }}>{item.value}</span>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
-                  </div>
-                  <div style={{ background: '#fefce8', border: '1px solid #fde68a', borderRadius: '12px', padding: '12px 14px' }}>
-                    <div style={{ fontSize: '12px', color: '#92400e', fontWeight: '700', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <FiAward size={13} color="#d97706" /> Appraisal Cycles
-                    </div>
-                    <div style={{ display: 'flex', gap: '20px' }}>
-                      {[
-                        { label: 'Active', value: stats.appraisals.active_cycles, color: '#15803d' },
-                        { label: 'Draft', value: stats.appraisals.draft_cycles, color: '#475569' },
-                        { label: 'Closed', value: stats.appraisals.closed_cycles, color: '#4f46e5' },
-                      ].map(item => (
-                        <div key={item.label} style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '20px', fontWeight: '800', color: item.color }}>{item.value}</div>
-                          <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600' }}>{item.label}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ── Recent Goals ── */}
-              <div style={{ ...cardBase, marginBottom: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Recent Goals</h3>
-                  <button onClick={() => navigate('/client-admin/goals')} style={{ background: '#ede9fe', border: 'none', color: '#6d28d9', fontSize: '12px', cursor: 'pointer', fontWeight: '700', padding: '6px 14px', borderRadius: '8px' }}>
-                    View all →
-                  </button>
-                </div>
-                {stats.recent_goals.length === 0 ? (
-                  <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No goals created yet</p>
-                ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '12px' }}>
-                    {stats.recent_goals.map(g => (
-                      <div key={g.id} style={{ padding: '14px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' }}>
-                          <div style={{ fontSize: '13px', color: '#1e293b', fontWeight: '700', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{g.title}</div>
-                          <GoalStatusBadge status={g.status} />
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#4b5563', fontWeight: '500' }}>{g.assigned_to || 'Unassigned'} · Weight {g.weight || 0}%</div>
-                        {g.due_date && <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', fontWeight: '500' }}>Due: {new Date(g.due_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>}
-                      </div>
-                    ))}
+                    <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 10, width: '100%', padding: '7px', background: 'none', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#6366f1', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                      View all activity <FiArrowRight size={12} />
+                    </button>
                   </div>
                 )}
               </div>
 
+              {/* ── Bottom Row: Trend + Alerts + Performance (When PMS is Active) ── */}
+              {isPmsActive && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                    {/* Goal Trend */}
+                    <div style={cardBase}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Goal Trend</h3>
+                        <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 8px', borderRadius: '12px' }}>Last 6 months</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#374151', fontWeight: '500' }}>
+                          <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#e0e7ff', display: 'inline-block' }} /> Total
+                        </span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#374151', fontWeight: '500' }}>
+                          <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#6366f1', display: 'inline-block' }} /> Completed
+                        </span>
+                      </div>
+                      <TrendBarChart data={stats.goal_trend} />
+                    </div>
+
+                    {/* Latest Alerts */}
+                    <div style={cardBase}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                        <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Latest Alerts</h3>
+                        {unreadCount > 0 && (
+                          <span style={{ fontSize: '11px', background: '#fee2e2', color: '#b91c1c', border: '1px solid #fecaca', padding: '3px 10px', borderRadius: '20px', fontWeight: '700' }}>
+                            {unreadCount} unread
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {notifications.length === 0 ? (
+                          <div style={{ textAlign: 'center', padding: '16px 0', color: '#6b7280', fontSize: '13px' }}>
+                            <FiCheckCircle size={22} color="#10b981" style={{ marginBottom: 6, display: 'block', margin: '0 auto 6px' }} />
+                            No pending actions
+                          </div>
+                        ) : notifications.slice(0, 5).map((n, i) => {
+                          const meta = NOTIF_META[n.type] || { icon: FiInfo, color: '#6366f1' }
+                          const Icon = meta.icon
+                          return (
+                            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 12px', background: n.read ? '#f8fafc' : `${meta.color}10`, border: `1px solid ${n.read ? '#e2e8f0' : meta.color + '25'}`, borderRadius: '10px' }}>
+                              <Icon size={14} color={meta.color} style={{ flexShrink: 0, marginTop: '2px' }} />
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: '12px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title}</div>
+                                <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px', fontWeight: '500' }}>{formatRelative(n.created_at)}</div>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 10, width: '100%', padding: '7px', background: 'none', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#6366f1', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                        View all activity <FiArrowRight size={12} />
+                      </button>
+                    </div>
+
+                    {/* Performance Overview */}
+                    <div style={cardBase}>
+                      <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: '0 0 16px' }}>Performance Overview</h3>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '18px' }}>
+                        <RingChart pct={goalRate} color="#a855f7" size={84} label={`${goalRate}%`} sublabel="goals" />
+                        <div style={{ flex: 1 }}>
+                          {[
+                            { label: 'Active Goals', value: activeGoals, color: '#15803d', bg: '#dcfce7' },
+                            { label: 'Pending Approval', value: pendingGoals, color: '#b45309', bg: '#fef3c7' },
+                            { label: 'Completed', value: stats.goals?.by_status?.completed || 0, color: '#4f46e5', bg: '#ede9fe' },
+                          ].map(item => (
+                            <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                              <span style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>{item.label}</span>
+                              <span style={{ fontSize: '14px', fontWeight: '800', color: item.color, background: item.bg, padding: '1px 10px', borderRadius: '8px' }}>{item.value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div style={{ background: '#fefce8', border: '1px solid #fde68a', borderRadius: '12px', padding: '12px 14px' }}>
+                        <div style={{ fontSize: '12px', color: '#92400e', fontWeight: '700', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <FiAward size={13} color="#d97706" /> Appraisal Cycles
+                        </div>
+                        <div style={{ display: 'flex', gap: '20px' }}>
+                          {[
+                            { label: 'Active', value: stats.appraisals?.active_cycles || 0, color: '#15803d' },
+                            { label: 'Draft', value: stats.appraisals?.draft_cycles || 0, color: '#475569' },
+                            { label: 'Closed', value: stats.appraisals?.closed_cycles || 0, color: '#4f46e5' },
+                          ].map(item => (
+                            <div key={item.label} style={{ textAlign: 'center' }}>
+                              <div style={{ fontSize: '20px', fontWeight: '800', color: item.color }}>{item.value}</div>
+                              <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600' }}>{item.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ── Recent Goals ── */}
+                  <div style={{ ...cardBase, marginBottom: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                      <h3 style={{ color: '#0f172a', fontSize: '14px', fontWeight: '700', margin: 0 }}>Recent Goals</h3>
+                      <button onClick={() => navigate('/client-admin/goals')} style={{ background: '#ede9fe', border: 'none', color: '#6d28d9', fontSize: '12px', cursor: 'pointer', fontWeight: '700', padding: '6px 14px', borderRadius: '8px' }}>
+                        View all →
+                      </button>
+                    </div>
+                    {!stats.recent_goals || stats.recent_goals.length === 0 ? (
+                      <p style={{ color: '#6b7280', fontSize: '13px', fontWeight: '500' }}>No goals created yet</p>
+                    ) : (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '12px' }}>
+                        {stats.recent_goals.map(g => (
+                          <div key={g.id} style={{ padding: '14px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' }}>
+                              <div style={{ fontSize: '13px', color: '#1e293b', fontWeight: '700', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{g.title}</div>
+                              <GoalStatusBadge status={g.status} />
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#4b5563', fontWeight: '500' }}>{g.assigned_to || 'Unassigned'} · Weight {g.weight || 0}%</div>
+                            {g.due_date && <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', fontWeight: '500' }}>Due: {new Date(g.due_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </>
           )}
         </main>

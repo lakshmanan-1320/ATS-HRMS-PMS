@@ -68,6 +68,24 @@ async function createNotificationForMany(employeeIds, type, title, message, enti
   }
 }
 
+async function getOrgEmployeeIds(organizationId) {
+  const result = await query(
+    `SELECT employee_id FROM employees WHERE organization_id = $1 AND status = 'active'`,
+    [organizationId]
+  )
+  return result.rows.map(r => r.employee_id).filter(Boolean)
+}
+
+async function getClientAdminEmployeeIds(organizationId) {
+  const result = await query(
+    `SELECT u.employee_id 
+     FROM users u 
+     WHERE u.organization_id = $1 AND u.role IN ('client_admin', 'hr') AND u.employee_id IS NOT NULL`,
+    [organizationId]
+  )
+  return result.rows.map(r => r.employee_id).filter(Boolean)
+}
+
 module.exports = {
   createNotification,
   createNotificationForMany,
@@ -77,4 +95,6 @@ module.exports = {
   markAllAsRead,
   getManagerIdForEmployee,
   getEmployeeName,
+  getOrgEmployeeIds,
+  getClientAdminEmployeeIds,
 }

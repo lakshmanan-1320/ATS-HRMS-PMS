@@ -350,6 +350,7 @@ export default function EmployeePolicies() {
                     </span>
 
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                      {/* AI Assistant button hidden for client deployment
                       <button
                         onClick={() => {
                           const categoryMap = {
@@ -378,6 +379,7 @@ export default function EmployeePolicies() {
                       >
                         <FiZap size={13} color={policy.category === 'IT & Data Security' ? '#4f46e5' : '#64748b'} /> Ask AI
                       </button>
+                      */}
 
                       <button
                         onClick={(e) => copyDirectLink(policy, e)}

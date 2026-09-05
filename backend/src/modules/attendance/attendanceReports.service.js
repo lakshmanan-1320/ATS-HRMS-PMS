@@ -4,25 +4,17 @@ const XLSX = require('xlsx');
 const PDFDocument = require('pdfkit');
 
 /* ─── Helper: Time Zone Formatter ─── */
-function formatInTimeZone(value, timeZone = env.timezone) {
-  if (!value) return '';
+function formatInTimeZone(value) {
+  if (!value) return '—';
   const date = value instanceof Date ? value : new Date(value);
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
+  if (isNaN(date.getTime())) return '—';
+  
+  return new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).formatToParts(date).reduce((acc, part) => {
-    acc[part.type] = part.value;
-    return acc;
-  }, {});
-
-  const offset = timeZone === 'Asia/Kolkata' ? '+05:30' : 'Z';
-  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}${offset}`;
+    hour12: true
+  }).format(date);
 }
 
 function safeFormatDate(value) {
@@ -222,43 +214,74 @@ function formatDuration(mins) {
 async function getSummaryReport(orgId, filters, user) {
   const matrix = await getPeriodDayMatrix(orgId, filters, user);
   if (matrix.length === 0) {
-    return { totalEmployees: 0, present: 0, absent: 0, lateArrivals: 0, earlyExits: 0, complianceRate: 100 };
+    return { totalEmployees: 0, present: 0, absent: 0, lateArrivals: 0, earlyExits: 0, complianceRate: 100, records: [] };
   }
 
-  const empIds = new Set();
-  let present = 0;
-  let absent = 0;
-  let lateArrivals = 0;
-  let earlyExits = 0;
-  let onTime = 0;
-  let completedShifts = 0;
+  const empMap = {};
+  let totalPresent = 0;
+  let totalAbsent = 0;
+  let totalLateArrivals = 0;
+  let totalEarlyExits = 0;
+  let totalOnTime = 0;
+  let totalCompletedShifts = 0;
 
   matrix.forEach(row => {
-    empIds.add(row.employee_id);
+    if (!empMap[row.employee_id]) {
+      empMap[row.employee_id] = {
+        employee: `${row.first_name} ${row.last_name}`,
+        employee_code: row.employee_code,
+        department: row.department_name || '—',
+        shift: row.shift_name || '—',
+        present_days: 0,
+        absent_days: 0,
+        late_arrivals: 0,
+        early_exits: 0,
+        total_worked_mins: 0,
+      };
+    }
+    const emp = empMap[row.employee_id];
     if (row.attendance_punch_id) {
-      present++;
-      if (row.attendance_result === 'LATE_ARRIVAL') lateArrivals++;
-      if (row.attendance_result === 'EARLY_EXIT') earlyExits++;
-      if (row.attendance_result === 'ON_TIME') onTime++;
-      if (row.attendance_result === 'COMPLETED_SHIFT') completedShifts++;
+      emp.present_days++;
+      totalPresent++;
+      if (row.attendance_result === 'LATE_ARRIVAL') { emp.late_arrivals++; totalLateArrivals++; }
+      if (row.attendance_result === 'EARLY_EXIT') { emp.early_exits++; totalEarlyExits++; }
+      if (row.attendance_result === 'ON_TIME') totalOnTime++;
+      if (row.attendance_result === 'COMPLETED_SHIFT') totalCompletedShifts++;
+      if (row.work_duration_minutes != null) emp.total_worked_mins += row.work_duration_minutes;
     } else {
-      // Absent if: not weekend (Sunday = 0), not holiday, no approved leave
       if (row.day_of_week !== 0 && !row.holiday_name && row.is_paid_leave === null) {
-        absent++;
+        emp.absent_days++;
+        totalAbsent++;
       }
     }
   });
 
-  const complianceNumerator = onTime + completedShifts;
-  const complianceRate = present > 0 ? Number(((complianceNumerator / present) * 100).toFixed(1)) : 100.0;
+  const records = Object.values(empMap).map(emp => ({
+    employee: emp.employee,
+    employee_code: emp.employee_code,
+    department: emp.department,
+    shift: emp.shift,
+    present_days: emp.present_days,
+    absent_days: emp.absent_days,
+    late_arrivals: emp.late_arrivals,
+    early_exits: emp.early_exits,
+    worked_hours: formatDuration(emp.total_worked_mins),
+    compliance_rate: emp.present_days > 0
+      ? `${Math.max(0, Math.round(((emp.present_days - emp.late_arrivals - emp.early_exits) / emp.present_days) * 100))}%`
+      : '100%'
+  }));
+
+  const complianceNumerator = totalOnTime + totalCompletedShifts;
+  const complianceRate = totalPresent > 0 ? Number(((complianceNumerator / totalPresent) * 100).toFixed(1)) : 100.0;
 
   return {
-    totalEmployees: empIds.size,
-    present,
-    absent,
-    lateArrivals,
-    earlyExits,
-    complianceRate
+    totalEmployees: Object.keys(empMap).length,
+    present: totalPresent,
+    absent: totalAbsent,
+    lateArrivals: totalLateArrivals,
+    earlyExits: totalEarlyExits,
+    complianceRate,
+    records
   };
 }
 
@@ -269,7 +292,7 @@ async function getDailyReport(orgId, filters, user) {
     employee: `${row.first_name} ${row.last_name}`,
     employee_code: row.employee_code,
     department: row.department_name || '—',
-    shift: row.shift_name ? `${row.shift_name} (${row.shift_code})` : '—',
+    shift: row.shift_name || '—',
     date: safeFormatDate(row.attendance_date),
     check_in: row.check_in_time ? formatInTimeZone(row.check_in_time) : '—',
     check_out: row.check_out_time ? formatInTimeZone(row.check_out_time) : '—',
@@ -339,7 +362,7 @@ async function getLateArrivalReport(orgId, filters, user) {
     return {
       employee: `${row.first_name} ${row.last_name}`,
       department: row.department_name || '—',
-      shift: row.shift_name ? `${row.shift_name} (${row.shift_code})` : '—',
+      shift: row.shift_name || '—',
       date: safeFormatDate(row.attendance_date),
       expected_time: row.shift_start_time || '—',
       actual_punch_in: row.check_in_time ? formatInTimeZone(row.check_in_time) : '—',
@@ -404,58 +427,56 @@ async function getDepartmentReport(orgId, filters, user) {
     if (!deptMap[deptName]) {
       deptMap[deptName] = {
         department: deptName,
-        empIds: new Set(),
+        total_shifts: 0,
         present: 0,
         absent: 0,
-        late: 0
+        late: 0,
+        early: 0,
+        worked_mins: 0
       };
     }
 
-    const dept = deptMap[deptName];
-    dept.empIds.add(row.employee_id);
+    const d = deptMap[deptName];
+    d.total_shifts++;
     if (row.attendance_punch_id) {
-      dept.present++;
-      if (row.attendance_result === 'LATE_ARRIVAL') dept.late++;
+      d.present++;
+      if (row.attendance_result === 'LATE_ARRIVAL') d.late++;
+      if (row.attendance_result === 'EARLY_EXIT') d.early++;
+      if (row.work_duration_minutes != null) d.worked_mins += row.work_duration_minutes;
     } else {
       if (row.day_of_week !== 0 && !row.holiday_name && row.is_paid_leave === null) {
-        dept.absent++;
+        d.absent++;
       }
     }
   });
 
-  return Object.values(deptMap).map(d => {
-    const totalRecords = d.present + d.absent;
-    const rate = totalRecords > 0 ? Number(((d.present / totalRecords) * 100).toFixed(1)) : 100.0;
-    return {
-      department: d.department,
-      total_employees: d.empIds.size,
-      present: d.present,
-      absent: d.absent,
-      late_arrivals: d.late,
-      attendance_percentage: rate
-    };
-  });
-}
-
-/* ─── 8. Employee Attendance History Report ─── */
-async function getEmployeeReport(orgId, employeeId, filters, user) {
-  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(employeeId);
-  if (!isUuid) return [];
-
-  const empFilters = { ...filters, employee_id: employeeId };
-  const matrix = await getPeriodDayMatrix(orgId, empFilters, user);
-  return matrix.map(row => ({
-    date: safeFormatDate(row.attendance_date),
-    check_in: row.check_in_time ? formatInTimeZone(row.check_in_time) : '—',
-    check_out: row.check_out_time ? formatInTimeZone(row.check_out_time) : '—',
-    worked_hours: formatDuration(row.work_duration_minutes),
-    shift: row.shift_name ? `${row.shift_name} (${row.shift_code})` : '—',
-    result: row.attendance_result || (row.attendance_punch_id ? 'PRESENT' : (row.day_of_week === 0 ? 'WEEKLY_OFF' : row.holiday_name ? 'HOLIDAY' : row.is_paid_leave !== null ? 'LEAVE' : 'ABSENT')),
-    location_status: row.location_status || 'LOCATION_NOT_VERIFIED'
+  return Object.values(deptMap).map(d => ({
+    department: d.department,
+    total_records: d.total_shifts,
+    present_count: d.present,
+    absent_count: d.absent,
+    late_count: d.late,
+    early_count: d.early,
+    present_percentage: d.total_shifts > 0 ? `${Number(((d.present / d.total_shifts) * 100).toFixed(1))}%` : '0%'
   }));
 }
 
-/* ─── 9. Payroll Attendance Report ─── */
+/* ─── 8. Employee History Log Report ─── */
+async function getEmployeeReport(orgId, employeeId, filters, user) {
+  const matrix = await getPeriodDayMatrix(orgId, { ...filters, employee_id: employeeId }, user);
+  return matrix.map(row => ({
+    date: safeFormatDate(row.attendance_date),
+    shift: row.shift_name ? `${row.shift_name} (${row.shift_code})` : '—',
+    check_in: row.check_in_time ? formatInTimeZone(row.check_in_time) : '—',
+    check_out: row.check_out_time ? formatInTimeZone(row.check_out_time) : '—',
+    worked_hours: formatDuration(row.work_duration_minutes),
+    adjustment: row.adjustment_status || '—',
+    location: row.matched_office_name || (row.location_status ? row.location_status.replace(/_/g, ' ') : '—'),
+    result: row.attendance_result || (row.attendance_punch_id ? 'PRESENT' : (row.day_of_week === 0 ? 'WEEKLY_OFF' : row.holiday_name ? 'HOLIDAY' : row.is_paid_leave !== null ? 'LEAVE' : 'ABSENT'))
+  }));
+}
+
+/* ─── 9. Payroll Attendance Summary Report ─── */
 async function getPayrollReport(orgId, filters, user) {
   const matrix = await getPeriodDayMatrix(orgId, filters, user);
   const empMap = {};
@@ -468,143 +489,82 @@ async function getPayrollReport(orgId, filters, user) {
         department: row.department_name || '—',
         workingDays: 0,
         presentDays: 0,
-        leaveDays: 0,
         lopDays: 0,
-        lateCounts: 0,
+        paidLeaveDays: 0,
         overtimeMinutes: 0
       };
     }
 
     const emp = empMap[row.employee_id];
-    
-    // Working day count: calendar day minus weekly off and holiday
-    const isWeeklyOff = row.day_of_week === 0;
-    const isHoliday = !!row.holiday_name;
-    if (!isWeeklyOff && !isHoliday) {
-      emp.workingDays++;
-    }
+    if (row.day_of_week !== 0 && !row.holiday_name) emp.workingDays++;
 
     if (row.attendance_punch_id) {
       emp.presentDays++;
-      if (row.attendance_result === 'LATE_ARRIVAL') emp.lateCounts++;
-      
-      // Calculate overtime minutes
-      const minHours = row.minimum_hours ? Number(row.minimum_hours) : 8;
-      const expectedMinutes = minHours * 60;
-      if (row.work_duration_minutes != null && row.work_duration_minutes > expectedMinutes) {
-        emp.overtimeMinutes += (row.work_duration_minutes - expectedMinutes);
-      }
-    } else {
-      if (row.is_paid_leave === true) {
-        emp.leaveDays++;
-      } else if (row.is_paid_leave === false) {
-        emp.lopDays++;
-      }
+    } else if (row.is_paid_leave !== null && row.is_paid_leave) {
+      emp.paidLeaveDays++;
+    } else if (row.day_of_week !== 0 && !row.holiday_name) {
+      emp.lopDays++;
     }
   });
 
   return Object.values(empMap).map(e => ({
     employee: e.employee,
-    code: e.code,
+    employee_code: e.code,
     department: e.department,
     working_days: e.workingDays,
     present_days: e.presentDays,
-    leave_days: e.leaveDays,
+    paid_leave_days: e.paidLeaveDays,
     lop_days: e.lopDays,
-    late_counts: e.lateCounts,
-    overtime_hours: Number((e.overtimeMinutes / 60).toFixed(1))
+    payable_days: e.presentDays + e.paidLeaveDays
   }));
 }
 
-/* ─── 10. Attendance Exception Report ─── */
+/* ─── 10. Attendance Exceptions Report ─── */
 async function getExceptionsReport(orgId, filters, user) {
   const matrix = await getPeriodDayMatrix(orgId, filters, user);
-  const exceptionsList = [];
+  const exceptions = [];
 
   matrix.forEach(row => {
-    let exceptionType = null;
-    let details = '';
-
-    const hasPunch = !!row.attendance_punch_id;
-    const dateStr = safeFormatDate(row.attendance_date);
-    const todayStr = new Date().toISOString().slice(0, 10);
-
-    if (hasPunch) {
-      if (row.check_in_time === null && row.check_out_time !== null) {
-        exceptionType = 'Missing Punch In';
-        details = 'Checkout stamp exists without checkin stamp.';
-      } else if (row.check_in_time !== null && row.check_out_time === null && dateStr < todayStr) {
-        exceptionType = 'Missing Punch Out';
-        details = 'Checkin stamp exists without checkout stamp.';
-      } else if (row.location_status === 'OUTSIDE_FENCE') {
-        exceptionType = 'Outside Fence';
-        details = `Punch occurred outside geofenced area. Matched Office: ${row.matched_office_name || 'Unknown'}.`;
+    if (row.attendance_punch_id) {
+      if (!row.check_out_time) {
+        exceptions.push({
+          employee: `${row.first_name} ${row.last_name}`,
+          code: row.employee_code,
+          department: row.department_name || '—',
+          date: safeFormatDate(row.attendance_date),
+          exception_type: 'Missing Punch Out',
+          details: 'Employee checked in but has no checkout punch recorded.'
+        });
       }
-    } else {
-      // Check if employee has no shift assigned
-      if (!row.shift_name) {
-        exceptionType = 'No Shift Assigned';
-        details = 'No active shift assignment configured for this employee.';
+      if (row.location_status === 'OUTSIDE_FENCE') {
+        exceptions.push({
+          employee: `${row.first_name} ${row.last_name}`,
+          code: row.employee_code,
+          department: row.department_name || '—',
+          date: safeFormatDate(row.attendance_date),
+          exception_type: 'Outside Geofence',
+          details: 'Punch recorded outside approved office geofence radius.'
+        });
       }
-    }
-
-    if (exceptionType) {
-      exceptionsList.push({
-        employee: `${row.first_name} ${row.last_name}`,
-        code: row.employee_code,
-        department: row.department_name || '—',
-        date: dateStr,
-        exception_type: exceptionType,
-        details
-      });
     }
   });
 
-  return exceptionsList;
+  return exceptions;
 }
 
 /* ─── Exporter Helpers: CSV ─── */
 function generateCSV(reportType, data, user, filters) {
-  if (!Array.isArray(data) || data.length === 0) return '';
-  const auditHeaders = [
-    `Generated By: ${user.email} (${user.role})`,
-    `Generated At: ${new Date().toLocaleString('en-IN')}`,
-    `Filters: ${JSON.stringify(filters)}`,
-    ''
-  ];
-
+  if (!Array.isArray(data) || data.length === 0) return 'No data available';
   const headers = Object.keys(data[0]);
-  const rows = data.map(item =>
-    headers.map(header => {
-      const val = item[header];
-      return typeof val === 'string' ? `"${val.replace(/"/g, '""')}"` : val;
-    }).join(',')
-  );
-
-  return [...auditHeaders, headers.join(','), ...rows].join('\n');
+  const rows = data.map(row => headers.map(h => `"${String(row[h] ?? '').replace(/"/g, '""')}"`).join(','));
+  return [headers.join(','), ...rows].join('\n');
 }
 
 /* ─── Exporter Helpers: XLSX ─── */
 function generateXLSX(reportType, data, user, filters) {
+  const list = Array.isArray(data) ? data : (data?.records || []);
   const wb = XLSX.utils.book_new();
-  
-  // Format audit metadata row array
-  const metadataRows = [
-    { A: 'Generated By:', B: `${user.email} (${user.role})` },
-    { A: 'Generated At:', B: new Date().toLocaleString('en-IN') },
-    { A: 'Filters Applied:', B: JSON.stringify(filters) },
-    {} // spacing
-  ];
-  
-  const ws = XLSX.utils.json_to_sheet(data, { origin: 'A5' });
-  
-  // Add audit metadata at the top of sheet
-  XLSX.utils.sheet_add_json(ws, metadataRows, {
-    header: ['A', 'B'],
-    skipHeader: true,
-    origin: 'A1'
-  });
-
+  const ws = XLSX.utils.json_to_sheet(list.length > 0 ? list : [{ message: 'No data available' }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Attendance Report');
   return XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 }
@@ -619,73 +579,131 @@ function generatePDF(reportType, data, user, filters) {
       doc.on('end', () => resolve(Buffer.concat(chunks)));
       doc.on('error', err => reject(err));
 
-      // Document Header Accent
-      doc.rect(0, 0, 842, 10).fill('#6366f1');
-      doc.moveDown(1.5);
+      // Header Accent Bar
+      doc.rect(0, 0, 842, 14).fill('#4f46e5');
 
-      // Title
-      doc.fillColor('#0f172a').fontSize(18).font('Helvetica-Bold').text('Insight HCM', 30, 20);
-      doc.fontSize(12).font('Helvetica').fillColor('#475569').text(`Attendance Report: ${reportType.toUpperCase()}`, 30, 42);
-      
-      // Audit details Box
-      doc.rect(480, 20, 330, 45).fill('#f8fafc').stroke('#cbd5e1');
+      // Title & Subtitle
+      doc.fillColor('#0f172a').fontSize(16).font('Helvetica-Bold').text('Insight HCM', 30, 24);
+      doc.fontSize(11).font('Helvetica-Bold').fillColor('#475569').text(`Attendance Report: ${(reportType || 'report').toUpperCase().replace(/-/g, ' ')}`, 30, 44);
+
+      // Audit Details Card Box (Right Aligned)
+      doc.rect(480, 22, 332, 42).fill('#f8fafc').stroke('#cbd5e1');
       doc.fontSize(7.5).fillColor('#475569').font('Helvetica');
-      doc.text(`Generated By: ${user.email} (${user.role})`, 490, 25);
-      doc.text(`Generated At: ${new Date().toLocaleString('en-IN')}`, 490, 36);
-      doc.text(`Filters: ${JSON.stringify(filters).slice(0, 60)}...`, 490, 47);
+      doc.text(`Generated By: ${user.email} (${user.role})`, 490, 27);
+      doc.text(`Generated At: ${new Date().toLocaleString('en-IN')}`, 490, 38);
+      const filterStr = Object.entries(filters || {}).filter(([k,v]) => v).map(([k,v]) => `${k}=${v}`).join(', ');
+      doc.text(`Filters: ${filterStr || 'None'}`, 490, 49, { width: 310, truncate: true });
 
-      // Grid/Table Setup
-      doc.moveTo(30, 75).lineTo(812, 75).stroke('#cbd5e1');
-      doc.moveDown(2);
-
-      if (!Array.isArray(data) || data.length === 0) {
-        doc.fontSize(12).text('No records found matching filters.', 30, 100);
+      let listData = Array.isArray(data) ? data : (data?.records || []);
+      if (!listData || listData.length === 0) {
+        doc.fontSize(12).fillColor('#64748b').text('No records found matching filters.', 30, 95);
         doc.end();
         return;
       }
 
-      // Draw table columns
-      const headers = Object.keys(data[0]);
-      const colWidth = Math.floor(782 / headers.length);
-      let startY = 85;
+      const headers = Object.keys(listData[0]);
 
-      // Draw Header Rows
-      doc.font('Helvetica-Bold').fontSize(8.5).fillColor('#1e293b');
-      headers.forEach((h, i) => {
-        const title = h.replace(/_/g, ' ').toUpperCase();
-        doc.text(title, 30 + i * colWidth, startY, { width: colWidth - 5, truncate: true });
+      function getHeaderTitle(h) {
+        if (h === 'present_days') return 'PRESENT';
+        if (h === 'absent_days') return 'ABSENT';
+        if (h === 'late_arrivals') return 'LATE';
+        if (h === 'early_exits') return 'EARLY';
+        if (h === 'worked_hours') return 'WORKED HRS';
+        if (h === 'compliance_rate') return 'COMPLIANCE RATE';
+        if (h === 'employee_code') return 'EMP CODE';
+        if (h === 'actual_punch_in') return 'PUNCH IN';
+        if (h === 'actual_punch_out') return 'PUNCH OUT';
+        if (h === 'location_status') return 'LOCATION';
+        return h.replace(/_/g, ' ').toUpperCase();
+      }
+
+      // Calculate Custom Column Widths
+      const totalWidth = 782;
+      const colWidths = {};
+      const numCols = headers.length;
+
+      headers.forEach(h => {
+        if (h === 'employee') colWidths[h] = 110;
+        else if (h === 'employee_code' || h === 'code') colWidths[h] = 65;
+        else if (h === 'department') colWidths[h] = 105;
+        else if (h === 'shift') colWidths[h] = 110;
+        else if (h === 'date') colWidths[h] = 65;
+        else if (h === 'check_in' || h === 'actual_punch_in') colWidths[h] = 70;
+        else if (h === 'check_out' || h === 'actual_punch_out') colWidths[h] = 70;
+        else if (h === 'worked_hours' || h === 'average_hours') colWidths[h] = 72;
+        else if (h === 'present_days' || h === 'absent_days' || h === 'late_arrivals' || h === 'early_exits') colWidths[h] = 55;
+        else if (h === 'compliance_rate') colWidths[h] = 100;
+        else if (h === 'result' || h === 'location_status') colWidths[h] = 75;
+        else colWidths[h] = Math.floor(totalWidth / numCols);
       });
 
-      doc.moveTo(30, startY + 12).lineTo(812, startY + 12).stroke('#e2e8f0');
-      startY += 18;
+      const assignedSum = Object.values(colWidths).reduce((a, b) => a + b, 0);
+      if (assignedSum !== totalWidth) {
+        const diff = totalWidth - assignedSum;
+        if (colWidths['shift']) colWidths['shift'] += diff;
+        else headers.forEach(h => { colWidths[h] = Math.floor(colWidths[h] * (totalWidth / assignedSum)); });
+      }
 
-      // Draw Data Rows
-      doc.font('Helvetica').fontSize(8).fillColor('#334155');
-      data.slice(0, 40).forEach(row => {
-        if (startY > 540) {
-          doc.addPage();
-          startY = 40;
-          doc.font('Helvetica-Bold').fontSize(8.5).fillColor('#1e293b');
-          headers.forEach((h, i) => {
-            doc.text(h.replace(/_/g, ' ').toUpperCase(), 30 + i * colWidth, startY, { width: colWidth - 5, truncate: true });
-          });
-          doc.moveTo(30, startY + 12).lineTo(812, startY + 12).stroke('#e2e8f0');
-          startY += 18;
-          doc.font('Helvetica').fontSize(8).fillColor('#334155');
-        }
+      let startY = 80;
 
-        headers.forEach((h, i) => {
-          let val = row[h];
-          if (val === null || val === undefined) val = '—';
-          doc.text(String(val), 30 + i * colWidth, startY, { width: colWidth - 5, truncate: true });
+      function drawTableHeaders(y) {
+        doc.font('Helvetica-Bold').fontSize(7.5);
+        let maxHeaderH = 18;
+        headers.forEach(h => {
+          const title = getHeaderTitle(h);
+          const textH = doc.heightOfString(title, { width: colWidths[h] - 4 });
+          if (textH + 6 > maxHeaderH) maxHeaderH = Math.ceil(textH + 6);
         });
 
-        startY += 14;
-      });
-
-      if (data.length > 40) {
-        doc.fontSize(8.5).fillColor('#ef4444').text(`* Truncated: Only first 40 records are shown in PDF. Export CSV/XLSX for full lists.`, 30, startY + 5);
+        doc.rect(30, y - 4, totalWidth, maxHeaderH).fill('#e0e7ff');
+        doc.fillColor('#1e1b4b');
+        let currentX = 30;
+        headers.forEach(h => {
+          const w = colWidths[h];
+          const title = getHeaderTitle(h);
+          doc.text(title, currentX + 2, y, { width: w - 4 });
+          currentX += w;
+        });
+        return y + maxHeaderH + 2;
       }
+
+      startY = drawTableHeaders(startY);
+
+      // Draw Rows across pages cleanly with dynamic row height
+      listData.forEach((row, idx) => {
+        doc.font('Helvetica').fontSize(7.5);
+        let maxCellHeight = 16;
+
+        headers.forEach(h => {
+          let val = row[h];
+          if (val === null || val === undefined) val = '—';
+          const textH = doc.heightOfString(String(val), { width: colWidths[h] - 6 });
+          if (textH + 6 > maxCellHeight) maxCellHeight = Math.ceil(textH + 6);
+        });
+
+        if (startY + maxCellHeight > 540) {
+          doc.addPage();
+          startY = drawTableHeaders(40);
+        }
+
+        if (idx % 2 === 1) {
+          doc.rect(30, startY - 2, totalWidth, maxCellHeight).fill('#f8fafc');
+        }
+
+        doc.fillColor('#334155');
+        let currentX = 30;
+
+        headers.forEach(h => {
+          const w = colWidths[h];
+          let val = row[h];
+          if (val === null || val === undefined) val = '—';
+          doc.text(String(val), currentX + 3, startY, { width: w - 6 });
+          currentX += w;
+        });
+
+        doc.moveTo(30, startY + maxCellHeight - 2).lineTo(30 + totalWidth, startY + maxCellHeight - 2).stroke('#f1f5f9');
+        startY += maxCellHeight;
+      });
 
       doc.end();
     } catch (err) {

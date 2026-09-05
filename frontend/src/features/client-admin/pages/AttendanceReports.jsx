@@ -101,10 +101,10 @@ export default function AttendanceReports() {
     }
   }
 
-  // Reload report when active selection or dates change
+  // Reload report when active selection, dates, or filter controls change
   useEffect(() => {
     loadReport()
-  }, [activeReport, startDate, endDate, selectedEmployeeId])
+  }, [activeReport, startDate, endDate, selectedDept, selectedPolicy, selectedShift, selectedResult, selectedLocation, selectedEmployeeId])
 
   const handleExport = async (format) => {
     setExporting(format)
@@ -278,9 +278,6 @@ export default function AttendanceReports() {
                     <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#4338ca', fontWeight: 500 }}>Auto-deliver daily shifts or geofence compliance audits directly to managers' mailboxes.</p>
                   </div>
                 </div>
-                <span style={{ fontSize: '11px', fontWeight: 800, background: '#6366f1', color: '#fff', padding: '4px 10px', borderRadius: '12px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  Coming Soon
-                </span>
               </div>
 
               {/* Grid Report Options */}

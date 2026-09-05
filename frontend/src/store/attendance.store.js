@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -30,7 +31,6 @@ export const useAttendanceStore = create((set, get) => ({
       if (err.response?.status === 401) {
         sessionStorage.clear()
         window.location.href = '/login'
-        return
       }
       set({ error: err.response?.data?.message || 'Failed to fetch policies.' })
     } finally {
@@ -64,11 +64,12 @@ export const useAttendanceStore = create((set, get) => ({
     }
   },
 
-  createPolicy: async (payload) => {
+  createPolicy: async (data) => {
     set({ loading: true, error: null })
     try {
-      await api.post('/attendance/policies', payload)
+      await api.post('/attendance/policies', data)
       await get().fetchPolicies()
+      toast.success('Attendance policy created successfully!')
     } catch (err) {
       const msg = err.response?.data?.message || 'Failed to create policy.'
       set({ error: msg })
@@ -78,11 +79,12 @@ export const useAttendanceStore = create((set, get) => ({
     }
   },
 
-  updatePolicy: async (id, payload) => {
+  updatePolicy: async (id, data) => {
     set({ loading: true, error: null })
     try {
-      await api.put(`/attendance/policies/${id}`, payload)
+      await api.put(`/attendance/policies/${id}`, data)
       await get().fetchPolicies()
+      toast.success('Attendance policy updated successfully!')
     } catch (err) {
       const msg = err.response?.data?.message || 'Failed to update policy.'
       set({ error: msg })
@@ -95,7 +97,7 @@ export const useAttendanceStore = create((set, get) => ({
   deletePolicy: async (p) => {
     if (p.usage_count > 0) {
       const msg = `Cannot delete policy because it is currently assigned to ${p.usage_count} active employee(s). Please unassign them first.`
-      alert(msg)
+      toast.error(msg)
       return
     }
     if (!window.confirm('Are you sure you want to delete this policy? This will soft-delete the configuration.')) return
@@ -104,9 +106,10 @@ export const useAttendanceStore = create((set, get) => ({
     try {
       await api.delete(`/attendance/policies/${p.attendance_policy_id}`)
       await get().fetchPolicies()
+      toast.success('Policy deleted successfully.')
     } catch (err) {
       const msg = err.response?.data?.message || 'Deletion failed. Check if employees are assigned to this policy.'
-      alert(msg)
+      toast.error(msg)
       set({ error: msg })
     } finally {
       set({ loading: false })
@@ -125,9 +128,10 @@ export const useAttendanceStore = create((set, get) => ({
         is_active: !p.is_active
       })
       await get().fetchPolicies()
+      toast.success(`Policy ${!p.is_active ? 'activated' : 'deactivated'} successfully.`)
     } catch (err) {
       const msg = err.response?.data?.message || 'Failed to toggle status.'
-      alert(msg)
+      toast.error(msg)
       set({ error: msg })
     } finally {
       set({ loading: false })
@@ -139,7 +143,7 @@ export const useAttendanceStore = create((set, get) => ({
     try {
       await api.post(`/attendance/policies/${policyId}/assign`, payload)
       await get().fetchPolicies()
-      alert('Policy successfully assigned.')
+      toast.success('Policy successfully assigned.')
     } catch (err) {
       const msg = err.response?.data?.message || 'Assignment failed.'
       set({ error: msg })

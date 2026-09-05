@@ -92,8 +92,8 @@ async function handleGetAuditLogs(req, res, next) {
       conditions.push(`created_at <= $${params.length}::timestamptz`);
     }
     if (action) {
-      params.push(action);
-      conditions.push(`action = $${params.length}`);
+      params.push(`%${action}%`);
+      conditions.push(`action_name ILIKE $${params.length}`);
     }
     if (actorEmail) {
       params.push(`%${actorEmail}%`);
@@ -111,7 +111,16 @@ async function handleGetAuditLogs(req, res, next) {
 
     const [{ rows }, { rows: countRows }] = await Promise.all([
       db.query(
-        `SELECT id, actor_id, actor_email, actor_role, action, target, metadata, ip_address, created_at
+        `SELECT
+           audit_log_id AS id,
+           actor_user_id AS actor_id,
+           actor_email,
+           actor_role,
+           action_name AS action,
+           COALESCE(entity_display_name, entity_name, module_name) AS target,
+           COALESCE(new_data, old_data, jsonb_build_object('module', module_name, 'status', request_status, 'browser', browser_name, 'os', operating_system)) AS metadata,
+           ip_address::text,
+           created_at
          FROM audit_logs
          ${where}
          ORDER BY created_at DESC
@@ -128,7 +137,7 @@ async function handleGetAuditLogs(req, res, next) {
   }
 }
 
-// Client admin: only their own logs, with pagination, date, action, and search filtering
+// Client admin: only their own organization's logs, with pagination, date, action, and search filtering
 async function handleGetClientAdminAuditLogs(req, res, next) {
   try {
     const page       = Math.max(1, parseInt(req.query.page)  || 1);
@@ -139,8 +148,8 @@ async function handleGetClientAdminAuditLogs(req, res, next) {
     const action     = req.query.action      || null;
     const search     = req.query.search      || null;
 
-    const conditions = ['actor_id = $1'];
-    const baseParams = [req.user.id];
+    const conditions = ['(organization_id = $1 OR actor_user_id = $2)'];
+    const baseParams = [req.user.organizationId, req.user.id];
 
     if (fromDate) {
       baseParams.push(fromDate);
@@ -151,12 +160,13 @@ async function handleGetClientAdminAuditLogs(req, res, next) {
       conditions.push(`created_at < ($${baseParams.length}::date + INTERVAL '1 day')`);
     }
     if (action) {
-      baseParams.push(action);
-      conditions.push(`action = $${baseParams.length}`);
+      baseParams.push(`%${action}%`);
+      conditions.push(`action_name ILIKE $${baseParams.length}`);
     }
     if (search) {
       baseParams.push(`%${search}%`);
-      conditions.push(`(actor_email ILIKE $${baseParams.length} OR target ILIKE $${baseParams.length})`);
+      const idx = baseParams.length;
+      conditions.push(`(actor_name ILIKE $${idx} OR actor_email ILIKE $${idx} OR action_name ILIKE $${idx} OR entity_name ILIKE $${idx} OR entity_display_name ILIKE $${idx})`);
     }
 
     const where = `WHERE ${conditions.join(' AND ')}`;
@@ -166,7 +176,16 @@ async function handleGetClientAdminAuditLogs(req, res, next) {
 
     const [{ rows }, { rows: countRows }] = await Promise.all([
       db.query(
-        `SELECT id, actor_id, actor_email, actor_role, action, target, metadata, ip_address, created_at
+        `SELECT
+           audit_log_id AS id,
+           actor_user_id AS actor_id,
+           actor_email,
+           actor_role,
+           action_name AS action,
+           COALESCE(entity_display_name, entity_name, module_name) AS target,
+           COALESCE(new_data, old_data, jsonb_build_object('module', module_name, 'status', request_status, 'browser', browser_name, 'os', operating_system)) AS metadata,
+           ip_address::text,
+           created_at
          FROM audit_logs
          ${where}
          ORDER BY created_at DESC

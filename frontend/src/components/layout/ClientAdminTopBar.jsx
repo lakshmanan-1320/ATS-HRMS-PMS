@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { FiBell, FiLogOut, FiChevronDown } from 'react-icons/fi'
+import { FiLogOut, FiChevronDown } from 'react-icons/fi'
+import NotificationDropdown from '../shared/NotificationDropdown'
 
 export default function ClientAdminTopBar({ title }) {
   const navigate = useNavigate()
@@ -14,24 +14,8 @@ export default function ClientAdminTopBar({ title }) {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   })
 
-  const [unreadCount, setUnreadCount] = useState(0)
   const [showProfile, setShowProfile] = useState(false)
   const profileRef = useRef(null)
-
-  useEffect(() => {
-    const token = sessionStorage.getItem('sa_token')
-    if (!token) return
-    axios.get('/api/client-admin/dashboard/notifications', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => {
-        try {
-          const readIds = new Set(JSON.parse(localStorage.getItem('ca_notif_read_ids') || '[]'))
-          setUnreadCount(r.data.filter((n, i) => !readIds.has(`${n.type}-${i}`)).length)
-        } catch { setUnreadCount(r.data.length) }
-      })
-      .catch(() => {})
-  }, [])
 
   useEffect(() => {
     function handle(e) {
@@ -70,28 +54,7 @@ export default function ClientAdminTopBar({ title }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <span style={{ fontSize: '13px', color: '#374151', fontWeight: '500' }}>{today}</span>
 
-        <button
-          onClick={() => navigate('/client-admin/dashboard')}
-          title="View notifications"
-          style={{
-            position: 'relative', background: '#f8fafc',
-            border: '1px solid #e2e8f0', borderRadius: '10px',
-            width: '42px', height: '42px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#ede9fe'; e.currentTarget.style.borderColor = '#a78bfa' }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.borderColor = '#e2e8f0' }}
-        >
-          <FiBell size={18} color="#374151" />
-          {unreadCount > 0 && (
-            <span style={{
-              position: 'absolute', top: '8px', right: '8px',
-              width: '8px', height: '8px', borderRadius: '50%',
-              background: '#ef4444', border: '2px solid #fff',
-            }} />
-          )}
-        </button>
+        <NotificationDropdown role="client_admin" />
 
         <div ref={profileRef} style={{ position: 'relative' }}>
           <button

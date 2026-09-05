@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar';
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar';
 import GoalPage from '../../goal/pages/GoalPage';
@@ -19,6 +20,10 @@ export default function EmployeePerformanceHub() {
   const { isEnabled, loading } = useModules();
   const [activeTab, setActiveTab] = useState('');
   const [selectedGoalForDrawer, setSelectedGoalForDrawer] = useState(null);
+
+  if (!loading && !isEnabled('pms')) {
+    return <Navigate to="/employee/dashboard" replace />;
+  }
 
   const tabs = [
     isEnabled('goals')                 && { key: 'goals',                    label: 'Goals' },

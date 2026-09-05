@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Card, Typography, Row, Col, Statistic, Progress, Empty, Space } from 'antd';
 import { FiTarget, FiCheckCircle, FiClock, FiSettings, FiBriefcase, FiAlertCircle, FiMessageSquare, FiCalendar, FiFolder, FiZap, FiClipboard } from 'react-icons/fi';
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar';
@@ -27,16 +28,22 @@ export default function PerformanceHub() {
   const [activeSettingsTab, setActiveSettingsTab] = useState('financial-years');
   const [selectedGoalForDrawer, setSelectedGoalForDrawer] = useState(null);
 
-  const { isEnabled } = useModules();
+  const { isEnabled, loading } = useModules();
   const { dashboardSummary, fetchDashboardSummary } = useGoalStore();
   const { dashboard, loadDashboard } = useKpiStore();
   const { dashboardStats, fetchDashboardStats } = useContinuousFeedbackStore();
 
   useEffect(() => {
-    fetchDashboardSummary();
-    loadDashboard();
-    fetchDashboardStats();
-  }, [fetchDashboardSummary, loadDashboard, fetchDashboardStats]);
+    if (isEnabled('pms')) {
+      fetchDashboardSummary();
+      loadDashboard();
+      fetchDashboardStats();
+    }
+  }, [isEnabled, fetchDashboardSummary, loadDashboard, fetchDashboardStats]);
+
+  if (!loading && !isEnabled('pms')) {
+    return <Navigate to="/client-admin/dashboard" replace />;
+  }
 
   // Render horizontal secondary tabs in Keka style
   const renderSubTabs = () => {

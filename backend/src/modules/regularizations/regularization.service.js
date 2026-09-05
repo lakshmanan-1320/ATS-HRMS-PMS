@@ -329,6 +329,15 @@ async function adminApproveRequest(id) {
       client
     );
 
+    notifRepo.createNotification(
+      request.employee_id,
+      'regularization_approved',
+      'Regularization Request Approved',
+      `Your attendance regularization request for ${request.attendance_date} has been approved.`,
+      request.regularization_id,
+      'regularization'
+    ).catch(() => {});
+
     return updated;
   });
 }
@@ -353,6 +362,15 @@ async function adminRejectRequest(id, rejectionReason) {
       rejectionReason || 'Rejected by admin',
       client
     );
+
+    notifRepo.createNotification(
+      request.employee_id,
+      'regularization_rejected',
+      'Regularization Request Rejected',
+      `Your attendance regularization request for ${request.attendance_date} has been rejected.${rejectionReason ? ' Reason: ' + rejectionReason : ''}`,
+      request.regularization_id,
+      'regularization'
+    ).catch(() => {});
 
     return updated;
   });

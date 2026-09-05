@@ -107,14 +107,14 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       gap: '10px',
       overflow: 'hidden',
       minWidth: 0,
+      flex: 1,
     },
     brandLogo: {
-      width: isCollapsed ? '36px' : '180px',
-      height: isCollapsed ? '36px' : '48px',
-      borderRadius: '6px',
-      flexShrink: 0,
+      height: '52px',
+      width: 'auto',
+      maxWidth: '195px',
       objectFit: 'contain',
-      filter: 'brightness(0) invert(1)',
+      display: 'block',
     },
     brandName: {
       fontSize: '17px',
@@ -423,12 +423,12 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
             onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
             onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none' }}
           >
-            <FiMenu size={20} />
+            <img src="/insight-tech-icon.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
           </button>
         ) : (
           <>
             <div style={styles.brandArea}>
-              <img src="/logo.png" alt="Logo" style={styles.brandLogo} />
+              <img src="/insight-tech-logo-white.png" alt="Insight Tech Logo" style={styles.brandLogo} />
             </div>
             <button
               style={styles.hamburger}

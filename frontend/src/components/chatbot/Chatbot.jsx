@@ -11,6 +11,8 @@ import ChatbotWindow from './ChatbotWindow.jsx';
  * Handles floating button, floating panel window, keyboard shortcuts, and API requests.
  */
 export default function Chatbot({ onOpenPolicyReader }) {
+  return null; // AI Chatbot hidden completely for client deployment
+
   const location = useLocation();
   const {
     messages,
