@@ -23,7 +23,7 @@ import {
   FiFileText
 } from 'react-icons/fi'
 import ExpandableSidebar from './ExpandableSidebar'
-import { useModules } from '../../hooks/useModules'
+import { useModules, clearModuleCache } from '../../hooks/useModules'
 
 export default function ClientAdminSidebar({ active }) {
   const { isEnabled } = useModules()
@@ -47,6 +47,7 @@ export default function ClientAdminSidebar({ active }) {
   }, [])
 
   function handleLogout() {
+    clearModuleCache()
     sessionStorage.clear()
     navigate('/login')
   }

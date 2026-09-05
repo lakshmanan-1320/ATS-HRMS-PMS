@@ -18,7 +18,7 @@ import {
   FiFileText
 } from 'react-icons/fi'
 import ExpandableSidebar from './ExpandableSidebar'
-import { useModules } from '../../hooks/useModules'
+import { useModules, clearModuleCache } from '../../hooks/useModules'
 
 const iconMap = {
   '🔑': FiKey,
@@ -64,6 +64,7 @@ export default function EmployeeSidebar({ active }) {
   }, [])
 
   function handleLogout() {
+    clearModuleCache()
     sessionStorage.clear()
     navigate('/login')
   }

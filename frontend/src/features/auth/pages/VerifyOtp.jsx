@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
+import { clearModuleCache } from '../../../hooks/useModules'
 
 const styles = {
   page: {
@@ -201,6 +202,7 @@ export default function VerifyOtp() {
     setLoading(true)
     try {
       const res = await axios.post('/api/auth/verify-otp', { otp, tempToken })
+      clearModuleCache()
       sessionStorage.setItem('sa_token', res.data.token)
       sessionStorage.setItem('user_role', res.data.role || 'super_admin')
       if (res.data.is_manager !== undefined) sessionStorage.setItem('is_manager', String(res.data.is_manager))

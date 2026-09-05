@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiLogOut, FiChevronDown } from 'react-icons/fi'
 import NotificationDropdown from '../shared/NotificationDropdown'
+import { clearModuleCache } from '../../hooks/useModules'
 
 export default function ClientAdminTopBar({ title }) {
   const navigate = useNavigate()
@@ -26,6 +27,7 @@ export default function ClientAdminTopBar({ title }) {
   }, [])
 
   function handleLogout() {
+    clearModuleCache()
     sessionStorage.clear()
     navigate('/login')
   }

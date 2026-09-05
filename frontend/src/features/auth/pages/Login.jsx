@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { clearModuleCache } from '../../../hooks/useModules'
 
 // ── SVG Icons ─────────────────────────────────────────────────
 const MailIcon = () => (
@@ -206,6 +207,7 @@ export default function Login() {
     try {
       const res = await axios.post('/api/auth/login', { email, password })
       if (res.data.otpEnabled === false) {
+        clearModuleCache()
         sessionStorage.setItem('sa_token',   res.data.token)
         sessionStorage.setItem('sa_email',   email)
         sessionStorage.setItem('user_role',  res.data.role || 'super_admin')
