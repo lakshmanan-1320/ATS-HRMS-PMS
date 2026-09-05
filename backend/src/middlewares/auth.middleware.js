@@ -44,7 +44,7 @@ function requireRoles(...allowedRoles) {
 }
 
 function requireSuperAdmin(req, res, next) {
-  requireRoles('super_admin')(req, res, next);
+  requireRoles('super_admin', 'superadmin')(req, res, next);
 }
 
 function requireClientAdmin(req, res, next) {
