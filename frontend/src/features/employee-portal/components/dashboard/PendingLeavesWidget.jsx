@@ -1,9 +1,9 @@
 import React from 'react'
 import { ClipboardIcon, CalIcon } from '../shared/Icons'
-import { WidgetCard, EmptyState } from '../shared/UI'
+import { WidgetCard, EmptyState, ViewAllLink } from '../shared/UI'
 import { COLORS } from '../../theme'
 
-export default function PendingLeavesWidget({ leaves }) {
+export default function PendingLeavesWidget({ leaves, onViewAll }) {
   return (
     <WidgetCard
       icon={<ClipboardIcon />}
@@ -11,6 +11,7 @@ export default function PendingLeavesWidget({ leaves }) {
       iconColor={COLORS.amber}
       title="Pending Leave Requests"
       subtitle="Awaiting approval"
+      action={onViewAll && <ViewAllLink onClick={onViewAll} />}
     >
       {leaves.length === 0 ? (
         <EmptyState message="No pending leave requests" positive />

@@ -133,7 +133,7 @@ async function seedAttendanceData() {
           created_at, updated_at
         ) VALUES (
           $1, 'General Day Shift', 'GEN-01', '09:00:00', '18:00:00',
-          15, 15, 8.0, '#6366f1', true, NOW(), NOW()
+          15, 15, 8.0, '#C2071A', true, NOW(), NOW()
         ) RETURNING shift_id
       `, [organizationId]);
       shiftId = newShift.rows[0].shift_id;

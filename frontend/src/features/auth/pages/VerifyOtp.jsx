@@ -2,119 +2,33 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { clearModuleCache } from '../../../hooks/useModules'
+import {
+  FiMail, FiShield, FiAlertCircle, FiCheckCircle,
+  FiArrowLeft, FiTool, FiCheck
+} from 'react-icons/fi'
 
-const styles = {
-  page: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    padding: '20px', position: 'relative', overflow: 'hidden',
-  },
-  orb1: {
-    position: 'absolute', top: '-10%', right: '-5%',
-    width: '500px', height: '500px', borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%)',
-    pointerEvents: 'none',
-  },
-  orb2: {
-    position: 'absolute', bottom: '-10%', left: '-5%',
-    width: '400px', height: '400px', borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%)',
-    pointerEvents: 'none',
-  },
-  card: {
-    background: 'rgba(15,23,42,0.85)',
-    backdropFilter: 'blur(24px)',
-    border: '1px solid rgba(34,197,94,0.2)',
-    borderRadius: '24px', width: '100%', maxWidth: '440px',
-    padding: '48px 40px',
-    boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
-    position: 'relative', zIndex: 1,
-  },
-  iconWrap: {
-    width: '60px', height: '60px', borderRadius: '16px',
-    background: 'rgba(34,197,94,0.12)',
-    border: '1px solid rgba(34,197,94,0.25)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: '26px', marginBottom: '24px',
-  },
-  badge: {
-    display: 'inline-flex', alignItems: 'center', gap: '6px',
-    background: 'rgba(34,197,94,0.12)',
-    border: '1px solid rgba(34,197,94,0.25)',
-    borderRadius: '20px', padding: '4px 12px',
-    fontSize: '11px', fontWeight: '600',
-    letterSpacing: '0.08em', textTransform: 'uppercase',
-    color: '#86efac', marginBottom: '20px',
-  },
-  heading: {
-    fontSize: '26px', fontWeight: '800', color: '#f1f5f9',
-    lineHeight: '1.2', marginBottom: '8px', letterSpacing: '-0.5px',
-  },
-  subHeading: {
-    fontSize: '14px', color: '#64748b', marginBottom: '8px', lineHeight: '1.6',
-  },
-  emailHint: {
-    fontSize: '13px', color: '#94a3b8',
-    background: 'rgba(30,41,59,0.6)',
-    borderRadius: '8px', padding: '10px 14px',
-    marginBottom: '32px', lineHeight: '1.5',
-  },
-  emailStrong: { color: '#6366f1', fontWeight: '600' },
-  otpRow: {
-    display: 'flex', gap: '10px', justifyContent: 'center',
-    marginBottom: '24px',
-  },
-  otpBox: {
-    width: '52px', height: '60px',
-    background: 'rgba(30,41,59,0.8)',
-    border: '1px solid rgba(99,102,241,0.2)',
-    borderRadius: '12px', textAlign: 'center',
-    fontSize: '22px', fontWeight: '700', color: '#f1f5f9',
-    outline: 'none', caretColor: '#6366f1',
-    transition: 'all 0.2s',
-    fontFamily: 'inherit',
-  },
-  timerRow: {
-    textAlign: 'center', fontSize: '13px',
-    color: '#64748b', marginBottom: '24px',
-  },
-  timerSpan: { color: '#6366f1', fontWeight: '600' },
-  resendBtn: {
-    background: 'none', border: 'none', color: '#6366f1',
-    cursor: 'pointer', fontWeight: '600', fontSize: '13px',
-    padding: '0', textDecoration: 'underline',
-  },
-  verifyBtn: {
-    width: '100%', padding: '15px',
-    background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-    border: 'none', borderRadius: '12px',
-    fontSize: '15px', fontWeight: '700', color: '#fff',
-    cursor: 'pointer', letterSpacing: '0.02em',
-    transition: 'all 0.2s',
-    boxShadow: '0 4px 15px rgba(22,163,74,0.35)',
-    display: 'flex', alignItems: 'center',
-    justifyContent: 'center', gap: '8px',
-  },
-  backLink: {
-    textAlign: 'center', marginTop: '20px',
-    fontSize: '13px', color: '#475569',
-    cursor: 'pointer',
-  },
-  backA: { color: '#6366f1', fontWeight: '500' },
-  errorBox: {
-    background: 'rgba(239,68,68,0.1)',
-    border: '1px solid rgba(239,68,68,0.3)',
-    borderRadius: '10px', padding: '12px 16px',
-    marginBottom: '20px', fontSize: '13px', color: '#fca5a5',
-  },
-  successBox: {
-    background: 'rgba(34,197,94,0.1)',
-    border: '1px solid rgba(34,197,94,0.3)',
-    borderRadius: '10px', padding: '12px 16px',
-    marginBottom: '20px', fontSize: '13px', color: '#86efac',
-  },
-}
+const CSS = `
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .otp-box {
+    transition: all 0.15s ease;
+  }
+  .otp-box:focus {
+    outline: none;
+    border-color: #C2071A !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3.5px rgba(194, 7, 26, 0.12) !important;
+  }
+  .otp-btn {
+    transition: all 0.2s ease;
+  }
+  .otp-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(194, 7, 26, 0.4) !important;
+  }
+  .otp-btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+`
 
 const OTP_LENGTH = 6
 const RESEND_COOLDOWN = 60
@@ -145,7 +59,7 @@ export default function VerifyOtp() {
   useEffect(() => {
     if (verifiedRef.current) return
     if (!email || !tempToken) navigate('/login')
-  }, [email, tempToken])
+  }, [email, tempToken, navigate])
 
   useEffect(() => {
     if (timer <= 0) return
@@ -272,58 +186,194 @@ export default function VerifyOtp() {
   const maskedEmail = email.replace(/(.{2})(.+)(@.+)/, (_, a, b, c) => a + '*'.repeat(Math.min(b.length, 4)) + c)
 
   return (
-    <div style={styles.page}>
-      <div style={styles.orb1} />
-      <div style={styles.orb2} />
-      <div style={styles.card}>
-        <div style={styles.iconWrap}>📧</div>
-        <div style={styles.badge}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e' }} />
-          Verify OTP
+    <div style={{
+      minHeight: '100vh',
+      width: '100vw',
+      background: '#f4f5f7',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+      padding: '24px 16px',
+      boxSizing: 'border-box',
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    }}>
+      <style>{CSS}</style>
+
+      {/* Decorative top-left corner red cutout */}
+      <div style={{
+        position: 'absolute',
+        top: '-70px',
+        left: '-70px',
+        width: '200px',
+        height: '200px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+        pointerEvents: 'none',
+        zIndex: 1
+      }} />
+
+      {/* Decorative bottom-right corner red cutout */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-80px',
+        right: '-80px',
+        width: '260px',
+        height: '260px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+        pointerEvents: 'none',
+        zIndex: 1
+      }} />
+
+      {/* Main OTP Card */}
+      <div style={{
+        position: 'relative',
+        zIndex: 2,
+        width: '100%',
+        maxWidth: '460px',
+        background: '#ffffff',
+        borderRadius: '24px',
+        overflow: 'hidden',
+        boxShadow: '0 20px 60px -10px rgba(0, 0, 0, 0.12), 0 8px 24px -5px rgba(0, 0, 0, 0.06)',
+        padding: '44px 40px',
+        boxSizing: 'border-box'
+      }}>
+        {/* Header Badges */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <div style={{
+            width: '48px', height: '48px', borderRadius: '14px',
+            background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <FiMail size={24} color="#C2071A" strokeWidth={2.2} />
+          </div>
+
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: '#FEECEE', border: '1px solid rgba(194, 7, 26, 0.2)',
+            borderRadius: '20px', padding: '5px 14px',
+            fontSize: '11px', fontWeight: '700',
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+            color: '#C2071A'
+          }}>
+            <FiShield size={13} color="#C2071A" />
+            <span>VERIFY OTP</span>
+          </div>
         </div>
 
-        <h1 style={styles.heading}>Check your email</h1>
-        <p style={styles.subHeading}>
+        {/* Title */}
+        <div style={{ marginBottom: '20px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 6px', letterSpacing: '-0.5px' }}>
+            Check your email
+          </h1>
+          <div style={{ width: '32px', height: '3px', background: '#C2071A', borderRadius: '2px' }} />
+        </div>
+
+        {/* Subtitle & Masked Email Banner */}
+        <p style={{ fontSize: '13.5px', color: '#64748b', margin: '0 0 12px', lineHeight: 1.5, fontWeight: '500' }}>
           A 6-digit verification code has been sent to:
         </p>
-        <div style={styles.emailHint}>
-          <strong style={styles.emailStrong}>{maskedEmail}</strong>
+
+        <div style={{
+          background: '#f8fafc',
+          border: '1px solid #e2e8f0',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          marginBottom: '24px',
+          lineHeight: '1.6',
+          fontSize: '13px',
+          color: '#475569'
+        }}>
+          <strong style={{ color: '#C2071A', fontWeight: '700' }}>{maskedEmail}</strong>
           <br />
-          Valid for <strong style={{ color: '#f1f5f9' }}>10 minutes</strong> · Do not share with anyone
+          <span style={{ fontSize: '12px', color: '#64748b' }}>
+            Valid for <strong style={{ color: '#0f172a' }}>10 minutes</strong> · Do not share with anyone
+          </span>
         </div>
 
+        {/* DEV MODE Banner */}
         {devOtp && (
           <div style={{
-            background: 'rgba(234,179,8,0.1)',
-            border: '1px solid rgba(234,179,8,0.35)',
-            borderRadius: '10px', padding: '12px 16px',
-            marginBottom: '20px', fontSize: '13px', color: '#fde047',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: '#fffbeb',
+            border: '1px solid #fde68a',
+            borderRadius: '12px',
+            padding: '12px 16px',
+            marginBottom: '24px',
+            fontSize: '13px',
+            color: '#b45309',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px'
           }}>
-            <span>🛠 <strong>DEV MODE</strong> — OTP: <strong style={{ letterSpacing: '4px', fontSize: '16px' }}>{devOtp}</strong></span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FiTool size={16} color="#b45309" />
+              <span>
+                <strong>DEV MODE</strong> — OTP: <strong style={{ letterSpacing: '3px', fontSize: '15px', color: '#78350f' }}>{devOtp}</strong>
+              </span>
+            </div>
             <button
+              type="button"
               onClick={() => {
                 const d = devOtp.split('')
                 setDigits(d)
                 inputRefs.current[5]?.focus()
               }}
               style={{
-                background: 'rgba(234,179,8,0.2)', border: '1px solid rgba(234,179,8,0.4)',
-                borderRadius: '6px', padding: '4px 10px', color: '#fde047',
-                cursor: 'pointer', fontSize: '12px', fontWeight: '600',
+                background: '#fef3c7',
+                border: '1px solid #fcd34d',
+                borderRadius: '8px',
+                padding: '5px 12px',
+                color: '#92400e',
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: '700',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.15s ease'
               }}
-            >Auto-fill</button>
+              onMouseEnter={e => e.currentTarget.style.background = '#fde68a'}
+              onMouseLeave={e => e.currentTarget.style.background = '#fef3c7'}
+            >
+              Auto-fill
+            </button>
           </div>
         )}
 
-        {error && <div style={styles.errorBox}>{error}</div>}
-        {success && <div style={styles.successBox}>{success}</div>}
+        {/* Error Banner */}
+        {error && (
+          <div style={{
+            display: 'flex', alignItems: 'flex-start', gap: '9px',
+            background: '#fef2f2', border: '1px solid #fecaca',
+            borderRadius: '12px', padding: '12px 14px', marginBottom: '20px'
+          }}>
+            <FiAlertCircle size={16} color="#dc2626" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <span style={{ fontSize: '13px', color: '#dc2626', lineHeight: 1.5, fontWeight: '500' }}>{error}</span>
+          </div>
+        )}
+
+        {/* Success Banner */}
+        {success && (
+          <div style={{
+            display: 'flex', alignItems: 'flex-start', gap: '9px',
+            background: '#f0fdf4', border: '1px solid #bbf7d0',
+            borderRadius: '12px', padding: '12px 14px', marginBottom: '20px'
+          }}>
+            <FiCheckCircle size={16} color="#15803d" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <span style={{ fontSize: '13px', color: '#15803d', lineHeight: 1.5, fontWeight: '500' }}>{success}</span>
+          </div>
+        )}
 
         <form onSubmit={handleVerify}>
-          <div style={styles.otpRow} onPaste={handlePaste}>
+          {/* OTP Digit Box Inputs */}
+          <div style={{
+            display: 'flex', gap: '10px', justifyContent: 'center',
+            marginBottom: '24px'
+          }} onPaste={handlePaste}>
             {digits.map((d, i) => (
               <input
                 key={i}
+                className="otp-box"
                 ref={el => inputRefs.current[i] = el}
                 type="text"
                 inputMode="numeric"
@@ -332,60 +382,108 @@ export default function VerifyOtp() {
                 onChange={e => handleDigit(i, e.target.value)}
                 onKeyDown={e => handleKeyDown(i, e)}
                 style={{
-                  ...styles.otpBox,
-                  border: d
-                    ? '1px solid rgba(99,102,241,0.6)'
-                    : '1px solid rgba(99,102,241,0.2)',
-                  boxShadow: d ? '0 0 0 3px rgba(99,102,241,0.1)' : 'none',
-                }}
-                onFocus={e => {
-                  e.target.style.border = '1px solid rgba(99,102,241,0.7)'
-                  e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.15)'
-                }}
-                onBlur={e => {
-                  e.target.style.border = d
-                    ? '1px solid rgba(99,102,241,0.6)'
-                    : '1px solid rgba(99,102,241,0.2)'
-                  e.target.style.boxShadow = d ? '0 0 0 3px rgba(99,102,241,0.1)' : 'none'
+                  width: '48px',
+                  height: '56px',
+                  background: d ? '#ffffff' : '#f8fafc',
+                  border: `1.5px solid ${d ? '#C2071A' : '#cbd5e1'}`,
+                  borderRadius: '12px',
+                  textAlign: 'center',
+                  fontSize: '20px',
+                  fontWeight: '800',
+                  color: '#0f172a',
+                  boxShadow: d ? '0 0 0 3px rgba(194, 7, 26, 0.1)' : 'none',
+                  fontFamily: 'inherit'
                 }}
               />
             ))}
           </div>
 
-          <div style={styles.timerRow}>
+          {/* Resend Timer / Action */}
+          <div style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', marginBottom: '24px', fontWeight: '500' }}>
             {timer > 0 ? (
-              <>Resend OTP in <span style={styles.timerSpan}>0:{String(timer).padStart(2, '0')}</span></>
+              <>Resend OTP in <span style={{ color: '#C2071A', fontWeight: '700' }}>0:{String(timer).padStart(2, '0')}</span></>
             ) : resendCount >= 3 ? (
-              <span style={{ color: '#ef4444' }}>Maximum resend limit reached. Please restart login.</span>
+              <span style={{ color: '#dc2626', fontWeight: '600' }}>Maximum resend limit reached. Please restart login.</span>
             ) : (
-              <button type="button" style={styles.resendBtn} onClick={handleResend}>
+              <button
+                type="button"
+                onClick={handleResend}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#C2071A',
+                  cursor: 'pointer',
+                  fontWeight: '700',
+                  fontSize: '13px',
+                  padding: 0,
+                  textDecoration: 'underline'
+                }}
+              >
                 Resend OTP
               </button>
             )}
           </div>
 
+          {/* Submit Button */}
           <button
+            className="otp-btn"
             type="submit"
-            style={{
-              ...styles.verifyBtn,
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer',
-            }}
             disabled={loading}
+            style={{
+              width: '100%',
+              padding: '14px',
+              background: loading
+                ? '#fca5a5'
+                : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+              border: 'none',
+              borderRadius: '12px',
+              fontSize: '14px',
+              fontWeight: '800',
+              color: '#ffffff',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              letterSpacing: '0.04em',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: loading ? 'none' : '0 6px 20px rgba(194, 7, 26, 0.3)'
+            }}
           >
             {loading ? (
-              <><Spinner /> Verifying...</>
+              <>
+                <Spinner />
+                <span>VERIFYING…</span>
+              </>
             ) : (
-              '✓ Verify & Sign In'
+              <>
+                <FiCheck size={18} color="#ffffff" stroke="#ffffff" />
+                <span>VERIFY & SIGN IN</span>
+              </>
             )}
           </button>
         </form>
 
-        <p style={styles.backLink}>
-          <a style={styles.backA} href="#" onClick={e => { e.preventDefault(); navigate('/login') }}>
-            ← Back to login
-          </a>
-        </p>
+        {/* Back to Login link */}
+        <div style={{ textAlign: 'center', marginTop: '24px' }}>
+          <span
+            onClick={() => navigate('/login')}
+            style={{
+              fontSize: '13px',
+              fontWeight: '700',
+              color: '#C2071A',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'opacity 0.2s'
+            }}
+            onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+            onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+          >
+            <FiArrowLeft size={15} color="#C2071A" />
+            <span>Back to login</span>
+          </span>
+        </div>
       </div>
     </div>
   )
@@ -394,12 +492,15 @@ export default function VerifyOtp() {
 function Spinner() {
   return (
     <span style={{
-      display: 'inline-block', width: '16px', height: '16px',
-      border: '2px solid rgba(255,255,255,0.3)',
-      borderTopColor: '#fff', borderRadius: '50%',
-      animation: 'spin 0.6s linear infinite',
-    }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </span>
+      display: 'inline-block',
+      width: '15px',
+      height: '15px',
+      flexShrink: 0,
+      border: '2.5px solid rgba(255, 255, 255, 0.35)',
+      borderTopColor: '#ffffff',
+      borderRadius: '50%',
+      animation: 'spin 0.65s linear infinite'
+    }} />
   )
 }
+

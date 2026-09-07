@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import axios from 'axios'
+import { FiUsers, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
 
@@ -114,6 +115,10 @@ export default function TeamAttendance() {
   const [selectedMember, setSelectedMember] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
   
   const isManager = sessionStorage.getItem('is_manager') === 'true'
 
@@ -127,6 +132,7 @@ export default function TeamAttendance() {
 
       const res = await api.get('/attendance/team-history', { params })
       setHistory(res.data || [])
+      setCurrentPage(1)
     } catch (err) {
       console.error('Failed to load team attendance history', err)
       if (err.response?.status === 401) {
@@ -161,10 +167,37 @@ export default function TeamAttendance() {
     }
   }, [fetchHistory, isManager])
 
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedMember, startDate, endDate, itemsPerPage])
+
   function handleReset() {
     setSelectedMember('')
     setStartDate('')
     setEndDate('')
+    setCurrentPage(1)
+  }
+
+  // Pagination Math
+  const totalItems = history.length
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1
+  const safePage = Math.min(Math.max(currentPage, 1), totalPages)
+  const startIndex = (safePage - 1) * itemsPerPage
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
+  const paginatedHistory = history.slice(startIndex, endIndex)
+
+  const getPageNumbers = () => {
+    const pages = []
+    const maxButtons = 5
+    let start = Math.max(1, safePage - Math.floor(maxButtons / 2))
+    let end = Math.min(totalPages, start + maxButtons - 1)
+    if (end - start + 1 < maxButtons) {
+      start = Math.max(1, end - maxButtons + 1)
+    }
+    for (let i = start; i <= end; i++) {
+      pages.push(i)
+    }
+    return pages
   }
 
   const selectStyle = {
@@ -199,22 +232,27 @@ export default function TeamAttendance() {
     fontWeight: '700',
     letterSpacing: '0.08em',
     textTransform: 'uppercase',
-    color: '#475569',
-    padding: '12px 16px',
-    borderBottom: '1px solid #cbd5e1',
-    background: '#f8fafc'
+    color: '#ffffff',
+    padding: '14px 16px',
+    borderBottom: 'none',
+    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)'
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <EmployeeSidebar active="team-attendance" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Team Attendance" />
         <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '28px' }}>
-          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#1e293b' }}>Team Attendance History</h1>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#475569', fontWeight: 500 }}>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FiUsers size={20} color="#C2071A" strokeWidth={2.5} />
+            </div>
+            Team Attendance History
+          </h1>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
             View and monitor attendance logs for your direct and indirect reports
           </p>
         </div>
@@ -222,13 +260,14 @@ export default function TeamAttendance() {
         {!isManager ? (
           <div style={{
             background: '#ffffff',
-            border: '1px dashed #cbd5e1',
-            borderRadius: '12px',
+            border: 'none',
+            borderRadius: '16px',
             padding: '48px',
             textAlign: 'center',
             color: '#64748b',
             fontSize: '14px',
-            fontWeight: '600'
+            fontWeight: '600',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)'
           }}>
             You do not have permission to view team attendance.
           </div>
@@ -311,146 +350,318 @@ export default function TeamAttendance() {
             {/* List/Table */}
             <div style={{
               background: '#ffffff',
-              border: '1px solid #cbd5e1',
+              border: 'none',
               borderRadius: '16px',
               overflow: 'hidden',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)'
+              boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
             }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ background: '#f8fafc' }}>
-                    <th style={thStyle}>Date</th>
-                    <th style={thStyle}>Employee</th>
-                    <th style={thStyle}>Check In</th>
-                    <th style={thStyle}>Check Out</th>
-                    <th style={thStyle}>Work Duration</th>
-                    <th style={thStyle}>Shift</th>
-                    <th style={thStyle}>Result</th>
-                    <th style={thStyle}>Location Status</th>
-                    <th style={thStyle}>Office Location</th>
-                    <th style={thStyle}>Distance</th>
-                    <th style={thStyle}>GPS Accuracy</th>
-                    <th style={thStyle}>Device & Platform</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr>
-                      <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
-                        Loading team records...
-                      </td>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' }}>
+                      <th style={thStyle}>Date</th>
+                      <th style={thStyle}>Employee</th>
+                      <th style={thStyle}>Check In</th>
+                      <th style={thStyle}>Check Out</th>
+                      <th style={thStyle}>Work Duration</th>
+                      <th style={thStyle}>Shift</th>
+                      <th style={thStyle}>Result</th>
+                      <th style={thStyle}>Location Status</th>
+                      <th style={thStyle}>Office Location</th>
+                      <th style={thStyle}>Distance</th>
+                      <th style={thStyle}>GPS Accuracy</th>
+                      <th style={thStyle}>Device & Platform</th>
                     </tr>
-                  ) : history.length === 0 ? (
-                    <tr>
-                      <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
-                        No attendance punch logs found matching the filters.
-                      </td>
-                    </tr>
-                  ) : (
-                    history.map(row => {
-                      const platform = row.device_info?.platform || 'Web'
-                      const browser = row.device_info?.browser || 'Unknown'
-                      
-                      return (
-                        <tr 
-                          key={row.attendance_punch_id}
-                          style={{ borderBottom: '1px solid #cbd5e1', transition: 'background 0.15s' }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >
-                          {/* Date */}
-                          <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
-                            {fmtDate(row.attendance_date)}
-                          </td>
-                          {/* Employee */}
-                          <td style={{ padding: '14px 16px' }}>
-                            <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>
-                              {row.first_name} {row.last_name}
-                            </div>
-                            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
-                              {row.employee_code} · {row.designation}
-                            </div>
-                          </td>
-                          {/* Check In */}
-                          <td style={{ padding: '14px 16px', fontSize: '13px', color: '#cbd5e1' }}>
-                            <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#dcfce7', color: '#15803d', border: '1px solid rgba(21,128,61,0.2)', fontWeight: '700' }}>
-                              {fmtTime(row.check_in_time)}
-                            </span>
-                          </td>
-                          {/* Check Out */}
-                          <td style={{ padding: '14px 16px', fontSize: '13px', color: '#cbd5e1' }}>
-                            {row.check_out_time ? (
-                              <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#fee2e2', color: '#b91c1c', border: '1px solid rgba(185,28,28,0.2)', fontWeight: '700' }}>
-                                {fmtTime(row.check_out_time)}
+                  </thead>
+                  <tbody>
+                    {loading ? (
+                      <tr>
+                        <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
+                          Loading team records...
+                        </td>
+                      </tr>
+                    ) : history.length === 0 ? (
+                      <tr>
+                        <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
+                          No attendance punch logs found matching the filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedHistory.map(row => {
+                        const platform = row.device_info?.platform || 'Web'
+                        const browser = row.device_info?.browser || 'Unknown'
+                        
+                        return (
+                          <tr 
+                            key={row.attendance_punch_id}
+                            style={{ borderBottom: '1px solid #edf2f7', transition: 'background 0.15s' }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            {/* Date */}
+                            <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
+                              {fmtDate(row.attendance_date)}
+                            </td>
+                            {/* Employee */}
+                            <td style={{ padding: '14px 16px' }}>
+                              <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>
+                                {row.first_name} {row.last_name}
+                              </div>
+                              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
+                                {row.employee_code} · {row.designation}
+                              </div>
+                            </td>
+                            {/* Check In */}
+                            <td style={{ padding: '14px 16px', fontSize: '13px' }}>
+                              <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#dcfce7', color: '#15803d', border: '1px solid rgba(21,128,61,0.2)', fontWeight: '700' }}>
+                                {fmtTime(row.check_in_time)}
                               </span>
-                            ) : (
-                              <span style={{ color: '#64748b', fontWeight: '600' }}>—</span>
-                            )}
-                          </td>
-                          {/* Work Duration */}
-                          <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '700', color: row.check_out_time ? '#1e293b' : '#6366f1' }}>
-                            {formatDuration(row.work_duration_minutes)}
-                          </td>
-                          {/* Shift */}
-                          <td style={{ padding: '14px 16px' }}>
-                            {row.shift_name ? (
-                              <span style={{
-                                background: row.shift_color_code || '#6366f1', color: '#fff',
-                                padding: '4px 8px', borderRadius: 8, fontSize: 11, fontWeight: 700,
-                                textShadow: '0 1px 2px rgba(0,0,0,0.15)', whiteSpace: 'nowrap'
-                              }}>
-                                {row.shift_name} ({row.shift_code})
-                              </span>
-                            ) : <span style={{ color: '#94a3b8' }}>—</span>}
-                          </td>
-                          {/* Result */}
-                          <td style={{ padding: '14px 16px' }}>
-                            {row.attendance_result ? (
-                              <span style={{
-                                display: 'inline-flex', alignItems: 'center', gap: '5px',
-                                fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '8px',
-                                background: (row.attendance_result === 'ON_TIME' || row.attendance_result === 'COMPLETED_SHIFT')
-                                  ? '#dcfce7'
-                                  : row.attendance_result === 'LATE_ARRIVAL'
-                                    ? '#ffedd5'
-                                    : '#fee2e2',
-                                color: (row.attendance_result === 'ON_TIME' || row.attendance_result === 'COMPLETED_SHIFT')
-                                  ? '#15803d'
-                                  : row.attendance_result === 'LATE_ARRIVAL'
-                                    ? '#c2410c'
-                                    : '#b91c1c',
-                                whiteSpace: 'nowrap'
-                              }}>
-                                {getLateArrivalText(row)}
-                              </span>
-                            ) : <span style={{ color: '#94a3b8' }}>—</span>}
-                          </td>
-                          {/* Location Status */}
-                          <td style={{ padding: '14px 16px' }}>
-                            {renderLocationStatusBadge(row)}
-                          </td>
-                          {/* Office Location */}
-                          <td style={{ padding: '14px 16px', fontSize: '12px', color: '#1e293b', fontWeight: '600' }}>
-                            {row.matched_office_name || row.zone_name || <span style={{ color: '#94a3b8' }}>—</span>}
-                          </td>
-                          {/* Distance */}
-                          <td style={{ padding: '14px 16px', fontSize: '12px', color: '#475569', fontFamily: 'monospace' }}>
-                            {row.distance_from_office != null ? `${Number(row.distance_from_office).toFixed(1)}m` : <span style={{ color: '#94a3b8' }}>—</span>}
-                          </td>
-                          {/* GPS Accuracy */}
-                          <td style={{ padding: '14px 16px', fontSize: '12px', color: '#64748b' }}>
-                            {row.gps_accuracy != null ? `±${Number(row.gps_accuracy).toFixed(0)}m` : <span style={{ color: '#94a3b8' }}>—</span>}
-                          </td>
-                          {/* Device & Platform */}
-                          <td style={{ padding: '14px 16px', fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
-                            {platform} ({browser})
-                          </td>
-                        </tr>
-                      )
-                    })
-                  )}
-                </tbody>
-              </table>
+                            </td>
+                            {/* Check Out */}
+                            <td style={{ padding: '14px 16px', fontSize: '13px' }}>
+                              {row.check_out_time ? (
+                                <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#fee2e2', color: '#b91c1c', border: '1px solid rgba(185,28,28,0.2)', fontWeight: '700' }}>
+                                  {fmtTime(row.check_out_time)}
+                                </span>
+                              ) : (
+                                <span style={{ color: '#64748b', fontWeight: '600' }}>—</span>
+                              )}
+                            </td>
+                            {/* Work Duration */}
+                            <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '700', color: row.check_out_time ? '#1e293b' : '#C2071A' }}>
+                              {formatDuration(row.work_duration_minutes)}
+                            </td>
+                            {/* Shift */}
+                            <td style={{ padding: '14px 16px' }}>
+                              {row.shift_name ? (
+                                <span style={{
+                                  background: row.shift_color_code || '#C2071A', color: '#fff',
+                                  padding: '4px 8px', borderRadius: 8, fontSize: 11, fontWeight: 700,
+                                  textShadow: '0 1px 2px rgba(0,0,0,0.15)', whiteSpace: 'nowrap'
+                                }}>
+                                  {row.shift_name} ({row.shift_code})
+                                </span>
+                              ) : <span style={{ color: '#94a3b8' }}>—</span>}
+                            </td>
+                            {/* Result */}
+                            <td style={{ padding: '14px 16px' }}>
+                              {row.attendance_result ? (
+                                <span style={{
+                                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                  fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '8px',
+                                  background: (row.attendance_result === 'ON_TIME' || row.attendance_result === 'COMPLETED_SHIFT')
+                                    ? '#dcfce7'
+                                    : row.attendance_result === 'LATE_ARRIVAL'
+                                      ? '#ffedd5'
+                                      : '#fee2e2',
+                                  color: (row.attendance_result === 'ON_TIME' || row.attendance_result === 'COMPLETED_SHIFT')
+                                    ? '#15803d'
+                                    : row.attendance_result === 'LATE_ARRIVAL'
+                                      ? '#c2410c'
+                                      : '#b91c1c',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  {getLateArrivalText(row)}
+                                </span>
+                              ) : <span style={{ color: '#94a3b8' }}>—</span>}
+                            </td>
+                            {/* Location Status */}
+                            <td style={{ padding: '14px 16px' }}>
+                              {renderLocationStatusBadge(row)}
+                            </td>
+                            {/* Office Location */}
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#1e293b', fontWeight: '600' }}>
+                              {row.matched_office_name || row.zone_name || <span style={{ color: '#94a3b8' }}>—</span>}
+                            </td>
+                            {/* Distance */}
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#475569', fontFamily: 'monospace' }}>
+                              {row.distance_from_office != null ? `${Number(row.distance_from_office).toFixed(1)}m` : <span style={{ color: '#94a3b8' }}>—</span>}
+                            </td>
+                            {/* GPS Accuracy */}
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#64748b' }}>
+                              {row.gps_accuracy != null ? `±${Number(row.gps_accuracy).toFixed(0)}m` : <span style={{ color: '#94a3b8' }}>—</span>}
+                            </td>
+                            {/* Device & Platform */}
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+                              {platform} ({browser})
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              {history.length > 0 && (
+                <div style={{
+                  padding: '16px 24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '16px',
+                  borderTop: '1px solid #edf2f7',
+                  background: '#ffffff'
+                }}>
+                  {/* Left: Summary */}
+                  <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>
+                    Showing <strong style={{ color: '#0f172a', fontWeight: '700' }}>{totalItems === 0 ? 0 : startIndex + 1}</strong> to{' '}
+                    <strong style={{ color: '#0f172a', fontWeight: '700' }}>{endIndex}</strong> of{' '}
+                    <strong style={{ color: '#0f172a', fontWeight: '700' }}>{totalItems}</strong> entries
+                  </div>
+
+                  {/* Right: Items per page selector + Controls */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                    {/* Rows per page dropdown */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>Rows per page:</span>
+                      <select
+                        value={itemsPerPage}
+                        onChange={e => setItemsPerPage(Number(e.target.value))}
+                        style={{
+                          padding: '6px 10px',
+                          borderRadius: '8px',
+                          border: '1px solid #cbd5e1',
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          color: '#1e293b',
+                          background: '#ffffff',
+                          cursor: 'pointer',
+                          outline: 'none'
+                        }}
+                      >
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                      </select>
+                    </div>
+
+                    {/* Pagination buttons */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      {/* First Page */}
+                      <button
+                        disabled={safePage === 1}
+                        onClick={() => setCurrentPage(1)}
+                        title="First Page"
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          background: safePage === 1 ? '#f8fafc' : '#ffffff',
+                          color: safePage === 1 ? '#cbd5e1' : '#475569',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: safePage === 1 ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <FiChevronsLeft size={16} color={safePage === 1 ? '#cbd5e1' : '#475569'} />
+                      </button>
+
+                      {/* Prev Page */}
+                      <button
+                        disabled={safePage === 1}
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        title="Previous Page"
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          background: safePage === 1 ? '#f8fafc' : '#ffffff',
+                          color: safePage === 1 ? '#cbd5e1' : '#475569',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: safePage === 1 ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <FiChevronLeft size={16} color={safePage === 1 ? '#cbd5e1' : '#475569'} />
+                      </button>
+
+                      {/* Page Numbers */}
+                      {getPageNumbers().map(pageNum => {
+                        const isActive = pageNum === safePage
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            style={{
+                              minWidth: 32,
+                              height: 32,
+                              padding: '0 8px',
+                              borderRadius: 8,
+                              border: isActive ? 'none' : '1px solid #e2e8f0',
+                              background: isActive ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#ffffff',
+                              color: isActive ? '#ffffff' : '#475569',
+                              fontWeight: isActive ? '700' : '600',
+                              fontSize: '13px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              boxShadow: isActive ? '0 2px 8px rgba(194,7,26,0.3)' : 'none',
+                              transition: 'all 0.15s ease'
+                            }}
+                          >
+                            {pageNum}
+                          </button>
+                        )
+                      })}
+
+                      {/* Next Page */}
+                      <button
+                        disabled={safePage === totalPages}
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        title="Next Page"
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          background: safePage === totalPages ? '#f8fafc' : '#ffffff',
+                          color: safePage === totalPages ? '#cbd5e1' : '#475569',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: safePage === totalPages ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <FiChevronRight size={16} color={safePage === totalPages ? '#cbd5e1' : '#475569'} />
+                      </button>
+
+                      {/* Last Page */}
+                      <button
+                        disabled={safePage === totalPages}
+                        onClick={() => setCurrentPage(totalPages)}
+                        title="Last Page"
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          background: safePage === totalPages ? '#f8fafc' : '#ffffff',
+                          color: safePage === totalPages ? '#cbd5e1' : '#475569',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: safePage === totalPages ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <FiChevronsRight size={16} color={safePage === totalPages ? '#cbd5e1' : '#475569'} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}
@@ -459,3 +670,4 @@ export default function TeamAttendance() {
   </div>
   )
 }
+

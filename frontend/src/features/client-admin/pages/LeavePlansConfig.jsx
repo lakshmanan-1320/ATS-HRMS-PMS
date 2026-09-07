@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
-import { FiCalendar, FiSliders, FiUsers, FiClock, FiActivity } from 'react-icons/fi'
+import { FiCalendar, FiSliders, FiUsers, FiClock, FiActivity, FiCheck, FiAlertCircle } from 'react-icons/fi'
 import LeavePlansList from './LeavePlansList.jsx'
 import LeavePlanDetails from './LeavePlanDetails.jsx'
 import LeaveBalancesGrid from './LeaveBalancesGrid.jsx'
@@ -63,7 +63,7 @@ export default function LeavePlansConfig() {
           
           {/* Main Page Header */}
           <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <FiSliders size={18} color="#fff" />
             </div>
             <div>
@@ -91,8 +91,8 @@ export default function LeavePlansConfig() {
                   }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 6, padding: '12px 20px', background: 'none',
-                    border: 'none', borderBottom: `2.5px solid ${isAct ? '#6366f1' : 'transparent'}`,
-                    color: isAct ? '#6366f1' : '#64748b', fontSize: '14px', fontWeight: '700', cursor: 'pointer',
+                    border: 'none', borderBottom: `2.5px solid ${isAct ? '#C2071A' : 'transparent'}`,
+                    color: isAct ? '#C2071A' : '#64748b', fontSize: '14px', fontWeight: '700', cursor: 'pointer',
                     transition: 'all 0.15s'
                   }}
                 >
@@ -139,22 +139,30 @@ export default function LeavePlansConfig() {
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: 8, padding: '12px 14px', background: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '10px', marginBottom: '20px' }}>
-                      <FiActivity size={14} color="#4f46e5" style={{ flexShrink: 0, marginTop: 2 }} />
-                      <span style={{ fontSize: '11px', color: '#4338ca', lineHeight: '16px' }}>
+                    <div style={{ display: 'flex', gap: 10, padding: '12px 14px', background: '#feecee', border: '1px solid #f7a6af', borderRadius: '10px', marginBottom: '20px' }}>
+                      <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg, #C2071A 0%, #C2071A 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                        <FiActivity size={12} color="#ffffff" />
+                      </div>
+                      <span style={{ fontSize: '11px', color: '#7c0a1a', lineHeight: '16px' }}>
                         This will calculate fractional credits (e.g. <code>quota_days / 12</code> for Monthly, or <code>quota_days / 4</code> for Quarterly) and post them directly to each employee's transaction ledger.
                       </span>
                     </div>
 
                     {accrualSuccess && (
-                      <div style={{ color: '#15803d', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
-                        ✓ {accrualSuccess}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#15803d', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
+                        <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #15803d 0%, #15803d 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <FiCheck size={11} color="#ffffff" />
+                        </div>
+                        {accrualSuccess}
                       </div>
                     )}
 
                     {accrualError && (
-                      <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
-                        ⚠️ {accrualError}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
+                        <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #b91c1c 0%, #b91c1c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <FiAlertCircle size={11} color="#ffffff" />
+                        </div>
+                        {accrualError}
                       </div>
                     )}
 
@@ -164,8 +172,8 @@ export default function LeavePlansConfig() {
                       style={{
                         width: '100%', padding: '12px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff',
                         cursor: runningAccrual ? 'not-allowed' : 'pointer',
-                        background: runningAccrual ? '#cbd5e1' : 'linear-gradient(135deg,#6366f1,#4f46e5)',
-                        boxShadow: runningAccrual ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
+                        background: runningAccrual ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)',
+                        boxShadow: runningAccrual ? 'none' : '0 4px 14px rgba(194,7,26,0.35)',
                         transition: 'all 0.2s'
                       }}
                     >

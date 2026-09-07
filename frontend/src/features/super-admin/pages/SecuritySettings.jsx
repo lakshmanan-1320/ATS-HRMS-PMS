@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import {
+  FiShield, FiKey, FiLock, FiBriefcase, FiCheckCircle, FiAlertCircle,
+  FiAlertTriangle, FiCheck, FiX, FiSave
+} from 'react-icons/fi'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
 
 const OTP_ROLES = [
   {
     key: 'otpSuperAdminEnabled',
     label: 'Super Admin',
-    icon: '👑',
-    color: '#6366f1',
-    bg: 'rgba(99,102,241,0.08)',
-    border: 'rgba(99,102,241,0.15)',
+    icon: <FiShield size={18} color="#C2071A" />,
+    color: '#C2071A',
+    bg: 'rgba(194, 7, 26, 0.08)',
+    border: 'rgba(194, 7, 26, 0.15)',
     desc: 'Super administrator accounts that manage the entire platform, clients, and global settings.',
     risk: 'High risk — super admins have full system access. Strongly recommended.',
   },
   {
     key: 'otpClientAdminEnabled',
     label: 'Client Admin',
-    icon: '🏢',
+    icon: <FiBriefcase size={18} color="#0ea5e9" />,
     color: '#0ea5e9',
     bg: 'rgba(14,165,233,0.08)',
     border: 'rgba(14,165,233,0.15)',
@@ -109,20 +114,23 @@ export default function SecuritySettings() {
   const disabledRoles = OTP_ROLES.filter(r => !otp[r.key])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <Sidebar active="security" />
-
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Security & Authentication" />
+        <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
 
         {/* Page header */}
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
             <div style={{
               width: '36px', height: '36px', borderRadius: '10px',
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '17px', boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-            }}>🔐</div>
+              boxShadow: '0 4px 12px rgba(194, 7, 26, 0.3)',
+            }}>
+              <FiShield size={18} color="#ffffff" style={{ stroke: '#ffffff' }} />
+            </div>
             <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
               Security & Authentication
             </h1>
@@ -144,7 +152,7 @@ export default function SecuritySettings() {
               border: `1px solid ${alert.type === 'success' ? '#86efac' : '#fca5a5'}`,
               color: alert.type === 'success' ? '#16a34a' : '#dc2626',
             }}>
-              <span style={{ fontSize: '16px' }}>{alert.type === 'success' ? '✓' : '⚠'}</span>
+              {alert.type === 'success' ? <FiCheckCircle size={16} color="#16a34a" /> : <FiAlertCircle size={16} color="#dc2626" />}
               {alert.msg}
             </div>
           )}
@@ -154,9 +162,11 @@ export default function SecuritySettings() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
               <div style={{
                 width: '28px', height: '28px', borderRadius: '8px',
-                background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px',
-              }}>🔑</div>
+                background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <FiKey size={14} color="#C2071A" />
+              </div>
               <span style={{ fontSize: '15px', fontWeight: '700', color: '#1e293b' }}>OTP Authentication</span>
               <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '4px' }}>
                 — per-role two-factor login via email OTP
@@ -169,10 +179,10 @@ export default function SecuritySettings() {
                 const on = otp[role.key]
                 return (
                   <div key={role.key} style={{
-                    background: '#ffffff', borderRadius: '14px',
-                    border: `1px solid ${on ? role.border : '#e8eaf0'}`,
+                    background: '#ffffff', borderRadius: '16px',
+                    border: 'none',
                     padding: '16px 18px',
-                    boxShadow: on ? `0 2px 12px ${role.color}12` : '0 2px 8px rgba(0,0,0,0.04)',
+                    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                     transition: 'all 0.2s',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -180,7 +190,7 @@ export default function SecuritySettings() {
                         width: '34px', height: '34px', borderRadius: '9px',
                         background: on ? role.bg : '#f1f5f9',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '16px', transition: 'all 0.2s',
+                        transition: 'all 0.2s',
                       }}>{role.icon}</div>
                       <span style={{
                         fontSize: '11px', fontWeight: '700', padding: '3px 9px',
@@ -205,13 +215,13 @@ export default function SecuritySettings() {
 
             {/* OTP card */}
             <div style={{
-              background: '#ffffff', borderRadius: '20px',
-              border: '1px solid #e8eaf0',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+              background: '#ffffff', borderRadius: '16px',
+              border: 'none',
+              boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
               overflow: 'hidden',
             }}>
               <div style={{
-                background: 'linear-gradient(135deg, #1e293b 0%, #334155 60%, #475569 100%)',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                 padding: '20px 28px',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>
@@ -220,17 +230,17 @@ export default function SecuritySettings() {
                 </div>
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  background: enabledCount === 3 ? 'rgba(34,197,94,0.2)' : enabledCount === 0 ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)',
-                  border: `1px solid ${enabledCount === 3 ? 'rgba(34,197,94,0.4)' : enabledCount === 0 ? 'rgba(239,68,68,0.4)' : 'rgba(245,158,11,0.4)'}`,
+                  background: enabledCount === 3 ? 'rgba(34,197,94,0.2)' : enabledCount === 0 ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.2)',
+                  border: `1px solid ${enabledCount === 3 ? 'rgba(34,197,94,0.4)' : enabledCount === 0 ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.3)'}`,
                   borderRadius: '20px', padding: '5px 12px',
                 }}>
                   <div style={{
                     width: '7px', height: '7px', borderRadius: '50%',
-                    background: enabledCount === 3 ? '#22c55e' : enabledCount === 0 ? '#ef4444' : '#f59e0b',
+                    background: enabledCount === 3 ? '#22c55e' : enabledCount === 0 ? '#ef4444' : '#ffffff',
                   }} />
                   <span style={{
                     fontSize: '12px', fontWeight: '600',
-                    color: enabledCount === 3 ? '#86efac' : enabledCount === 0 ? '#fca5a5' : '#fde68a',
+                    color: enabledCount === 3 ? '#86efac' : enabledCount === 0 ? '#fca5a5' : '#ffffff',
                   }}>
                     {enabledCount} / 3 roles secured
                   </span>
@@ -252,7 +262,7 @@ export default function SecuritySettings() {
                       background: on ? role.bg : '#f1f5f9',
                       border: `1px solid ${on ? role.border : '#e8eaf0'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '20px', transition: 'all 0.2s',
+                      transition: 'all 0.2s',
                     }}>{role.icon}</div>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
@@ -285,7 +295,7 @@ export default function SecuritySettings() {
                   background: '#fefce8', border: '1px solid #fde68a',
                   display: 'flex', alignItems: 'flex-start', gap: '10px',
                 }}>
-                  <span style={{ fontSize: '15px', marginTop: '1px' }}>⚠️</span>
+                  <FiAlertTriangle size={15} color="#d97706" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div style={{ fontSize: '12px', color: '#a16207', lineHeight: '1.6' }}>
                     OTP disabled for <strong>{disabledRoles.map(r => r.label).join(', ')}</strong> — users in these roles will log in with email + password only.
                   </div>
@@ -299,9 +309,11 @@ export default function SecuritySettings() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
               <div style={{
                 width: '28px', height: '28px', borderRadius: '8px',
-                background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px',
-              }}>🔒</div>
+                background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <FiLock size={14} color="#C2071A" />
+              </div>
               <span style={{ fontSize: '15px', fontWeight: '700', color: '#1e293b' }}>Account Lockout</span>
               <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '4px' }}>
                 — protect against brute-force login attacks
@@ -309,19 +321,19 @@ export default function SecuritySettings() {
             </div>
 
             <div style={{
-              background: '#ffffff', borderRadius: '20px',
-              border: '1px solid #e8eaf0',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+              background: '#ffffff', borderRadius: '16px',
+              border: 'none',
+              boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
               overflow: 'hidden',
             }}>
               <div style={{
-                background: 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 60%, #b91c1c 100%)',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                 padding: '20px 28px',
               }}>
                 <div style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff' }}>
                   Failed Login Attempt Policy
                 </div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', marginTop: '3px' }}>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', marginTop: '3px' }}>
                   Lock accounts automatically after repeated failed password attempts
                 </div>
               </div>
@@ -349,10 +361,10 @@ export default function SecuritySettings() {
                           border: '1px solid #d1d5db', borderRadius: '10px',
                           fontSize: '18px', fontWeight: '700', color: '#1e293b',
                           textAlign: 'center', outline: 'none',
-                          transition: 'border-color 0.2s',
+                          transition: 'all 0.2s',
                         }}
-                        onFocus={e => e.target.style.borderColor = '#6366f1'}
-                        onBlur={e => e.target.style.borderColor = '#d1d5db'}
+                        onFocus={e => { e.target.style.borderColor = '#C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
+                        onBlur={e => { e.target.style.borderColor = '#d1d5db'; e.target.style.boxShadow = 'none' }}
                       />
                       <span style={{ fontSize: '13px', color: '#6b7280' }}>attempts</span>
                     </div>
@@ -365,9 +377,9 @@ export default function SecuritySettings() {
                           style={{
                             padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '600',
                             cursor: 'pointer', transition: 'all 0.15s',
-                            background: lockout.maxLoginAttempts === n ? '#6366f1' : '#f1f5f9',
-                            color: lockout.maxLoginAttempts === n ? '#fff' : '#64748b',
-                            border: `1px solid ${lockout.maxLoginAttempts === n ? '#6366f1' : '#e2e8f0'}`,
+                            background: lockout.maxLoginAttempts === n ? '#C2071A' : '#f1f5f9',
+                            color: lockout.maxLoginAttempts === n ? '#ffffff' : '#64748b',
+                            border: `1px solid ${lockout.maxLoginAttempts === n ? '#C2071A' : '#e2e8f0'}`,
                           }}
                         >
                           {n}
@@ -392,10 +404,10 @@ export default function SecuritySettings() {
                         border: '1px solid #d1d5db', borderRadius: '10px',
                         fontSize: '14px', fontWeight: '600', color: '#1e293b',
                         background: '#fff', outline: 'none', cursor: 'pointer',
-                        transition: 'border-color 0.2s',
+                        transition: 'all 0.2s',
                       }}
-                      onFocus={e => e.target.style.borderColor = '#6366f1'}
-                      onBlur={e => e.target.style.borderColor = '#d1d5db'}
+                      onFocus={e => { e.target.style.borderColor = '#C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
+                      onBlur={e => { e.target.style.borderColor = '#d1d5db'; e.target.style.boxShadow = 'none' }}
                     >
                       {LOCKOUT_DURATION_OPTIONS.map(min => (
                         <option key={min} value={min}>
@@ -405,8 +417,8 @@ export default function SecuritySettings() {
                     </select>
                     <div style={{
                       marginTop: '12px', padding: '10px 14px', borderRadius: '10px',
-                      background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.1)',
-                      fontSize: '12px', color: '#4f46e5',
+                      background: 'rgba(194, 7, 26, 0.04)', border: '1px solid rgba(194, 7, 26, 0.1)',
+                      fontSize: '12px', color: '#C2071A',
                     }}>
                       After <strong>{lockout.maxLoginAttempts}</strong> failed attempt{lockout.maxLoginAttempts !== 1 ? 's' : ''}, account locks for{' '}
                       <strong>{lockout.lockoutDurationMinutes < 60 ? `${lockout.lockoutDurationMinutes} minutes` : `${lockout.lockoutDurationMinutes / 60} hour${lockout.lockoutDurationMinutes > 60 ? 's' : ''}`}</strong>.
@@ -421,8 +433,8 @@ export default function SecuritySettings() {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '20px 24px', borderRadius: '16px',
-            background: '#ffffff', border: '1px solid #e8eaf0',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            background: '#ffffff', border: 'none',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
           }}>
             <div style={{ fontSize: '12px', color: '#94a3b8' }}>
               Changes take effect immediately for all new login sessions.
@@ -433,21 +445,23 @@ export default function SecuritySettings() {
               style={{
                 display: 'flex', alignItems: 'center', gap: '7px',
                 padding: '10px 24px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                 border: 'none', borderRadius: '10px',
                 fontSize: '13px', fontWeight: '700',
-                color: '#fff', cursor: saving ? 'not-allowed' : 'pointer',
-                boxShadow: '0 4px 12px rgba(99,102,241,0.4)',
+                color: '#ffffff', cursor: saving ? 'not-allowed' : 'pointer',
+                boxShadow: '0 4px 12px rgba(194, 7, 26, 0.3)',
                 transition: 'all 0.2s', opacity: saving ? 0.75 : 1,
               }}
             >
-              <span>🔒</span>
+              <FiLock size={15} color="#ffffff" style={{ stroke: '#ffffff' }} />
               {saving ? 'Saving…' : 'Save Settings'}
             </button>
           </div>
 
         </form>
       </main>
+      </div>
     </div>
   )
 }
+

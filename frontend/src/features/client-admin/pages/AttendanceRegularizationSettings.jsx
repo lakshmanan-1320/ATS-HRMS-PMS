@@ -136,8 +136,11 @@ export default function AttendanceRegularizationSettings() {
           
           {/* Header */}
           <div style={{ marginBottom: '24px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FiSettings style={{ color: '#6366f1' }} /> Attendance Regularization Settings
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 34, height: 34, borderRadius: '10px', background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <FiSettings size={17} color="#ffffff" />
+              </div>
+              Attendance Regularization Settings
             </h1>
             <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
               Configure corporate attendance correction limits, validation windows, and approval workflows.
@@ -150,8 +153,8 @@ export default function AttendanceRegularizationSettings() {
               onClick={() => setActiveTab('settings')}
               style={{
                 padding: '10px 16px', border: 'none', background: 'none', fontSize: '13px', fontWeight: 700,
-                color: activeTab === 'settings' ? '#6366f1' : '#64748b', cursor: 'pointer',
-                borderBottom: activeTab === 'settings' ? '2px solid #6366f1' : 'none',
+                color: activeTab === 'settings' ? '#C2071A' : '#64748b', cursor: 'pointer',
+                borderBottom: activeTab === 'settings' ? '2px solid #C2071A' : 'none',
                 display: 'flex', alignItems: 'center', gap: '6px'
               }}
             >
@@ -161,8 +164,8 @@ export default function AttendanceRegularizationSettings() {
               onClick={() => setActiveTab('logs')}
               style={{
                 padding: '10px 16px', border: 'none', background: 'none', fontSize: '13px', fontWeight: 700,
-                color: activeTab === 'logs' ? '#6366f1' : '#64748b', cursor: 'pointer',
-                borderBottom: activeTab === 'logs' ? '2px solid #6366f1' : 'none',
+                color: activeTab === 'logs' ? '#C2071A' : '#64748b', cursor: 'pointer',
+                borderBottom: activeTab === 'logs' ? '2px solid #C2071A' : 'none',
                 display: 'flex', alignItems: 'center', gap: '6px'
               }}
             >
@@ -172,13 +175,19 @@ export default function AttendanceRegularizationSettings() {
 
           {/* Success / Error Messages */}
           {error && (
-            <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', color: '#b91c1c', padding: '12px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', fontWeight: 600 }}>
-              <FiAlertCircle size={16} /> {error}
+            <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', color: '#b91c1c', padding: '12px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', fontWeight: 600 }}>
+              <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <FiAlertCircle size={13} color="#ffffff" />
+              </div>
+              {error}
             </div>
           )}
           {success && (
-            <div style={{ background: '#f0fdf4', border: '1px solid #86efac', color: '#15803d', padding: '12px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', fontWeight: 600 }}>
-              <FiCheck size={16} /> {success}
+            <div style={{ background: '#f0fdf4', border: '1px solid #86efac', color: '#15803d', padding: '12px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', fontWeight: 600 }}>
+              <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <FiCheck size={13} color="#ffffff" />
+              </div>
+              {success}
             </div>
           )}
 
@@ -197,13 +206,13 @@ export default function AttendanceRegularizationSettings() {
                     value={maxRequests}
                     onChange={e => setMaxRequests(parseInt(e.target.value) || 0)}
                     min="1"
-                    style={{ width: '60px', padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', textAlign: 'center', outline: 'none' }}
+                    style={{ width: '60px', padding: '6px 10px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', textAlign: 'center', outline: 'none' }}
                   />
                   <span style={{ fontSize: '13px', color: '#334155', fontWeight: 600 }}>times in a</span>
                   <select
                     value={period}
                     onChange={e => setPeriod(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', outline: 'none', cursor: 'pointer' }}
+                    style={{ padding: '6px 10px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', outline: 'none', cursor: 'pointer' }}
                   >
                     <option value="MONTH">Month</option>
                     <option value="QUARTER">Quarter</option>
@@ -226,7 +235,7 @@ export default function AttendanceRegularizationSettings() {
                     value={windowDays}
                     onChange={e => setWindowDays(parseInt(e.target.value) || 0)}
                     min="1"
-                    style={{ width: '60px', padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', textAlign: 'center', outline: 'none' }}
+                    style={{ width: '60px', padding: '6px 10px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', textAlign: 'center', outline: 'none' }}
                   />
                   <span style={{ fontSize: '13px', color: '#334155', fontWeight: 600 }}>days from attendance date.</span>
                 </div>
@@ -241,11 +250,11 @@ export default function AttendanceRegularizationSettings() {
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                    <input type="checkbox" checked={allowMissed} onChange={e => setAllowMissed(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                    <input type="checkbox" checked={allowMissed} onChange={e => setAllowMissed(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                     Allow Missed Punch Requests
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                    <input type="checkbox" checked={allowCorrection} onChange={e => setAllowCorrection(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                    <input type="checkbox" checked={allowCorrection} onChange={e => setAllowCorrection(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                     Allow Attendance Corrections
                   </label>
                 </div>
@@ -260,11 +269,11 @@ export default function AttendanceRegularizationSettings() {
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                    <input type="checkbox" checked={reasonRequired} onChange={e => setReasonRequired(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                    <input type="checkbox" checked={reasonRequired} onChange={e => setReasonRequired(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                     Require employees to provide a reason for regularization
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                    <input type="checkbox" checked={allowFuture} onChange={e => setAllowFuture(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                    <input type="checkbox" checked={allowFuture} onChange={e => setAllowFuture(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                     Allow future date regularization requests
                   </label>
                 </div>
@@ -283,22 +292,22 @@ export default function AttendanceRegularizationSettings() {
                     type="checkbox"
                     checked={enablePartial}
                     onChange={e => setEnablePartial(e.target.checked)}
-                    style={{ width: '40px', height: '20px', cursor: 'pointer', accentColor: '#6366f1' }}
+                    style={{ width: '40px', height: '20px', cursor: 'pointer', accentColor: '#C2071A' }}
                   />
                 </div>
 
                 {enablePartial && (
-                  <div style={{ paddingLeft: '20px', marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '10px', borderLeft: '2px solid #cbd5e1' }}>
+                  <div style={{ paddingLeft: '20px', marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '10px', borderLeft: '2px solid #e2e8f0' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                      <input type="checkbox" checked={allowLate} onChange={e => setAllowLate(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                      <input type="checkbox" checked={allowLate} onChange={e => setAllowLate(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                       Allow Late Coming Permission
                     </label>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                      <input type="checkbox" checked={allowEarly} onChange={e => setAllowEarly(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                      <input type="checkbox" checked={allowEarly} onChange={e => setAllowEarly(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                       Allow Early Leaving Permission
                     </label>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#334155', fontWeight: 600 }}>
-                      <input type="checkbox" checked={allowTempOut} onChange={e => setAllowTempOut(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#6366f1' }} />
+                      <input type="checkbox" checked={allowTempOut} onChange={e => setAllowTempOut(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#C2071A' }} />
                       Allow Temporary Exit Permission
                     </label>
                   </div>
@@ -310,7 +319,7 @@ export default function AttendanceRegularizationSettings() {
                   type="submit"
                   disabled={saving}
                   style={{
-                    background: '#6366f1', color: '#fff', padding: '10px 24px', border: 'none', borderRadius: '10px',
+                    background: '#C2071A', color: '#fff', padding: '10px 24px', border: 'none', borderRadius: '10px',
                     fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'background 0.2s'
                   }}
                 >
@@ -355,7 +364,7 @@ export default function AttendanceRegularizationSettings() {
                     {logs.map((row, i) => (
                       <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={{ padding: '12px 18px', color: '#1e293b', fontWeight: 700 }}>{row.first_name} {row.last_name}</td>
-                        <td style={{ padding: '12px 18px', color: '#6366f1', fontWeight: 700 }}>{new Date(row.attendance_date).toISOString().slice(0, 10)}</td>
+                        <td style={{ padding: '12px 18px', color: '#C2071A', fontWeight: 700 }}>{new Date(row.attendance_date).toISOString().slice(0, 10)}</td>
                         <td style={{ padding: '12px 18px', color: '#475569', fontWeight: 600 }}>{row.request_category}</td>
                         <td style={{ padding: '12px 18px', color: '#475569', fontWeight: 600 }}>{row.request_type.replace(/_/g, ' ')}</td>
                         <td style={{ padding: '12px 18px', color: '#1e293b', fontFamily: 'monospace' }}>{row.requested_check_in ? new Date(row.requested_check_in).toLocaleTimeString('en-US', { hour12: false }) : '—'}</td>

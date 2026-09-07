@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
+import { FiArrowLeft, FiCalendar, FiClock, FiAlertCircle, FiCheck, FiSend } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -18,23 +19,23 @@ function fmt(dateStr) {
 
 // ── Styles ────────────────────────────────────────────────────────
 const s = {
-  page:      { display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, system-ui, sans-serif' },
-  main:      { flex: 1, padding: '32px 40px', overflowY: 'auto', maxWidth: '900px' },
-  backBtn:   { display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff', fontSize: '13px', fontWeight: '600', color: '#374151', cursor: 'pointer', marginBottom: '22px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' },
-  tabBar:    { display: 'flex', gap: '4px', background: '#f1f5f9', borderRadius: '12px', padding: '4px', marginBottom: '28px', width: 'fit-content' },
-  tab: (a)  => ({ padding: '10px 24px', borderRadius: '9px', border: 'none', fontSize: '13px', fontWeight: a ? '700' : '500', cursor: 'pointer', transition: 'all 0.2s', background: a ? '#fff' : 'transparent', color: a ? '#0f172a' : '#64748b', boxShadow: a ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }),
-  card:      { background: '#fff', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '28px 32px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '20px' },
-  cardTitle: { fontSize: '17px', fontWeight: '800', color: '#0f172a', margin: '0 0 6px' },
+  page:      { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
+  main:      { flex: 1, padding: '28px 32px', overflowY: 'auto', maxWidth: '900px' },
+  backBtn:   { display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', background: '#fff', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer', marginBottom: '22px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
+  tabBar:    { display: 'flex', gap: '6px', background: '#e2e8f0', borderRadius: '12px', padding: '4px', marginBottom: '24px', width: 'fit-content' },
+  tab: (a)  => ({ padding: '10px 22px', borderRadius: '8px', border: 'none', fontSize: '13px', fontWeight: a ? '700' : '600', cursor: 'pointer', transition: 'all 0.2s', background: a ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent', color: a ? '#fff' : '#64748b', boxShadow: a ? '0 2px 8px rgba(194,7,26,0.25)' : 'none' }),
+  card:      { background: '#fff', border: 'none', borderRadius: '16px', padding: '28px 32px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', marginBottom: '20px' },
+  cardTitle: { fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 6px' },
   cardSub:   { fontSize: '13px', color: '#64748b', margin: '0 0 24px' },
   grid2:     { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' },
   fGroup:    { marginBottom: '16px' },
   fLabel:    { display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' },
   fInput:    { width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', colorScheme: 'light', background: '#fff' },
   fSelect:   { width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer', boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff' },
-  submitBtn: { width: '100%', padding: '12px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px' },
-  permBtn:   { width: '100%', padding: '12px', background: 'linear-gradient(135deg,#10b981,#059669)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px' },
-  msgError:  { color: '#ef4444', fontSize: '12px', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px' },
-  msgSuccess:{ color: '#059669', fontSize: '12px', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px', padding: '10px 14px' },
+  submitBtn: { width: '100%', padding: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+  permBtn:   { width: '100%', padding: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+  msgError:  { color: '#ef4444', fontSize: '12px', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px' },
+  msgSuccess:{ color: '#059669', fontSize: '12px', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px', padding: '10px 14px' },
   policyBox: { background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px 18px', marginTop: '16px' },
   policyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #f1f5f9', fontSize: '12px' },
   balGrid:   { display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginBottom: '24px' },
@@ -42,7 +43,7 @@ const s = {
   balVal:    (col) => ({ fontSize: '28px', fontWeight: '800', color: col, lineHeight: 1, marginBottom: '2px' }),
   balLbl:    { fontSize: '11px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' },
   smallBalGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: '12px', marginBottom: '24px' },
-  smallBal:  (accent) => ({ background: '#fff', border: `1px solid ${accent}33`, borderRadius: '12px', padding: '14px 16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }),
+  smallBal:  (accent) => ({ background: '#fff', border: `1px solid ${accent}33`, borderRadius: '12px', padding: '14px 16px', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }),
 }
 
 // ── Leave Request Tab ─────────────────────────────────────────────
@@ -123,7 +124,7 @@ function LeaveTab({ balances, onSuccess }) {
           <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Your Leave Balances</div>
           <div style={s.smallBalGrid}>
             {balances.map(b => {
-              const accent = b.is_paid_leave ? '#6366f1' : '#10b981'
+              const accent = b.is_paid_leave ? '#C2071A' : '#10b981'
               const avail  = parseFloat(b.available_days)
               return (
                 <div key={b.leave_type_id}
@@ -191,9 +192,9 @@ function LeaveTab({ balances, onSuccess }) {
               <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', lineHeight: 1 }}>{preview.total_days}</div>
               <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>Total Days</div>
             </div>
-            <div style={{ flex: 1, minWidth: '90px', background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ fontSize: '22px', fontWeight: '800', color: '#6366f1', lineHeight: 1 }}>{preview.paid_days}</div>
-              <div style={{ fontSize: '10px', color: '#6366f1', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>Paid Leave</div>
+            <div style={{ flex: 1, minWidth: '90px', background: 'rgba(194,7,26,0.05)', border: '1px solid rgba(194,7,26,0.2)', borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: '#C2071A', lineHeight: 1 }}>{preview.paid_days}</div>
+              <div style={{ fontSize: '10px', color: '#C2071A', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>Paid Leave</div>
             </div>
             <div style={{ flex: 1, minWidth: '90px', background: preview.lop_days > 0 ? 'rgba(239,68,68,0.05)' : 'rgba(16,185,129,0.05)', border: `1px solid ${preview.lop_days > 0 ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)'}`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
               <div style={{ fontSize: '22px', fontWeight: '800', color: preview.lop_days > 0 ? '#ef4444' : '#059669', lineHeight: 1 }}>{preview.lop_days}</div>
@@ -212,9 +213,10 @@ function LeaveTab({ balances, onSuccess }) {
           <input style={s.fInput} placeholder="https://… (medical certificate, supporting document)" value={attachmentUrl} onChange={e => setAttachmentUrl(e.target.value)} />
         </div>
 
-        {error   && <div style={s.msgError}>⚠ {error}</div>}
-        {success && <div style={s.msgSuccess}>✓ {success}</div>}
+        {error   && <div style={s.msgError}><FiAlertCircle size={15} color="#ef4444" /> {error}</div>}
+        {success && <div style={s.msgSuccess}><FiCheck size={15} color="#059669" /> {success}</div>}
         <button type="submit" style={{ ...s.submitBtn, opacity: submitting ? 0.7 : 1 }} disabled={submitting}>
+          <FiSend size={16} color="#ffffff" stroke="#ffffff" />
           {submitting ? 'Submitting…' : 'Submit Leave Request'}
         </button>
       </form>
@@ -292,7 +294,7 @@ function PermissionTab({ onSuccess }) {
             Your Permission Balance — {monthName} {now.getFullYear()}
           </div>
           <div style={s.balGrid}>
-            {[['Allocated', balance.allocated_count, '#6366f1'], ['Used', balance.used_count, '#d97706'], ['Remaining', remaining, remaining > 0 ? '#059669' : '#ef4444']].map(([lbl, val, col]) => (
+            {[['Allocated', balance.allocated_count, '#C2071A'], ['Used', balance.used_count, '#d97706'], ['Remaining', remaining, remaining > 0 ? '#059669' : '#ef4444']].map(([lbl, val, col]) => (
               <div key={lbl} style={s.balCell(col)}>
                 <div style={s.balVal(col)}>{val}</div>
                 <div style={s.balLbl}>{lbl}</div>
@@ -307,7 +309,7 @@ function PermissionTab({ onSuccess }) {
               <span>{Math.round(usedPct)}%</span>
             </div>
             <div style={{ height: '6px', borderRadius: '4px', background: '#f1f5f9', overflow: 'hidden' }}>
-              <div style={{ height: '100%', borderRadius: '4px', width: `${Math.min(100, usedPct)}%`, background: usedPct >= 100 ? '#ef4444' : '#6366f1', transition: 'width 0.4s' }} />
+              <div style={{ height: '100%', borderRadius: '4px', width: `${Math.min(100, usedPct)}%`, background: usedPct >= 100 ? '#ef4444' : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', transition: 'width 0.4s' }} />
             </div>
           </div>
         </div>
@@ -332,8 +334,9 @@ function PermissionTab({ onSuccess }) {
       )}
 
       {remaining <= 0 && (
-        <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '10px', padding: '14px 16px', marginBottom: '20px', fontSize: '13px', color: '#dc2626', fontWeight: '600' }}>
-          ⚠ You have exhausted your permission quota for this month. Quota resets on the 1st of next month.
+        <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '10px', padding: '14px 16px', marginBottom: '20px', fontSize: '13px', color: '#dc2626', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <FiAlertCircle size={16} color="#dc2626" />
+          <span>You have exhausted your permission quota for this month. Quota resets on the 1st of next month.</span>
         </div>
       )}
 
@@ -355,7 +358,7 @@ function PermissionTab({ onSuccess }) {
         </div>
 
         {startTime && endTime && endTime > startTime && (
-          <div style={{ background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontSize: '12px', color: '#6366f1', fontWeight: '600' }}>
+          <div style={{ background: 'rgba(194,7,26,0.05)', border: '1px solid rgba(194,7,26,0.15)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontSize: '12px', color: '#C2071A', fontWeight: '600' }}>
             Duration: {(() => {
               const [sh, sm] = startTime.split(':').map(Number)
               const [eh, em] = endTime.split(':').map(Number)
@@ -372,9 +375,10 @@ function PermissionTab({ onSuccess }) {
           <textarea style={{ ...s.fInput, minHeight: '80px', resize: 'vertical' }} placeholder="Briefly describe the reason for your permission request…" value={reason} onChange={e => setReason(e.target.value)} />
         </div>
 
-        {error   && <div style={s.msgError}>⚠ {error}</div>}
-        {success && <div style={s.msgSuccess}>✓ {success}</div>}
+        {error   && <div style={s.msgError}><FiAlertCircle size={15} color="#ef4444" /> {error}</div>}
+        {success && <div style={s.msgSuccess}><FiCheck size={15} color="#059669" /> {success}</div>}
         <button type="submit" style={{ ...s.permBtn, opacity: (submitting || remaining <= 0) ? 0.7 : 1 }} disabled={submitting || remaining <= 0}>
+          <FiSend size={16} color="#ffffff" stroke="#ffffff" />
           {submitting ? 'Submitting…' : 'Submit Permission Request'}
         </button>
       </form>
@@ -401,17 +405,24 @@ export default function LeaveRequest() {
       <EmployeeSidebar active="leave-request" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Apply Leave / Permission" />
-        <div style={{ flex: 1, overflowY: 'auto', padding: '32px 40px' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '28px 32px' }}>
           <div style={{ maxWidth: '860px' }}>
 
             {/* Back button */}
             <button style={s.backBtn} onClick={() => navigate('/employee/leave')}>
-              ← Back to Leave Dashboard
+              <FiArrowLeft size={14} color="#374151" /> Back to Leave Dashboard
             </button>
 
             {/* Page title */}
-            <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>Apply Leave / Permission</h1>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 24px' }}>Submit a leave request based on your leave balance or request a short permission to be away.</p>
+            <div style={{ marginBottom: '24px' }}>
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+                </div>
+                Apply Leave / Permission
+              </h1>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Submit a leave request based on your leave balance or request a short permission to be away.</p>
+            </div>
 
             {/* Tab switcher */}
             <div style={s.tabBar}>

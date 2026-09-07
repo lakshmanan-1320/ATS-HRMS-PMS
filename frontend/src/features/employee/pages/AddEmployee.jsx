@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { FiXCircle, FiAlertTriangle } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 
@@ -24,14 +25,14 @@ const BLANK = {
 
 const iStyle = (err) => ({
   padding: '9px 13px', background: '#ffffff',
-  border: `1px solid ${err ? '#ef4444' : '#cbd5e1'}`,
+  border: `1px solid ${err ? '#ef4444' : '#e2e8f0'}`,
   borderRadius: 10, color: '#1e293b', fontSize: 13, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit',
   transition: 'border-color 0.15s ease',
 })
 
 const selStyle = {
-  padding: '9px 13px', background: '#ffffff', border: '1px solid #cbd5e1',
+  padding: '9px 13px', background: '#ffffff', border: '1px solid #e2e8f0',
   borderRadius: 10, color: '#1e293b', fontSize: 13, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit', cursor: 'pointer',
 }
@@ -40,7 +41,7 @@ function Field({ label, required, error, children, hint }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
       <label style={{ fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-        {label}{required && <span style={{ color: '#6366f1', marginLeft: 2 }}>*</span>}
+        {label}{required && <span style={{ color: '#C2071A', marginLeft: 2 }}>*</span>}
       </label>
       {children}
       {hint && !error && <span style={{ fontSize: 11, color: '#64748b' }}>{hint}</span>}
@@ -284,8 +285,8 @@ export default function AddEmployee() {
     }
   }
 
-  const inputFocus = e => { e.target.style.borderColor = '#6366f1' }
-  const inputBlur  = e => { e.target.style.borderColor = '#cbd5e1' }
+  const inputFocus = e => { e.target.style.borderColor = '#C2071A' }
+  const inputBlur  = e => { e.target.style.borderColor = '#e2e8f0' }
 
   const filteredManagerEmployees = employees.filter(e => {
     if (!form.department_id) return false
@@ -311,19 +312,19 @@ export default function AddEmployee() {
               <p style={{ fontSize: 13, color: '#64748b', marginBottom: 24 }}>
                 Share this temporary password with the employee for their first sign-in. They'll be prompted to change it after OTP verification.
               </p>
-              <div style={{ padding: 16, background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 12, marginBottom: 24 }}>
+              <div style={{ padding: 16, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, marginBottom: 24 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b', marginBottom: 4 }}>{credentials.name}</div>
                 <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>{credentials.employeeCode} · {credentials.email}</div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 14px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 8 }}>
-                  <code style={{ color: '#6366f1', fontSize: 16, fontWeight: 700 }}>{credentials.tempPassword}</code>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 14px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 8 }}>
+                  <code style={{ color: '#C2071A', fontSize: 16, fontWeight: 700 }}>{credentials.tempPassword}</code>
                   <button onClick={() => navigator.clipboard?.writeText(credentials.tempPassword)}
-                    style={{ padding: '6px 12px', background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 8, color: '#6366f1', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
+                    style={{ padding: '6px 12px', background: 'rgba(194,7,26,0.08)', border: '1px solid rgba(194,7,26,0.2)', borderRadius: 8, color: '#C2071A', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
                     Copy
                   </button>
                 </div>
               </div>
               <button onClick={() => navigate('/client-admin/employees')}
-                style={{ width: '100%', padding: '11px 0', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: 10, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ width: '100%', padding: '11px 0', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: 10, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
                 Done — Go to Employees
               </button>
             </div>
@@ -337,8 +338,8 @@ export default function AddEmployee() {
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
       <ClientAdminSidebar active="employees" />
       {toast && (
-        <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 9999, padding: '12px 18px', borderRadius: 12, fontSize: 13, fontWeight: 500, minWidth: 280, background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-          ✗ {toast.msg}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, position: 'fixed', top: 24, right: 24, zIndex: 9999, padding: '12px 18px', borderRadius: 12, fontSize: 13, fontWeight: 500, minWidth: 280, background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+          <FiXCircle size={16} /> {toast.msg}
         </div>
       )}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -346,14 +347,14 @@ export default function AddEmployee() {
         <main style={{ flex: 1, padding: '32px 36px', overflow: 'auto' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13 }}>
-            <button onClick={() => navigate('/client-admin/employees')} style={{ background: 'none', border: 'none', color: '#6366f1', cursor: 'pointer', fontSize: 13, fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
+            <button onClick={() => navigate('/client-admin/employees')} style={{ background: 'none', border: 'none', color: '#C2071A', cursor: 'pointer', fontSize: 13, fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
               Employees
             </button>
             <span style={{ color: '#94a3b8' }}>/</span>
             <span style={{ color: '#64748b', fontWeight: 600 }}>Add Employee</span>
           </div>
 
-          <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: 16, padding: '28px 36px', boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}>
+          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, padding: '28px 36px', boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}>
             <div style={{ marginBottom: 20 }}>
               <h2 style={{ fontSize: 20, fontWeight: 800, margin: 0, color: '#1e293b' }}>Add New Employee Profile</h2>
               <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>Create system access, register organizational details, and initialize payroll config.</p>
@@ -496,12 +497,12 @@ export default function AddEmployee() {
               
               {/* Preview Components Table */}
               {parseFloat(salaryAmt) > 0 && (
-                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #cbd5e1' }}>
+                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #e2e8f0' }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 12 }}>Salary Component Breakdown Preview</div>
                   
                   {previewSummary && previewSummary.is_valid === false && (
                     <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', color: '#991b1b', padding: '12px 16px', borderRadius: '10px', fontSize: '13px', fontWeight: '600', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span>⚠️</span>
+                      <FiAlertTriangle size={16} />
                       <span>{previewSummary.error_message}</span>
                     </div>
                   )}
@@ -526,19 +527,19 @@ export default function AddEmployee() {
                     </div>
                     <div style={{ fontSize: '12px' }}>
                       <span style={{ color: '#64748b', fontWeight: '600' }}>CTC: </span>
-                      <strong style={{ color: '#6366f1' }}>₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
+                      <strong style={{ color: '#C2071A' }}>₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                     </div>
                   </div>
 
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                     <thead>
                       <tr>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #cbd5e1', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Component</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #cbd5e1', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Type</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #cbd5e1', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Formula/Basis</th>
-                        <th style={{ textAlign: 'center', padding: '6px 12px', borderBottom: '1px solid #cbd5e1', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Auto</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #cbd5e1', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Config Rate / Amount</th>
-                        <th style={{ textAlign: 'right', padding: '6px 12px', borderBottom: '1px solid #cbd5e1', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Calculated Monthly Value</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Component</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Type</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Formula/Basis</th>
+                        <th style={{ textAlign: 'center', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Auto</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Config Rate / Amount</th>
+                        <th style={{ textAlign: 'right', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Calculated Monthly Value</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -590,14 +591,14 @@ export default function AddEmployee() {
                                   />
                                 </div>
                               ) : !isAuto ? (
-                                <div className="groww-input-box" style={{ width: 105, height: 30, background: '#eef2ff', borderColor: '#c7d2fe' }}>
-                                  <span className="groww-prefix" style={{ color: '#6366f1' }}>₹</span>
+                                <div className="groww-input-box" style={{ width: 105, height: 30, background: '#feecee', borderColor: '#f7a6af' }}>
+                                  <span className="groww-prefix" style={{ color: '#C2071A' }}>₹</span>
                                   <input
                                     type="number"
                                     placeholder="Amount"
                                     value={c.manual_amount !== null && c.manual_amount !== undefined ? (Math.round(c.manual_amount * 100) / 100) : ''}
                                     onChange={e => handleUpdateComponentField(index, 'manual_amount', e.target.value)}
-                                    style={{ color: '#6366f1' }}
+                                    style={{ color: '#C2071A' }}
                                   />
                                 </div>
                               ) : (
@@ -619,7 +620,7 @@ export default function AddEmployee() {
                       })}
                       <tr style={{ background: '#f1f5f9' }}>
                         <td colSpan="5" style={{ padding: '8px 12px', fontWeight: 700 }}>Cost to Company (CTC):</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 800, color: '#6366f1' }}>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 800, color: '#C2071A' }}>
                           ₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </td>
                       </tr>
@@ -682,10 +683,10 @@ export default function AddEmployee() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 28, paddingTop: 20, borderTop: '1px solid #e2e8f0' }}>
-              <button onClick={() => navigate('/client-admin/employees')} style={{ padding: '10px 20px', background: 'rgba(0,0,0,0.04)', border: '1px solid #cbd5e1', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#64748b', fontFamily: 'inherit', fontWeight: 600 }}>
+              <button onClick={() => navigate('/client-admin/employees')} style={{ padding: '10px 20px', background: 'rgba(0,0,0,0.04)', border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#64748b', fontFamily: 'inherit', fontWeight: 600 }}>
                 Cancel
               </button>
-              <button onClick={handleSave} disabled={saving} style={{ padding: '10px 24px', background: saving ? 'rgba(99,102,241,0.5)' : 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: 10, cursor: saving ? 'default' : 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit', boxShadow: saving ? 'none' : '0 4px 14px rgba(99,102,241,0.35)' }}>
+              <button onClick={handleSave} disabled={saving} style={{ padding: '10px 24px', background: saving ? 'rgba(194,7,26,0.5)' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: 10, cursor: saving ? 'default' : 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit', boxShadow: saving ? 'none' : '0 4px 14px rgba(194,7,26,0.35)' }}>
                 {saving ? 'Saving…' : 'Add Employee'}
               </button>
             </div>

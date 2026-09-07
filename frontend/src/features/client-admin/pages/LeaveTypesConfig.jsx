@@ -4,7 +4,8 @@ import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.js
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 import {
   FiPlus, FiSearch, FiX, FiFilter, FiChevronDown, FiChevronUp,
-  FiList, FiCheckCircle, FiXCircle, FiDollarSign, FiEdit2, FiCalendar
+  FiList, FiCheckCircle, FiXCircle, FiDollarSign, FiEdit2, FiCalendar,
+  FiCheck, FiMinus, FiAlertCircle
 } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
@@ -179,7 +180,7 @@ export default function LeaveTypesConfig() {
           <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiCalendar size={18} color="#fff" />
                 </div>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Leave Policies</h1>
@@ -190,7 +191,7 @@ export default function LeaveTypesConfig() {
             </div>
             <button
               onClick={openCreateModal}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.35)', transition: 'all 0.2s' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
               onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
             >
@@ -201,11 +202,11 @@ export default function LeaveTypesConfig() {
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#6366f1', bg: '#eef2ff', icon: <FiList size={18} color="#6366f1" /> },
-              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#16a34a', bg: '#f0fdf4', icon: <FiCheckCircle size={18} color="#16a34a" /> },
-              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#0369a1', bg: '#f0f9ff', icon: <FiDollarSign size={18} color="#0369a1" /> },
-              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#dc2626', bg: '#fef2f2', icon: <FiXCircle size={18} color="#dc2626" /> },
-            ].map(({ key, label, value, color, bg, icon }) => {
+              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#C2071A', icon: <FiList size={18} color="#ffffff" /> },
+              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#16a34a', icon: <FiCheckCircle size={18} color="#ffffff" /> },
+              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#0f766e', icon: <FiDollarSign size={18} color="#ffffff" /> },
+              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#dc2626', icon: <FiXCircle size={18} color="#ffffff" /> },
+            ].map(({ key, label, value, color, icon }) => {
               const active = isStatActive(key)
               return (
                 <div
@@ -218,8 +219,8 @@ export default function LeaveTypesConfig() {
                     setPage(1)
                   }}
                   style={{ background: '#fff', border: `1.5px solid ${active ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                  <div style={{ width: 42, height: 42, borderRadius: '12px', background: active ? color : bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.15s' }}>
-                    {React.cloneElement(icon, { color: active ? '#fff' : undefined })}
+                  <div style={{ width: 42, height: 42, borderRadius: '12px', background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {icon}
                   </div>
                   <div>
                     <div style={{ fontSize: '26px', fontWeight: '800', color: active ? color : '#0f172a', lineHeight: 1 }}>{value}</div>
@@ -260,7 +261,7 @@ export default function LeaveTypesConfig() {
 
               <button
                 onClick={() => setShowAdvanced(v => !v)}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#eef2ff' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#c7d2fe' : '#e2e8f0'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#4f46e5' : '#374151', cursor: 'pointer' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#feecee' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#f7a6af' : '#e2e8f0'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#941018' : '#374151', cursor: 'pointer' }}>
                 <FiFilter size={12} />
                 Advanced {hasAdvancedFilters ? '•' : ''}
                 {showAdvanced ? <FiChevronUp size={11} /> : <FiChevronDown size={11} />}
@@ -318,7 +319,7 @@ export default function LeaveTypesConfig() {
                   <div style={{ display: 'flex', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
                     {[{ val: 'asc', label: '↑ A–Z' }, { val: 'desc', label: '↓ Z–A' }].map(o => (
                       <button key={o.val} onClick={() => setSortDir(o.val)}
-                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#6366f1' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
+                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#C2071A' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
                         {o.label}
                       </button>
                     ))}
@@ -341,7 +342,7 @@ export default function LeaveTypesConfig() {
           {/* Status Tab Pills */}
           <div style={{ display: 'flex', gap: 8, marginBottom: '16px', flexWrap: 'wrap' }}>
             {[
-              { val: 'ALL',      label: 'All',      count: types.length,   color: '#6366f1' },
+              { val: 'ALL',      label: 'All',      count: types.length,   color: '#C2071A' },
               { val: 'ACTIVE',   label: 'Active',   count: stats.active,   color: '#16a34a' },
               { val: 'INACTIVE', label: 'Inactive', count: stats.inactive, color: '#dc2626' },
             ].map(o => (
@@ -364,23 +365,23 @@ export default function LeaveTypesConfig() {
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
                 <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading leave policies…</div>
               </div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-                  <FiCalendar size={22} color="#94a3b8" />
+                <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'linear-gradient(135deg, #94a3b8 0%, #94a3b8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                  <FiCalendar size={22} color="#ffffff" />
                 </div>
                 <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>
                   {types.length === 0 ? 'No leave policies configured yet' : 'No policies match the current filters'}
                 </div>
                 {types.length === 0 ? (
-                  <button onClick={openCreateModal} style={{ marginTop: 8, padding: '9px 20px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
+                  <button onClick={openCreateModal} style={{ marginTop: 8, padding: '9px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
                     + Add First Leave Type
                   </button>
                 ) : hasAnyFilter && (
-                  <span onClick={resetAll} style={{ color: '#6366f1', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
+                  <span onClick={resetAll} style={{ color: '#C2071A', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
                     Clear all filters
                   </span>
                 )}
@@ -411,7 +412,7 @@ export default function LeaveTypesConfig() {
                           )}
                         </td>
                         <td style={{ padding: '14px 18px' }}>
-                          <span style={{ fontFamily: 'monospace', background: '#eef2ff', color: '#4f46e5', padding: '3px 9px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>
+                          <span style={{ fontFamily: 'monospace', background: '#feecee', color: '#941018', padding: '3px 9px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>
                             {t.leave_type_code}
                           </span>
                         </td>
@@ -430,15 +431,15 @@ export default function LeaveTypesConfig() {
                             border:     `1px solid ${t.is_paid_leave ? '#bbf7d0' : '#fde68a'}`,
                             textTransform: 'uppercase', letterSpacing: '0.04em'
                           }}>
-                            {t.is_paid_leave ? '✓ Paid' : '— Unpaid'}
+                            {t.is_paid_leave ? <><FiCheck size={11} /> Paid</> : <><FiMinus size={11} /> Unpaid</>}
                           </span>
                         </td>
                         <td style={{ padding: '14px 18px' }}>
                           <span style={{
                             display: 'inline-flex', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px',
-                            background: t.allows_half_day ? '#dbeafe' : '#f1f5f9',
-                            color:      t.allows_half_day ? '#1d4ed8' : '#64748b',
-                            border:     `1px solid ${t.allows_half_day ? '#bfdbfe' : '#e2e8f0'}`,
+                            background: t.allows_half_day ? '#ede9fe' : '#f1f5f9',
+                            color:      t.allows_half_day ? '#6d28d9' : '#64748b',
+                            border:     `1px solid ${t.allows_half_day ? '#ddd6fe' : '#e2e8f0'}`,
                             textTransform: 'uppercase', letterSpacing: '0.04em'
                           }}>
                             {t.allows_half_day ? 'Allowed' : 'Blocked'}
@@ -463,11 +464,11 @@ export default function LeaveTypesConfig() {
                         <td style={{ padding: '14px 18px' }}>
                           <button
                             onClick={() => openEditModal(t)}
-                            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#f8fafc', color: '#4f46e5', border: '1px solid #c7d2fe', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' }}
-                            onMouseEnter={e => { e.currentTarget.style.background = '#eef2ff' }}
-                            onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc' }}
+                            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#C2071A', color: '#ffffff', border: '1px solid #C2071A', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' }}
+                            onMouseEnter={e => { e.currentTarget.style.background = '#941018' }}
+                            onMouseLeave={e => { e.currentTarget.style.background = '#C2071A' }}
                           >
-                            <FiEdit2 size={12} /> Configure
+                            <FiEdit2 size={12} color="#ffffff" /> Configure
                           </button>
                         </td>
                       </tr>
@@ -487,7 +488,7 @@ export default function LeaveTypesConfig() {
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#e2e8f0' : '#374151' }}>
                   ‹ Prev
                 </button>
 
@@ -496,7 +497,7 @@ export default function LeaveTypesConfig() {
                     <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8', fontSize: '13px' }}>…</span>
                   ) : (
                     <button key={p} onClick={() => setPage(p)}
-                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(99,102,241,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {p}
                     </button>
                   )
@@ -504,7 +505,7 @@ export default function LeaveTypesConfig() {
 
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#e2e8f0' : '#374151' }}>
                   Next ›
                 </button>
               </div>
@@ -527,7 +528,7 @@ export default function LeaveTypesConfig() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiCalendar size={18} color="#fff" />
                 </div>
                 <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
@@ -582,7 +583,7 @@ export default function LeaveTypesConfig() {
                     <label key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13px', color: '#374151', cursor: 'pointer', fontWeight: '600', minWidth: '45%' }}>
                       <input
                         type="checkbox" checked={state} onChange={e => set(e.target.checked)}
-                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#6366f1' }}
+                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#C2071A' }}
                       />
                       {label}
                     </label>
@@ -591,8 +592,11 @@ export default function LeaveTypesConfig() {
               </div>
 
               {formError && (
-                <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
-                  ⚠️ {formError}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #b91c1c 0%, #b91c1c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <FiAlertCircle size={11} color="#ffffff" />
+                  </div>
+                  {formError}
                 </div>
               )}
 
@@ -602,7 +606,7 @@ export default function LeaveTypesConfig() {
                   Cancel
                 </button>
                 <button type="submit"
-                  style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.35)' }}
+                  style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}
                   onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                   onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                   {editingType ? 'Update Policy' : 'Create Policy'}

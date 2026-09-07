@@ -6,21 +6,34 @@ import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 import {
   FiSettings, FiPlus, FiEdit2, FiTrash2, FiEye,
   FiSearch, FiX, FiCheckCircle, FiXCircle, FiFilter,
-  FiAlertCircle, FiLoader, FiUserPlus, FiMapPin, FiClock
+  FiAlertCircle, FiLoader, FiUserPlus, FiMapPin, FiClock, FiChevronLeft, FiChevronRight
 } from 'react-icons/fi'
 
 const PAGE_SIZE = 10
+const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
 
 const TYPE_BADGE = {
-  OFFICE: { bg: '#e0f2fe', color: '#0369a1', border: '#bae6fd' },
-  REMOTE: { bg: '#dcfce7', color: '#15803d', border: '#bbf7d0' },
-  HYBRID: { bg: '#faf5ff', color: '#6d28d9', border: '#e9d5ff' },
+  OFFICE: { bg: '#e0f2fe', color: '#0284c7' },
+  REMOTE: { bg: '#e8fbf0', color: '#0fa958' },
+  HYBRID: { bg: '#f3e8ff', color: '#7c3aed' },
+}
+
+function CodeBadge({ code }) {
+  if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
+  return (
+    <span style={{
+      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
+      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+    }}>
+      {code}
+    </span>
+  )
 }
 
 export default function AttendancePolicies() {
   const navigate = useNavigate()
   
-  // Zustand Store
   const {
     policies,
     loading,
@@ -62,7 +75,7 @@ export default function AttendancePolicies() {
   // Assignment Modal
   const [assignOpen, setAssignOpen] = useState(false)
   const [assigningPolicy, setAssigningPolicy] = useState(null)
-  const [assignMode, setAssignMode] = useState('DEPARTMENT') // DEPARTMENT | EMPLOYEE
+  const [assignMode, setAssignMode] = useState('DEPARTMENT')
   const [selectedDeptId, setSelectedDeptId] = useState('')
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([])
   const [effectiveFrom, setEffectiveFrom] = useState(new Date().toISOString().slice(0, 10))
@@ -71,7 +84,6 @@ export default function AttendancePolicies() {
   const [policyAssignedDeptIds, setPolicyAssignedDeptIds] = useState([])
   const [policyAssignedEmpIds, setPolicyAssignedEmpIds] = useState([])
 
-  // Search inside checklist
   const [empSearch, setEmpSearch] = useState('')
 
   useEffect(() => {
@@ -149,16 +161,16 @@ export default function AttendancePolicies() {
     setFormError('')
 
     const payload = {
-      name: name.trim(),
+      name,
       policy_type: policyType,
-      description: description.trim(),
+      description,
       enable_location_validation: enableLocation,
       enable_shift_validation: enableShift,
       is_active: isActive,
       office_location_ids: selectedOfficeLocationIds,
       enable_late_arrival_lop: enableLateArrivalLop,
-      late_arrivals_threshold: parseInt(lateArrivalsLimit) || 0,
-      lop_days_per_threshold: parseFloat(lopDaysDeduction) || 0.00
+      late_arrivals_threshold: enableLateArrivalLop ? Number(lateArrivalsLimit) : 3,
+      lop_days_per_threshold: enableLateArrivalLop ? Number(lopDaysDeduction) : 1.0
     }
 
     try {
@@ -169,657 +181,440 @@ export default function AttendancePolicies() {
       }
       setModalOpen(false)
     } catch (err) {
-      setFormError(err.message || 'Operation failed.')
+      setFormError(err.response?.data?.message || 'Failed to save policy.')
     } finally {
       setFormSaving(false)
     }
   }
 
-  const handleDelete = deletePolicy
-  const handleToggleStatus = togglePolicyStatus
-
   async function handleAssignSubmit(e) {
     e.preventDefault()
+    if (assignMode === 'DEPARTMENT' && !selectedDeptId) {
+      return setAssignError('Please select a department.')
+    }
+    if (assignMode === 'EMPLOYEE' && selectedEmployeeIds.length === 0) {
+      return setAssignError('Please select at least one employee.')
+    }
+
     setAssignSaving(true)
     setAssignError('')
 
     const payload = {
-      effective_from: effectiveFrom,
-      department_id: assignMode === 'DEPARTMENT' ? selectedDeptId : null,
-      employee_ids: assignMode === 'EMPLOYEE' ? selectedEmployeeIds : [],
-    }
-
-    if (assignMode === 'DEPARTMENT' && !selectedDeptId) {
-      setAssignSaving(false)
-      return setAssignError('Please select a department.')
-    }
-
-    if (assignMode === 'EMPLOYEE' && selectedEmployeeIds.length === 0) {
-      setAssignSaving(false)
-      return setAssignError('Please select at least one employee.')
+      assignment_type: assignMode,
+      department_id: assignMode === 'DEPARTMENT' ? selectedDeptId : undefined,
+      employee_ids: assignMode === 'EMPLOYEE' ? selectedEmployeeIds : undefined,
+      effective_from: effectiveFrom
     }
 
     try {
       await assignPolicy(assigningPolicy.attendance_policy_id, payload)
       setAssignOpen(false)
     } catch (err) {
-      setAssignError(err.message || 'Assignment failed.')
+      setAssignError(err.message || err.response?.data?.message || 'Failed to assign policy.')
     } finally {
       setAssignSaving(false)
     }
   }
 
-  function handleToggleEmployeeSelection(empId) {
-    setSelectedEmployeeIds(prev => 
-      prev.includes(empId) ? prev.filter(id => id !== empId) : [...prev, empId]
-    )
+  async function handleDelete(p) {
+    if (!window.confirm(`Are you sure you want to delete "${p.name}"?`)) return
+    try {
+      await deletePolicy(p.attendance_policy_id)
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete policy.')
+    }
   }
 
-  // Filtered and paginated policies
-  const filtered = useMemo(() => {
+  async function handleToggleStatus(p) {
+    try {
+      await togglePolicyStatus(p.attendance_policy_id, !p.is_active)
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to toggle status.')
+    }
+  }
+
+  const filteredPolicies = useMemo(() => {
     return policies.filter(p => {
+      if (typeFilter && p.policy_type !== typeFilter) return false
       if (search) {
         const q = search.toLowerCase()
-        if (!p.name.toLowerCase().includes(q) && !(p.description || '').toLowerCase().includes(q)) return false
+        return p.name.toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q)
       }
-      if (typeFilter && p.policy_type !== typeFilter) return false
       return true
     })
   }, [policies, search, typeFilter])
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const totalPages = Math.max(1, Math.ceil(filteredPolicies.length / PAGE_SIZE))
+  const paginatedPolicies = filteredPolicies.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  const filteredEmployees = useMemo(() => {
+  const filteredEmpMetadata = useMemo(() => {
     if (!empSearch) return metadataEmployees
     const q = empSearch.toLowerCase()
-    return metadataEmployees.filter(e => 
+    return metadataEmployees.filter(e =>
       `${e.first_name} ${e.last_name}`.toLowerCase().includes(q) ||
       (e.employee_code || '').toLowerCase().includes(q)
     )
   }, [metadataEmployees, empSearch])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f4ff', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="attendance-policies" />
-      
+
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
-        
-        <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+
+        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
-          {/* Page Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiSettings size={18} color="#fff" />
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: 10,
+                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <FiSettings size={20} color="#C2071A" strokeWidth={2.5} />
                 </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Attendance Policies</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Configure working formats, geofence, and validation policies for employees
+                Attendance Policies
+              </h1>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
+                Configure rules, geofence, shifts, and assign policy coverage across teams
               </p>
             </div>
-            
+
             <button
               onClick={handleOpenCreate}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '7px',
+                padding: '9px 18px', borderRadius: '10px', border: 'none',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                color: '#ffffff', fontSize: '13px', fontWeight: 700,
+                cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                fontFamily: "'Inter', sans-serif"
+              }}
             >
-              <FiPlus size={15} /> Create Policy
+              <FiPlus size={16} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+              Create Policy
             </button>
           </div>
 
-          {/* Filter Bar */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+          {/* Card Container */}
+          <div style={{
+            background: '#ffffff', border: 'none', borderRadius: '16px',
+            padding: '24px', boxShadow: cardShadow
+          }}>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', minWidth: '200px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
-              <FiSearch size={13} color="#94a3b8" />
-              <input
-                placeholder="Search policies by name or description…"
-                value={search}
-                onChange={e => { setSearch(e.target.value); setPage(1) }}
-                style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }}
-              />
-              {search && (
-                <button onClick={() => { setSearch(''); setPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}>
-                  <FiX size={12} />
-                </button>
-              )}
+            {/* Filter controls */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+              <div style={{ position: 'relative', width: '300px' }}>
+                <FiSearch size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input
+                  type="text"
+                  placeholder="Search policies..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  style={{
+                    width: '100%', paddingLeft: '34px', padding: '8px 12px 8px 34px',
+                    borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc',
+                    fontSize: '13px', boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <select
+                  value={typeFilter}
+                  onChange={e => setTypeFilter(e.target.value)}
+                  style={{ padding: '8px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                >
+                  <option value="">All Types</option>
+                  <option value="OFFICE">Office</option>
+                  <option value="REMOTE">Remote</option>
+                  <option value="HYBRID">Hybrid</option>
+                </select>
+                <span style={{
+                  background: '#FEECEE', color: '#C2071A', padding: '5px 14px',
+                  borderRadius: 20, fontWeight: 700, fontSize: 11.5, letterSpacing: '0.02em',
+                }}>
+                  {filteredPolicies.length} Policies
+                </span>
+              </div>
             </div>
 
-            <select
-              value={typeFilter} onChange={e => { setTypeFilter(e.target.value); setPage(1) }}
-              style={{ padding: '8px 12px', border: '1px solid #e2e8f0', borderRadius: '9px', fontSize: '13px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600' }}
-            >
-              <option value="">All Formats</option>
-              <option value="OFFICE">Office</option>
-              <option value="REMOTE">Remote</option>
-              <option value="HYBRID">Hybrid</option>
-            </select>
-
-            {(search || typeFilter) && (
-              <button
-                onClick={() => { setSearch(''); setTypeFilter(''); setPage(1) }}
-                style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', fontSize: '12px', fontWeight: '700', color: '#b91c1c', cursor: 'pointer' }}
-              >
-                <FiX size={11} /> Clear
-              </button>
-            )}
-
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5 }}>
-              <FiFilter size={12} color="#94a3b8" />
-              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>
-                {filtered.length} configured policy{filtered.length !== 1 ? 'ies' : ''}
-              </span>
-            </div>
-          </div>
-
-          {/* Table Container */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-            {loading ? (
-              <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-                <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading policies…</div>
-              </div>
-            ) : filtered.length === 0 ? (
-              <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ fontSize: '40px', marginBottom: '12px' }}>⚙️</div>
-                <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>
-                  No attendance policies found
-                </div>
-                <span style={{ color: '#94a3b8', fontSize: '13px' }}>Click "Create Policy" to define a new policy schema.</span>
-              </div>
-            ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                  <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-                      {['Policy Name', 'Format Type', 'Location Validation', 'Shift Validation', 'Assigned Count', 'Status', 'Actions'].map(h => (
-                        <th key={h} style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginated.map((p, idx) => {
-                      const badge = TYPE_BADGE[p.policy_type] || TYPE_BADGE.OFFICE
-                      return (
-                        <tr key={p.attendance_policy_id}
-                          style={{ borderBottom: idx < paginated.length - 1 ? '1px solid #f1f5f9' : 'none', transition: 'background 0.15s' }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >
-                          <td style={{ padding: '14px 18px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                              <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px' }}>{p.name}</span>
-                              <span style={{ fontSize: '12px', color: '#64748b', marginTop: 2, maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                {p.description || 'No description provided'}
-                              </span>
-                              {p.enable_late_arrival_lop && (
-                                <span style={{ fontSize: '11px', color: '#b45309', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
-                                  ⚠️ LOP Rule: {p.late_arrivals_threshold} Lates = {p.lop_days_per_threshold} LOP Day(s)
-                                </span>
-                              )}
-                            </div>
-                          </td>
-                          <td style={{ padding: '14px 18px' }}>
-                            <span style={{ display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '6px', textTransform: 'uppercase', background: badge.bg, color: badge.color, border: `1px solid ${badge.border}`, letterSpacing: '0.04em' }}>
-                              {p.policy_type}
-                            </span>
-                          </td>
-                          <td style={{ padding: '14px 18px' }}>
-                            {p.enable_location_validation ? (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#15803d', fontWeight: '600' }}><FiCheckCircle /> Enabled</span>
-                            ) : (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#64748b' }}><FiXCircle /> Disabled</span>
-                            )}
-                          </td>
-                          <td style={{ padding: '14px 18px' }}>
-                            {p.enable_shift_validation ? (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#15803d', fontWeight: '600' }}><FiCheckCircle /> Enabled</span>
-                            ) : (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#64748b' }}><FiXCircle /> Disabled</span>
-                            )}
-                          </td>
-                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#0f172a' }}>
-                            {p.usage_count} Employee{p.usage_count !== 1 ? 's' : ''}
-                          </td>
-                          <td style={{ padding: '14px 18px' }}>
+            {/* Table */}
+            <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <thead>
+                  <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Policy Name</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Type</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Validations</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Late LOP Rule</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Status</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading policies...</td></tr>
+                  ) : paginatedPolicies.length === 0 ? (
+                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No attendance policies found.</td></tr>
+                  ) : paginatedPolicies.map((p, i) => {
+                    const badge = TYPE_BADGE[p.policy_type] || TYPE_BADGE.OFFICE
+                    return (
+                      <tr
+                        key={p.attendance_policy_id}
+                        style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                        onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : '#fafafa'}
+                      >
+                        <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>
+                          {p.name}
+                          {p.description && <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 400 }}>{p.description}</span>}
+                        </td>
+                        <td style={{ padding: '14px 16px' }}>
+                          <span style={{ padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, background: badge.bg, color: badge.color }}>
+                            {p.policy_type}
+                          </span>
+                        </td>
+                        <td style={{ padding: '14px 16px', fontSize: '12px', color: '#475569' }}>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            {p.enable_location_validation && <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '2px 6px', borderRadius: '4px', fontSize: '10.5px', fontWeight: 700 }}>Geofence</span>}
+                            {p.enable_shift_validation && <span style={{ background: '#f3e8ff', color: '#7c3aed', padding: '2px 6px', borderRadius: '4px', fontSize: '10.5px', fontWeight: 700 }}>Shift</span>}
+                          </div>
+                        </td>
+                        <td style={{ padding: '14px 16px', fontSize: '12px' }}>
+                          {p.enable_late_arrival_lop ? (
+                            <span style={{ color: '#dc2626', fontWeight: 700 }}>{p.late_arrivals_threshold} Late = {p.lop_days_per_threshold} LOP</span>
+                          ) : (
+                            <span style={{ color: '#94a3b8' }}>Disabled</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '14px 16px' }}>
+                          <span
+                            onClick={() => handleToggleStatus(p)}
+                            style={{
+                              padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, cursor: 'pointer',
+                              background: p.is_active ? '#e8fbf0' : '#feecee',
+                              color: p.is_active ? '#0fa958' : '#dc2626'
+                            }}
+                          >
+                            {p.is_active ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td style={{ padding: '14px 16px', textAlign: 'right' }}>
+                          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
                             <button
-                              onClick={() => handleToggleStatus(p)}
-                              style={{
-                                padding: '4px 10px', borderRadius: '7px', fontSize: '11px', fontWeight: '700', cursor: 'pointer', border: '1px solid',
-                                background: p.is_active ? '#f0fdf4' : '#fef2f2',
-                                color:      p.is_active ? '#15803d'  : '#b91c1c',
-                                borderColor: p.is_active ? '#bbf7d0' : '#fecaca',
-                              }}
+                              title="View Policy Details"
+                              onClick={() => navigate(`/client-admin/attendance/policies/${p.attendance_policy_id}`)}
+                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#f1f5f9', color: '#475569', cursor: 'pointer' }}
                             >
-                              {p.is_active ? 'Active' : 'Inactive'}
+                              <FiEye size={14} />
                             </button>
-                          </td>
-                          <td style={{ padding: '14px 18px' }}>
-                            <div style={{ display: 'flex', gap: 6 }}>
-                              <button
-                                onClick={() => navigate(`/client-admin/attendance/policies/${p.attendance_policy_id}`)}
-                                style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                              >
-                                <FiEye size={12} /> View
-                              </button>
-                              <button
-                                onClick={() => handleOpenEdit(p)}
-                                style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#eef2ff', color: '#4f46e5', border: '1px solid #c7d2fe', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                              >
-                                <FiEdit2 size={11} /> Edit
-                              </button>
-                              <button
-                                onClick={() => handleOpenAssign(p)}
-                                style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                              >
-                                <FiUserPlus size={12} /> Assign
-                              </button>
-                              <button
-                                onClick={() => handleDelete(p)}
-                                style={{
-                                  display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700',
-                                  background: '#fef2f2',
-                                  color:      '#b91c1c',
-                                  borderColor: '#fecaca',
-                                  cursor: 'pointer'
-                                }}
-                                title={p.usage_count > 0 ? `Cannot delete policy with active members (${p.usage_count} assigned)` : ""}
-                              >
-                                <FiTrash2 size={11} /> Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+                            <button
+                              title="Assign Coverage"
+                              onClick={() => handleOpenAssign(p)}
+                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#e0f2fe', color: '#0284c7', cursor: 'pointer' }}
+                            >
+                              <FiUserPlus size={14} />
+                            </button>
+                            <button
+                              title="Edit Policy"
+                              onClick={() => handleOpenEdit(p)}
+                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#fef3c7', color: '#d97706', cursor: 'pointer' }}
+                            >
+                              <FiEdit2 size={14} />
+                            </button>
+                            <button
+                              title="Delete Policy"
+                              onClick={() => handleDelete(p)}
+                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#feecee', color: '#dc2626', cursor: 'pointer' }}
+                            >
+                              <FiTrash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+                <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Page {page} of {totalPages}</span>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}>
+                    <FiChevronLeft size={16} />
+                  </button>
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', opacity: page === totalPages ? 0.4 : 1 }}>
+                    <FiChevronRight size={16} />
+                  </button>
+                </div>
               </div>
             )}
           </div>
-
-          {/* Pagination */}
-          {!loading && filtered.length > PAGE_SIZE && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
-              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
-                Showing <strong style={{ color: '#374151' }}>{((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, filtered.length)}</strong> of <strong style={{ color: '#374151' }}>{filtered.length}</strong> policies
-              </span>
-              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                <button
-                  onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151' }}
-                >‹ Prev</button>
-                <button
-                  disabled
-                  style={{ width: '38px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: '700', border: 'none', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >{page}</button>
-                <button
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151' }}
-                >Next ›</button>
-              </div>
-            </div>
-          )}
-
-          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        </main>
+        </div>
       </div>
 
-      {/* Create / Edit Policy Modal */}
+      {/* Modal 1: Create / Edit Policy */}
       {modalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}
-          onClick={() => setModalOpen(false)}>
-          <div style={{ background: '#fff', borderRadius: '20px', padding: '32px', width: '560px', maxWidth: '100%', boxShadow: '0 24px 64px rgba(0,0,0,0.2)', maxHeight: '90vh', overflowY: 'auto' }}
-            onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {editingPolicy ? <FiEdit2 size={16} color="#fff" /> : <FiPlus size={18} color="#fff" />}
-                </div>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
-                  {editingPolicy ? 'Edit Attendance Policy' : 'Create Attendance Policy'}
-                </h3>
-              </div>
-              <button onClick={() => setModalOpen(false)}
-                style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}>
-                <FiX size={14} />
-              </button>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '28px', width: '540px', maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
+                {editingPolicy ? 'Edit Attendance Policy' : 'Create Attendance Policy'}
+              </h3>
+              <button onClick={() => setModalOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><FiX size={18} /></button>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={labelStyle}>Policy Name *</label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Office Employees Policy" required style={inputStyle} />
+            {formError && (
+              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#feecee', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
+                {formError}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Policy Name *</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }} />
               </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <label style={labelStyle}>Policy Format Type *</label>
-                <select value={policyType} onChange={e => setPolicyType(e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
-                  <option value="OFFICE">Office (In-Office Rules)</option>
-                  <option value="REMOTE">Remote (Flexible WFH)</option>
-                  <option value="HYBRID">Hybrid (Mix of Office & Remote)</option>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Policy Format</label>
+                <select value={policyType} onChange={e => setPolicyType(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px' }}>
+                  <option value="OFFICE">Office</option>
+                  <option value="REMOTE">Remote</option>
+                  <option value="HYBRID">Hybrid</option>
                 </select>
               </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <label style={labelStyle}>Description</label>
-                <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe the working rules or target groups for this policy…" rows={2} style={{ ...inputStyle, resize: 'vertical' }} />
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Description</label>
+                <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }} />
               </div>
 
-              {/* Validation settings section */}
-              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', marginBottom: '16px' }}>
-                <h4 style={{ margin: '0 0 12px', fontSize: '12px', color: '#475569', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Validation Settings</h4>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: '13px', fontWeight: '500', color: '#334155' }}>
-                    <input type="checkbox" checked={enableLocation} onChange={e => setEnableLocation(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
-                    Enable Location Validation (Saves option)
-                  </label>
-
-                  {enableLocation && (
-                    <div style={{ paddingLeft: '26px', display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px', marginBottom: '8px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Allowed Office Locations:</span>
-                      {officeLocations.length === 0 ? (
-                        <div style={{ fontSize: '12px', color: '#64748b', fontStyle: 'italic' }}>
-                          No active office locations configured.{' '}
-                          <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/client-admin/attendance/office-locations`} target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', fontWeight: '600', textDecoration: 'underline' }}>
-                            Configure locations
-                          </a>{' '}
-                          first.
-                        </div>
-                      ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '140px', overflowY: 'auto', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px', background: '#f8fafc' }}>
-                          {officeLocations.filter(loc => loc.is_active).map(loc => (
-                            <label key={loc.office_location_id} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '12.5px', color: '#334155', fontWeight: '500' }}>
-                              <input
-                                type="checkbox"
-                                checked={selectedOfficeLocationIds.includes(loc.office_location_id)}
-                                onChange={() => {
-                                  setSelectedOfficeLocationIds(prev =>
-                                    prev.includes(loc.office_location_id)
-                                      ? prev.filter(id => id !== loc.office_location_id)
-                                      : [...prev, loc.office_location_id]
-                                  )
-                                }}
-                                style={{ cursor: 'pointer' }}
-                              />
-                              <span>{loc.location_name}</span>
-                              <span style={{ color: '#94a3b8', fontSize: '11px' }}>({loc.radius_meters}m)</span>
-                            </label>
-                          ))}
-                          {officeLocations.filter(loc => loc.is_active).length === 0 && (
-                            <div style={{ fontSize: '12px', color: '#64748b', fontStyle: 'italic' }}>No active locations available.</div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: '13px', fontWeight: '500', color: '#334155' }}>
-                    <input type="checkbox" checked={enableShift} onChange={e => setEnableShift(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
-                    Enable Shift Validation (Saves option)
-                  </label>
-                </div>
-              </div>
-
-              {/* Late Arrival to LOP Configuration */}
-              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', marginBottom: '16px' }}>
-                <h4 style={{ margin: '0 0 12px', fontSize: '12px', color: '#475569', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Late Arrival LOP Rules</h4>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: '13px', fontWeight: '500', color: '#334155' }}>
-                    <input type="checkbox" checked={enableLateArrivalLop} onChange={e => setEnableLateArrivalLop(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
-                    Enable Late Arrival to LOP Deduction Rule
-                  </label>
-
-                  {enableLateArrivalLop && (
-                    <div style={{ paddingLeft: '26px', display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '4px' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                        <div>
-                          <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#475569', marginBottom: '4px' }}>Late Arrival Threshold</label>
-                          <input
-                            type="number"
-                            min="1"
-                            value={lateArrivalsLimit}
-                            onChange={e => setLateArrivalsLimit(Math.max(1, parseInt(e.target.value) || 1))}
-                            placeholder="e.g. 3"
-                            style={{ ...inputStyle, width: '100%' }}
-                            required
-                          />
-                          <span style={{ fontSize: '11px', color: '#64748b' }}>Every X late arrivals...</span>
-                        </div>
-                        <div>
-                          <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#475569', marginBottom: '4px' }}>LOP Days Deduction</label>
-                          <input
-                            type="number"
-                            step="any"
-                            min="0.1"
-                            value={lopDaysDeduction}
-                            onChange={e => setLopDaysDeduction(e.target.value)}
-                            placeholder="e.g. 1.0"
-                            style={{ ...inputStyle, width: '100%' }}
-                            required
-                          />
-                          <span style={{ fontSize: '11px', color: '#64748b' }}>...deduct Y LOP day(s)</span>
-                        </div>
-                      </div>
-
-                      {/* Rule Preview & Examples */}
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px 14px' }}>
-                        <div style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>Rule Preview</div>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
-                          Every <span style={{ color: '#ca8a04' }}>{lateArrivalsLimit}</span> Late Arrivals = <span style={{ color: '#ef4444' }}>{Number((parseFloat(lopDaysDeduction) || 0).toFixed(2))}</span> LOP Day(s)
-                        </div>
-                        <div style={{ fontSize: '11.5px', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                          <span style={{ fontWeight: '500' }}>Examples:</span>
-                          <span>• {lateArrivalsLimit} Lates ➔ {Number(((parseFloat(lopDaysDeduction) || 0) * 1).toFixed(2))} LOP Day</span>
-                          <span>• {lateArrivalsLimit * 2} Lates ➔ {Number(((parseFloat(lopDaysDeduction) || 0) * 2).toFixed(2))} LOP Days</span>
-                          <span>• {lateArrivalsLimit * 3} Lates ➔ {Number(((parseFloat(lopDaysDeduction) || 0) * 3).toFixed(2))} LOP Days</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-                <label style={{ cursor: 'pointer', fontSize: '13px', fontWeight: '600', color: '#334155', display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
-                  Policy is Active
+              <div style={{ display: 'flex', gap: '20px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={enableLocation} onChange={e => setEnableLocation(e.target.checked)} />
+                  Enable Geofence Validation
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={enableShift} onChange={e => setEnableShift(e.target.checked)} />
+                  Enable Shift Validation
                 </label>
               </div>
 
-              {formError && (
-                <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', marginBottom: '14px' }}>
-                  {formError}
-                </div>
-              )}
+              {/* Late Arrival LOP Rules */}
+              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 700, color: '#0f172a', cursor: 'pointer', marginBottom: '12px' }}>
+                  <input type="checkbox" checked={enableLateArrivalLop} onChange={e => setEnableLateArrivalLop(e.target.checked)} />
+                  Enable Late Arrival LOP Deduction
+                </label>
 
-              <button type="submit" disabled={formSaving}
-                style={{ width: '100%', padding: '11px', background: formSaving ? '#a5b4fc' : 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: formSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.3)', marginTop: '4px' }}>
-                {formSaving ? 'Saving…' : editingPolicy ? 'Save Changes' : 'Create Policy'}
-              </button>
+                {enableLateArrivalLop && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: '#f8fafc', padding: '14px', borderRadius: '10px' }}>
+                    <div>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Late Arrivals Count</label>
+                      <input type="number" min="1" max="30" value={lateArrivalsLimit} onChange={e => setLateArrivalsLimit(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', marginTop: '4px', boxSizing: 'border-box' }} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>LOP Days Deducted</label>
+                      <select value={lopDaysDeduction} onChange={e => setLopDaysDeduction(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', marginTop: '4px' }}>
+                        <option value="0.5">0.5 Day LOP</option>
+                        <option value="1.0">1.0 Day LOP</option>
+                        <option value="1.5">1.5 Days LOP</option>
+                        <option value="2.0">2.0 Days LOP</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
+                <button type="button" onClick={() => setModalOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={formSaving} style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                  {formSaving ? 'Saving...' : editingPolicy ? 'Update Policy' : 'Create Policy'}
+                </button>
+              </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Policy Assignment Modal */}
+      {/* Modal 2: Assign Policy Coverage */}
       {assignOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}
-          onClick={() => !assignSaving && setAssignOpen(false)}>
-          <div style={{ background: '#fff', borderRadius: '20px', padding: '32px', width: '580px', maxWidth: '100%', boxShadow: '0 24px 64px rgba(0,0,0,0.2)', maxHeight: '90vh', overflowY: 'auto' }}
-            onClick={e => e.stopPropagation()}>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <div>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
-                  Assign Policy: {assigningPolicy?.name}
-                </h3>
-                <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#64748b' }}>
-                  Enforce this policy by assigning it to a department or specific employees
-                </p>
-              </div>
-              {!assignSaving && (
-                <button onClick={() => setAssignOpen(false)}
-                  style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}>
-                  <FiX size={14} />
-                </button>
-              )}
+        <div style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '28px', width: '500px', maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
+                Assign "{assigningPolicy?.name}"
+              </h3>
+              <button onClick={() => setAssignOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><FiX size={18} /></button>
             </div>
 
-            <form onSubmit={handleAssignSubmit}>
-              {/* Assignment Mode Tabs */}
-              <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '10px', padding: 3, marginBottom: '20px' }}>
-                <button
-                  type="button"
-                  onClick={() => { setAssignMode('DEPARTMENT'); setSelectedEmployeeIds([]) }}
-                  style={{
-                    flex: 1, padding: '8px 0', border: 'none', borderRadius: '8px', cursor: 'pointer',
-                    fontSize: '12px', fontWeight: '700', transition: 'all 0.15s',
-                    background: assignMode === 'DEPARTMENT' ? '#fff' : 'transparent',
-                    color: assignMode === 'DEPARTMENT' ? '#6366f1' : '#64748b',
-                    boxShadow: assignMode === 'DEPARTMENT' ? '0 1px 4px rgba(0,0,0,0.1)' : 'none'
-                  }}
-                >
-                  Department Assignment
+            {assignError && (
+              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#feecee', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
+                {assignError}
+              </div>
+            )}
+
+            <form onSubmit={handleAssignSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '4px', borderRadius: '10px' }}>
+                <button type="button" onClick={() => setAssignMode('DEPARTMENT')} style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', background: assignMode === 'DEPARTMENT' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent', color: assignMode === 'DEPARTMENT' ? '#ffffff' : '#64748b', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
+                  Department Wise
                 </button>
-                <button
-                  type="button"
-                  onClick={() => { setAssignMode('EMPLOYEE'); setSelectedDeptId('') }}
-                  style={{
-                    flex: 1, padding: '8px 0', border: 'none', borderRadius: '8px', cursor: 'pointer',
-                    fontSize: '12px', fontWeight: '700', transition: 'all 0.15s',
-                    background: assignMode === 'EMPLOYEE' ? '#fff' : 'transparent',
-                    color: assignMode === 'EMPLOYEE' ? '#6366f1' : '#64748b',
-                    boxShadow: assignMode === 'EMPLOYEE' ? '0 1px 4px rgba(0,0,0,0.1)' : 'none'
-                  }}
-                >
-                  Individual Assignment
+                <button type="button" onClick={() => setAssignMode('EMPLOYEE')} style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', background: assignMode === 'EMPLOYEE' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent', color: assignMode === 'EMPLOYEE' ? '#ffffff' : '#64748b', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
+                  Employee Wise
                 </button>
               </div>
 
-              {/* Department Dropdown */}
-              {assignMode === 'DEPARTMENT' && (
-                <div style={{ marginBottom: '20px' }}>
-                  <label style={labelStyle}>Target Department *</label>
-                  <select
-                    value={selectedDeptId}
-                    onChange={e => setSelectedDeptId(e.target.value)}
-                    style={{ ...inputStyle, cursor: 'pointer' }}
-                  >
-                    <option value="">— Select Department —</option>
-                    {metadataDepartments.map(d => {
-                      const isAssigned = policyAssignedDeptIds.includes(d.department_id)
-                      return (
-                        <option key={d.department_id} value={d.department_id}>
-                          {d.name} {isAssigned ? '✓ (Already Assigned)' : ''}
-                        </option>
-                      )
-                    })}
+              {assignMode === 'DEPARTMENT' ? (
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Select Department *</label>
+                  <select value={selectedDeptId} onChange={e => setSelectedDeptId(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px' }}>
+                    <option value="">Choose department</option>
+                    {metadataDepartments.map(d => (
+                      <option key={d.department_id} value={d.department_id}>
+                        {d.name} {policyAssignedDeptIds.includes(d.department_id) ? '(Assigned)' : ''}
+                      </option>
+                    ))}
                   </select>
-                  {selectedDeptId && policyAssignedDeptIds.includes(selectedDeptId) && (
-                    <div style={{ marginTop: '8px', padding: '10px 14px', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '9px', fontSize: '12.5px', color: '#1e40af', fontWeight: '600', display: 'flex', alignItems: 'center', gap: 7 }}>
-                      <span>ℹ️</span> All active employees in this department are already assigned to <strong>{assigningPolicy?.name}</strong>.
-                    </div>
-                  )}
                 </div>
-              )}
-
-              {/* Employee Checklist */}
-              {assignMode === 'EMPLOYEE' && (
-                <div style={{ marginBottom: '20px' }}>
-                  <label style={labelStyle}>Select Employees *</label>
-                  
-                  {/* Search inside checklist */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px', marginBottom: 10 }}>
-                    <FiSearch size={13} color="#94a3b8" />
-                    <input
-                      placeholder="Search employees…"
-                      value={empSearch}
-                      onChange={e => setEmpSearch(e.target.value)}
-                      style={{ border: 'none', background: 'transparent', padding: '7px 0', fontSize: '13px', color: '#0f172a', outline: 'none', width: '100%' }}
-                    />
-                  </div>
-
-                  <div style={{ maxHeight: '180px', overflowY: 'auto', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '6px' }}>
-                    {filteredEmployees.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '20px', color: '#94a3b8', fontSize: '12px' }}>No employees found</div>
-                    ) : (
-                      filteredEmployees.map(e => {
-                        const isAssigned = policyAssignedEmpIds.includes(e.employee_id)
-                        return (
-                          <label key={e.employee_id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: '7px', cursor: 'pointer', transition: 'background 0.1s' }}
-                            onMouseEnter={ev => ev.currentTarget.style.background = '#f8fafc'}
-                            onMouseLeave={ev => ev.currentTarget.style.background = 'transparent'}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={selectedEmployeeIds.includes(e.employee_id)}
-                              onChange={() => handleToggleEmployeeSelection(e.employee_id)}
-                              style={{ cursor: 'pointer' }}
-                            />
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                <span style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{e.first_name} {e.last_name}</span>
-                                {isAssigned && (
-                                  <span style={{ fontSize: '10px', color: '#4338ca', background: '#e0e7ff', border: '1px solid #c7d2fe', padding: '1px 6px', borderRadius: '4px', fontWeight: '700' }}>
-                                    Already Assigned
-                                  </span>
-                                )}
-                              </div>
-                              <span style={{ fontSize: '11px', color: '#64748b' }}>{e.employee_code} · {e.department_name || 'No Dept'}</span>
-                            </div>
-                          </label>
-                        )
-                      })
-                    )}
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: 6, fontWeight: 500 }}>
-                    Selected {selectedEmployeeIds.length} employee{selectedEmployeeIds.length !== 1 ? 's' : ''}
+              ) : (
+                <div>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>Select Employees *</label>
+                  <input type="text" placeholder="Search employees..." value={empSearch} onChange={e => setEmpSearch(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', marginBottom: '10px', boxSizing: 'border-box' }} />
+                  <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '8px' }}>
+                    {filteredEmpMetadata.map(e => (
+                      <label key={e.employee_id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px', fontSize: '13px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedEmployeeIds.includes(e.employee_id)}
+                          onChange={ev => {
+                            if (ev.target.checked) setSelectedEmployeeIds(p => [...p, e.employee_id])
+                            else setSelectedEmployeeIds(p => p.filter(id => id !== e.employee_id))
+                          }}
+                        />
+                        <span style={{ fontWeight: 600, color: '#0f172a' }}>{e.first_name} {e.last_name}</span>
+                        <CodeBadge code={e.employee_code} />
+                      </label>
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Effective Date */}
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Effective From Date *</label>
-                <input
-                  type="date"
-                  value={effectiveFrom}
-                  onChange={e => setEffectiveFrom(e.target.value)}
-                  required
-                  style={inputStyle}
-                />
-                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginTop: 4 }}>
-                  Future dates can be selected for scheduled changes.
-                </span>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Effective From Date</label>
+                <input type="date" value={effectiveFrom} onChange={e => setEffectiveFrom(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }} />
               </div>
 
-              {assignError && (
-                <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', marginBottom: '14px' }}>
-                  {assignError}
-                </div>
-              )}
-
-              <div style={{ display: 'flex', gap: 10 }}>
-                <button
-                  type="button"
-                  disabled={assignSaving}
-                  onClick={() => setAssignOpen(false)}
-                  style={{ flex: 1, padding: '10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={assignSaving}
-                  style={{ flex: 2, padding: '10px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: assignSaving ? 'not-allowed' : 'pointer', background: assignSaving ? '#a5b4fc' : 'linear-gradient(135deg,#6366f1,#4f46e5)', boxShadow: assignSaving ? 'none' : '0 4px 12px rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
-                >
-                  {assignSaving ? <><FiLoader style={{ animation: 'spin 0.8s linear infinite' }} /> Assigning…</> : 'Assign Policy'}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
+                <button type="button" onClick={() => setAssignOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={assignSaving} style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                  {assignSaving ? 'Assigning...' : 'Assign Coverage'}
                 </button>
               </div>
             </form>
@@ -828,52 +623,4 @@ export default function AttendancePolicies() {
       )}
     </div>
   )
-}
-
-const labelStyle = {
-  display: 'block',
-  fontSize: '11px',
-  fontWeight: '700',
-  color: '#64748b',
-  marginBottom: '6px',
-  textTransform: 'uppercase',
-  letterSpacing: '0.06em'
-}
-
-const inputStyle = {
-  width: '100%',
-  padding: '10px 13px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '9px',
-  fontSize: '13px',
-  color: '#0f172a',
-  outline: 'none',
-  boxSizing: 'border-box',
-  fontFamily: 'inherit',
-  background: '#f8fafc'
-}
-
-const soonBadgeStyle = {
-  fontSize: '10px',
-  background: '#f1f5f9',
-  color: '#64748b',
-  padding: '1px 6px',
-  borderRadius: '5px',
-  fontWeight: '700',
-  letterSpacing: '0.02em',
-  border: '1px solid #e2e8f0'
-}
-
-const selStyle = {
-  width: '100%',
-  padding: '10px 13px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '9px',
-  fontSize: '13px',
-  color: '#0f172a',
-  outline: 'none',
-  boxSizing: 'border-box',
-  fontFamily: 'inherit',
-  background: '#f8fafc',
-  cursor: 'pointer'
 }

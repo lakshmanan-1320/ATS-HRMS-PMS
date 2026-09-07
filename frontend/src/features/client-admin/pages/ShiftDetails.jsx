@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAttendanceStore } from '../../../store/attendance.store'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
-import { FiChevronLeft, FiClock, FiUsers, FiInfo, FiFolder, FiSearch } from 'react-icons/fi'
+import { FiArrowLeft, FiClock, FiUsers, FiInfo, FiFolder, FiSearch } from 'react-icons/fi'
+
+const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
+
+function CodeBadge({ code }) {
+  if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
+  return (
+    <span style={{
+      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
+      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+    }}>
+      {code}
+    </span>
+  )
+}
 
 export default function ShiftDetails() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { currentShift, loadingShifts, error, fetchShiftDetails } = useAttendanceStore()
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -16,7 +32,6 @@ export default function ShiftDetails() {
     }
   }, [id, fetchShiftDetails])
 
-  // Filter employees by search
   const filteredEmployees = currentShift?.assignedEmployees?.filter(emp => {
     const fullName = `${emp.first_name || ''} ${emp.last_name || ''}`.toLowerCase()
     const code = (emp.employee_code || '').toLowerCase()
@@ -25,7 +40,6 @@ export default function ShiftDetails() {
     return fullName.includes(query) || code.includes(query) || dept.includes(query)
   }) || []
 
-  // Time format helper (converts "09:00:00" to "09:00 AM")
   const formatTimeStr = (t) => {
     if (!t) return '—'
     const parts = t.split(':')
@@ -36,53 +50,14 @@ export default function ShiftDetails() {
     return `${displayH.toString().padStart(2, '0')}:${m} ${ampm}`
   }
 
-  // Styles
-  const s = {
-    container: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: '"Outfit", "Inter", sans-serif' },
-    content: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' },
-    pageBody: { flex: 1, padding: '28px 32px', overflowY: 'auto' },
-    backBtn: { display: 'inline-flex', alignItems: 'center', gap: 6, color: '#6366f1', fontSize: 13, fontWeight: 700, textDecoration: 'none', marginBottom: 16 },
-    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
-    title: { fontSize: 22, fontWeight: 800, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: 10 },
-    colorTag: (c) => ({ width: 14, height: 14, borderRadius: '50%', background: c || '#6366f1' }),
-    shiftCode: { fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: '#6366f1', background: '#eef2ff', padding: '3px 8px', borderRadius: 8 },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 28 },
-    metricCard: {
-      background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, padding: 18,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: 14
-    },
-    metricIcon: (bg, color) => ({
-      width: 42, height: 42, borderRadius: 12, background: bg, color: color,
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }),
-    metricValue: { fontSize: 16, fontWeight: 800, color: '#0f172a', margin: 0 },
-    metricLabel: { fontSize: 11, color: '#64748b', marginTop: 2, fontWeight: 600 },
-    sectionTitle: { fontSize: 15, fontWeight: 800, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: 8 },
-    flexContainer: { display: 'grid', gridTemplateColumns: '3fr 1fr', gap: 24, alignItems: 'start' },
-    mainCard: { background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)', overflow: 'hidden' },
-    cardHeader: { padding: '16px 20px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    searchWrapper: { position: 'relative', width: 220 },
-    searchInput: {
-      width: '100%', padding: '8px 12px 8px 30px', border: '1px solid #e2e8f0', borderRadius: 10,
-      fontSize: 12, outline: 'none', color: '#1e293b', fontFamily: 'inherit'
-    },
-    table: { width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' },
-    th: { background: '#f8fafc', padding: '12px 16px', fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #e2e8f0' },
-    td: { padding: '14px 16px', borderBottom: '1px solid #f1f5f9', color: '#334155' },
-    deptCard: {
-      padding: '12px 14px', border: '1px solid #e2e8f0', borderRadius: 12,
-      display: 'flex', alignItems: 'center', gap: 10, background: '#f8fafc', marginBottom: 10
-    }
-  }
-
   if (loadingShifts) {
     return (
-      <div style={s.container}>
+      <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
         <ClientAdminSidebar active="shifts-schedules" />
-        <div style={s.content}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <ClientAdminTopBar />
           <div style={{ textAlign: 'center', padding: '100px 0', color: '#64748b' }}>
-            <div style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid #cbd5e1', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            <div style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid #cbd5e1', borderTopColor: '#C2071A', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
             <p style={{ marginTop: 12, fontWeight: 500 }}>Loading shift details...</p>
           </div>
         </div>
@@ -92,15 +67,15 @@ export default function ShiftDetails() {
 
   if (error || !currentShift) {
     return (
-      <div style={s.container}>
+      <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
         <ClientAdminSidebar active="shifts-schedules" />
-        <div style={s.content}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <ClientAdminTopBar />
-          <div style={s.pageBody}>
-            <Link to="/client-admin/attendance/shifts-schedules" style={s.backBtn}>
-              <FiChevronLeft /> Back to Shifts
-            </Link>
-            <div style={{ padding: 24, background: '#fee2e2', color: '#b91c1c', borderRadius: 12, fontWeight: 600 }}>
+          <div style={{ padding: '28px 32px' }}>
+            <button onClick={() => navigate('/client-admin/attendance/shifts-schedules')} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#C2071A', fontSize: 13, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', marginBottom: 16, padding: 0 }}>
+              <FiArrowLeft size={14} color="#C2071A" strokeWidth={2.5} /> Back to Shifts
+            </button>
+            <div style={{ padding: 24, background: '#feecee', color: '#dc2626', borderRadius: 12, fontWeight: 600 }}>
               {error || 'Shift not found.'}
             </div>
           </div>
@@ -110,151 +85,152 @@ export default function ShiftDetails() {
   }
 
   return (
-    <div style={s.container}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="shifts-schedules" />
 
-      <div style={s.content}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={s.pageBody}>
-          <Link to="/client-admin/attendance/shifts-schedules" style={s.backBtn}>
-            <FiChevronLeft /> Back to Shifts
-          </Link>
+        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+          <button onClick={() => navigate('/client-admin/attendance/shifts-schedules')} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#C2071A', fontSize: 13, fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', marginBottom: 16, padding: 0 }}>
+            <FiArrowLeft size={14} color="#C2071A" strokeWidth={2.5} /> Back to Shifts
+          </button>
 
           {/* Header */}
-          <div style={s.header}>
-            <div>
-              <h1 style={s.title}>
-                <span style={s.colorTag(currentShift.color_code)} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 14, height: 14, borderRadius: '50%', background: currentShift.color_code || '#C2071A' }} />
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: 10 }}>
                 {currentShift.shift_name}
-                <span style={s.shiftCode}>{currentShift.shift_code}</span>
               </h1>
+              <CodeBadge code={currentShift.shift_code} />
             </div>
           </div>
 
           {/* Metrics Grid */}
-          <div style={s.grid}>
-            <div style={s.metricCard}>
-              <div style={s.metricIcon('#eef2ff', '#6366f1')}>
-                <FiClock size={18} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 28 }}>
+            <div style={{ background: '#ffffff', border: 'none', borderRadius: 16, padding: 18, boxShadow: cardShadow, display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: '#FEECEE', color: '#C2071A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiClock size={18} color="#C2071A" strokeWidth={2.5} />
               </div>
               <div>
-                <p style={s.metricValue}>{formatTimeStr(currentShift.start_time)} - {formatTimeStr(currentShift.end_time)}</p>
-                <p style={s.metricLabel}>Shift Timings</p>
+                <p style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: 0 }}>{formatTimeStr(currentShift.start_time)} - {formatTimeStr(currentShift.end_time)}</p>
+                <p style={{ fontSize: 11, color: '#64748b', marginTop: 2, fontWeight: 600 }}>Shift Timings</p>
               </div>
             </div>
 
-            <div style={s.metricCard}>
-              <div style={s.metricIcon('#ecfdf5', '#10b981')}>
+            <div style={{ background: '#ffffff', border: 'none', borderRadius: 16, padding: 18, boxShadow: cardShadow, display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: '#e8fbf0', color: '#0fa958', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <FiInfo size={18} />
               </div>
               <div>
-                <p style={s.metricValue}>{currentShift.grace_minutes} mins</p>
-                <p style={s.metricLabel}>Grace Minutes</p>
+                <p style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: 0 }}>{currentShift.grace_minutes || 0} Mins</p>
+                <p style={{ fontSize: 11, color: '#64748b', marginTop: 2, fontWeight: 600 }}>Grace Period</p>
               </div>
             </div>
 
-            <div style={s.metricCard}>
-              <div style={s.metricIcon('#fef3c7', '#f59e0b')}>
-                <FiInfo size={18} />
-              </div>
-              <div>
-                <p style={s.metricValue}>{currentShift.early_exit_grace_minutes} mins</p>
-                <p style={s.metricLabel}>Early Exit Grace</p>
-              </div>
-            </div>
-
-            <div style={s.metricCard}>
-              <div style={s.metricIcon('#f0fdfa', '#14b8a6')}>
+            <div style={{ background: '#ffffff', border: 'none', borderRadius: 16, padding: 18, boxShadow: cardShadow, display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: '#f3e8ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <FiClock size={18} />
               </div>
               <div>
-                <p style={s.metricValue}>{currentShift.minimum_hours} Hours</p>
-                <p style={s.metricLabel}>Min working hours</p>
+                <p style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: 0 }}>{currentShift.minimum_hours || 8.0} Hours</p>
+                <p style={{ fontSize: 11, color: '#64748b', marginTop: 2, fontWeight: 600 }}>Min Hours Required</p>
               </div>
             </div>
 
-            <div style={s.metricCard}>
-              <div style={s.metricIcon('#fdf2f8', '#ec4899')}>
+            <div style={{ background: '#ffffff', border: 'none', borderRadius: 16, padding: 18, boxShadow: cardShadow, display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <FiUsers size={18} />
               </div>
               <div>
-                <p style={s.metricValue}>{currentShift.assigned_employees_count}</p>
-                <p style={s.metricLabel}>Active Employees</p>
+                <p style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: 0 }}>{currentShift.assignedEmployees?.length || 0}</p>
+                <p style={{ fontSize: 11, color: '#64748b', marginTop: 2, fontWeight: 600 }}>Assigned Employees</p>
               </div>
             </div>
           </div>
 
-          {/* Double Column Container */}
-          <div style={s.flexContainer}>
-            {/* Left: Employees Table */}
-            <div style={s.mainCard}>
-              <div style={s.cardHeader}>
-                <h3 style={s.sectionTitle}>
-                  <FiUsers size={16} color="#6366f1" /> Assigned Employees
+          {/* Members & Departments Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: 24, alignItems: 'start' }}>
+            
+            {/* Table of Employees */}
+            <div style={{ background: '#ffffff', border: 'none', borderRadius: 16, boxShadow: cardShadow, overflow: 'hidden' }}>
+              <div style={{ padding: '16px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <FiUsers color="#C2071A" size={16} /> Assigned Employees ({filteredEmployees.length})
                 </h3>
-                <div style={s.searchWrapper}>
-                  <FiSearch size={12} color="#94a3b8" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                <div style={{ position: 'relative', width: 220 }}>
+                  <FiSearch size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                   <input
-                    id="employee-list-search"
+                    type="text"
                     placeholder="Search employees..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    style={s.searchInput}
+                    style={{
+                      width: '100%', padding: '8px 12px 8px 30px', border: '1.5px solid #e2e8f0', borderRadius: 10,
+                      fontSize: 12, outline: 'none', color: '#1e293b', background: '#f8fafc', boxSizing: 'border-box'
+                    }}
                   />
                 </div>
               </div>
 
-              {filteredEmployees.length === 0 ? (
-                <div style={{ padding: '40px 20px', textAlign: 'center', color: '#64748b' }}>
-                  <p style={{ margin: 0, fontSize: 13, fontWeight: 500 }}>No assigned employees match the filter criteria.</p>
-                </div>
-              ) : (
-                <table style={s.table}>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
                   <thead>
-                    <tr>
-                      <th style={s.th}>Employee</th>
-                      <th style={s.th}>Code</th>
-                      <th style={s.th}>Department</th>
-                      <th style={s.th}>Designation</th>
+                    <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff' }}>
+                      <th style={{ padding: '14px 16px', fontSize: 11.5, fontWeight: 700, color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Employee</th>
+                      <th style={{ padding: '14px 16px', fontSize: 11.5, fontWeight: 700, color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Code</th>
+                      <th style={{ padding: '14px 16px', fontSize: 11.5, fontWeight: 700, color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Department</th>
+                      <th style={{ padding: '14px 16px', fontSize: 11.5, fontWeight: 700, color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Effective From</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredEmployees.map(emp => (
-                      <tr key={emp.employee_id}>
-                        <td style={{ ...s.td, fontWeight: 700, color: '#0f172a' }}>{emp.first_name} {emp.last_name}</td>
-                        <td style={{ ...s.td, fontFamily: 'monospace', color: '#6366f1', fontWeight: 600 }}>{emp.employee_code}</td>
-                        <td style={s.td}>{emp.department_name || '—'}</td>
-                        <td style={s.td}>{emp.designation || '—'}</td>
+                    {filteredEmployees.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+                          No employees assigned to this shift.
+                        </td>
                       </tr>
-                    ))}
+                    ) : (
+                      filteredEmployees.map((emp, i) => (
+                        <tr key={emp.employee_id} style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}>
+                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>
+                            {emp.first_name} {emp.last_name}
+                          </td>
+                          <td style={{ padding: '14px 16px' }}>
+                            <CodeBadge code={emp.employee_code} />
+                          </td>
+                          <td style={{ padding: '14px 16px', color: '#475569' }}>
+                            {emp.department_name || '—'}
+                          </td>
+                          <td style={{ padding: '14px 16px', color: '#64748b' }}>
+                            {emp.effective_from ? new Date(emp.effective_from).toLocaleDateString('en-IN') : '—'}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
+              </div>
+            </div>
+
+            {/* Sidebar Departments list */}
+            <div style={{ background: '#ffffff', border: 'none', borderRadius: 16, padding: 20, boxShadow: cardShadow }}>
+              <h3 style={{ fontSize: 15, fontWeight: 800, color: '#0f172a', margin: '0 0 16px 0', borderBottom: '1px solid #f1f5f9', paddingBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <FiFolder color="#C2071A" size={16} /> Departments ({currentShift?.assignedDepartments?.length || 0})
+              </h3>
+              {(!currentShift?.assignedDepartments || currentShift.assignedDepartments.length === 0) ? (
+                <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>No departments assigned.</p>
+              ) : (
+                currentShift.assignedDepartments.map(dept => (
+                  <div key={dept.department_id} style={{ padding: '10px 12px', borderRadius: 10, background: '#f8fafc', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>{dept.department_name}</span>
+                  </div>
+                ))
               )}
             </div>
 
-            {/* Right: Assigned Departments */}
-            <div>
-              <div style={{ marginBottom: 12 }}>
-                <h3 style={s.sectionTitle}>
-                  <FiFolder size={16} color="#6366f1" /> Assigned Departments
-                </h3>
-              </div>
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, padding: 18, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-                {currentShift.assignedDepartments?.length === 0 ? (
-                  <p style={{ margin: 0, fontSize: 13, color: '#64748b', textAlign: 'center', padding: '10px 0' }}>No departments assigned.</p>
-                ) : (
-                  currentShift.assignedDepartments?.map(dept => (
-                    <div key={dept.department_id} style={s.deptCard}>
-                      <FiFolder size={14} color="#6366f1" />
-                      <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{dept.name}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
           </div>
-
         </div>
       </div>
     </div>

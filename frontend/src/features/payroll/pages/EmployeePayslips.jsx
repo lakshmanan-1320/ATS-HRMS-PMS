@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import {
+  FiFileText, FiDollarSign, FiTrendingUp, FiDownload,
+  FiCheckCircle, FiCalendar, FiGift, FiCoffee, FiAlertTriangle, FiX, FiCheck, FiEye
+} from 'react-icons/fi'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
 
@@ -12,7 +16,7 @@ api.interceptors.request.use(cfg => {
 })
 
 const MONTH_COLORS = [
-  '#6366f1','#8b5cf6','#ec4899','#f59e0b','#10b981','#3b82f6',
+  '#C2071A','#900513','#ec4899','#f59e0b','#10b981','#3b82f6',
   '#14b8a6','#f43f5e','#a855f7','#22c55e','#0ea5e9','#f97316'
 ]
 
@@ -49,10 +53,11 @@ function numberToWords(num) {
 function StatusBadge({ status }) {
   const map = {
     APPROVED: { bg: 'rgba(16,185,129,0.12)', color: '#059669', border: 'rgba(16,185,129,0.25)', dot: '#10b981' },
-    LOCKED:   { bg: 'rgba(99,102,241,0.1)',  color: '#6366f1', border: 'rgba(99,102,241,0.25)', dot: '#6366f1' },
+    LOCKED:   { bg: 'rgba(194,7,26,0.08)',   color: '#C2071A', border: 'rgba(194,7,26,0.2)',    dot: '#C2071A' },
     DRAFT:    { bg: 'rgba(234,179,8,0.1)',   color: '#d97706', border: 'rgba(234,179,8,0.25)',  dot: '#f59e0b' },
     GENERATED:{ bg: 'rgba(234,179,8,0.1)',   color: '#d97706', border: 'rgba(234,179,8,0.25)',  dot: '#f59e0b' },
   }
+
   const c = map[status] || { bg: 'rgba(100,116,139,0.1)', color: '#64748b', border: 'rgba(100,116,139,0.2)', dot: '#94a3b8' }
   return (
     <span style={{
@@ -141,10 +146,11 @@ export default function EmployeePayslips() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '6px' }}>
               <div style={{
                 width: '42px', height: '42px', borderRadius: '12px',
-                background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))',
-                border: '1px solid rgba(99,102,241,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'
-              }}>💰</div>
+                background: '#FEECEE',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <FiDollarSign size={20} color="#C2071A" strokeWidth={2.5} />
+              </div>
               <div>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a', lineHeight: 1.2 }}>My Payslips</h1>
                 <p style={{ margin: 0, fontSize: '13px', color: '#64748b', marginTop: '2px' }}>View and access your historical salary details and payslip breakdowns</p>
@@ -158,24 +164,24 @@ export default function EmployeePayslips() {
               {[
                 {
                   label: 'Total Payslips', value: payslips.length,
-                  icon: '📄', color: '#6366f1',
+                  icon: <FiFileText size={20} color="#C2071A" />, color: '#C2071A',
                   sub: 'All time records'
                 },
                 {
                   label: 'Latest Net Salary', value: `₹${latestNet.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-                  icon: '💵', color: '#10b981',
+                  icon: <FiDollarSign size={20} color="#10b981" />, color: '#10b981',
                   sub: `${getMonthName(payslips[0]?.payroll_month)} ${payslips[0]?.payroll_year}`
                 },
                 {
                   label: 'YTD Earnings', value: `₹${ytdTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-                  icon: '📈', color: '#f59e0b',
+                  icon: <FiTrendingUp size={20} color="#d97706" />, color: '#d97706',
                   sub: 'Year to date total'
                 }
               ].map((stat, i) => (
                 <div key={i} style={{
-                  background: '#ffffff', border: '1px solid #e8eaf0',
-                  borderRadius: '18px', padding: '20px 24px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                  background: '#ffffff', border: 'none',
+                  borderRadius: '16px', padding: '20px 24px',
+                  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
                   position: 'relative', overflow: 'hidden'
                 }}>
                   <div style={{
@@ -189,7 +195,7 @@ export default function EmployeePayslips() {
                       <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '6px' }}>{stat.sub}</div>
                     </div>
                     <div style={{
-                      width: '40px', height: '40px', borderRadius: '10px', fontSize: '18px',
+                      width: '40px', height: '40px', borderRadius: '10px',
                       background: `${stat.color}14`, border: `1px solid ${stat.color}25`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                     }}>{stat.icon}</div>
@@ -201,8 +207,8 @@ export default function EmployeePayslips() {
 
           {/* Payslips Section */}
           <div style={{
-            background: '#ffffff', border: '1px solid #e8eaf0',
-            borderRadius: '20px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
+            background: '#ffffff', border: 'none',
+            borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
           }}>
             {/* Section Header */}
             <div style={{
@@ -210,7 +216,7 @@ export default function EmployeePayslips() {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366f1', boxShadow: '0 0 8px rgba(99,102,241,0.4)' }} />
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C2071A', boxShadow: '0 0 8px rgba(194,7,26,0.4)' }} />
                 <span style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b' }}>Payslip History</span>
               </div>
               {payslips.length > 0 && (
@@ -233,10 +239,11 @@ export default function EmployeePayslips() {
             ) : payslips.length === 0 ? (
               <div style={{ padding: '72px 40px', textAlign: 'center' }}>
                 <div style={{
-                  width: '72px', height: '72px', borderRadius: '20px', margin: '0 auto 16px',
-                  background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.15)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px'
-                }}>📋</div>
+                  width: '64px', height: '64px', borderRadius: '16px', margin: '0 auto 16px',
+                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <FiFileText size={28} color="#C2071A" />
+                </div>
                 <div style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '6px' }}>No payslips yet</div>
                 <div style={{ fontSize: '13px', color: '#64748b', maxWidth: '300px', margin: '0 auto' }}>
                   Your payslips will appear here once salary is processed by HR.
@@ -247,11 +254,11 @@ export default function EmployeePayslips() {
                 {/* Table Header */}
                 <div style={{
                   display: 'grid', gridTemplateColumns: '2fr 1.5fr 1.5fr 1.5fr 1fr 1.5fr',
-                  padding: '12px 24px', gap: '12px',
-                  borderBottom: '1px solid #e8eaf0', background: '#f8fafc'
+                  padding: '14px 24px', gap: '12px',
+                  borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)'
                 }}>
                   {['Pay Period','Gross Earnings','Deductions','Net Salary','Status','Action'].map(h => (
-                    <div key={h} style={{ fontSize: '10px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</div>
+                    <div key={h} style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</div>
                   ))}
                 </div>
 
@@ -309,22 +316,29 @@ export default function EmployeePayslips() {
                         <button
                           className="ps-btn"
                           style={{
-                            padding: '7px 14px', background: 'rgba(99,102,241,0.08)',
-                            border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px',
-                            fontSize: '12px', fontWeight: '600', color: '#6366f1', cursor: 'pointer'
+                            padding: '7px 14px', background: 'rgba(194,7,26,0.08)',
+                            border: '1px solid rgba(194,7,26,0.2)', borderRadius: '8px',
+                            fontSize: '12px', fontWeight: '600', color: '#C2071A', cursor: 'pointer',
+                            display: 'inline-flex', alignItems: 'center', gap: '4px'
                           }}
                           onClick={() => loadDetails(ps.employee_payroll_id)}
-                        >View</button>
+                        >
+                          <FiEye size={13} color="#C2071A" /> View
+                        </button>
                         {ps.current_status === 'LOCKED' && (
                           <button
                             className="ps-btn"
                             style={{
-                              padding: '7px 14px', background: 'rgba(16,185,129,0.08)',
-                              border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px',
-                              fontSize: '12px', fontWeight: '600', color: '#059669', cursor: 'pointer'
+                              padding: '7px 14px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                              border: 'none', borderRadius: '8px',
+                              fontSize: '12px', fontWeight: '600', color: '#fff', cursor: 'pointer',
+                              display: 'inline-flex', alignItems: 'center', gap: '4px',
+                              boxShadow: '0 2px 6px rgba(194,7,26,0.25)'
                             }}
                             onClick={() => handleDownloadPayslip(ps.employee_payroll_id)}
-                          >↓ PDF</button>
+                          >
+                            <FiDownload size={13} color="#ffffff" stroke="#ffffff" /> PDF
+                          </button>
                         )}
                       </div>
                     </div>
@@ -344,9 +358,9 @@ export default function EmployeePayslips() {
         }} onClick={() => { setSelectedPayslipId(null); setDetails(null) }}>
           <div
             style={{
-              background: '#ffffff', border: '1px solid #e2e8f0',
+              background: '#ffffff', border: 'none',
               borderRadius: '24px', width: '100%', maxWidth: '700px', maxHeight: '90vh',
-              overflowY: 'auto', boxShadow: '0 24px 64px rgba(15,23,42,0.15)',
+              overflowY: 'auto', boxShadow: '0 24px 64px rgba(15,23,42,0.18)',
               animation: 'fadeIn 0.25s ease'
             }}
             onClick={e => e.stopPropagation()}
@@ -358,14 +372,14 @@ export default function EmployeePayslips() {
                 {/* Modal Hero */}
                 <div style={{
                   padding: '28px 32px 24px',
-                  background: 'linear-gradient(135deg, rgba(99,102,241,0.07) 0%, rgba(139,92,246,0.04) 100%)',
+                  background: 'linear-gradient(135deg, rgba(194,7,26,0.06) 0%, rgba(144,5,19,0.03) 100%)',
                   borderBottom: '1px solid #e8eaf0',
                   position: 'relative', overflow: 'hidden'
                 }}>
                   <div style={{
                     position: 'absolute', top: '-30px', right: '-30px',
                     width: '120px', height: '120px', borderRadius: '50%',
-                    background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.08)'
+                    background: 'rgba(194,7,26,0.04)', border: '1px solid rgba(194,7,26,0.08)'
                   }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -402,17 +416,21 @@ export default function EmployeePayslips() {
                         <button
                           className="ps-btn"
                           style={{
-                            padding: '8px 16px', background: 'rgba(99,102,241,0.08)',
-                            border: '1px solid rgba(99,102,241,0.2)', borderRadius: '10px',
-                            fontSize: '13px', fontWeight: '600', color: '#6366f1', cursor: 'pointer'
+                            padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                            border: 'none', borderRadius: '10px',
+                            fontSize: '13px', fontWeight: '600', color: '#fff', cursor: 'pointer',
+                            display: 'inline-flex', alignItems: 'center', gap: '6px',
+                            boxShadow: '0 3px 10px rgba(194,7,26,0.25)'
                           }}
                           onClick={() => handleDownloadPayslip(details.payslip.employee_payroll_id)}
-                        >↓ Download PDF</button>
+                        >
+                          <FiDownload size={14} color="#ffffff" stroke="#ffffff" /> Download PDF
+                        </button>
                       )}
                       <button
                         style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '22px', cursor: 'pointer', padding: '4px', lineHeight: 1 }}
                         onClick={() => { setSelectedPayslipId(null); setDetails(null) }}
-                      >×</button>
+                      ><FiX size={20} color="#64748b" /></button>
                     </div>
                   </div>
                 </div>
@@ -451,17 +469,17 @@ export default function EmployeePayslips() {
                     <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Attendance Snapshot</div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
                       {[
-                        { label: 'Present', val: parseFloat(details.payslip?.present_days), color: '#10b981', icon: '✅' },
-                        { label: 'Paid Leaves', val: parseFloat(details.payslip?.paid_leave_days), color: '#3b82f6', icon: '🌿' },
-                        { label: 'Holidays', val: parseFloat(details.payslip?.holiday_days), color: '#8b5cf6', icon: '🎉' },
-                        { label: 'Week Offs', val: parseFloat(details.payslip?.week_off_days), color: '#64748b', icon: '😴' },
-                        { label: 'LOP Days', val: parseFloat(details.payslip?.lop_days), color: parseFloat(details.payslip?.lop_days) > 0 ? '#ef4444' : '#64748b', icon: '⚠️' },
+                        { label: 'Present', val: parseFloat(details.payslip?.present_days), color: '#10b981', icon: <FiCheckCircle size={16} color="#10b981" /> },
+                        { label: 'Paid Leaves', val: parseFloat(details.payslip?.paid_leave_days), color: '#C2071A', icon: <FiCalendar size={16} color="#C2071A" /> },
+                        { label: 'Holidays', val: parseFloat(details.payslip?.holiday_days), color: '#d97706', icon: <FiGift size={16} color="#d97706" /> },
+                        { label: 'Week Offs', val: parseFloat(details.payslip?.week_off_days), color: '#64748b', icon: <FiCoffee size={16} color="#64748b" /> },
+                        { label: 'LOP Days', val: parseFloat(details.payslip?.lop_days), color: parseFloat(details.payslip?.lop_days) > 0 ? '#ef4444' : '#64748b', icon: <FiAlertTriangle size={16} color={parseFloat(details.payslip?.lop_days) > 0 ? '#ef4444' : '#64748b'} /> },
                       ].map(({ label, val, color, icon }) => (
                         <div key={label} style={{
                           background: '#f8fafc', border: '1px solid #e8eaf0',
                           borderRadius: '12px', padding: '12px 10px', textAlign: 'center'
                         }}>
-                          <div style={{ fontSize: '14px', marginBottom: '4px' }}>{icon}</div>
+                          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '4px' }}>{icon}</div>
                           <div style={{ fontSize: '18px', fontWeight: '800', color, lineHeight: 1 }}>{val}</div>
                           <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: '4px' }}>{label}</div>
                         </div>
@@ -488,8 +506,8 @@ export default function EmployeePayslips() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     {/* Earnings */}
                     <div style={{ background: '#f8fafc', border: '1px solid #e8eaf0', borderRadius: '14px', overflow: 'hidden' }}>
-                      <div style={{ padding: '12px 16px', borderBottom: '1px solid #e8eaf0', background: 'rgba(99,102,241,0.06)' }}>
-                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Earnings</span>
+                      <div style={{ padding: '12px 16px', borderBottom: '1px solid #e8eaf0', background: 'rgba(194,7,26,0.06)' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#C2071A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Earnings</span>
                       </div>
                       <div style={{ padding: '4px 16px 8px' }}>
                         {details.components?.filter(c => c.component_type === 'EARNING').map(c => (
@@ -574,3 +592,4 @@ export default function EmployeePayslips() {
     </div>
   )
 }
+

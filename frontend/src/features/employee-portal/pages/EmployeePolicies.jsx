@@ -180,7 +180,7 @@ export default function EmployeePolicies() {
   const iStyle = {
     padding: '10px 14px',
     background: '#ffffff',
-    border: '1px solid #cbd5e1',
+    border: '1px solid #e2e8f0',
     borderRadius: 10,
     color: '#1e293b',
     fontSize: 13,
@@ -205,7 +205,7 @@ export default function EmployeePolicies() {
   const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)';
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
       <EmployeeSidebar active="policies" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -215,7 +215,7 @@ export default function EmployeePolicies() {
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#C2071A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 <FiShield size={14} /> Governance & Guidelines
               </div>
               <h1 style={{ margin: '4px 0 0', fontSize: 24, fontWeight: 800, color: '#1e293b' }}>
@@ -255,10 +255,10 @@ export default function EmployeePolicies() {
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     transition: 'all 0.15s ease',
-                    background: selectedCategory === cat ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : '#ffffff',
-                    border: selectedCategory === cat ? 'none' : '1px solid #cbd5e1',
+                    background: selectedCategory === cat ? 'linear-gradient(135deg, #C2071A, #941018)' : '#ffffff',
+                    border: selectedCategory === cat ? 'none' : '1px solid #e2e8f0',
                     color: selectedCategory === cat ? '#ffffff' : '#475569',
-                    boxShadow: selectedCategory === cat ? '0 4px 12px rgba(99,102,241,0.25)' : 'none'
+                    boxShadow: selectedCategory === cat ? '0 4px 12px rgba(194,7,26,0.25)' : 'none'
                   }}
                 >
                   {cat}
@@ -273,8 +273,8 @@ export default function EmployeePolicies() {
               Loading policies...
             </div>
           ) : filteredPolicies.length === 0 ? (
-            <div style={{ padding: '60px 20px', textAlign: 'center', background: '#ffffff', borderRadius: 16, border: '1px dashed #cbd5e1', boxShadow: cardShadow }}>
-              <FiFileText size={40} style={{ color: '#cbd5e1', marginBottom: 12 }} />
+            <div style={{ padding: '60px 20px', textAlign: 'center', background: '#ffffff', borderRadius: 16, border: '1px dashed #e2e8f0', boxShadow: cardShadow }}>
+              <FiFileText size={40} style={{ color: '#e2e8f0', marginBottom: 12 }} />
               <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 4 }}>No Matching Policies</div>
               <div style={{ fontSize: 13, color: '#64748b', maxWidth: 360, margin: '0 auto' }}>
                 No published company policies match your search term or selected category filter.
@@ -288,7 +288,7 @@ export default function EmployeePolicies() {
                   style={{
                     background: '#ffffff',
                     borderRadius: 16,
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #e2e8f0',
                     padding: 22,
                     display: 'flex',
                     flexDirection: 'column',
@@ -298,19 +298,19 @@ export default function EmployeePolicies() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-3px)';
-                    e.currentTarget.style.boxShadow = '0 12px 24px -4px rgba(99, 102, 241, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.04)';
-                    e.currentTarget.style.borderColor = '#a5b4fc';
+                    e.currentTarget.style.boxShadow = '0 12px 24px -4px rgba(194, 7, 26, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.04)';
+                    e.currentTarget.style.borderColor = '#f7a6af';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = cardShadow;
-                    e.currentTarget.style.borderColor = '#cbd5e1';
+                    e.currentTarget.style.borderColor = '#e2e8f0';
                   }}
                 >
                   <div>
                     {/* Category Tag & Version */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                      <span style={{ display: 'inline-block', padding: '3px 9px', background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.2)', borderRadius: 6, fontSize: 11, fontWeight: 700, color: '#4f46e5' }}>
+                      <span style={{ display: 'inline-block', padding: '3px 9px', background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.2)', borderRadius: 6, fontSize: 11, fontWeight: 700, color: '#941018' }}>
                         {policy.category}
                       </span>
                       <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b' }}>v{policy.version_number}</span>
@@ -320,7 +320,7 @@ export default function EmployeePolicies() {
                     <h3
                       onClick={() => openPolicyReader(policy)}
                       style={{ margin: '0 0 8px', fontSize: 16, fontWeight: 800, color: '#1e293b', cursor: 'pointer', lineHeight: 1.3, transition: 'color 0.15s' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = '#C2071A')}
                       onMouseLeave={(e) => (e.currentTarget.style.color = '#1e293b')}
                     >
                       {policy.title}
@@ -368,30 +368,30 @@ export default function EmployeePolicies() {
                           alignItems: 'center',
                           gap: 5,
                           padding: '6px 10px',
-                          background: policy.category === 'IT & Data Security' ? 'rgba(99, 102, 241, 0.12)' : '#f8fafc',
-                          border: policy.category === 'IT & Data Security' ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid #cbd5e1',
+                          background: policy.category === 'IT & Data Security' ? 'rgba(194, 7, 26, 0.12)' : '#f8fafc',
+                          border: policy.category === 'IT & Data Security' ? '1px solid rgba(194, 7, 26, 0.3)' : '1px solid #e2e8f0',
                           borderRadius: 8,
                           cursor: 'pointer',
                           fontSize: 11,
                           fontWeight: 700,
-                          color: policy.category === 'IT & Data Security' ? '#4f46e5' : '#475569'
+                          color: policy.category === 'IT & Data Security' ? '#941018' : '#475569'
                         }}
                       >
-                        <FiZap size={13} color={policy.category === 'IT & Data Security' ? '#4f46e5' : '#64748b'} /> Ask AI
+                        <FiZap size={13} color={policy.category === 'IT & Data Security' ? '#941018' : '#64748b'} /> Ask AI
                       </button>
                       */}
 
                       <button
                         onClick={(e) => copyDirectLink(policy, e)}
                         title="Copy Direct Link to Policy"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 10px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#475569' }}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#475569' }}
                       >
                         <FiShare2 size={13} /> Share Link
                       </button>
 
                       <button
                         onClick={() => openPolicyReader(policy)}
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: '#ffffff', boxShadow: '0 2px 8px rgba(99, 102, 241, 0.25)' }}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'linear-gradient(135deg, #C2071A, #941018)', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: '#ffffff', boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)' }}
                       >
                         <FiEye size={13} /> Read
                       </button>
@@ -399,7 +399,7 @@ export default function EmployeePolicies() {
                       <button
                         onClick={() => handleDownloadDoc(policy)}
                         title="Download Official PDF"
-                        style={{ width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 8, cursor: 'pointer', color: '#4338ca' }}
+                        style={{ width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', color: '#7c0a1a' }}
                       >
                         <FiDownload size={14} />
                       </button>
@@ -417,11 +417,11 @@ export default function EmployeePolicies() {
         <div style={BD} onClick={closePolicyReader}>
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{ background: '#ffffff', borderRadius: 16, border: '1px solid #cbd5e1', padding: 28, width: 780, maxWidth: '95vw', maxHeight: '88vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)', display: 'flex', flexDirection: 'column' }}
+            style={{ background: '#ffffff', borderRadius: 16, border: '1px solid #e2e8f0', padding: 28, width: 780, maxWidth: '95vw', maxHeight: '88vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)', display: 'flex', flexDirection: 'column' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #f1f5f9', paddingBottom: 14 }}>
               <div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#C2071A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   {selectedPolicy.category} • Version {selectedPolicy.version_number}
                 </span>
                 <h2 style={{ margin: '4px 0 0', fontSize: 20, fontWeight: 800, color: '#1e293b' }}>
@@ -432,7 +432,7 @@ export default function EmployeePolicies() {
                 <button
                   onClick={(e) => copyDirectLink(selectedPolicy, e)}
                   title="Copy Direct Link to Clipboard"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#475569' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#475569' }}
                 >
                   <FiLink size={14} /> Copy Direct Link
                 </button>
@@ -444,8 +444,8 @@ export default function EmployeePolicies() {
 
             <div ref={modalContentRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
               {selectedPolicy.summary && (
-                <div style={{ padding: 14, background: 'rgba(99, 102, 241, 0.06)', border: '1px solid rgba(99, 102, 241, 0.2)', borderRadius: 12 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#4f46e5', textTransform: 'uppercase', marginBottom: 4 }}>Executive Overview</div>
+                <div style={{ padding: 14, background: 'rgba(194, 7, 26, 0.06)', border: '1px solid rgba(194, 7, 26, 0.2)', borderRadius: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#941018', textTransform: 'uppercase', marginBottom: 4 }}>Executive Overview</div>
                   <div style={{ fontSize: 13, color: '#334155', lineHeight: 1.5 }}>{selectedPolicy.summary}</div>
                 </div>
               )}
@@ -462,7 +462,7 @@ export default function EmployeePolicies() {
               </div>
               <button
                 onClick={() => handleDownloadDoc(selectedPolicy)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#ffffff', boxShadow: '0 4px 14px rgba(99, 102, 241, 0.35)' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A, #941018)', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#ffffff', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.35)' }}
               >
                 <FiDownload size={15} /> Download Official PDF
               </button>

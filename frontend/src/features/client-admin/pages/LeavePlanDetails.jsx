@@ -11,7 +11,7 @@ export default function LeavePlanDetails({ plan, onBack }) {
     <div>
       <button
         onClick={onBack}
-        style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#4f46e5', fontSize: '13px', fontWeight: '700', cursor: 'pointer', marginBottom: '20px', padding: 0 }}
+        style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#941018', fontSize: '13px', fontWeight: '700', cursor: 'pointer', marginBottom: '20px', padding: 0 }}
       >
         <FiArrowLeft size={14} /> Back to Plans List
       </button>
@@ -35,8 +35,8 @@ export default function LeavePlanDetails({ plan, onBack }) {
               onClick={() => setActiveSubTab(t.key)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'none',
-                border: 'none', borderBottom: `2px solid ${isAct ? '#6366f1' : 'transparent'}`,
-                color: isAct ? '#6366f1' : '#64748b', fontSize: '13px', fontWeight: '700', cursor: 'pointer',
+                border: 'none', borderBottom: `2px solid ${isAct ? '#C2071A' : 'transparent'}`,
+                color: isAct ? '#C2071A' : '#64748b', fontSize: '13px', fontWeight: '700', cursor: 'pointer',
                 transition: 'all 0.15s'
               }}
             >

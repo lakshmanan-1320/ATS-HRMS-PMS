@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import {
+  FiBell, FiCalendar, FiClock, FiAward, FiDollarSign, FiCheck, FiX,
+  FiUser, FiUsers, FiUserCheck, FiSave, FiAlertCircle, FiCheckCircle,
+  FiFileText, FiTarget, FiAlertTriangle, FiBriefcase
+} from 'react-icons/fi'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -17,7 +23,7 @@ const EVENTS = [
     trigger: 'Employee',
     recipient: 'Manager',
     category: 'Leave',
-    icon: '🏖️',
+    icon: <FiCalendar size={18} color="#C2071A" />,
   },
   {
     key: 'leave_decision',
@@ -26,7 +32,7 @@ const EVENTS = [
     trigger: 'Manager',
     recipient: 'Employee',
     category: 'Leave',
-    icon: '✅',
+    icon: <FiCheckCircle size={18} color="#16a34a" />,
   },
   {
     key: 'regularization_submitted',
@@ -35,7 +41,7 @@ const EVENTS = [
     trigger: 'Employee',
     recipient: 'Manager',
     category: 'Attendance',
-    icon: '🕐',
+    icon: <FiClock size={18} color="#0891b2" />,
   },
   {
     key: 'regularization_decision',
@@ -44,7 +50,7 @@ const EVENTS = [
     trigger: 'Manager',
     recipient: 'Employee',
     category: 'Attendance',
-    icon: '📋',
+    icon: <FiFileText size={18} color="#0891b2" />,
   },
   {
     key: 'appraisal_cycle_opened',
@@ -53,7 +59,7 @@ const EVENTS = [
     trigger: 'Client Admin',
     recipient: 'All Employees',
     category: 'Performance',
-    icon: '⭐',
+    icon: <FiAward size={18} color="#059669" />,
   },
   {
     key: 'goal_submitted',
@@ -62,7 +68,7 @@ const EVENTS = [
     trigger: 'Employee',
     recipient: 'Manager',
     category: 'Performance',
-    icon: '📨',
+    icon: <FiTarget size={18} color="#059669" />,
   },
   {
     key: 'goal_deadline_reminder',
@@ -71,7 +77,7 @@ const EVENTS = [
     trigger: 'Scheduled Job',
     recipient: 'Employee',
     category: 'Performance',
-    icon: '🎯',
+    icon: <FiClock size={18} color="#059669" />,
   },
   {
     key: 'payroll_processed',
@@ -80,28 +86,28 @@ const EVENTS = [
     trigger: 'Client Admin',
     recipient: 'Employee',
     category: 'Payroll',
-    icon: '💰',
+    icon: <FiDollarSign size={18} color="#d97706" />,
   },
 ]
 
 const TRIGGER_CONFIG = {
-  'Employee':      { bg: '#ede9fe', color: '#6d28d9', dot: '#7c3aed' },
+  'Employee':      { bg: '#fee2e2', color: '#900513', dot: '#C2071A' },
   'Manager':       { bg: '#dcfce7', color: '#15803d', dot: '#16a34a' },
   'Client Admin':  { bg: '#fef9c3', color: '#a16207', dot: '#ca8a04' },
   'Scheduled Job': { bg: '#e0f2fe', color: '#0369a1', dot: '#0284c7' },
 }
 
 const CATEGORY_CONFIG = {
-  'Leave':       { color: '#6366f1', bg: '#eef2ff', icon: '🏖️' },
-  'Attendance':  { color: '#0891b2', bg: '#ecfeff', icon: '🕐' },
-  'Performance': { color: '#059669', bg: '#ecfdf5', icon: '⭐' },
-  'Payroll':     { color: '#d97706', bg: '#fffbeb', icon: '💰' },
+  'Leave':       { color: '#C2071A', bg: 'rgba(194, 7, 26, 0.08)', icon: <FiCalendar size={15} color="#C2071A" /> },
+  'Attendance':  { color: '#0891b2', bg: '#ecfeff', icon: <FiClock size={15} color="#0891b2" /> },
+  'Performance': { color: '#059669', bg: '#ecfdf5', icon: <FiAward size={15} color="#059669" /> },
+  'Payroll':     { color: '#d97706', bg: '#fffbeb', icon: <FiDollarSign size={15} color="#d97706" /> },
 }
 
 const RECIPIENT_ICONS = {
-  'Manager': '👔',
-  'Employee': '👤',
-  'All Employees': '👥',
+  'Manager': <FiUserCheck size={14} color="#64748b" />,
+  'Employee': <FiUser size={14} color="#64748b" />,
+  'All Employees': <FiUsers size={14} color="#64748b" />,
 }
 
 const CATEGORIES = [...new Set(EVENTS.map(e => e.category))]
@@ -145,18 +151,18 @@ export default function NotificationSettings() {
     setTimeout(() => setToast(t => ({ ...t, show: false })), 3000)
   }
 
-  const allEvents = EVENTS
   const filteredCategories = filter === 'All' ? CATEGORIES : [filter]
   const enabledCount = EVENTS.filter(ev => settings[ev.key]).length
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <Sidebar active="notifications" />
-
-      <main style={{ flex: 1, overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Notification Settings" />
+        <main style={{ flex: 1, overflowY: 'auto' }}>
         {/* Hero Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+          background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
           padding: '36px 40px 32px',
           position: 'relative',
           overflow: 'hidden',
@@ -165,12 +171,12 @@ export default function NotificationSettings() {
           <div style={{
             position: 'absolute', top: '-40px', right: '-40px',
             width: '200px', height: '200px', borderRadius: '50%',
-            background: 'rgba(99,102,241,0.15)', pointerEvents: 'none',
+            background: 'rgba(255,255,255,0.1)', pointerEvents: 'none',
           }} />
           <div style={{
             position: 'absolute', bottom: '-60px', right: '160px',
             width: '140px', height: '140px', borderRadius: '50%',
-            background: 'rgba(99,102,241,0.08)', pointerEvents: 'none',
+            background: 'rgba(255,255,255,0.05)', pointerEvents: 'none',
           }} />
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
@@ -178,15 +184,19 @@ export default function NotificationSettings() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                 <div style={{
                   width: '44px', height: '44px', borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                  background: 'rgba(255,255,255,0.18)',
+                  border: '1px solid rgba(255,255,255,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '22px', boxShadow: '0 4px 14px rgba(99,102,241,0.4)',
-                }}>🔔</div>
+                  backdropFilter: 'blur(8px)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
+                }}>
+                  <FiBell size={22} color="#ffffff" style={{ stroke: '#ffffff' }} />
+                </div>
                 <div>
-                  <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#f8fafc', letterSpacing: '-0.3px' }}>
+                  <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.3px' }}>
                     Notification Settings
                   </h1>
-                  <p style={{ margin: '2px 0 0', fontSize: '13px', color: '#94a3b8' }}>
+                  <p style={{ margin: '2px 0 0', fontSize: '13px', color: 'rgba(255,255,255,0.85)' }}>
                     Control which email notifications are sent for each system event
                   </p>
                 </div>
@@ -196,21 +206,21 @@ export default function NotificationSettings() {
             {/* Stats row */}
             <div style={{ display: 'flex', gap: '12px' }}>
               {[
-                { label: 'Total', value: EVENTS.length, color: '#94a3b8' },
-                { label: 'Enabled', value: enabledCount, color: '#4ade80' },
-                { label: 'Disabled', value: EVENTS.length - enabledCount, color: '#f87171' },
+                { label: 'Total', value: EVENTS.length, color: '#ffffff' },
+                { label: 'Enabled', value: enabledCount, color: '#86efac' },
+                { label: 'Disabled', value: EVENTS.length - enabledCount, color: '#fca5a5' },
               ].map(stat => (
                 <div key={stat.label} style={{
-                  background: 'rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,0.12)',
                   backdropFilter: 'blur(8px)',
-                  border: '1px solid rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(255,255,255,0.2)',
                   borderRadius: '12px',
                   padding: '12px 18px',
                   textAlign: 'center',
                   minWidth: '72px',
                 }}>
                   <div style={{ fontSize: '22px', fontWeight: '800', color: stat.color, lineHeight: 1 }}>{stat.value}</div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</div>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)', marginTop: '4px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -233,10 +243,10 @@ export default function NotificationSettings() {
                     padding: '8px 16px',
                     borderRadius: '50px',
                     border: isActive
-                      ? `2px solid ${cat === 'All' ? '#6366f1' : catCfg.color}`
+                      ? `2px solid ${cat === 'All' ? '#C2071A' : catCfg.color}`
                       : '2px solid #e2e8f0',
                     background: isActive
-                      ? cat === 'All' ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : catCfg.bg
+                      ? cat === 'All' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : catCfg.bg
                       : '#ffffff',
                     color: isActive
                       ? cat === 'All' ? '#fff' : catCfg.color
@@ -248,7 +258,7 @@ export default function NotificationSettings() {
                     alignItems: 'center',
                     gap: '6px',
                     transition: 'all 0.15s',
-                    boxShadow: isActive ? '0 2px 8px rgba(99,102,241,0.2)' : 'none',
+                    boxShadow: isActive ? '0 2px 8px rgba(194, 7, 26, 0.2)' : 'none',
                   }}
                 >
                   {cat !== 'All' && <span>{catCfg.icon}</span>}
@@ -273,10 +283,14 @@ export default function NotificationSettings() {
           {/* Category Sections */}
           {loading ? (
             <div style={{
-              background: '#fff', borderRadius: '16px', padding: '60px',
-              textAlign: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+              background: '#ffffff', borderRadius: '16px', border: 'none', padding: '60px',
+              textAlign: 'center', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
             }}>
-              <div style={{ fontSize: '32px', marginBottom: '12px' }}>⏳</div>
+              <div style={{
+                width: '32px', height: '32px', borderRadius: '50%',
+                border: '3px solid rgba(194, 7, 26, 0.2)', borderTopColor: '#C2071A',
+                animation: 'spin 0.7s linear infinite', margin: '0 auto 12px',
+              }} />
               <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0 }}>Loading notification settings…</p>
             </div>
           ) : (
@@ -296,7 +310,7 @@ export default function NotificationSettings() {
                       <div style={{
                         width: '34px', height: '34px', borderRadius: '10px',
                         background: catCfg.bg, display: 'flex', alignItems: 'center',
-                        justifyContent: 'center', fontSize: '18px',
+                        justifyContent: 'center',
                         border: `1px solid ${catCfg.color}22`,
                       }}>
                         {catCfg.icon}
@@ -341,9 +355,9 @@ export default function NotificationSettings() {
                   <div style={{
                     background: '#ffffff',
                     borderRadius: '16px',
-                    border: '1px solid #e2e8f0',
+                    border: 'none',
                     overflow: 'hidden',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                   }}>
                     {/* Table Head */}
                     <div style={{
@@ -373,12 +387,12 @@ export default function NotificationSettings() {
                             padding: '16px 20px',
                             borderBottom: i < catEvents.length - 1 ? '1px solid #f1f5f9' : 'none',
                             alignItems: 'center',
-                            background: isOn ? '#fafbff' : '#ffffff',
+                            background: isOn ? 'rgba(194, 7, 26, 0.01)' : '#ffffff',
                             transition: 'background 0.15s',
                             cursor: 'default',
                           }}
-                          onMouseEnter={e => { e.currentTarget.style.background = '#f5f7ff' }}
-                          onMouseLeave={e => { e.currentTarget.style.background = isOn ? '#fafbff' : '#ffffff' }}
+                          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(194, 7, 26, 0.03)' }}
+                          onMouseLeave={e => { e.currentTarget.style.background = isOn ? 'rgba(194, 7, 26, 0.01)' : '#ffffff' }}
                         >
                           {/* Event Info */}
                           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
@@ -386,7 +400,7 @@ export default function NotificationSettings() {
                               width: '36px', height: '36px', borderRadius: '10px',
                               background: isOn ? catCfg.bg : '#f1f5f9',
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              fontSize: '18px', flexShrink: 0,
+                              flexShrink: 0,
                               transition: 'background 0.2s',
                               border: isOn ? `1px solid ${catCfg.color}33` : '1px solid #e2e8f0',
                             }}>
@@ -426,7 +440,7 @@ export default function NotificationSettings() {
 
                           {/* Recipient */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ fontSize: '15px' }}>{RECIPIENT_ICONS[ev.recipient] || '👤'}</span>
+                            {RECIPIENT_ICONS[ev.recipient] || <FiUser size={14} color="#64748b" />}
                             <span style={{ fontSize: '13px', color: '#334155', fontWeight: '600' }}>
                               {ev.recipient}
                             </span>
@@ -440,12 +454,12 @@ export default function NotificationSettings() {
                               style={{
                                 position: 'relative', width: '46px', height: '26px',
                                 background: isOn
-                                  ? `linear-gradient(135deg, ${catCfg.color}, ${catCfg.color}cc)`
+                                  ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)'
                                   : '#cbd5e1',
                                 borderRadius: '13px', cursor: 'pointer',
                                 border: 'none', padding: 0, outline: 'none', flexShrink: 0,
                                 transition: 'background 0.2s',
-                                boxShadow: isOn ? `0 2px 8px ${catCfg.color}55` : 'none',
+                                boxShadow: isOn ? '0 2px 8px rgba(194, 7, 26, 0.35)' : 'none',
                               }}
                             >
                               <span style={{
@@ -474,9 +488,9 @@ export default function NotificationSettings() {
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               background: '#ffffff',
               borderRadius: '16px',
-              border: '1px solid #e2e8f0',
+              border: 'none',
               padding: '16px 24px',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+              boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
               marginTop: '8px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -486,7 +500,7 @@ export default function NotificationSettings() {
                 }}>
                   <span style={{
                     display: 'inline-block', width: '8px', height: '8px',
-                    borderRadius: '50%', background: '#4ade80',
+                    borderRadius: '50%', background: '#16a34a',
                   }} />
                   <span><strong style={{ color: '#1e293b' }}>{enabledCount}</strong> of <strong style={{ color: '#1e293b' }}>{EVENTS.length}</strong> notifications active</span>
                 </div>
@@ -494,8 +508,9 @@ export default function NotificationSettings() {
                   <span style={{
                     fontSize: '11px', background: '#fef2f2', color: '#dc2626',
                     padding: '3px 10px', borderRadius: '6px', fontWeight: '600',
+                    display: 'flex', alignItems: 'center', gap: '5px',
                   }}>
-                    ⚠️ All notifications disabled
+                    <FiAlertTriangle size={12} color="#dc2626" /> All notifications disabled
                   </span>
                 )}
               </div>
@@ -528,12 +543,12 @@ export default function NotificationSettings() {
                   style={{
                     padding: '10px 28px',
                     background: saving
-                      ? '#94a3b8'
-                      : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                      ? '#fca5a5'
+                      : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                     border: 'none', borderRadius: '10px',
                     fontSize: '13px', fontWeight: '700', color: '#ffffff',
                     cursor: saving ? 'not-allowed' : 'pointer',
-                    boxShadow: saving ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
+                    boxShadow: saving ? 'none' : '0 4px 14px rgba(194, 7, 26, 0.35)',
                     transition: 'all 0.15s',
                     display: 'flex', alignItems: 'center', gap: '6px',
                   }}
@@ -549,7 +564,7 @@ export default function NotificationSettings() {
                       }} />
                       Saving…
                     </>
-                  ) : '💾 Save Settings'}
+                  ) : <><FiSave size={15} color="#ffffff" style={{ stroke: '#ffffff' }} /> Save Settings</>}
                 </button>
               </div>
             </div>
@@ -561,8 +576,8 @@ export default function NotificationSettings() {
       <div style={{
         position: 'fixed', bottom: '28px', right: '28px',
         background: toast.type === 'success'
-          ? 'linear-gradient(135deg, #22c55e, #16a34a)'
-          : 'linear-gradient(135deg, #ef4444, #dc2626)',
+          ? 'linear-gradient(135deg, #16a34a, #15803d)'
+          : 'linear-gradient(135deg, #dc2626, #991b1b)',
         color: '#fff',
         padding: '14px 22px', borderRadius: '12px',
         fontSize: '13px', fontWeight: '600',
@@ -574,13 +589,15 @@ export default function NotificationSettings() {
         display: 'flex', alignItems: 'center', gap: '10px',
         minWidth: '220px',
       }}>
-        <span style={{ fontSize: '18px' }}>{toast.type === 'success' ? '✅' : '❌'}</span>
+        {toast.type === 'success' ? <FiCheckCircle size={18} color="#fff" /> : <FiAlertCircle size={18} color="#fff" />}
         {toast.msg}
       </div>
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
+      </div>
     </div>
   )
 }
+

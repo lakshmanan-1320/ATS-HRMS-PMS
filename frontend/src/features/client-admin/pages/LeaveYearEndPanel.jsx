@@ -72,7 +72,7 @@ export default function LeaveYearEndPanel({ planId }) {
           <div style={{ flex: 1, paddingTop: '18px' }}>
             <button
               onClick={loadStatus}
-              style={{ padding: '10px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}
+              style={{ padding: '10px 16px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}
             >
               Check Log Status
             </button>
@@ -106,7 +106,7 @@ export default function LeaveYearEndPanel({ planId }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 {statusLog.status === 'RUNNING' && (
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '12px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: '#eff6ff', color: '#1d4ed8' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '12px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: '#fffbeb', color: '#b45309' }}>
                     <FiLoader className="spin" size={12} /> Running
                   </span>
                 )}
@@ -146,8 +146,11 @@ export default function LeaveYearEndPanel({ planId }) {
         </div>
 
         {error && (
-          <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
-            ⚠️ {error}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
+            <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #b91c1c 0%, #b91c1c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FiAlertTriangle size={11} color="#ffffff" />
+            </div>
+            {error}
           </div>
         )}
 
@@ -159,8 +162,8 @@ export default function LeaveYearEndPanel({ planId }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%',
             padding: '12px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff',
             cursor: executing || (statusLog && statusLog.status === 'COMPLETED') ? 'not-allowed' : 'pointer',
-            background: executing || (statusLog && statusLog.status === 'COMPLETED') ? '#cbd5e1' : 'linear-gradient(135deg,#6366f1,#4f46e5)',
-            boxShadow: executing || (statusLog && statusLog.status === 'COMPLETED') ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
+            background: executing || (statusLog && statusLog.status === 'COMPLETED') ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)',
+            boxShadow: executing || (statusLog && statusLog.status === 'COMPLETED') ? 'none' : '0 4px 14px rgba(194,7,26,0.35)',
             transition: 'all 0.2s'
           }}
         >

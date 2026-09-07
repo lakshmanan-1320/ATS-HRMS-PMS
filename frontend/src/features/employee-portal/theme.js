@@ -1,17 +1,17 @@
 // Shared design tokens for the employee portal
 
 export const COLORS = {
-  primary:    '#6366f1',
-  primarySoft:'rgba(99,102,241,0.12)',
+  primary:    '#C2071A',
+  primarySoft:'rgba(194,7,26,0.12)',
   green:      '#10b981',
   greenSoft:  'rgba(16,185,129,0.12)',
-  blue:       '#0ea5e9',
-  blueSoft:   'rgba(14,165,233,0.12)',
+  blue:       '#0f766e',
+  blueSoft:   'rgba(15,118,110,0.12)',
   amber:      '#f59e0b',
   amberSoft:  'rgba(245,158,11,0.12)',
   red:        '#ef4444',
   redSoft:    'rgba(239,68,68,0.12)',
-  purple:     '#8b5cf6',
+  purple:     '#7c3aed',
   pink:       '#ec4899',
   slate:      '#94a3b8',
   slateSoft:  'rgba(100,116,139,0.15)',
@@ -28,8 +28,8 @@ export const COLORS = {
 
 export const STATUS_COLOR = {
   draft:       { bg: COLORS.slateSoft,  color: COLORS.slate   },
-  active:      { bg: COLORS.primarySoft, color: '#a5b4fc'     },
-  in_progress: { bg: COLORS.blueSoft,   color: '#38bdf8'      },
+  active:      { bg: COLORS.primarySoft, color: '#C2071A'     },
+  in_progress: { bg: COLORS.blueSoft,   color: '#0f766e'      },
   submitted:   { bg: COLORS.amberSoft,  color: '#fbbf24'      },
   approved:    { bg: COLORS.greenSoft,  color: '#34d399'      },
   completed:   { bg: 'rgba(16,185,129,0.15)', color: '#34d399'},
@@ -72,12 +72,12 @@ export const INPUT = {
 }
 
 export const GRADIENTS = {
-  primary:  'linear-gradient(135deg,#6366f1,#8b5cf6)',
-  blue:     'linear-gradient(135deg,#0ea5e9,#6366f1)',
+  primary:  'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
+  blue:     'linear-gradient(135deg,#0f766e,#0d5f59)',
   green:    'linear-gradient(135deg,#10b981,#059669)',
   amber:    'linear-gradient(135deg,#f59e0b,#d97706)',
-  pink:     'linear-gradient(135deg,#ec4899,#8b5cf6)',
-  purple:   'linear-gradient(135deg,#8b5cf6,#6366f1)',
+  pink:     'linear-gradient(135deg,#ec4899,#a21caf)',
+  purple:   'linear-gradient(135deg,#7c3aed,#6d28d9)',
 }
 
-export const BAR_COLORS = ['#6366f1','#0ea5e9','#10b981','#f59e0b','#ec4899','#8b5cf6']
+export const BAR_COLORS = ['#C2071A','#0f766e','#10b981','#f59e0b','#ec4899','#7c3aed']

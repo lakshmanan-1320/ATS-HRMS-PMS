@@ -7,7 +7,7 @@ async function getClientAdmins() {
            u.last_login_at AS last_login, ca.created_at, ca.updated_at
     FROM client_admins ca
     LEFT JOIN organizations o ON o.organization_id = ca.organization_id
-    LEFT JOIN users u ON u.organization_id = ca.organization_id AND u.role = 'client_admin'
+    LEFT JOIN users u ON LOWER(u.email) = LOWER(ca.email) AND u.role = 'client_admin'
     ORDER BY ca.created_at DESC
   `);
   return result.rows;
@@ -18,7 +18,7 @@ async function findClientAdminById(id) {
     SELECT ca.*, o.name AS organization_name, u.last_login_at AS last_login
     FROM client_admins ca
     LEFT JOIN organizations o ON o.organization_id = ca.organization_id
-    LEFT JOIN users u ON u.organization_id = ca.organization_id AND u.role = 'client_admin'
+    LEFT JOIN users u ON LOWER(u.email) = LOWER(ca.email) AND u.role = 'client_admin'
     WHERE ca.client_admin_id = $1
   `, [id]);
   return result.rows[0] || null;

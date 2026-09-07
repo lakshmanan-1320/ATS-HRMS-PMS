@@ -90,9 +90,12 @@ export default function ManagerRegularizationApprovals() {
         <div style={containerStyle}>
           
           {/* Header */}
-          <div style={{ marginBottom: '24px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FiCheckSquare style={{ color: '#6366f1' }} /> Regularization Approvals
+          <div style={{ marginBottom: '28px' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiCheckSquare size={20} color="#C2071A" strokeWidth={2.5} />
+              </div>
+              Regularization Approvals
             </h1>
             <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
               Review and act on attendance correction and permission requests submitted by your team.
@@ -112,7 +115,7 @@ export default function ManagerRegularizationApprovals() {
           )}
 
           {/* Queue Container */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' }}>
             
             <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
               <h3 style={{ margin: 0, fontSize: '15px', color: '#0f172a', fontWeight: 700 }}>Pending adjustment approvals</h3>
@@ -131,24 +134,27 @@ export default function ManagerRegularizationApprovals() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
                   <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0', color: '#475569', fontWeight: 700, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.04em' }}>
-                      <th style={{ padding: '14px 18px' }}>Employee</th>
-                      <th style={{ padding: '14px 18px' }}>Date</th>
-                      <th style={{ padding: '14px 18px' }}>Category</th>
-                      <th style={{ padding: '14px 18px' }}>Type</th>
-                      <th style={{ padding: '14px 18px' }}>Requested Times</th>
-                      <th style={{ padding: '14px 18px' }}>Reason</th>
-                      <th style={{ padding: '14px 18px' }}>Submitted On</th>
-                      <th style={{ padding: '14px 18px', textAlign: 'center' }}>Actions</th>
+                    <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.04em' }}>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Employee</th>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Date</th>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Category</th>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Type</th>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Requested Times</th>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Reason</th>
+                      <th style={{ padding: '14px 18px', color: '#ffffff' }}>Submitted On</th>
+                      <th style={{ padding: '14px 18px', textAlign: 'center', color: '#ffffff' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {requests.map((row, i) => (
-                      <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >
                         <td style={{ padding: '12px 18px', color: '#1e293b', fontWeight: 700 }}>
                           {row.first_name} {row.last_name} ({row.employee_code})
                         </td>
-                        <td style={{ padding: '12px 18px', color: '#6366f1', fontWeight: 700 }}>
+                        <td style={{ padding: '12px 18px', color: '#C2071A', fontWeight: 700 }}>
                           {new Date(row.attendance_date).toISOString().slice(0, 10)}
                         </td>
                         <td style={{ padding: '12px 18px', color: '#475569', fontWeight: 600 }}>{row.request_category}</td>
@@ -167,13 +173,13 @@ export default function ManagerRegularizationApprovals() {
                           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                             <button
                               onClick={() => handleActionOpen(row, 'approve')}
-                              style={{ padding: '6px 12px', background: '#dcfce7', border: '1px solid #bbf7d0', color: '#15803d', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
+                              style={{ padding: '6px 12px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', color: '#059669', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
                             >
                               Approve
                             </button>
                             <button
                               onClick={() => handleActionOpen(row, 'reject')}
-                              style={{ padding: '6px 12px', background: '#fee2e2', border: '1px solid #fecaca', color: '#b91c1c', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
+                              style={{ padding: '6px 12px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#ef4444', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
                             >
                               Reject
                             </button>
@@ -190,7 +196,7 @@ export default function ManagerRegularizationApprovals() {
             {/* Approval / Rejection remarks modal */}
             {selectedRequest && (
               <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-                <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', width: '420px', maxWidth: '90%', border: '1px solid #e2e8f0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', width: '420px', maxWidth: '90%', border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>
@@ -200,7 +206,7 @@ export default function ManagerRegularizationApprovals() {
                       onClick={() => setSelectedRequest(null)}
                       style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', display: 'flex' }}
                     >
-                      <FiX size={16} />
+                      <FiX size={18} color="#64748b" />
                     </button>
                   </div>
 
@@ -225,7 +231,7 @@ export default function ManagerRegularizationApprovals() {
                         onChange={e => setRemarks(e.target.value)}
                         required={actionType === 'reject'}
                         placeholder={actionType === 'approve' ? 'Optional approval comments...' : 'Provide comments explaining the rejection...'}
-                        style={{ padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
+                        style={{ padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
                       />
                     </div>
 
@@ -233,7 +239,7 @@ export default function ManagerRegularizationApprovals() {
                       <button
                         type="button"
                         onClick={() => setSelectedRequest(null)}
-                        style={{ flex: 1, padding: '9px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#475569', cursor: 'pointer' }}
+                        style={{ flex: 1, padding: '10px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#475569', cursor: 'pointer' }}
                       >
                         Cancel
                       </button>
@@ -241,8 +247,8 @@ export default function ManagerRegularizationApprovals() {
                         type="submit"
                         disabled={submitting}
                         style={{
-                          flex: 1, padding: '9px', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#fff',
-                          background: actionType === 'approve' ? '#16a34a' : '#dc2626', cursor: 'pointer'
+                          flex: 1, padding: '10px', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#fff',
+                          background: actionType === 'approve' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', cursor: 'pointer'
                         }}
                       >
                         {submitting ? 'Processing...' : 'Confirm'}

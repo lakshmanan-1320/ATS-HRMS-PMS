@@ -17,7 +17,7 @@ const icon = (d, extra = {}) => (props) => (
   </svg>
 )
 
-export const FingerprintIcon = ({ size = 18, color = '#6366f1', style }) => (
+export const FingerprintIcon = ({ size = 18, color = '#C2071A', style }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={style}>
     <path d="M12 22v-3"/><path d="M12 14v-4"/><path d="M14 14V9a2 2 0 0 0-4 0v5"/>
     <path d="M17 14V8a5 5 0 0 0-10 0v6"/><path d="M20 14V7A8 8 0 0 0 4 7v7"/>

@@ -19,7 +19,7 @@ export default function TeamAttendanceWidget({ members }) {
   return (
     <WidgetCard
       icon={<TeamAttIcon />}
-      iconBg="rgba(14,165,233,0.1)"
+      iconBg="rgba(15,118,110,0.1)"
       iconColor={COLORS.blue}
       title="Team Attendance"
       subtitle="Today's status"

@@ -93,7 +93,7 @@ export default function LeaveBalancesGrid() {
 
       {loading ? (
         <div style={{ padding: '60px', textAlign: 'center' }}>
-          <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
           <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading employee directory…</div>
         </div>
       ) : filtered.length === 0 ? (
@@ -143,7 +143,7 @@ export default function LeaveBalancesGrid() {
                       <td style={{ padding: '12px 18px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                         <button
                           onClick={() => setSelectedAdjustEmployee(emp)}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f5f7ff', border: '1px solid #c7d2fe', borderRadius: '8px', color: '#4f46e5', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f5f7ff', border: '1px solid #f7a6af', borderRadius: '8px', color: '#941018', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
                         >
                           <FiSliders size={12} /> Adjust Balance
                         </button>
@@ -178,7 +178,7 @@ export default function LeaveBalancesGrid() {
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', borderTop: '1px solid #f1f5f9', paddingTop: 4, marginTop: 4 }}>
                                       <span style={{ color: '#0f172a' }}>Available:</span>
-                                      <span style={{ color: '#6366f1' }}>{parseFloat(bal.available_days)}</span>
+                                      <span style={{ color: '#C2071A' }}>{parseFloat(bal.available_days)}</span>
                                     </div>
                                   </div>
                                 ))}
@@ -204,14 +204,14 @@ export default function LeaveBalancesGrid() {
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: page === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === 1 ? '#cbd5e1' : '#374151' }}
+                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: page === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === 1 ? '#e2e8f0' : '#374151' }}
                 >
                   Prev
                 </button>
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: page === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === totalPages ? '#cbd5e1' : '#374151' }}
+                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: page === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === totalPages ? '#e2e8f0' : '#374151' }}
                 >
                   Next
                 </button>

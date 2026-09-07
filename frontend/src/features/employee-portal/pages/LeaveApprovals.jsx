@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
+import { FiCheckCircle, FiXCircle, FiClock, FiStar, FiAlertCircle, FiRefreshCw, FiLink, FiCheck, FiX } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -11,10 +12,10 @@ api.interceptors.request.use(cfg => {
 })
 
 const STATUS_STYLE = {
-  PENDING:   { bg: 'rgba(234,179,8,0.1)',    color: '#d97706' },
-  APPROVED:  { bg: 'rgba(16,185,129,0.1)',   color: '#059669' },
-  REJECTED:  { bg: 'rgba(239,68,68,0.1)',    color: '#ef4444' },
-  CANCELLED: { bg: 'rgba(100,116,139,0.1)', color: '#64748b' }
+  PENDING:   { bg: 'rgba(245,158,11,0.12)',  color: '#d97706' },
+  APPROVED:  { bg: 'rgba(16,185,129,0.12)', color: '#059669' },
+  REJECTED:  { bg: 'rgba(239,68,68,0.12)',  color: '#ef4444' },
+  CANCELLED: { bg: 'rgba(100,116,139,0.12)', color: '#64748b' }
 }
 
 const PAGE_SIZE = 10
@@ -40,7 +41,7 @@ function Pagination({ page, total, onChange }) {
         </button>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
           <button key={p} onClick={() => onChange(p)}
-            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#6366f1' : '#e2e8f0', background: p === page ? '#6366f1' : '#fff', color: p === page ? '#fff' : '#374151' }}>
+            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#C2071A' : '#e2e8f0', background: p === page ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}>
             {p}
           </button>
         ))}
@@ -54,26 +55,26 @@ function Pagination({ page, total, onChange }) {
 }
 
 const s = {
-  page: { display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' },
-  main: { flex: 1, padding: '32px 40px', overflowY: 'auto' },
-  card: { background: '#ffffff', border: '1px solid #e8eaf0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' },
-  th: { padding: '13px 18px', color: '#64748b', fontWeight: '600', borderBottom: '1px solid #e8eaf0', background: '#f8fafc', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em' },
-  td: { padding: '14px 18px', color: '#1e293b', borderBottom: '1px solid #f1f5f9', fontSize: '13px' },
-  statusBadge: { display: 'inline-block', fontSize: '11px', fontWeight: '600', padding: '3px 9px', borderRadius: '20px', textTransform: 'capitalize' },
+  page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
+  main: { flex: 1, padding: '28px 32px', overflowY: 'auto' },
+  card: { background: '#ffffff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' },
+  th: { padding: '14px 18px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' },
+  td: { padding: '14px 18px', color: '#1e293b', borderBottom: '1px solid #edf2f7', fontSize: '13px' },
+  statusBadge: { display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', textTransform: 'uppercase' },
   approveBtn: { padding: '6px 14px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#059669', cursor: 'pointer', marginRight: '8px' },
   rejectBtn:  { padding: '6px 14px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',  borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#ef4444', cursor: 'pointer', marginRight: '8px' },
-  overrideBtn:{ padding: '6px 14px', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.25)',  borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#6366f1', cursor: 'pointer' },
+  overrideBtn:{ padding: '6px 14px', background: 'rgba(194,7,26,0.1)', border: '1px solid rgba(194,7,26,0.25)',  borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#C2071A', cursor: 'pointer' },
   modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
-  modal: { background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '32px', width: '450px', maxWidth: '90%', boxShadow: '0 10px 30px rgba(0,0,0,0.12)' },
+  modal: { background: '#ffffff', border: 'none', borderRadius: '16px', padding: '32px', width: '450px', maxWidth: '90%', boxShadow: '0 10px 30px rgba(0,0,0,0.18)' },
   modalHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #e8eaf0', paddingBottom: '12px' },
   closeBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#64748b', cursor: 'pointer' },
-  label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#64748b', marginBottom: '6px' },
+  label: { display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' },
   input: { width: '100%', padding: '10px 14px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' },
-  submitBtn: { padding: '11px 24px', background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '600', color: '#ffffff', cursor: 'pointer', width: '100%', marginTop: '10px' },
+  submitBtn: { padding: '11px 24px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', width: '100%', marginTop: '10px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
   error: { color: '#ef4444', fontSize: '12px', marginTop: '6px' },
-  filterBar: { display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 18px', borderBottom: '1px solid #e8eaf0', flexWrap: 'wrap', background: '#fcfcfd' },
+  filterBar: { display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', borderBottom: '1px solid #e8eaf0', flexWrap: 'wrap', background: '#fcfcfd' },
   filterInput: { padding: '7px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#fff', outline: 'none', height: '34px', boxSizing: 'border-box' },
-  tab: (active) => ({ padding: '13px 20px', fontSize: '13px', fontWeight: active ? '700' : '500', color: active ? '#6366f1' : '#64748b', border: 'none', borderBottom: active ? '2px solid #6366f1' : '2px solid transparent', background: 'none', cursor: 'pointer', marginBottom: '-1px', transition: 'all 0.15s' }),
+  tab: (active) => ({ padding: '13px 20px', fontSize: '13px', fontWeight: active ? '700' : '500', color: active ? '#C2071A' : '#64748b', border: 'none', borderBottom: active ? '2.5px solid #C2071A' : '2.5px solid transparent', background: 'none', cursor: 'pointer', marginBottom: '-1px', transition: 'all 0.15s' }),
 }
 
 export default function LeaveApprovals() {
@@ -184,23 +185,28 @@ export default function LeaveApprovals() {
         <main style={s.main}>
 
           {/* Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>Leave Approval Board</h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>Review, approve, or override leave requests from your direct reports</p>
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+                </div>
+                Leave Approval Board
+              </h1>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Review, approve, or override leave requests from your direct reports</p>
             </div>
           </div>
 
           {/* KPI Strip */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
             {[
-              { label: 'Pending',   value: pendingCount,  accent: '#d97706', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.22)',  icon: '⏳' },
-              { label: 'Approved',  value: approvedCount, accent: '#059669', bg: 'rgba(16,185,129,0.08)',  border: 'rgba(16,185,129,0.22)',  icon: '✅' },
-              { label: 'Rejected',  value: rejectedCount, accent: '#ef4444', bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.22)',   icon: '❌' },
-              { label: 'Optional Holiday Avails', value: teamOH.length || '—', accent: '#9333ea', bg: 'rgba(168,85,247,0.08)', border: 'rgba(168,85,247,0.22)', icon: '✨' },
+              { label: 'Pending',   value: pendingCount,  accent: '#d97706', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.22)',  icon: <FiClock size={20} color="#d97706" /> },
+              { label: 'Approved',  value: approvedCount, accent: '#059669', bg: 'rgba(16,185,129,0.08)',  border: 'rgba(16,185,129,0.22)',  icon: <FiCheckCircle size={20} color="#059669" /> },
+              { label: 'Rejected',  value: rejectedCount, accent: '#ef4444', bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.22)',   icon: <FiXCircle size={20} color="#ef4444" /> },
+              { label: 'Optional Holiday Avails', value: teamOH.length || '—', accent: '#9333ea', bg: 'rgba(168,85,247,0.08)', border: 'rgba(168,85,247,0.22)', icon: <FiStar size={20} color="#9333ea" /> },
             ].map(({ label, value, accent, bg, border, icon }) => (
-              <div key={label} style={{ background: '#fff', borderRadius: '16px', padding: '18px 20px', border: `1px solid ${border}`, boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: bg, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>{icon}</div>
+              <div key={label} style={{ background: '#fff', borderRadius: '16px', padding: '18px 20px', border: `1px solid ${border}`, boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: bg, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{icon}</div>
                 <div>
                   <div style={{ fontSize: '26px', fontWeight: '800', color: accent, lineHeight: 1, marginBottom: '3px' }}>{value}</div>
                   <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>{label}</div>
@@ -210,7 +216,7 @@ export default function LeaveApprovals() {
           </div>
 
           {/* Tab Bar */}
-          <div style={{ background: '#fff', border: '1px solid #e8eaf0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' }}>
             <div style={{ display: 'flex', gap: 0, padding: '0 18px', borderBottom: '1px solid #e8eaf0' }}>
               <button style={s.tab(activeTab === 'requests')} onClick={() => setActiveTab('requests')}>
                 Leave Requests ({leaves.length})
@@ -279,7 +285,7 @@ export default function LeaveApprovals() {
                             </td>
                             <td style={s.td}>
                               <div style={{ fontWeight: '600' }}>{r.leave_type_name}</div>
-                              {r.session_type !== 'FULL_DAY' && <div style={{ fontSize: '11px', color: '#6366f1' }}>{r.session_type}</div>}
+                              {r.session_type !== 'FULL_DAY' && <div style={{ fontSize: '11px', color: '#C2071A' }}>{r.session_type}</div>}
                             </td>
                             <td style={s.td}>
                               <div>{fmt(r.start_date)}</div>
@@ -290,8 +296,8 @@ export default function LeaveApprovals() {
                               <div style={{ maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.leave_reason || '—'}</div>
                               {r.attachment_url && (
                                 <a href={r.attachment_url} target="_blank" rel="noopener noreferrer"
-                                  style={{ color: '#6366f1', textDecoration: 'none', fontSize: '11px', fontWeight: '600', marginTop: '2px', display: 'block' }}>
-                                  🔗 Attachment
+                                  style={{ color: '#C2071A', textDecoration: 'none', fontSize: '11px', fontWeight: '600', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <FiLink size={12} color="#C2071A" /> Attachment
                                 </a>
                               )}
                             </td>
@@ -345,8 +351,8 @@ export default function LeaveApprovals() {
                     </button>
                   )}
                   <button onClick={loadTeamOH}
-                    style={{ padding: '6px 14px', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '8px', background: 'rgba(99,102,241,0.06)', fontSize: '12px', fontWeight: '600', color: '#6366f1', cursor: 'pointer' }}>
-                    ↻ Refresh
+                    style={{ padding: '6px 14px', border: '1px solid rgba(194,7,26,0.3)', borderRadius: '8px', background: 'rgba(194,7,26,0.06)', fontSize: '12px', fontWeight: '600', color: '#C2071A', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <FiRefreshCw size={13} color="#C2071A" /> Refresh
                   </button>
                   <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#94a3b8', fontWeight: '600', whiteSpace: 'nowrap' }}>
                     {teamOHUniqueEmpCount} employee{teamOHUniqueEmpCount !== 1 ? 's' : ''} · {teamOH.length} avail{teamOH.length !== 1 ? 's' : ''}
@@ -356,7 +362,7 @@ export default function LeaveApprovals() {
                 {/* Summary info banner */}
                 {teamOH.length > 0 && (
                   <div style={{ margin: '14px 18px', padding: '12px 16px', borderRadius: '10px', background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.18)', fontSize: '12px', color: '#7c3aed', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span>✨</span>
+                    <FiStar size={15} color="#7c3aed" />
                     <span>
                       <strong>{teamOHUniqueEmpCount}</strong> team member{teamOHUniqueEmpCount !== 1 ? 's have' : ' has'} availed a total of <strong>{teamOH.length}</strong> optional holiday{teamOH.length !== 1 ? 's' : ''} this year.
                     </span>
@@ -400,7 +406,7 @@ export default function LeaveApprovals() {
                             {r.holiday_date ? new Date(r.holiday_date.split('T')[0] + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }) : '—'}
                           </td>
                           <td style={s.td}>
-                            <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '6px', background: 'rgba(99,102,241,0.08)', color: '#6366f1', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(99,102,241,0.2)' }}>
+                            <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '6px', background: 'rgba(194,7,26,0.08)', color: '#C2071A', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(194,7,26,0.2)' }}>
                               FY {r.leave_year}
                             </span>
                           </td>
@@ -425,7 +431,7 @@ export default function LeaveApprovals() {
                 <h3 style={{ margin: 0, color: '#0f172a', fontSize: '17px', fontWeight: '700', textTransform: 'capitalize' }}>
                   {actionType} Request — {selectedReq?.employee_name}
                 </h3>
-                <button style={s.closeBtn} onClick={() => setModalOpen(false)}>&times;</button>
+                <button style={s.closeBtn} onClick={() => setModalOpen(false)}><FiX size={18} color="#64748b" /></button>
               </div>
               <form onSubmit={handleActionSubmit}>
                 <div style={{ marginBottom: '16px' }}>
@@ -443,11 +449,11 @@ export default function LeaveApprovals() {
                     onChange={e => setRemarks(e.target.value)}
                   />
                 </div>
-                {formError && <div style={s.error}>⚠️ {formError}</div>}
+                {formError && <div style={s.error}><FiAlertCircle size={14} color="#ef4444" /> {formError}</div>}
                 <button style={{
                   ...s.submitBtn,
                   background: actionType === 'reject' ? 'linear-gradient(135deg,#ef4444,#dc2626)'
-                    : actionType === 'cancel' ? 'linear-gradient(135deg,#6366f1,#4f46e5)'
+                    : actionType === 'cancel' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)'
                     : 'linear-gradient(135deg,#10b981,#059669)'
                 }} type="submit">
                   Confirm {actionType}

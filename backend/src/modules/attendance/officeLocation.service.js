@@ -70,7 +70,19 @@ async function checkDuplicate(organizationId, locationName, latitude, longitude,
   return false;
 }
 
-async function createOfficeLocation(organizationId, data) {
+function normalizeOfficeData(data) {
+  if (!data) return {};
+  return {
+    ...data,
+    locationName: data.locationName || data.location_name || '',
+    radiusMeters: data.radiusMeters != null ? data.radiusMeters : data.radius_meters,
+    isActive: data.isActive !== undefined ? data.isActive : (data.is_active !== undefined ? data.is_active : true),
+    placeId: data.placeId || data.google_place_id || data.place_id || null,
+  };
+}
+
+async function createOfficeLocation(organizationId, rawData) {
+  const data = normalizeOfficeData(rawData);
   if (!data.locationName) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Location Name is required.');
   }
@@ -99,12 +111,13 @@ async function createOfficeLocation(organizationId, data) {
   return await repository.create(organizationId, data);
 }
 
-async function updateOfficeLocation(organizationId, officeLocationId, data) {
+async function updateOfficeLocation(organizationId, officeLocationId, rawData) {
   const existing = await repository.findById(officeLocationId);
   if (!existing || existing.organization_id !== organizationId) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, 'Office location not found.');
   }
 
+  const data = normalizeOfficeData(rawData);
   if (!data.locationName) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, 'Location Name is required.');
   }

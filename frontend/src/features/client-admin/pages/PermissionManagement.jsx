@@ -201,7 +201,7 @@ export default function PermissionManagement() {
   // ── shared UI pieces ───────────────────────────────────────────
   const Spinner = ({ label }) => (
     <div style={{ padding: '60px', textAlign: 'center' }}>
-      <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+      <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
       <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>{label}</div>
     </div>
   )
@@ -219,7 +219,7 @@ export default function PermissionManagement() {
         {getPageNumbers(page, totalPages).map((p, i) =>
           p === '...' ? <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8' }}>…</span> : (
             <button key={p} onClick={() => setPage(p)}
-              style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(99,102,241,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {p}
             </button>
           )
@@ -261,7 +261,7 @@ export default function PermissionManagement() {
           <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiShield size={18} color="#fff" />
                 </div>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Permission Management</h1>
@@ -272,11 +272,13 @@ export default function PermissionManagement() {
             </div>
 
             {settings && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '12px', padding: '10px 16px' }}>
-                <FiInfo size={14} color="#4f46e5" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#feecee', border: '1px solid #f7a6af', borderRadius: '12px', padding: '10px 16px' }}>
+                <div style={{ width: 26, height: 26, borderRadius: '8px', background: '#C2071A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FiInfo size={13} color="#ffffff" />
+                </div>
                 <div>
-                  <div style={{ fontSize: '12px', fontWeight: '800', color: '#4f46e5' }}>Active Policy</div>
-                  <div style={{ fontSize: '11px', color: '#6366f1' }}>
+                  <div style={{ fontSize: '12px', fontWeight: '800', color: '#941018' }}>Active Policy</div>
+                  <div style={{ fontSize: '11px', color: '#C2071A' }}>
                     {settings.monthly_count} permission{settings.monthly_count !== 1 ? 's' : ''} × {settings.hours_per_permission}h each · credited 1st of every month
                   </div>
                 </div>
@@ -289,9 +291,9 @@ export default function PermissionManagement() {
             {TABS.map(t => (
               <button key={t.key} onClick={() => setActiveTab(t.key)}
                 style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', borderRadius: '9px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '700', transition: 'all 0.15s',
-                  background: activeTab === t.key ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : 'transparent',
+                  background: activeTab === t.key ? 'linear-gradient(135deg,#C2071A,#941018)' : 'transparent',
                   color:      activeTab === t.key ? '#fff' : '#64748b',
-                  boxShadow:  activeTab === t.key ? '0 2px 8px rgba(99,102,241,0.3)' : 'none',
+                  boxShadow:  activeTab === t.key ? '0 2px 8px rgba(194,7,26,0.3)' : 'none',
                 }}>
                 {t.icon} {t.label}
               </button>
@@ -304,17 +306,17 @@ export default function PermissionManagement() {
               {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '20px' }}>
                 {[
-                  { key: 'ALL',      label: 'Total',    value: stats.total,    color: '#6366f1', bg: '#eef2ff', icon: <FiList size={18} color="#6366f1" /> },
-                  { key: 'PENDING',  label: 'Pending',  value: stats.pending,  color: '#b45309', bg: '#fffbeb', icon: <FiClock size={18} color="#b45309" /> },
-                  { key: 'APPROVED', label: 'Approved', value: stats.approved, color: '#15803d', bg: '#f0fdf4', icon: <FiCheckCircle size={18} color="#15803d" /> },
-                  { key: 'REJECTED', label: 'Rejected', value: stats.rejected, color: '#b91c1c', bg: '#fef2f2', icon: <FiXCircle size={18} color="#b91c1c" /> },
-                ].map(({ key, label, value, color, bg, icon }) => {
+                  { key: 'ALL',      label: 'Total',    value: stats.total,    color: '#C2071A', icon: <FiList size={18} color="#ffffff" /> },
+                  { key: 'PENDING',  label: 'Pending',  value: stats.pending,  color: '#b45309', icon: <FiClock size={18} color="#ffffff" /> },
+                  { key: 'APPROVED', label: 'Approved', value: stats.approved, color: '#15803d', icon: <FiCheckCircle size={18} color="#ffffff" /> },
+                  { key: 'REJECTED', label: 'Rejected', value: stats.rejected, color: '#b91c1c', icon: <FiXCircle size={18} color="#ffffff" /> },
+                ].map(({ key, label, value, color, icon }) => {
                   const active = statusFilter === key
                   return (
                     <div key={key} onClick={() => { setStatusFilter(key); setReqPage(1) }}
                       style={{ background: '#fff', border: `1.5px solid ${active ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                      <div style={{ width: 42, height: 42, borderRadius: '12px', background: active ? color : bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        {React.cloneElement(icon, { color: active ? '#fff' : undefined })}
+                      <div style={{ width: 42, height: 42, borderRadius: '12px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {icon}
                       </div>
                       <div>
                         <div style={{ fontSize: '26px', fontWeight: '800', color: active ? color : '#0f172a', lineHeight: 1 }}>{value}</div>
@@ -342,7 +344,7 @@ export default function PermissionManagement() {
 
               {/* Status Pills */}
               <div style={{ display: 'flex', gap: 8, marginBottom: '16px' }}>
-                {[{ val: 'ALL', label: 'All', count: requests.length, color: '#6366f1' }, { val: 'PENDING', label: 'Pending', count: stats.pending, color: '#b45309' }, { val: 'APPROVED', label: 'Approved', count: stats.approved, color: '#15803d' }, { val: 'REJECTED', label: 'Rejected', count: stats.rejected, color: '#b91c1c' }].map(o => (
+                {[{ val: 'ALL', label: 'All', count: requests.length, color: '#C2071A' }, { val: 'PENDING', label: 'Pending', count: stats.pending, color: '#b45309' }, { val: 'APPROVED', label: 'Approved', count: stats.approved, color: '#15803d' }, { val: 'REJECTED', label: 'Rejected', count: stats.rejected, color: '#b91c1c' }].map(o => (
                   <button key={o.val} onClick={() => { setStatusFilter(o.val); setReqPage(1) }} style={{ padding: '7px 16px', borderRadius: '20px', border: `1.5px solid ${statusFilter === o.val ? o.color : '#e2e8f0'}`, background: statusFilter === o.val ? o.color : '#fff', color: statusFilter === o.val ? '#fff' : '#475569', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
                     {o.label}
                     <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#f1f5f9', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>{o.count}</span>
@@ -354,7 +356,7 @@ export default function PermissionManagement() {
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {reqLoading ? <Spinner label="Loading permission requests…" /> : filteredReq.length === 0 ? (
                   <div style={{ padding: '60px', textAlign: 'center' }}>
-                    <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiShield size={22} color="#94a3b8" /></div>
+                    <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiShield size={22} color="#ffffff" /></div>
                     <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700' }}>No permission requests for {MONTHS[monthFilter - 1]} {yearFilter}</div>
                   </div>
                 ) : (
@@ -395,16 +397,16 @@ export default function PermissionManagement() {
                                 {r.status === 'PENDING' ? (
                                   <div style={{ display: 'flex', gap: 6 }}>
                                     <button onClick={() => handleApprove(r.permission_request_id)}
-                                      style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 12px', background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                                      onMouseEnter={e => e.currentTarget.style.background = '#dcfce7'}
-                                      onMouseLeave={e => e.currentTarget.style.background = '#f0fdf4'}>
-                                      <FiCheck size={11} /> Approve
+                                      style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 12px', background: '#15803d', color: '#ffffff', border: '1px solid #15803d', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                                      onMouseEnter={e => e.currentTarget.style.background = '#166534'}
+                                      onMouseLeave={e => e.currentTarget.style.background = '#15803d'}>
+                                      <FiCheck size={11} color="#ffffff" /> Approve
                                     </button>
                                     <button onClick={() => { setRejectModal({ id: r.permission_request_id, name: r.employee_name }); setRejectReason('') }}
-                                      style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 12px', background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                                      onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
-                                      onMouseLeave={e => e.currentTarget.style.background = '#fef2f2'}>
-                                      <FiX size={11} /> Reject
+                                      style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 12px', background: '#b91c1c', color: '#ffffff', border: '1px solid #b91c1c', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                                      onMouseEnter={e => e.currentTarget.style.background = '#991b1b'}
+                                      onMouseLeave={e => e.currentTarget.style.background = '#b91c1c'}>
+                                      <FiX size={11} color="#ffffff" /> Reject
                                     </button>
                                   </div>
                                 ) : (
@@ -441,7 +443,7 @@ export default function PermissionManagement() {
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {balLoading ? <Spinner label="Loading balances…" /> : filteredBal.length === 0 ? (
                   <div style={{ padding: '60px', textAlign: 'center' }}>
-                    <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiUsers size={22} color="#94a3b8" /></div>
+                    <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiUsers size={22} color="#ffffff" /></div>
                     <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No balance records for {MONTHS[balMonth - 1]} {balYear}</div>
                     <div style={{ color: '#64748b', fontSize: '13px' }}>Balances are credited on the 1st of each month</div>
                   </div>
@@ -474,7 +476,7 @@ export default function PermissionManagement() {
                                 <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#374151', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.allocated_count}</div>
                               </td>
                               <td style={{ padding: '14px 18px' }}>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: b.used_count > 0 ? '#eef2ff' : '#f8fafc', border: `1px solid ${b.used_count > 0 ? '#c7d2fe' : '#e2e8f0'}`, color: b.used_count > 0 ? '#4f46e5' : '#94a3b8', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.used_count}</div>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: b.used_count > 0 ? '#feecee' : '#f8fafc', border: `1px solid ${b.used_count > 0 ? '#f7a6af' : '#e2e8f0'}`, color: b.used_count > 0 ? '#941018' : '#94a3b8', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.used_count}</div>
                               </td>
                               <td style={{ padding: '14px 18px' }}>
                                 <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: remaining <= 0 ? '#fef2f2' : '#f0fdf4', border: `1px solid ${remaining <= 0 ? '#fecaca' : '#bbf7d0'}`, color: remaining <= 0 ? '#b91c1c' : '#15803d', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{remaining}</span>
@@ -505,7 +507,7 @@ export default function PermissionManagement() {
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {/* Card header */}
                 <div style={{ padding: '24px 28px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <FiSettings size={18} color="#fff" />
                   </div>
                   <div>
@@ -535,7 +537,7 @@ export default function PermissionManagement() {
                         </span>
                       </div>
                       <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: 6 }}>
-                        Current: <strong style={{ color: '#4f46e5' }}>{settings?.monthly_count ?? '—'}</strong> permissions/month
+                        Current: <strong style={{ color: '#941018' }}>{settings?.monthly_count ?? '—'}</strong> permissions/month
                       </div>
                     </div>
 
@@ -555,7 +557,7 @@ export default function PermissionManagement() {
                         <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>hours per permission request</span>
                       </div>
                       <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: 6 }}>
-                        Current: <strong style={{ color: '#4f46e5' }}>{settings?.hours_per_permission ?? '—'}</strong> hours per permission
+                        Current: <strong style={{ color: '#941018' }}>{settings?.hours_per_permission ?? '—'}</strong> hours per permission
                       </div>
                     </div>
 
@@ -566,7 +568,7 @@ export default function PermissionManagement() {
                           type="checkbox"
                           checked={proRata}
                           onChange={e => setProRata(e.target.checked)}
-                          style={{ marginTop: 2, width: 16, height: 16, accentColor: '#6366f1', cursor: 'pointer', flexShrink: 0 }}
+                          style={{ marginTop: 2, width: 16, height: 16, accentColor: '#C2071A', cursor: 'pointer', flexShrink: 0 }}
                         />
                         <div>
                           <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: 4 }}>Pro-rata credit on joining</div>
@@ -579,9 +581,11 @@ export default function PermissionManagement() {
                     </div>
 
                     {/* Policy Preview */}
-                    <div style={{ background: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                      <FiInfo size={15} color="#4f46e5" style={{ flexShrink: 0, marginTop: 1 }} />
-                      <div style={{ fontSize: '12px', color: '#4338ca', lineHeight: 1.6 }}>
+                    <div style={{ background: '#feecee', border: '1px solid #f7a6af', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#C2071A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                        <FiInfo size={13} color="#ffffff" />
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#7c0a1a', lineHeight: 1.6 }}>
                         <strong>Effective policy:</strong> Each employee will receive <strong>{monthlyCount || '?'} permission{parseInt(monthlyCount) !== 1 ? 's' : ''}</strong> of <strong>{hoursPerPerm || '?'} hour{parseFloat(hoursPerPerm) !== 1 ? 's' : ''} each</strong> on the <strong>1st of every month at midnight</strong>.
                         {proRata && ' New joiners receive a pro-rata allocation for their first month.'}
                       </div>
@@ -589,16 +593,23 @@ export default function PermissionManagement() {
 
                     {/* Feedback message */}
                     {settingsMsg && (
-                      <div style={{ marginBottom: 18, padding: '10px 14px', borderRadius: '8px', fontSize: '13px', fontWeight: '600',
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18, padding: '10px 14px', borderRadius: '8px', fontSize: '13px', fontWeight: '600',
                         background: settingsMsg.type === 'success' ? '#f0fdf4' : '#fef2f2',
                         color:      settingsMsg.type === 'success' ? '#15803d' : '#b91c1c',
                         border:     `1px solid ${settingsMsg.type === 'success' ? '#bbf7d0' : '#fecaca'}` }}>
-                        {settingsMsg.type === 'success' ? '✓ ' : '⚠ '}{settingsMsg.text}
+                        <div style={{
+                          width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                          background: settingsMsg.type === 'success' ? '#15803d' : '#b91c1c',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          {settingsMsg.type === 'success' ? <FiCheck size={12} color="#ffffff" /> : <FiX size={12} color="#ffffff" />}
+                        </div>
+                        {settingsMsg.text}
                       </div>
                     )}
 
                     <button type="submit" disabled={settingsSaving}
-                      style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '11px 24px', background: settingsSaving ? '#a5b4fc' : 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: settingsSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.35)' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '11px 24px', background: settingsSaving ? 'rgba(194,7,26,0.5)' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: settingsSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}
                       onMouseEnter={e => { if (!settingsSaving) e.currentTarget.style.transform = 'translateY(-1px)' }}
                       onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                       <FiSave size={14} />
@@ -622,8 +633,8 @@ export default function PermissionManagement() {
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiXCircle size={18} color="#b91c1c" />
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiXCircle size={18} color="#ffffff" />
                 </div>
                 <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>Reject Permission</h3>
               </div>

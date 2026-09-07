@@ -79,9 +79,10 @@ const DATE_RANGES = [
 
 const cardBase = {
   background: '#ffffff',
-  border: '1px solid #eff3f8',
-  borderRadius: '12px',
-  padding: '15px 15px',
+  border: 'none',
+  borderRadius: '16px',
+  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+  padding: '18px 20px',
 }
 
 const solid = (val) => val.startsWith('var(') || val.startsWith('linear-gradient') ? val : `linear-gradient(${val}, ${val})`
@@ -176,7 +177,7 @@ function MetricCard({ label, value, sub, accent, icon: Icon, trend, trendLabel }
   const trendBg = trend > 0 ? '#e8fbf0' : trend < 0 ? '#feecee' : '#f1f5f9'
   const trendColor = trend > 0 ? '#0fa958' : trend < 0 ? BRAND.redBright : '#7b8aa8'
   return (
-    <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '11px 13px' }}>
+    <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ width: '31px', height: '31px', borderRadius: '9px', backgroundImage: solid('#f6f6f6'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Icon size={17} color={accent} />
@@ -361,7 +362,9 @@ export default function ClientAdminDashboard() {
           <div className="welcome-banner-card" style={{
             background: 'linear-gradient(96.35deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
             backgroundImage: 'linear-gradient(96.35deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
-            borderRadius: '12px',
+            border: 'none',
+            borderRadius: '16px',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.04)',
             padding: '24px 20px 32px 16px',
             marginBottom: '28px',
             position: 'relative',
@@ -466,8 +469,9 @@ export default function ClientAdminDashboard() {
                     onClick={() => navigate(link.path)}
                     style={{
                       background: active ? BRAND.redTint : '#ffffff',
-                      border: `1px solid ${active ? 'var(--figma-border-active)' : BRAND.border}`,
-                      borderRadius: '11px', padding: '14px 6px', cursor: 'pointer', textAlign: 'center',
+                      border: 'none',
+                      boxShadow: active ? '0 4px 12px rgba(194, 7, 26, 0.12)' : '0 2px 8px rgba(0, 0, 0, 0.03)',
+                      borderRadius: '12px', padding: '14px 6px', cursor: 'pointer', textAlign: 'center',
                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                       transition: 'all 0.2s',
                     }}
@@ -487,8 +491,9 @@ export default function ClientAdminDashboard() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '20px' }}>
             {/* Overall Performance */}
             <div style={{
-              backgroundImage: 'var(--figma-card-gradient-red)',
-              borderRadius: '12px', padding: '0 15px',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+              border: 'none',
+              borderRadius: '16px', boxShadow: '0 8px 24px -4px rgba(194, 7, 26, 0.3)', padding: '0 18px',
               display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px', position: 'relative', overflow: 'hidden',
             }}>
               <RingChart pct={0} color="#ffffff" trackColor="rgba(255,255,255,0.25)" size={60} strokeWidth={7} label="0%" labelSize="12.6px" labelColor="#fff" />
@@ -503,7 +508,7 @@ export default function ClientAdminDashboard() {
             </div>
 
             {/* Goal Completion */}
-            <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '0 15px', display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px' }}>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '0 18px', display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px' }}>
               <RingChart pct={0} color={BRAND.redBright} trackColor="#f1f5f9" size={54} strokeWidth={6} label="0%" labelSize="12.6px" labelColor={BRAND.redBright} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                 <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>GOAL COMPLETION</div>
@@ -517,7 +522,7 @@ export default function ClientAdminDashboard() {
             </div>
 
             {/* KPI Approval */}
-            <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '0 15px', display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px' }}>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '0 18px', display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px' }}>
               <RingChart pct={0} color="#16a34a" trackColor="#f1f5f9" size={54} strokeWidth={6} label="0%" labelSize="12.6px" labelColor="#16a34a" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                 <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>KPI APPROVAL</div>
@@ -569,38 +574,38 @@ export default function ClientAdminDashboard() {
           </div>
 
           {/* ── Today's Attendance Banner ── */}
-          <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
+          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 20px', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <div style={{ fontFamily: FONT_HEAD, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', color: BRAND.navy }}>
                 Today's Attendance
               </div>
-              <button onClick={() => navigate('/client-admin/attendance')} style={{ background: 'none', border: '1px solid #dde7f5', borderRadius: '7px', padding: '3px 11px', display: 'flex', alignItems: 'center', gap: '7px', fontFamily: FONT_HEAD, fontSize: '10.2px', fontWeight: 600, color: '#1d4ed8', cursor: 'pointer' }}>
+              <button onClick={() => navigate('/client-admin/attendance')} style={{ background: '#edf3fc', border: 'none', borderRadius: '8px', padding: '5px 13px', display: 'flex', alignItems: 'center', gap: '7px', fontFamily: FONT_HEAD, fontSize: '10.2px', fontWeight: 600, color: '#1d4ed8', cursor: 'pointer' }}>
                 View Full Report <FiArrowRight size={11} />
               </button>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '36px', padding: '0 11px', border: '1px solid #ecf1f8', borderRadius: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
                 <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#edf3fc'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <FiUsers size={13} color="#2563eb" />
                 </div>
                 <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: '#2563eb' }}>41</span>
                 <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Total Employees</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '36px', padding: '0 11px', border: '1px solid #ecf1f8', borderRadius: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
                 <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#dcfce7'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <FiCheckCircle size={13} color="#16a34a" />
                 </div>
                 <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: '#16a34a' }}>0</span>
                 <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Present Today</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '36px', padding: '0 11px', border: '1px solid #ecf1f8', borderRadius: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
                 <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#fee2e2'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <FiAlertCircle size={13} color={BRAND.redBright} />
                 </div>
                 <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: BRAND.redBright }}>41</span>
                 <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Absent Today</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '36px', padding: '0 11px', border: '1px solid #ecf1f8', borderRadius: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
                 <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#edf3fc'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <FiBarChart2 size={13} color="#2563eb" />
                 </div>
@@ -614,7 +619,7 @@ export default function ClientAdminDashboard() {
           <SectionLabel>Advanced Analytics</SectionLabel>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '24px' }}>
             {/* Pending Actions */}
-            <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '13px 15px' }}>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <FiFilter size={14} color="#64748b" />
                 <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>Pending Actions</div>
@@ -637,7 +642,7 @@ export default function ClientAdminDashboard() {
             </div>
 
             {/* Goal Health */}
-            <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '13px 15px' }}>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <FiTarget size={14} color="#64748b" />
                 <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>Goal Health</div>
@@ -658,7 +663,7 @@ export default function ClientAdminDashboard() {
             </div>
 
             {/* Appraisal Status */}
-            <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '13px 15px' }}>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <FiFileText size={14} color="#64748b" />
                 <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>Appraisal Status</div>
@@ -679,7 +684,7 @@ export default function ClientAdminDashboard() {
             </div>
 
             {/* KPI Breakdown */}
-            <div style={{ background: '#fff', border: `1px solid ${BRAND.border}`, borderRadius: '12px', padding: '13px 15px' }}>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <FiBarChart2 size={14} color="#64748b" />
                 <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>KPI Breakdown</div>
@@ -802,8 +807,8 @@ export default function ClientAdminDashboard() {
                   <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f7a6af', display: 'inline-block' }} /> Completed
                 </span>
               </div>
-              <div style={{ border: '1px stroke #f1f5f9', borderRadius: '8px', height: '110px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#fafbfc' }}>
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '6px 12px', fontSize: '10.4px', color: '#64748b' }}>
+              <div style={{ borderRadius: '8px', height: '110px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#fafbfc', boxShadow: 'inset 0 0 0 1px #f1f5f9' }}>
+                <div style={{ background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.03)', borderRadius: '6px', padding: '6px 12px', fontSize: '10.4px', color: '#64748b' }}>
                   No trend data available yet
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', marginTop: '16px', fontSize: '9.6px', color: '#64748b' }}>
@@ -816,13 +821,13 @@ export default function ClientAdminDashboard() {
             <div style={cardBase}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                 <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Latest Alerts</h3>
-                <span style={{ fontFamily: FONT_HEAD, fontSize: '10.4px', background: BRAND.redTint, color: BRAND.red, border: '1px solid #f7a6af', padding: '3px 10px', borderRadius: '20px', fontWeight: 600 }}>
+                <span style={{ fontFamily: FONT_HEAD, fontSize: '10.4px', background: BRAND.redTint, color: BRAND.red, border: 'none', padding: '3px 10px', borderRadius: '20px', fontWeight: 600 }}>
                   {unreadCount} unread
                 </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {alertItems.slice(0, 5).map((n, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
                     <FiClock size={13} color="#64748b" style={{ flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: '11.4px', color: '#1e293b', fontWeight: 700 }}>{n.title}</div>
@@ -831,7 +836,7 @@ export default function ClientAdminDashboard() {
                   </div>
                 ))}
               </div>
-              <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 12, width: '100%', padding: '7px', background: 'none', border: `1px solid ${BRAND.border}`, borderRadius: '8px', fontFamily: FONT_HEAD, fontSize: '10.4px', color: BRAND.red, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+              <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 12, width: '100%', padding: '8px', background: BRAND.redTint, border: 'none', borderRadius: '10px', fontFamily: FONT_HEAD, fontSize: '10.4px', color: BRAND.red, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
                 View all activity <FiArrowRight size={12} />
               </button>
             </div>
@@ -868,7 +873,7 @@ export default function ClientAdminDashboard() {
                   </div>
                 </div>
               </div>
-              <div style={{ background: '#fcf8f8', border: '1px solid #f9e2e5', borderRadius: '10px', padding: '10px 12px' }}>
+              <div style={{ background: '#fcf8f8', border: 'none', borderRadius: '12px', padding: '10px 12px' }}>
                 <div style={{ fontSize: '11px', color: BRAND.red, fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <FiUsers size={13} color={BRAND.red} /> Appraisal Cycles
                 </div>

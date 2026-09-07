@@ -18,18 +18,33 @@ api.interceptors.request.use(cfg => {
   return cfg
 })
 
+const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
+
 const REPORT_TYPES = [
-  { id: 'summary', title: 'Attendance Summary', desc: 'Aggregated totals, present/absent stats, and overall compliance.', icon: FiTrendingUp, bg: 'linear-gradient(135deg,#6366f1,#818cf8)' },
-  { id: 'daily', title: 'Daily Attendance', desc: 'Detailed log lists of daily checkins/checkouts, hours, and results.', icon: FiCalendar, bg: 'linear-gradient(135deg,#10b981,#34d399)' },
-  { id: 'monthly', title: 'Monthly Attendance', desc: 'Monthly summary view of present, absent, and late tallies per employee.', icon: FiUsers, bg: 'linear-gradient(135deg,#06b6d4,#22d3ee)' },
-  { id: 'late-arrivals', title: 'Late Arrivals', desc: 'Track employees who clock in past the shift start & grace periods.', icon: FiClock, bg: 'linear-gradient(135deg,#f59e0b,#fbbf24)' },
-  { id: 'early-exits', title: 'Early Exits', desc: 'Track employees who clock out before the shift expected exit time.', icon: FiAlertTriangle, bg: 'linear-gradient(135deg,#f43f5e,#fda4af)' },
-  { id: 'geofence', title: 'Geofence Compliance', desc: 'Verify fence verification status, office locations, and GPS accuracy.', icon: FiMapPin, bg: 'linear-gradient(135deg,#8b5cf6,#a78bfa)' },
-  { id: 'departments', title: 'Department Summaries', desc: 'Department-wise averages, total active headcount, and present ratios.', icon: FiUsers, bg: 'linear-gradient(135deg,#ec4899,#f472b6)' },
-  { id: 'payroll', title: 'Monthly Payroll Attendance', desc: 'Track LOP days, leaves, and overtime hours for payroll calculations.', icon: FiClipboard, bg: 'linear-gradient(135deg,#14b8a6,#2dd4bf)' },
-  { id: 'exceptions', title: 'Attendance Exceptions', desc: 'Flags missing punch ins/outs, outside geofence, and missing shifts.', icon: FiAlertTriangle, bg: 'linear-gradient(135deg,#e11d48,#fb7185)' },
-  { id: 'employee', title: 'Employee History', desc: 'Chronological timeline log showing single employee attendance.', icon: FiSearch, bg: 'linear-gradient(135deg,#4b5563,#9ca3af)' }
+  { id: 'summary', title: 'Attendance Summary', desc: 'Aggregated totals, present/absent stats, and overall compliance.', icon: FiTrendingUp },
+  { id: 'daily', title: 'Daily Attendance', desc: 'Detailed log lists of daily checkins/checkouts, hours, and results.', icon: FiCalendar },
+  { id: 'monthly', title: 'Monthly Attendance', desc: 'Monthly summary view of present, absent, and late tallies per employee.', icon: FiUsers },
+  { id: 'late-arrivals', title: 'Late Arrivals', desc: 'Track employees who clock in past the shift start & grace periods.', icon: FiClock },
+  { id: 'early-exits', title: 'Early Exits', desc: 'Track employees who clock out before the shift expected exit time.', icon: FiAlertTriangle },
+  { id: 'geofence', title: 'Geofence Compliance', desc: 'Verify fence verification status, office locations, and GPS accuracy.', icon: FiMapPin },
+  { id: 'departments', title: 'Department Summaries', desc: 'Department-wise averages, total active headcount, and present ratios.', icon: FiUsers },
+  { id: 'payroll', title: 'Monthly Payroll Attendance', desc: 'Track LOP days, leaves, and overtime hours for payroll calculations.', icon: FiClipboard },
+  { id: 'exceptions', title: 'Attendance Exceptions', desc: 'Flags missing punch ins/outs, outside geofence, and missing shifts.', icon: FiAlertTriangle },
+  { id: 'employee', title: 'Employee History', desc: 'Chronological timeline log showing single employee attendance.', icon: FiSearch }
 ]
+
+function CodeBadge({ code }) {
+  if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
+  return (
+    <span style={{
+      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
+      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+    }}>
+      {code}
+    </span>
+  )
+}
 
 export default function AttendanceReports() {
   const [activeReport, setActiveReport] = useState(null)
@@ -44,13 +59,12 @@ export default function AttendanceReports() {
   const [selectedResult, setSelectedResult] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('')
-  const [selectedMode, setSelectedMode] = useState('ALL') // future placeholder
 
   // Data state
   const [reportData, setReportData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [exporting, setExporting] = useState(null) // 'csv' | 'xlsx' | 'pdf' | null
+  const [exporting, setExporting] = useState(null)
 
   // Dropdown options
   const [departments, setDepartments] = useState([])
@@ -101,7 +115,6 @@ export default function AttendanceReports() {
     }
   }
 
-  // Reload report when active selection, dates, or filter controls change
   useEffect(() => {
     loadReport()
   }, [activeReport, startDate, endDate, selectedDept, selectedPolicy, selectedShift, selectedResult, selectedLocation, selectedEmployeeId])
@@ -149,417 +162,202 @@ export default function AttendanceReports() {
     }
   }
 
-  // Columns & Headers setup based on Report
-  const { columns, headers } = useMemo(() => {
-    if (!activeReport || !reportData) return { columns: [], headers: [] }
-    let dataList = Array.isArray(reportData) ? reportData : (reportData.records || [])
-    if (dataList.length === 0) return { columns: [], headers: [] }
-    
-    const firstItem = dataList[0]
-    const columns = Object.keys(firstItem)
-    const headers = columns.map(col => col.replace(/_/g, ' ').toUpperCase())
-    return { columns, headers }
-  }, [activeReport, reportData])
+  const selectedReportInfo = REPORT_TYPES.find(r => r.id === activeReport)
 
-  const displayList = useMemo(() => {
-    if (!reportData) return []
-    return Array.isArray(reportData) ? reportData : (reportData.records || [])
-  }, [reportData])
-
-  // Style Tokens
-  const pageStyle = { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }
-  const mainStyle = { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }
-  const containerStyle = { flex: 1, padding: '24px 32px', overflowY: 'auto' }
-  
   return (
-    <div style={pageStyle}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="attendance-reports" />
 
-      <div style={mainStyle}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={containerStyle}>
+        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
-          {/* Back Trigger */}
-          {activeReport && (
-            <button
-              onClick={() => { setActiveReport(null); setReportData(null) }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none',
-                color: '#6366f1', fontSize: '13px', fontWeight: 700, cursor: 'pointer', marginBottom: '16px', padding: 0
-              }}
-            >
-              <FiChevronLeft size={16} /> Back to Reports Dashboard
-            </button>
-          )}
-
-          {/* Page Header */}
+          {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiClipboard style={{ color: '#6366f1' }} /> 
-                {activeReport ? REPORT_TYPES.find(r => r.id === activeReport)?.title : 'Attendance Reports'}
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: 10,
+                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <FiClipboard size={20} color="#C2071A" strokeWidth={2.5} />
+                </div>
+                Attendance Reports
               </h1>
               <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
-                {activeReport 
-                  ? REPORT_TYPES.find(r => r.id === activeReport)?.desc
-                  : 'Select and download localized attendance summaries, geofence compliance matrices, and payroll audit sheets.'}
+                Generate, inspect, and export comprehensive attendance compliance logs & analytics
               </p>
             </div>
-            
+
             {activeReport && (
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
                 <button
-                  id="export-csv"
                   onClick={() => handleExport('csv')}
-                  disabled={exporting || displayList.length === 0}
+                  disabled={exporting !== null}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: '#f1f5f9',
-                    border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#334155', cursor: 'pointer'
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 16px', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                    color: '#ffffff', border: 'none', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                    boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)',
+                    fontFamily: "'Inter', sans-serif"
                   }}
                 >
-                  <FiDownload size={14} /> {exporting === 'csv' ? 'CSV...' : 'CSV'}
+                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+                  Export CSV
                 </button>
+
                 <button
-                  id="export-xlsx"
-                  onClick={() => handleExport('xlsx')}
-                  disabled={exporting || displayList.length === 0}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: '#f1f5f9',
-                    border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#334155', cursor: 'pointer'
-                  }}
-                >
-                  <FiDownload size={14} /> {exporting === 'xlsx' ? 'XLSX...' : 'Excel'}
-                </button>
-                <button
-                  id="export-pdf"
                   onClick={() => handleExport('pdf')}
-                  disabled={exporting || displayList.length === 0}
+                  disabled={exporting !== null}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: '#f1f5f9',
-                    border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '13px', fontWeight: 700, color: '#334155', cursor: 'pointer'
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    color: '#ffffff', border: 'none', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    fontFamily: "'Inter', sans-serif"
                   }}
                 >
-                  <FiDownload size={14} /> {exporting === 'pdf' ? 'PDF...' : 'PDF'}
+                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+                  Export PDF
+                </button>
+
+                <button
+                  onClick={loadReport}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    color: '#ffffff', border: 'none', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                >
+                  <FiRefreshCw size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin' : ''} />
+                  Refresh
                 </button>
               </div>
             )}
           </div>
 
-          <style>{`
-            .report-card:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.08), 0 4px 6px -2px rgba(99, 102, 241, 0.04) !important;
-            }
-          `}</style>
-
-          {/* Dashboard Mode */}
-          {!activeReport && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              
-              {/* Scheduled Reports Coming Soon placeholder */}
-              <div style={{
-                background: 'linear-gradient(135deg,#eef2ff,#e0e7ff)',
-                borderRadius: '16px',
-                padding: '20px',
-                border: '1px solid #c7d2fe',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '16px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#6366f1', color: '#fff', display: 'flex', alignItems: 'center', justifycontent: 'center', flexShrink: 0 }}>
-                    <FiMail size={20} style={{ margin: 'auto' }} />
-                  </div>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: '#1e1b4b' }}>Scheduled Reports</h4>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#4338ca', fontWeight: 500 }}>Auto-deliver daily shifts or geofence compliance audits directly to managers' mailboxes.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Grid Report Options */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-                {REPORT_TYPES.map(report => (
-                  <div
-                    key={report.id}
-                    className="report-card"
-                    onClick={() => setActiveReport(report.id)}
-                    style={{
-                      background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px',
-                      padding: '20px', cursor: 'pointer', display: 'flex', flexDirection: 'column',
-                      gap: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: report.bg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <report.icon size={20} />
+          {/* Report Selection Grid */}
+          {!activeReport ? (
+            <div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>Select Report Type</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+                {REPORT_TYPES.map(r => {
+                  const Icon = r.icon
+                  return (
+                    <div
+                      key={r.id}
+                      onClick={() => setActiveReport(r.id)}
+                      style={{
+                        background: '#ffffff', border: 'none', borderRadius: '16px',
+                        padding: '20px', cursor: 'pointer', boxShadow: cardShadow,
+                        transition: 'all 0.18s ease', display: 'flex', gap: '14px', alignItems: 'flex-start'
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
+                      <div style={{
+                        width: 44, height: 44, borderRadius: 12,
+                        background: '#FEECEE', color: '#C2071A',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                      }}>
+                        <Icon size={20} color="#C2071A" strokeWidth={2.5} />
+                      </div>
+                      <div>
+                        <h3 style={{ margin: '0 0 4px', fontSize: '15px', fontWeight: 800, color: '#0f172a' }}>{r.title}</h3>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>{r.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>{report.title}</h3>
-                      <p style={{ margin: '6px 0 0 0', fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>{report.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
-          )}
-
-          {/* Viewer Mode */}
-          {activeReport && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              
-              {/* Unified Filter Toolbar */}
-              <div style={{
-                background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px',
-                padding: '16px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
-                display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '13px', fontWeight: 700 }}>
-                  <FiFilter size={14} /> Filters:
+          ) : (
+            <div>
+              {/* Active Report Header & Filters */}
+              <div style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '20px 24px', boxShadow: cardShadow, marginBottom: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <button
+                      onClick={() => setActiveReport(null)}
+                      style={{ background: '#f1f5f9', border: 'none', borderRadius: '8px', padding: '6px 10px', fontSize: '12px', fontWeight: 700, color: '#475569', cursor: 'pointer' }}
+                    >
+                      Back to All Reports
+                    </button>
+                    <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{selectedReportInfo?.title}</h2>
+                  </div>
                 </div>
 
-                {/* Date range */}
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={e => setStartDate(e.target.value)}
-                  style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none' }}
-                />
-                <span style={{ fontSize: '12px', color: '#94a3b8' }}>to</span>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={e => setEndDate(e.target.value)}
-                  style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none' }}
-                />
+                {/* Filter Controls */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'flex-end' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Start Date</label>
+                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
+                  </div>
 
-                {/* Employee select (for employee history) */}
-                {activeReport === 'employee' && (
-                  <select
-                    value={selectedEmployeeId}
-                    onChange={e => setSelectedEmployeeId(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer' }}
-                  >
-                    <option value="">Select Employee</option>
-                    {employees.map(e => (
-                      <option key={e.employee_id} value={e.employee_id}>{e.first_name} {e.last_name} ({e.employee_code})</option>
-                    ))}
-                  </select>
-                )}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>End Date</label>
+                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
+                  </div>
 
-                {/* Department dropdown */}
-                {activeReport !== 'employee' && (
-                  <select
-                    value={selectedDept}
-                    onChange={e => setSelectedDept(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer' }}
-                  >
-                    <option value="">All Departments</option>
-                    {departments.map(d => (
-                      <option key={d.department_id} value={d.department_id}>{d.name}</option>
-                    ))}
-                  </select>
-                )}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Department</label>
+                    <select value={selectedDept} onChange={e => setSelectedDept(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+                      <option value="">All Departments</option>
+                      {departments.map(d => <option key={d.department_id || d.id} value={d.department_id || d.id}>{d.name}</option>)}
+                    </select>
+                  </div>
 
-                {/* Policies dropdown */}
-                {activeReport !== 'employee' && (
-                  <select
-                    value={selectedPolicy}
-                    onChange={e => setSelectedPolicy(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer' }}
-                  >
-                    <option value="">All Policies</option>
-                    {policies.map(p => (
-                      <option key={p.attendance_policy_id} value={p.attendance_policy_id}>{p.name}</option>
-                    ))}
-                  </select>
-                )}
+                  {activeReport === 'employee' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Employee *</label>
+                      <select value={selectedEmployeeId} onChange={e => setSelectedEmployeeId(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+                        <option value="">Select Employee</option>
+                        {employees.map(e => <option key={e.employee_id} value={e.employee_id}>{e.first_name} {e.last_name} ({e.employee_code})</option>)}
+                      </select>
+                    </div>
+                  )}
 
-                {/* Shifts dropdown */}
-                {activeReport !== 'employee' && (
-                  <select
-                    value={selectedShift}
-                    onChange={e => setSelectedShift(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer' }}
-                  >
-                    <option value="">All Shifts</option>
-                    {shifts.map(s => (
-                      <option key={s.shift_id} value={s.shift_id}>{s.shift_name} ({s.shift_code})</option>
-                    ))}
-                  </select>
-                )}
-
-                {/* Results dropdown */}
-                {['daily', 'late-arrivals', 'early-exits'].includes(activeReport) && (
-                  <select
-                    value={selectedResult}
-                    onChange={e => setSelectedResult(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer' }}
-                  >
-                    <option value="">All Results</option>
-                    <option value="ON_TIME">On Time</option>
-                    <option value="LATE_ARRIVAL">Late Arrival</option>
-                    <option value="EARLY_EXIT">Early Exit</option>
-                    <option value="COMPLETED_SHIFT">Completed Shift</option>
-                  </select>
-                )}
-
-                {/* Geofence location status */}
-                {activeReport === 'geofence' && (
-                  <select
-                    value={selectedLocation}
-                    onChange={e => setSelectedLocation(e.target.value)}
-                    style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer' }}
-                  >
-                    <option value="">All Geofence Status</option>
-                    <option value="INSIDE_FENCE">Inside Geofence</option>
-                    <option value="OUTSIDE_FENCE">Outside Geofence</option>
-                    <option value="LOCATION_NOT_VERIFIED">Location Not Verified</option>
-                  </select>
-                )}
-
-                {/* Future WFH/On-Duty Filter */}
-                <select
-                  value={selectedMode}
-                  onChange={e => setSelectedMode(e.target.value)}
-                  style={{ padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none', cursor: 'pointer', background: '#f8fafc' }}
-                >
-                  <option value="ALL">All Modes (Future-ready)</option>
-                  <option value="OFFICE">Office Punch</option>
-                  <option value="WFH">WFH Remote</option>
-                  <option value="ON_DUTY">On Duty</option>
-                </select>
-
-                {/* Search Text */}
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <FiSearch size={12} color="#94a3b8" style={{ position: 'absolute', left: '10px' }} />
-                  <input
-                    placeholder="Search name/code..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    style={{ padding: '6px 10px 6px 28px', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '12px', outline: 'none' }}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Search</label>
+                    <input type="text" placeholder="Search keywords..." value={search} onChange={e => setSearch(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
+                  </div>
                 </div>
-
-                <button
-                  onClick={loadReport}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '4px', padding: '7px 14px', background: '#6366f1',
-                    border: 'none', borderRadius: '8px', fontSize: '12px', fontWeight: 700, color: '#fff', cursor: 'pointer'
-                  }}
-                >
-                  <FiRefreshCw size={12} /> Apply
-                </button>
               </div>
 
-              {/* Summary Cards Panel for Specific Report Types */}
-              {activeReport === 'summary' && reportData && !Array.isArray(reportData) && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px' }}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Total Employees</span>
-                    <strong style={{ fontSize: '22px', color: '#0f172a' }}>{reportData.totalEmployees}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Punched Present</span>
-                    <strong style={{ fontSize: '22px', color: '#10b981' }}>{reportData.present}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Absent Days</span>
-                    <strong style={{ fontSize: '22px', color: '#ef4444' }}>{reportData.absent}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Late Arrivals</span>
-                    <strong style={{ fontSize: '22px', color: '#f59e0b' }}>{reportData.lateArrivals}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Early Exits</span>
-                    <strong style={{ fontSize: '22px', color: '#f43f5e' }}>{reportData.earlyExits}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Compliance Rate</span>
-                    <strong style={{ fontSize: '22px', color: '#6366f1' }}>{reportData.complianceRate}%</strong>
-                  </div>
-                </div>
-              )}
-
-              {activeReport === 'geofence' && reportData && reportData.summary && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Inside Geofence Count</span>
-                    <strong style={{ fontSize: '22px', color: '#10b981' }}>{reportData.summary.insideFenceCount}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Outside Geofence Count</span>
-                    <strong style={{ fontSize: '22px', color: '#ef4444' }}>{reportData.summary.outsideFenceCount}</strong>
-                  </div>
-                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Location Not Verified Count</span>
-                    <strong style={{ fontSize: '22px', color: '#64748b' }}>{reportData.summary.locationNotVerifiedCount}</strong>
-                  </div>
-                </div>
-              )}
-
-              {/* Scrollable Report Table Card */}
-              <div style={{
-                background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px',
-                overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
-              }}>
+              {/* Data Table */}
+              <div style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '24px', boxShadow: cardShadow }}>
                 {loading ? (
-                  <div style={{ padding: '60px 40px', textAlign: 'center', color: '#64748b' }}>
-                    <FiRefreshCw className="spin-anim" size={24} style={{ marginBottom: '8px', animation: 'spin 1.5s infinite linear' }} />
-                    <div>Loading report lines...</div>
-                  </div>
+                  <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading report data...</div>
                 ) : error ? (
-                  <div style={{ padding: '60px 40px', textAlign: 'center', color: '#ef4444', fontWeight: 600 }}>
-                    {error}
-                  </div>
-                ) : displayList.length === 0 ? (
-                  <div style={{ padding: '60px 40px', textAlign: 'center', color: '#64748b' }}>
-                    {activeReport === 'employee' && !selectedEmployeeId
-                      ? 'Please select an employee from the filter dropdown above to view their attendance history.'
-                      : 'No matching report data lines. Try modifying filter ranges or parameters.'}
-                  </div>
+                  <div style={{ padding: '20px', background: '#feecee', color: '#dc2626', borderRadius: '10px', fontSize: '13px', fontWeight: 600 }}>{error}</div>
+                ) : !reportData || (Array.isArray(reportData) && reportData.length === 0) ? (
+                  <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No records found for the selected parameters.</div>
                 ) : (
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
+                  <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
-                        <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0', color: '#475569', fontWeight: 700, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.04em' }}>
-                          {headers.map((h, i) => (
-                            <th key={i} style={{ padding: '14px 18px' }}>{h}</th>
+                        <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                          {Object.keys(reportData[0] || {}).map(key => (
+                            <th key={key} style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                              {key.replace(/_/g, ' ')}
+                            </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {displayList.map((row, rIdx) => (
-                          <tr
-                            key={rIdx}
-                            style={{
-                              borderBottom: '1px solid #f1f5f9',
-                              background: rIdx % 2 === 0 ? '#ffffff' : '#fafbfc'
-                            }}
-                          >
-                            {columns.map((col, cIdx) => {
-                              let val = row[col]
-                              if (val === null || val === undefined) val = '—'
-                              return (
-                                <td key={cIdx} style={{ padding: '12px 18px', color: '#1e293b', fontWeight: 500 }}>
-                                  {/* Result / status stylings */}
-                                  {col === 'result' || col === 'location_status' || col === 'exception_type' ? (
-                                    <span style={{
-                                      fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px',
-                                      background: ['ON_TIME', 'COMPLETED_SHIFT', 'INSIDE_FENCE', 'PRESENT'].includes(val) ? '#dcfce7' : ['LATE_ARRIVAL', 'OUTSIDE_FENCE', 'Missing Punch Out', 'Missing Punch In'].includes(val) ? '#ffedd5' : '#fee2e2',
-                                      color: ['ON_TIME', 'COMPLETED_SHIFT', 'INSIDE_FENCE', 'PRESENT'].includes(val) ? '#15803d' : ['LATE_ARRIVAL', 'OUTSIDE_FENCE', 'Missing Punch Out', 'Missing Punch In'].includes(val) ? '#c2410c' : '#b91c1c'
-                                    }}>
-                                      {String(val).replace(/_/g, ' ')}
-                                    </span>
-                                  ) : (
-                                    String(val)
-                                  )}
-                                </td>
-                              )
-                            })}
+                        {reportData.map((row, idx) => (
+                          <tr key={idx} style={{ borderBottom: '1px solid #edf2f7', background: idx % 2 === 0 ? '#ffffff' : '#fafafa' }}>
+                            {Object.entries(row).map(([k, val], i) => (
+                              <td key={i} style={{ padding: '14px 16px', color: '#1e293b' }}>
+                                {k.includes('code') ? <CodeBadge code={String(val)} /> : String(val ?? '—')}
+                              </td>
+                            ))}
                           </tr>
                         ))}
                       </tbody>

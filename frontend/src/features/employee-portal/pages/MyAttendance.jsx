@@ -247,9 +247,9 @@ export default function MyAttendance() {
   /* ───── styles ───── */
   const card = {
     background: '#fff',
-    border: '1px solid #e8eaf0',
+    border: 'none',
     borderRadius: '16px',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
   }
 
   const inputBase = {
@@ -276,20 +276,19 @@ export default function MyAttendance() {
   }
 
   const thStyle = {
-    padding: '11px 16px',
+    padding: '14px 16px',
     textAlign: 'left',
-    fontSize: '11px',
+    fontSize: '11.5px',
     fontWeight: '700',
-    letterSpacing: '0.08em',
+    letterSpacing: '0.06em',
     textTransform: 'uppercase',
-    color: '#64748b',
-    background: '#f8fafc',
-    borderBottom: '1.5px solid #e8eaf0',
+    color: '#ffffff',
+    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
     whiteSpace: 'nowrap',
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <EmployeeSidebar active="attendance" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Attendance" />
@@ -299,10 +298,13 @@ export default function MyAttendance() {
           {/* ── Page Header ── */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
             <div>
-              <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px' }}>
+              <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.3px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+                </div>
                 My Attendance
               </h1>
-              <p style={{ margin: '3px 0 0', fontSize: '13px', color: '#64748b' }}>
+              <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
                 Your personal attendance punch history
               </p>
             </div>
@@ -312,19 +314,19 @@ export default function MyAttendance() {
               disabled={filtered.length === 0}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
-                padding: '10px 20px',
-                background: filtered.length === 0 ? '#e2e8f0' : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-                color: filtered.length === 0 ? '#94a3b8' : '#fff',
-                border: 'none', borderRadius: '12px',
+                padding: '9px 18px',
+                background: filtered.length === 0 ? '#e2e8f0' : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                color: filtered.length === 0 ? '#94a3b8' : '#ffffff',
+                border: 'none', borderRadius: '10px',
                 fontSize: '13px', fontWeight: '700',
                 cursor: filtered.length === 0 ? 'not-allowed' : 'pointer',
                 fontFamily: 'inherit',
-                boxShadow: filtered.length === 0 ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
+                boxShadow: filtered.length === 0 ? 'none' : '0 3px 10px rgba(194, 7, 26, 0.25)',
                 transition: 'all 0.2s',
                 letterSpacing: '0.01em',
               }}
             >
-              <FiDownload size={15} />
+              <FiDownload size={15} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
               Export PDF
             </button>
           </div>
@@ -352,13 +354,13 @@ export default function MyAttendance() {
             <div style={{ ...card, padding: '20px 22px', display: 'flex', alignItems: 'center', gap: '14px' }}>
               <div style={{
                 width: '44px', height: '44px', borderRadius: '12px',
-                background: 'linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.06))',
+                background: 'linear-gradient(135deg,rgba(194,7,26,0.12),rgba(148,16,24,0.06))',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
               }}>
-                <FiClock size={20} color="#6366f1" />
+                <FiClock size={20} color="#C2071A" />
               </div>
               <div>
-                <div style={{ fontSize: '26px', fontWeight: '800', color: '#6366f1', lineHeight: 1 }}>
+                <div style={{ fontSize: '26px', fontWeight: '800', color: '#C2071A', lineHeight: 1 }}>
                   {loading ? '—' : `${totalHrs}h ${remMins}m`}
                 </div>
                 <div style={{ fontSize: '12px', color: '#64748b', marginTop: '3px', fontWeight: '600' }}>Total Hours</div>
@@ -406,12 +408,12 @@ export default function MyAttendance() {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiFilter size={14} color="#6366f1" />
+                <FiFilter size={14} color="#C2071A" />
                 <span style={{ fontSize: '13px', fontWeight: '700', color: '#475569' }}>Advanced Filters</span>
                 {activeCount > 0 && (
                   <span style={{
                     minWidth: '20px', height: '20px', borderRadius: '10px',
-                    background: '#6366f1', color: '#fff',
+                    background: '#C2071A', color: '#fff',
                     fontSize: '11px', fontWeight: '700',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                     padding: '0 6px',
@@ -427,11 +429,11 @@ export default function MyAttendance() {
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: '4px',
                       padding: '4px 10px', border: 'none', borderRadius: '8px',
-                      background: 'rgba(239,68,68,0.08)', color: '#ef4444',
+                      background: '#FEECEE', color: '#C2071A',
                       fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
                     }}
                   >
-                    <FiX size={11} /> Clear All
+                    <FiX size={11} color="#C2071A" /> Clear All
                   </button>
                 )}
                 <span style={{ fontSize: '18px', color: '#94a3b8', lineHeight: 1, transform: showFilters ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', display: 'inline-block' }}>
@@ -477,7 +479,7 @@ export default function MyAttendance() {
                           padding: '6px 14px',
                           borderRadius: '20px',
                           border: statusFilter === opt.value ? 'none' : '1.5px solid #e2e8f0',
-                          background: statusFilter === opt.value ? '#6366f1' : '#fff',
+                          background: statusFilter === opt.value ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff',
                           color: statusFilter === opt.value ? '#fff' : '#64748b',
                           fontSize: '12px', fontWeight: '600',
                           cursor: 'pointer', fontFamily: 'inherit',
@@ -552,7 +554,7 @@ export default function MyAttendance() {
                     <tr>
                       <td colSpan="10" style={{ padding: '60px', textAlign: 'center' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                          <div style={{ width: '36px', height: '36px', border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                          <div style={{ width: '36px', height: '36px', border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                           <span style={{ fontSize: '14px', color: '#94a3b8' }}>Loading attendance records…</span>
                         </div>
                       </td>
@@ -564,7 +566,7 @@ export default function MyAttendance() {
                           <FiSearch size={32} color="#cbd5e1" />
                           <span style={{ fontSize: '14px', color: '#94a3b8', fontWeight: '500' }}>No attendance records found</span>
                           {hasFilters && (
-                            <button onClick={clearAll} style={{ marginTop: '4px', fontSize: '13px', color: '#6366f1', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', fontFamily: 'inherit' }}>
+                            <button onClick={clearAll} style={{ marginTop: '4px', fontSize: '13px', color: '#C2071A', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', fontFamily: 'inherit' }}>
                               Clear filters
                             </button>
                           )}
@@ -606,20 +608,20 @@ export default function MyAttendance() {
                             <span style={{
                               display: 'inline-flex', alignItems: 'center', gap: '5px',
                               padding: '4px 12px', borderRadius: '20px',
-                              background: 'rgba(99,102,241,0.08)', color: '#6366f1',
+                              background: 'rgba(194,7,26,0.08)', color: '#C2071A',
                               fontWeight: '700', fontSize: '12px',
                             }}>
                               ◌ Still In
                             </span>
                           )}
                         </td>
-                        <td style={{ padding: '13px 16px', fontSize: '13px', fontWeight: '700', color: row.check_out_time ? '#334155' : '#6366f1' }}>
+                        <td style={{ padding: '13px 16px', fontSize: '13px', fontWeight: '700', color: row.check_out_time ? '#334155' : '#C2071A' }}>
                           {formatDuration(row.work_duration_minutes)}
                         </td>
                         <td style={{ padding: '13px 16px' }}>
                           {row.shift_name ? (
                             <span style={{
-                              background: row.shift_color_code || '#6366f1', color: '#fff',
+                              background: row.shift_color_code || '#C2071A', color: '#fff',
                               padding: '4px 8px', borderRadius: 8, fontSize: 11, fontWeight: 700,
                               textShadow: '0 1px 2px rgba(0,0,0,0.15)', whiteSpace: 'nowrap'
                             }}>
@@ -701,11 +703,11 @@ export default function MyAttendance() {
                       style={{
                         width: '34px', height: '34px', borderRadius: '10px',
                         border: pg === currentPage ? 'none' : '1.5px solid #e2e8f0',
-                        background: pg === currentPage ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#fff',
+                        background: pg === currentPage ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff',
                         color: pg === currentPage ? '#fff' : '#475569',
                         fontSize: '13px', fontWeight: pg === currentPage ? '700' : '500',
                         cursor: 'pointer', fontFamily: 'inherit',
-                        boxShadow: pg === currentPage ? '0 2px 8px rgba(99,102,241,0.3)' : 'none',
+                        boxShadow: pg === currentPage ? '0 2px 8px rgba(194, 7, 26, 0.3)' : 'none',
                       }}
                     >
                       {pg}

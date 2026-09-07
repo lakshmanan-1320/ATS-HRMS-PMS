@@ -1,4 +1,5 @@
 import React from 'react'
+import { FiAlertTriangle, FiGift, FiCalendar } from 'react-icons/fi'
 import { FingerprintIcon, ExitIcon, EntryIcon, CheckIcon } from '../shared/Icons'
 import { COLORS } from '../../theme'
 
@@ -38,11 +39,13 @@ export default function AttendanceCard({
   const timerColor = hasCheckedOut ? COLORS.textMuted : isCheckIn ? COLORS.green : COLORS.textMuted
 
   return (
-    <div style={{ background: COLORS.surface, borderRadius: '18px', padding: '22px', border: `1px solid ${COLORS.borderLight}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ background: COLORS.surface, borderRadius: '18px', padding: '22px', border: `1px solid ${COLORS.borderLight}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0, boxSizing: 'border-box', overflow: 'hidden' }}>
       <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid #f1f5f9`, paddingBottom: '13px', marginBottom: '18px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', fontSize: '13px', fontWeight: '700', color: COLORS.text }}>
-          <FingerprintIcon style={{ marginRight: '7px', flexShrink: 0 }} />
-          Today's Attendance
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'rgba(194,7,26,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.primary, flexShrink: 0 }}>
+            <FingerprintIcon size={14} />
+          </div>
+          <span style={{ fontSize: '13px', fontWeight: '700', color: COLORS.text }}>Today's Attendance</span>
         </div>
         <div style={{ fontSize: '11px', color: COLORS.textMuted }}>{formattedDate}</div>
       </div>
@@ -60,11 +63,11 @@ export default function AttendanceCard({
           gap: '10px',
           boxSizing: 'border-box'
         }}>
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: shiftColorCode || '#6366f1', flexShrink: 0 }} />
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: shiftColorCode || '#C2071A', flexShrink: 0 }} />
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '12px', fontWeight: '800', color: '#1e293b' }}>
-                {shiftName} <span style={{ fontSize: '10px', fontWeight: '700', color: '#6366f1', background: '#eef2ff', padding: '2px 6px', borderRadius: '6px', marginLeft: '4px' }}>{shiftCode}</span>
+                {shiftName} <span style={{ fontSize: '10px', fontWeight: '700', color: '#C2071A', background: '#feecee', padding: '2px 6px', borderRadius: '6px', marginLeft: '4px' }}>{shiftCode}</span>
               </span>
               <span style={{ fontSize: '11px', fontWeight: '600', color: '#64748b' }}>
                 {formatTimeStr(shiftStartTime)} - {formatTimeStr(shiftEndTime)}
@@ -92,19 +95,19 @@ export default function AttendanceCard({
           gap: '8px',
           boxSizing: 'border-box'
         }}>
-          <span>⚠️</span>
+          <FiAlertTriangle size={13} color="#b45309" style={{ flexShrink: 0 }} />
           <span><strong>No Shift Assigned:</strong> Contact administrator for shift assignments.</span>
         </div>
       )}
 
       {isHoliday && (
         <div style={{ background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.18)', borderRadius: '9px', padding: '8px 12px', marginBottom: '14px', fontSize: '11px', color: COLORS.green, display: 'flex', alignItems: 'center', gap: '6px' }}>
-          🎉 <strong>Holiday:</strong>&nbsp;{holidayName}
+          <FiGift size={13} /> <strong>Holiday:</strong>&nbsp;{holidayName}
         </div>
       )}
       {isOnLeave && !isHoliday && (
         <div style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.18)', borderRadius: '9px', padding: '8px 12px', marginBottom: '14px', fontSize: '11px', color: COLORS.red, display: 'flex', alignItems: 'center', gap: '6px' }}>
-          📅 <strong>On Leave today</strong>
+          <FiCalendar size={13} /> <strong>On Leave today</strong>
         </div>
       )}
 
@@ -149,7 +152,7 @@ export default function AttendanceCard({
         </button>
       ) : (
         <div style={{ background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: '10px', padding: '10px 14px', fontSize: '11px', color: COLORS.red, display: 'flex', alignItems: 'center', gap: '7px' }}>
-          <span>⚠️</span><span><strong>Attendance disabled</strong> for your account</span>
+          <FiAlertTriangle size={13} color={COLORS.red} style={{ flexShrink: 0 }} /><span><strong>Attendance disabled</strong> for your account</span>
         </div>
       )}
 
@@ -160,7 +163,7 @@ export default function AttendanceCard({
             <span style={{ fontSize: '10px', fontWeight: '700', color: COLORS.primary }}>{formatTime(elapsedSeconds)}</span>
           </div>
           <div style={{ height: '5px', background: '#f1f5f9', borderRadius: '3px' }}>
-            <div style={{ height: '100%', width: `${Math.min(100, (elapsedSeconds / (8 * 3600)) * 100)}%`, background: 'linear-gradient(to right,#6366f1,#8b5cf6)', borderRadius: '3px', transition: 'width 0.6s' }} />
+            <div style={{ height: '100%', width: `${Math.min(100, (elapsedSeconds / (8 * 3600)) * 100)}%`, background: 'linear-gradient(to right, #D01021, #B40619)', borderRadius: '3px', transition: 'width 0.6s' }} />
           </div>
           <div style={{ fontSize: '9px', color: COLORS.textMuted, marginTop: '3px', textAlign: 'right' }}>of 8hr target</div>
         </div>

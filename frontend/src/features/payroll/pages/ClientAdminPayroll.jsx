@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
+import { FiSettings, FiUploadCloud, FiClipboard, FiClock, FiCheckCircle, FiXCircle, FiDownload } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 
 // Axios configuration will be initialized inside the component function to ensure sa_token is read correctly.
 
 const s = {
-  page: { display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' },
+  page: { display: 'flex', minHeight: '100vh', background: '#f3f7fa', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
   main: { flex: 1, padding: '32px 36px', overflowY: 'auto' },
   header: { marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   h1: { fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '4px', margin: 0 },
   sub: { fontSize: '13px', color: '#475569', margin: 0, fontWeight: 500 },
-  tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #cbd5e1', marginBottom: '24px', paddingBottom: '8px' },
+  tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '8px' },
   tabBtn: (active) => ({
-    padding: '8px 16px', background: active ? 'rgba(37,99,235,0.06)' : 'transparent',
-    border: 'none', color: active ? '#6366f1' : '#64748b',
+    padding: '8px 16px', background: active ? 'rgba(194,7,26,0.06)' : 'transparent',
+    border: 'none', color: active ? '#C2071A' : '#64748b',
     fontSize: '13px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s',
-    borderBottom: active ? '2px solid #6366f1' : 'none',
+    borderBottom: active ? '2px solid #C2071A' : 'none',
     borderRadius: active ? '8px 8px 0 0' : '8px',
     fontFamily: 'inherit'
   }),
   card: {
-    background: '#ffffff', border: '1px solid #cbd5e1',
+    background: '#ffffff', border: '1px solid #e2e8f0',
     borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)', marginBottom: '24px'
   },
   sectionTitle: { margin: '0 0 16px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
@@ -31,26 +32,27 @@ const s = {
   label: { fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' },
   input: {
     padding: '10px 14px', background: '#ffffff',
-    border: '1px solid #cbd5e1', borderRadius: '10px',
+    border: '1px solid #e2e8f0', borderRadius: '10px',
     fontSize: '13px', color: '#1e293b', outline: 'none',
     fontFamily: 'inherit', transition: 'border-color 0.15s ease'
   },
   select: {
     padding: '10px 14px', background: '#ffffff',
-    border: '1px solid #cbd5e1', borderRadius: '10px',
+    border: '1px solid #e2e8f0', borderRadius: '10px',
     fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer',
     fontFamily: 'inherit', transition: 'border-color 0.15s ease'
   },
   btn: {
-    padding: '10px 20px', background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+    padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A 0%, #941018 100%)',
     border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff',
-    cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 14px rgba(99, 102, 241, 0.35)',
+    cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.35)',
     display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit'
   },
   btnSec: {
     padding: '10px 20px', background: '#ffffff',
-    border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#64748b',
-    cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit'
+    border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#64748b',
+    cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit',
+    display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
   },
   btnDanger: {
     padding: '6px 12px', background: 'rgba(185,28,28,0.06)',
@@ -60,11 +62,11 @@ const s = {
   table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
   th: {
     padding: '12px 16px', color: '#475569', fontWeight: '700',
-    borderBottom: '1px solid #cbd5e1',
+    borderBottom: '1px solid #e2e8f0',
     textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em',
     background: '#f8fafc'
   },
-  tr: { borderBottom: '1px solid #cbd5e1', transition: 'background 0.2s' },
+  tr: { borderBottom: '1px solid #e2e8f0', transition: 'background 0.2s' },
   td: { padding: '12px 16px', color: '#1e293b', fontWeight: '500' },
   badge: (status) => {
     let bg = '#f1f5f9'; let color = '#475569'; let border = 'rgba(71,85,105,0.2)';
@@ -85,14 +87,14 @@ const s = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100
   },
   modalContent: {
-    background: '#ffffff', border: '1px solid #cbd5e1',
+    background: '#ffffff', border: '1px solid #e2e8f0',
     borderRadius: '16px', width: '90%', maxWidth: '800px', padding: '28px',
     boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02)',
     maxHeight: '90vh', overflowY: 'auto'
   },
   kpiContainer: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '24px' },
   kpiCard: {
-    background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '12px',
+    background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px',
     padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '4px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
   },
@@ -903,7 +905,7 @@ export default function ClientAdminPayroll() {
                     onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                     onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
                   >
-                    ⚙️ Generate Run
+                    <FiSettings size={14} /> Generate Run
                   </button>
                 </div>
                 <table style={s.table}>
@@ -982,19 +984,19 @@ export default function ClientAdminPayroll() {
                       )}
                       {runDetails?.run?.current_status !== 'LOCKED' && (
                         <>
-                          <button style={{ ...s.btn, background: 'rgba(37,99,235,0.06)', border: '1px solid rgba(37,99,235,0.15)', color: '#6366f1', boxShadow: 'none' }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,99,235,0.12)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(37,99,235,0.06)'}
+                          <button style={{ ...s.btn, background: 'rgba(194,7,26,0.06)', border: '1px solid rgba(194,7,26,0.15)', color: '#C2071A', boxShadow: 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(194,7,26,0.12)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(194,7,26,0.06)'}
                             onClick={() => setShowAdjModal(true)}
                           >
                             + Add Adjustment
                           </button>
-                          <button style={{ ...s.btn, background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', color: '#4f46e5', boxShadow: 'none' }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(99,102,241,0.12)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(99,102,241,0.06)'}
+                          <button style={{ ...s.btn, background: 'rgba(194,7,26,0.06)', border: '1px solid rgba(194,7,26,0.15)', color: '#941018', boxShadow: 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(194,7,26,0.12)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(194,7,26,0.06)'}
                             onClick={() => setShowBulkAdjModal(true)}
                           >
-                            📤 Bulk Adjustments
+                            <FiUploadCloud size={14} /> Bulk Adjustments
                           </button>
                         </>
                       )}
@@ -1046,7 +1048,7 @@ export default function ClientAdminPayroll() {
                               </td>
                               <td style={s.td}>
                                 <div>₹{gross.toFixed(2)}</div>
-                                <div style={{ fontSize: '10px', color: '#6366f1', fontWeight: '700' }}>CTC: ₹{ctc.toFixed(2)}</div>
+                                <div style={{ fontSize: '10px', color: '#C2071A', fontWeight: '700' }}>CTC: ₹{ctc.toFixed(2)}</div>
                               </td>
                               <td style={s.td}>₹{benefits.toFixed(2)}</td>
                               <td style={s.td}>₹{pf.toFixed(2)} / ₹{esi.toFixed(2)}</td>
@@ -1076,8 +1078,8 @@ export default function ClientAdminPayroll() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '24px' }}>
                   <div style={s.card}>
-                    <h4 style={{ color: '#1e293b', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
-                      📋 Manual Adjustments
+                    <h4 style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#1e293b', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
+                      <FiClipboard size={15} /> Manual Adjustments
                     </h4>
                     <table style={s.table}>
                       <thead>
@@ -1128,8 +1130,8 @@ export default function ClientAdminPayroll() {
                   </div>
 
                   <div style={s.card}>
-                    <h4 style={{ color: '#1e293b', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
-                      🕒 Action Audit Log
+                    <h4 style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#1e293b', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
+                      <FiClock size={15} /> Action Audit Log
                     </h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '300px', overflowY: 'auto' }}>
                       {runDetails?.logs?.length === 0 ? (
@@ -1137,11 +1139,11 @@ export default function ClientAdminPayroll() {
                       ) : (
                         runDetails?.logs?.map(log => (
                           <div key={log.log_id} style={{
-                            padding: '12px', background: '#f8fafc', border: '1px solid #cbd5e1',
+                            padding: '12px', background: '#f8fafc', border: '1px solid #e2e8f0',
                             borderRadius: '10px'
                           }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#6366f1', textTransform: 'uppercase' }}>{log.action}</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#C2071A', textTransform: 'uppercase' }}>{log.action}</span>
                               <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '600' }}>{new Date(log.created_at).toLocaleString()}</span>
                             </div>
                             <div style={{ fontSize: '12px', color: '#475569', fontWeight: '500' }}>{log.remarks}</div>
@@ -1210,7 +1212,7 @@ export default function ClientAdminPayroll() {
                       >
                         <td style={s.td}>
                           <div style={{ fontWeight: '700', color: '#1e293b' }}>{c.component_name}</div>
-                          <div style={{ fontSize: '10px', color: '#6366f1', fontWeight: '700' }}>CODE: {c.component_code}</div>
+                          <div style={{ fontSize: '10px', color: '#C2071A', fontWeight: '700' }}>CODE: {c.component_code}</div>
                         </td>
                         <td style={s.td}>
                           <span style={{
@@ -1231,8 +1233,13 @@ export default function ClientAdminPayroll() {
                           <div style={{ fontSize: '11px', color: '#94a3b8' }}>Order: {c.display_order}</div>
                         </td>
                         <td style={s.td}>
-                          <div style={{ fontSize: '11px', fontWeight: '600', color: '#475569' }}>
-                            {c.include_in_gross ? '✅ Gross' : '❌ Gross'} | {c.include_in_ctc ? '✅ CTC' : '❌ CTC'}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '11px', fontWeight: '600', color: '#475569' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: c.include_in_gross ? '#15803d' : '#b91c1c' }}>
+                              {c.include_in_gross ? <FiCheckCircle size={12} /> : <FiXCircle size={12} />} Gross
+                            </span>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: c.include_in_ctc ? '#15803d' : '#b91c1c' }}>
+                              {c.include_in_ctc ? <FiCheckCircle size={12} /> : <FiXCircle size={12} />} CTC
+                            </span>
                           </div>
                           <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>
                             {c.is_taxable ? 'Taxable' : 'Non-Taxable'}
@@ -1420,8 +1427,8 @@ export default function ClientAdminPayroll() {
         {/* Tab content: Settings */}
         {activeTab === 'settings' && (
           <div style={s.card}>
-            <h3 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
-              ⚙️ Organization Week Off Configuration
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 16px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
+              <FiSettings size={16} /> Organization Week Off Configuration
             </h3>
             <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '24px', fontWeight: 500 }}>
               Select which days of the week are considered week-offs (non-working days) in your company.
@@ -1436,9 +1443,9 @@ export default function ClientAdminPayroll() {
                       onClick={() => handleToggleWeekDay(index)}
                       style={{
                         padding: '16px', borderRadius: '12px', cursor: 'pointer',
-                        background: isChecked ? 'rgba(37,99,235,0.06)' : '#ffffff',
-                        border: `1px solid ${isChecked ? '#6366f1' : '#cbd5e1'}`,
-                        color: isChecked ? '#6366f1' : '#1e293b',
+                        background: isChecked ? 'rgba(194,7,26,0.06)' : '#ffffff',
+                        border: `1px solid ${isChecked ? '#C2071A' : '#e2e8f0'}`,
+                        color: isChecked ? '#C2071A' : '#1e293b',
                         display: 'flex', alignItems: 'center', gap: '12px', transition: 'all 0.2s',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)'
                       }}
@@ -1651,8 +1658,8 @@ export default function ClientAdminPayroll() {
 
             {/* Overtime Logs History Audit */}
             <div style={s.card}>
-              <h3 style={{ margin: '0 0 20px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
-                📋 Overtime Request Logs & Audit
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 20px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
+                <FiClipboard size={16} /> Overtime Request Logs & Audit
               </h3>
               <div style={{ overflowX: 'auto', maxHeight: '420px' }}>
                 <table style={s.table}>
@@ -1685,8 +1692,8 @@ export default function ClientAdminPayroll() {
                               <div>{log.attendance_date.split('T')[0]}</div>
                               <span style={{
                                 fontSize: '9px', fontWeight: '700', padding: '1px 6px', borderRadius: '4px',
-                                background: log.day_type === 'HOLIDAY' ? '#fef3c7' : log.day_type === 'WEEKEND' ? '#dbeafe' : '#f1f5f9',
-                                color: log.day_type === 'HOLIDAY' ? '#b45309' : log.day_type === 'WEEKEND' ? '#1d4ed8' : '#475569'
+                                background: log.day_type === 'HOLIDAY' ? '#fef3c7' : log.day_type === 'WEEKEND' ? '#ede9fe' : '#f1f5f9',
+                                color: log.day_type === 'HOLIDAY' ? '#b45309' : log.day_type === 'WEEKEND' ? '#6d28d9' : '#475569'
                               }}>{log.day_type}</span>
                             </td>
                             <td style={s.td}>
@@ -1825,7 +1832,7 @@ export default function ClientAdminPayroll() {
 
                 {/* KPI comparison cards inside modal */}
                 {newBase > 0 && (
-                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <span style={{ fontSize: '11px', fontWeight: '800', color: '#64748b', textTransform: 'uppercase' }}>Revision Analysis & Timeline</span>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', justifyContent: 'center' }}>
@@ -1834,7 +1841,7 @@ export default function ClientAdminPayroll() {
                         <div style={{ fontSize: '14px', fontWeight: '800' }}>₹{currentBase.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
                         <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Eff: {revCurrentConfig?.effective_from ? new Date(revCurrentConfig.effective_from).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}</div>
                       </div>
-                      <div style={{ fontSize: '20px', color: '#cbd5e1', fontWeight: 'bold' }}>↓</div>
+                      <div style={{ fontSize: '20px', color: '#e2e8f0', fontWeight: 'bold' }}>↓</div>
                       <div style={{ textAlign: 'center' }}>
                         <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>New Salary</span>
                         <div style={{ fontSize: '14px', fontWeight: '800' }}>₹{newBase.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
@@ -1881,7 +1888,7 @@ export default function ClientAdminPayroll() {
                   </div>
                 ) : (
                   <div>
-                    <div style={{ overflowX: 'auto', maxHeight: '380px', border: '1px solid #cbd5e1', borderRadius: '10px', padding: '10px', background: '#f8fafc' }}>
+                    <div style={{ overflowX: 'auto', maxHeight: '380px', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px', background: '#f8fafc' }}>
                       <table style={s.table}>
                         <thead>
                           <tr>
@@ -1930,7 +1937,7 @@ export default function ClientAdminPayroll() {
                     </div>
 
                     {/* Total Summary Breakdown Box */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', background: '#f1f5f9', padding: '12px', borderRadius: '10px', marginTop: '12px', border: '1px solid #cbd5e1', textAlign: 'center' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', background: '#f1f5f9', padding: '12px', borderRadius: '10px', marginTop: '12px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                       <div>
                         <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Gross Salary</span>
                         <div style={{ fontSize: '12px', fontWeight: '800', color: '#1e293b', marginTop: '2px' }}>₹{revGross.toLocaleString('en-IN')}</div>
@@ -1949,7 +1956,7 @@ export default function ClientAdminPayroll() {
                       </div>
                       <div>
                         <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>CTC (Monthly)</span>
-                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#6366f1', marginTop: '2px' }}>₹{revCalculatedCTC.toLocaleString('en-IN')}</div>
+                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#C2071A', marginTop: '2px' }}>₹{revCalculatedCTC.toLocaleString('en-IN')}</div>
                       </div>
                     </div>
 
@@ -2329,12 +2336,12 @@ export default function ClientAdminPayroll() {
               </p>
               
               <button style={s.btnSec} onClick={downloadAdjustmentTemplate}>
-                📥 Download CSV Template
+                <FiDownload size={13} /> Download CSV Template
               </button>
 
-              <div style={{ border: '2px dashed #cbd5e1', borderRadius: '12px', padding: '24px', textAlign: 'center', background: '#f8fafc' }}>
+              <div style={{ border: '2px dashed #e2e8f0', borderRadius: '12px', padding: '24px', textAlign: 'center', background: '#f8fafc' }}>
                 <label style={{ cursor: 'pointer', display: 'block' }}>
-                  <span style={{ fontSize: '14px', fontWeight: '700', color: '#6366f1' }}>Choose CSV File</span>
+                  <span style={{ fontSize: '14px', fontWeight: '700', color: '#C2071A' }}>Choose CSV File</span>
                   <input
                     type="file"
                     accept=".csv"

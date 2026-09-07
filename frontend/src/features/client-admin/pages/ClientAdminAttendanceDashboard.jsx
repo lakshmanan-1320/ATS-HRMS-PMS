@@ -15,6 +15,8 @@ function formatDisplayDate(dateStr) {
   return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
 }
 
+const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
+
 export default function ClientAdminAttendanceDashboard() {
   const navigate = useNavigate()
   
@@ -50,17 +52,11 @@ export default function ClientAdminAttendanceDashboard() {
 
   // Load data on filter or refresh change
   useEffect(() => {
-    // 1. Fetch dashboard summary for the selected day
     fetchDashboardSummary(selectedDate)
-    
-    // 2. Fetch departments summary for the selected day
     fetchDepartmentsSummary(selectedDate)
 
-    // 3. Fetch trends based on the active tab/filter
     const trendRange = activeFilter === 'current_month' ? 'current_month' : activeFilter === '7days' ? '7days' : '7days'
     fetchTrends(trendRange)
-
-    // 4. Fetch admin overview for exceptions list
     fetchAdminOverview({ date: selectedDate, limit: 'all' })
   }, [activeFilter, selectedDate, refreshKey, fetchDashboardSummary, fetchDepartmentsSummary, fetchTrends, fetchAdminOverview])
 
@@ -73,7 +69,6 @@ export default function ClientAdminAttendanceDashboard() {
     const isPeriodMode = activeFilter === '7days' || activeFilter === 'current_month'
     
     if (isPeriodMode && trends && trends.length > 0) {
-      // Aggregate over period
       const totalPoints = trends.length
       const sumTotalEmployees = trends.reduce((sum, p) => sum + (p.totalEmployees || 0), 0)
       const sumPresent = trends.reduce((sum, p) => sum + (p.present || 0), 0)
@@ -101,7 +96,6 @@ export default function ClientAdminAttendanceDashboard() {
         labelSuffix: ' (Period Avg)'
       }
     } else {
-      // Single day mode
       return {
         totalEmployees: dashboardSummary?.totalEmployees || 0,
         present: dashboardSummary?.present || 0,
@@ -126,7 +120,6 @@ export default function ClientAdminAttendanceDashboard() {
   }, [adminOverview])
 
   const [activeExceptionTab, setActiveExceptionTab] = useState('late')
-
   const loading = loadingDashboard || loadingTrends || loadingDeptSummary || loadingOverview
 
   // Inline CSS Styles
@@ -134,7 +127,7 @@ export default function ClientAdminAttendanceDashboard() {
     display: 'flex',
     minHeight: '100vh',
     background: '#f8fafc',
-    fontFamily: 'Inter, system-ui, sans-serif',
+    fontFamily: "'Inter', sans-serif",
     color: '#1e293b'
   }
 
@@ -147,7 +140,7 @@ export default function ClientAdminAttendanceDashboard() {
 
   const mainContentStyle = {
     flex: 1,
-    padding: '24px 32px',
+    padding: '28px 32px',
     overflowY: 'auto'
   }
 
@@ -167,7 +160,7 @@ export default function ClientAdminAttendanceDashboard() {
     margin: 0,
     display: 'flex',
     alignItems: 'center',
-    gap: '8px'
+    gap: '10px'
   }
 
   const dateSubStyle = {
@@ -179,23 +172,25 @@ export default function ClientAdminAttendanceDashboard() {
 
   const filterGroupStyle = {
     display: 'flex',
-    background: '#e2e8f0',
-    padding: '4px',
-    borderRadius: '10px',
-    gap: '4px'
+    background: '#ffffff',
+    padding: '5px',
+    borderRadius: '12px',
+    gap: '6px',
+    boxShadow: cardShadow
   }
 
   const filterButtonStyle = (active) => ({
     padding: '8px 16px',
     borderRadius: '8px',
     border: 'none',
-    background: active ? '#ffffff' : 'transparent',
-    color: active ? '#0f172a' : '#475569',
+    background: active ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
+    color: active ? '#ffffff' : '#64748b',
     fontSize: '13px',
-    fontWeight: 600,
+    fontWeight: active ? 700 : 600,
     cursor: 'pointer',
-    boxShadow: active ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-    transition: 'all 0.15s ease'
+    boxShadow: active ? '0 3px 10px rgba(194, 7, 26, 0.25)' : 'none',
+    transition: 'all 0.15s ease',
+    fontFamily: "'Inter', sans-serif"
   })
 
   const statsGridStyle = {
@@ -205,18 +200,18 @@ export default function ClientAdminAttendanceDashboard() {
     marginBottom: '24px'
   }
 
-  const cardStyle = (colorAccent) => ({
+  const cardStyle = {
     background: '#ffffff',
-    border: '1px solid #e2e8f0',
+    border: 'none',
     borderRadius: '16px',
     padding: '20px',
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+    boxShadow: cardShadow,
     position: 'relative',
     overflow: 'hidden'
-  })
+  }
 
   const cardIndicatorStyle = (color) => ({
     position: 'absolute',
@@ -246,7 +241,6 @@ export default function ClientAdminAttendanceDashboard() {
     marginBottom: '24px'
   }
 
-  // Media Query handling for responsiveness
   useEffect(() => {
     const handleResize = () => {
       const grid = document.getElementById('widgets-grid')
@@ -275,11 +269,17 @@ export default function ClientAdminAttendanceDashboard() {
           <div style={headerContainerStyle}>
             <div>
               <h1 style={titleStyle}>
-                <FiClock style={{ color: '#6366f1' }} /> Attendance Dashboard
+                <div style={{
+                  width: 38, height: 38, borderRadius: 10,
+                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+                </div>
+                Attendance Dashboard
               </h1>
               <p style={dateSubStyle}>
                 Real-time tracking, metrics, and compliance logs •{' '}
-                <span style={{ color: '#6366f1', fontWeight: 700 }}>
+                <span style={{ color: '#C2071A', fontWeight: 700 }}>
                   {formatDisplayDate(selectedDate)}
                 </span>
               </p>
@@ -323,18 +323,21 @@ export default function ClientAdminAttendanceDashboard() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '38px',
-                  height: '38px',
+                  gap: '6px',
+                  padding: '8px 16px',
                   borderRadius: '10px',
-                  border: '1px solid #cbd5e1',
-                  background: '#ffffff',
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                   cursor: 'pointer',
-                  color: '#475569',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                  fontFamily: "'Inter', sans-serif",
                 }}
               >
-                <FiRefreshCw className={loading ? 'spin-anim' : ''} size={16} />
+                <FiRefreshCw size={15} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin-anim' : ''} />
+                Refresh
               </button>
             </div>
           </div>
@@ -344,16 +347,16 @@ export default function ClientAdminAttendanceDashboard() {
             @keyframes spin { to { transform: rotate(360deg); } }
             .card-hover:hover {
               transform: translateY(-2px);
-              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+              box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.08) !important;
             }
           `}</style>
 
           {/* Stats Cards */}
           <div style={statsGridStyle}>
             {/* Total Employees */}
-            <div className="card-hover" style={{ ...cardStyle('#6366f1'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#6366f1')} />
-              <div style={iconContainerStyle('#e0e7ff', '#6366f1')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#C2071A')} />
+              <div style={iconContainerStyle('#FEECEE', '#C2071A')}>
                 <FiUsers size={22} />
               </div>
               <div>
@@ -363,9 +366,9 @@ export default function ClientAdminAttendanceDashboard() {
             </div>
 
             {/* Attendance % */}
-            <div className="card-hover" style={{ ...cardStyle('#10b981'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#10b981')} />
-              <div style={iconContainerStyle('#d1fae5', '#10b981')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#0fa958')} />
+              <div style={iconContainerStyle('#e8fbf0', '#0fa958')}>
                 <FiTrendingUp size={22} />
               </div>
               <div>
@@ -375,9 +378,9 @@ export default function ClientAdminAttendanceDashboard() {
             </div>
 
             {/* Present */}
-            <div className="card-hover" style={{ ...cardStyle('#22c55e'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#22c55e')} />
-              <div style={iconContainerStyle('#dcfce7', '#22c55e')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#0fa958')} />
+              <div style={iconContainerStyle('#e8fbf0', '#0fa958')}>
                 <FiCheckCircle size={22} />
               </div>
               <div>
@@ -387,9 +390,9 @@ export default function ClientAdminAttendanceDashboard() {
             </div>
 
             {/* Absent */}
-            <div className="card-hover" style={{ ...cardStyle('#ef4444'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#ef4444')} />
-              <div style={iconContainerStyle('#fee2e2', '#ef4444')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#dc2626')} />
+              <div style={iconContainerStyle('#feecee', '#dc2626')}>
                 <FiXCircle size={22} />
               </div>
               <div>
@@ -399,9 +402,9 @@ export default function ClientAdminAttendanceDashboard() {
             </div>
 
             {/* On Time */}
-            <div className="card-hover" style={{ ...cardStyle('#3b82f6'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#3b82f6')} />
-              <div style={iconContainerStyle('#dbeafe', '#3b82f6')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#0284c7')} />
+              <div style={iconContainerStyle('#e0f2fe', '#0284c7')}>
                 <FiCheckCircle size={22} />
               </div>
               <div>
@@ -411,9 +414,9 @@ export default function ClientAdminAttendanceDashboard() {
             </div>
 
             {/* Late Arrivals */}
-            <div className="card-hover" style={{ ...cardStyle('#f59e0b'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#f59e0b')} />
-              <div style={iconContainerStyle('#fef3c7', '#f59e0b')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#d97706')} />
+              <div style={iconContainerStyle('#fef3c7', '#d97706')}>
                 <FiClock size={22} />
               </div>
               <div>
@@ -423,9 +426,9 @@ export default function ClientAdminAttendanceDashboard() {
             </div>
 
             {/* Early Exits */}
-            <div className="card-hover" style={{ ...cardStyle('#f43f5e'), transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#f43f5e')} />
-              <div style={iconContainerStyle('#ffe4e6', '#f43f5e')}>
+            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
+              <div style={cardIndicatorStyle('#dc2626')} />
+              <div style={iconContainerStyle('#feecee', '#dc2626')}>
                 <FiAlertTriangle size={22} />
               </div>
               <div>
@@ -444,22 +447,22 @@ export default function ClientAdminAttendanceDashboard() {
               {/* Exceptions Widget */}
               <div style={{
                 background: '#ffffff',
-                border: '1px solid #e2e8f0',
+                border: 'none',
                 borderRadius: '16px',
                 padding: '24px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+                boxShadow: cardShadow
               }}>
-                <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#0f172a' }}>Today's Exceptions</h3>
-                  <div style={{ display: 'flex', gap: '8px', background: '#f1f5f9', padding: '3px', borderRadius: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+                  <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>Today's Exceptions</h3>
+                  <div style={{ display: 'flex', gap: '6px', background: '#f8fafc', padding: '4px', borderRadius: '10px' }}>
                     <button
                       onClick={() => setActiveExceptionTab('late')}
                       style={{
-                        padding: '6px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        background: activeExceptionTab === 'late' ? '#ffffff' : 'transparent',
-                        color: activeExceptionTab === 'late' ? '#c2410c' : '#64748b',
-                        boxShadow: activeExceptionTab === 'late' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
-                        transition: 'all 0.15s ease'
+                        padding: '6px 14px', borderRadius: '8px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                        background: activeExceptionTab === 'late' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
+                        color: activeExceptionTab === 'late' ? '#ffffff' : '#64748b',
+                        boxShadow: activeExceptionTab === 'late' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
+                        transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
                       }}
                     >
                       Late Arrivals ({exceptions.lateArrivals.length})
@@ -467,11 +470,11 @@ export default function ClientAdminAttendanceDashboard() {
                     <button
                       onClick={() => setActiveExceptionTab('geofence')}
                       style={{
-                        padding: '6px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        background: activeExceptionTab === 'geofence' ? '#ffffff' : 'transparent',
-                        color: activeExceptionTab === 'geofence' ? '#b91c1c' : '#64748b',
-                        boxShadow: activeExceptionTab === 'geofence' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
-                        transition: 'all 0.15s ease'
+                        padding: '6px 14px', borderRadius: '8px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                        background: activeExceptionTab === 'geofence' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
+                        color: activeExceptionTab === 'geofence' ? '#ffffff' : '#64748b',
+                        boxShadow: activeExceptionTab === 'geofence' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
+                        transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
                       }}
                     >
                       Outside Fence ({exceptions.outsideFence.length})
@@ -479,11 +482,11 @@ export default function ClientAdminAttendanceDashboard() {
                     <button
                       onClick={() => setActiveExceptionTab('early')}
                       style={{
-                        padding: '6px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        background: activeExceptionTab === 'early' ? '#ffffff' : 'transparent',
-                        color: activeExceptionTab === 'early' ? '#b91c1c' : '#64748b',
-                        boxShadow: activeExceptionTab === 'early' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
-                        transition: 'all 0.15s ease'
+                        padding: '6px 14px', borderRadius: '8px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                        background: activeExceptionTab === 'early' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
+                        color: activeExceptionTab === 'early' ? '#ffffff' : '#64748b',
+                        boxShadow: activeExceptionTab === 'early' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
+                        transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
                       }}
                     >
                       Early Exits ({exceptions.earlyExits.length})
@@ -492,36 +495,36 @@ export default function ClientAdminAttendanceDashboard() {
                 </div>
 
                 {/* Exception List */}
-                <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                <div style={{ maxHeight: '250px', overflowY: 'auto', borderRadius: '12px', overflow: 'hidden' }}>
                   {activeExceptionTab === 'late' && (
                     exceptions.lateArrivals.length === 0 ? (
-                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No late arrivals today 🎉</div>
+                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No late arrivals today.</div>
                     ) : (
                       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                         <thead>
-                          <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Employee</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Shift</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Check In</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Policy</th>
+                          <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Check In</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Policy</th>
                           </tr>
                         </thead>
                         <tbody>
                           {exceptions.lateArrivals.map(r => (
                             <tr key={r.employee_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '10px 12px', fontWeight: 600, color: '#0f172a' }}>
+                              <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0f172a' }}>
                                 {r.first_name} {r.last_name}
-                                <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block', fontWeight: 400 }}>{r.employee_code}</span>
+                                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600, fontFamily: 'monospace' }}>{r.employee_code}</span>
                               </td>
-                              <td style={{ padding: '10px 12px' }}>
-                                <span style={{ background: '#fef3c7', color: '#d97706', padding: '2px 6px', borderRadius: '4px', fontSize: '11px', fontWeight: 700 }}>
+                              <td style={{ padding: '12px 14px' }}>
+                                <span style={{ background: '#fef3c7', color: '#d97706', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700 }}>
                                   {r.shift_name}
                                 </span>
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#dc2626', fontWeight: 700 }}>
+                              <td style={{ padding: '12px 14px', color: '#dc2626', fontWeight: 700 }}>
                                 {r.check_in_time ? new Date(r.check_in_time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#64748b' }}>{r.policy_name || 'General Policy'}</td>
+                              <td style={{ padding: '12px 14px', color: '#64748b' }}>{r.policy_name || 'General Policy'}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -531,33 +534,33 @@ export default function ClientAdminAttendanceDashboard() {
 
                   {activeExceptionTab === 'geofence' && (
                     exceptions.outsideFence.length === 0 ? (
-                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No outside geofence alerts today 👍</div>
+                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No outside geofence alerts today.</div>
                     ) : (
                       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                         <thead>
-                          <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Employee</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Office Zone</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Check In Distance</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>GPS Accuracy</th>
+                          <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Office Zone</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Check In Distance</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>GPS Accuracy</th>
                           </tr>
                         </thead>
                         <tbody>
                           {exceptions.outsideFence.map(r => (
                             <tr key={r.employee_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '10px 12px', fontWeight: 600, color: '#0f172a' }}>
+                              <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0f172a' }}>
                                 {r.first_name} {r.last_name}
-                                <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block', fontWeight: 400 }}>{r.employee_code}</span>
+                                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600, fontFamily: 'monospace' }}>{r.employee_code}</span>
                               </td>
-                              <td style={{ padding: '10px 12px' }}>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#b91c1c', fontWeight: 600 }}>
+                              <td style={{ padding: '12px 14px' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#dc2626', fontWeight: 700 }}>
                                   <FiMapPin size={12} /> {r.matched_office_name || 'Geofenced area'}
                                 </span>
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#dc2626', fontWeight: 700 }}>
+                              <td style={{ padding: '12px 14px', color: '#dc2626', fontWeight: 700 }}>
                                 {r.distance_from_office != null ? `${Number(r.distance_from_office).toFixed(0)}m outside` : '—'}
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#64748b' }}>
+                              <td style={{ padding: '12px 14px', color: '#64748b' }}>
                                 {r.gps_accuracy != null ? `±${Number(r.gps_accuracy).toFixed(0)}m` : '—'}
                               </td>
                             </tr>
@@ -569,31 +572,31 @@ export default function ClientAdminAttendanceDashboard() {
 
                   {activeExceptionTab === 'early' && (
                     exceptions.earlyExits.length === 0 ? (
-                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No early exits today ✅</div>
+                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No early exits today.</div>
                     ) : (
                       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                         <thead>
-                          <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Employee</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Shift Duration</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Check Out</th>
-                            <th style={{ padding: '8px 12px', fontWeight: 600 }}>Shift Target</th>
+                          <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift Duration</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Check Out</th>
+                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift Target</th>
                           </tr>
                         </thead>
                         <tbody>
                           {exceptions.earlyExits.map(r => (
                             <tr key={r.employee_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '10px 12px', fontWeight: 600, color: '#0f172a' }}>
+                              <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0f172a' }}>
                                 {r.first_name} {r.last_name}
-                                <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block', fontWeight: 400 }}>{r.employee_code}</span>
+                                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600, fontFamily: 'monospace' }}>{r.employee_code}</span>
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#475569' }}>
+                              <td style={{ padding: '12px 14px', color: '#475569' }}>
                                 {r.work_duration_minutes != null ? `${Math.floor(r.work_duration_minutes / 60)}h ${r.work_duration_minutes % 60}m` : '—'}
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#dc2626', fontWeight: 700 }}>
+                              <td style={{ padding: '12px 14px', color: '#dc2626', fontWeight: 700 }}>
                                 {r.check_out_time ? new Date(r.check_out_time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
                               </td>
-                              <td style={{ padding: '10px 12px', color: '#64748b' }}>
+                              <td style={{ padding: '12px 14px', color: '#64748b' }}>
                                 {r.shift_start_time} - {r.shift_end_time}
                               </td>
                             </tr>
@@ -608,12 +611,12 @@ export default function ClientAdminAttendanceDashboard() {
               {/* Trend Charts Card */}
               <div style={{
                 background: '#ffffff',
-                border: '1px solid #e2e8f0',
+                border: 'none',
                 borderRadius: '16px',
                 padding: '24px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+                boxShadow: cardShadow
               }}>
-                <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 700, color: '#0f172a' }}>Attendance Trends</h3>
+                <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>Attendance Trends</h3>
                 
                 {trends.length === 0 ? (
                   <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>No trend data found.</div>
@@ -621,8 +624,8 @@ export default function ClientAdminAttendanceDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                     {/* SVG Chart 1: Daily Attendance % */}
                     <div>
-                      <h4 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 600, color: '#64748b' }}>Attendance Rate Trend (%)</h4>
-                      <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '10px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 700, color: '#475569' }}>Attendance Rate Trend (%)</h4>
+                      <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f8fafc', borderRadius: '10px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', padding: '10px' }}>
                         <svg viewBox="0 0 300 130" style={{ width: '100%', height: '100%' }}>
                           {/* Grid Lines */}
                           <line x1="30" y1="20" x2="290" y2="20" stroke="#e2e8f0" strokeDasharray="3,3" />
@@ -650,14 +653,14 @@ export default function ClientAdminAttendanceDashboard() {
                             return (
                               <>
                                 <path d={areaData} fill="url(#grad1)" opacity="0.15" />
-                                <path d={pathData} fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d={pathData} fill="none" stroke="#0fa958" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                 {points.map((p, idx) => (
-                                  <circle key={idx} cx={p.x} cy={p.y} r="3" fill="#10b981" stroke="#ffffff" strokeWidth="1" />
+                                  <circle key={idx} cx={p.x} cy={p.y} r="3" fill="#0fa958" stroke="#ffffff" strokeWidth="1" />
                                 ))}
                                 <defs>
                                   <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stopColor="#10b981" />
-                                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                                    <stop offset="0%" stopColor="#0fa958" />
+                                    <stop offset="100%" stopColor="#0fa958" stopOpacity="0" />
                                   </linearGradient>
                                 </defs>
                               </>
@@ -669,8 +672,8 @@ export default function ClientAdminAttendanceDashboard() {
 
                     {/* SVG Chart 2: Exception Counts */}
                     <div>
-                      <h4 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 600, color: '#64748b' }}>Late Arrival Exceptions</h4>
-                      <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', padding: '10px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 700, color: '#475569' }}>Late Arrival Exceptions</h4>
+                      <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f8fafc', borderRadius: '10px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', padding: '10px' }}>
                         <svg viewBox="0 0 300 130" style={{ width: '100%', height: '100%' }}>
                           {/* Grid Lines */}
                           <line x1="30" y1="20" x2="290" y2="20" stroke="#e2e8f0" strokeDasharray="3,3" />
@@ -690,7 +693,7 @@ export default function ClientAdminAttendanceDashboard() {
                               const y = 110 - h
                               return (
                                 <g key={idx}>
-                                  <rect x={x} y={y} width={barWidth} height={h} rx="2" fill="#f59e0b" opacity="0.85" />
+                                  <rect x={x} y={y} width={barWidth} height={h} rx="2" fill="#d97706" opacity="0.85" />
                                   <text x={x + barWidth / 2} y={Math.max(10, y - 4)} fontSize="6" fill="#475569" fontWeight="700" textAnchor="middle">{val}</text>
                                 </g>
                               )
@@ -707,14 +710,14 @@ export default function ClientAdminAttendanceDashboard() {
             {/* Right Column: Department Summaries Widget */}
             <div style={{
               background: '#ffffff',
-              border: '1px solid #e2e8f0',
+              border: 'none',
               borderRadius: '16px',
               padding: '24px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              boxShadow: cardShadow,
               display: 'flex',
               flexDirection: 'column'
             }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 700, color: '#0f172a' }}>Department Statistics</h3>
+              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>Department Statistics</h3>
               
               {departmentsSummary.length === 0 ? (
                 <div style={{ padding: '40px 0', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No department statistics found.</div>
@@ -725,7 +728,7 @@ export default function ClientAdminAttendanceDashboard() {
                     return (
                       <div key={d.departmentId} style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>{d.departmentName}</span>
+                          <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>{d.departmentName}</span>
                           <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
                             {d.presentCount}/{d.totalEmployees} Present
                           </span>
@@ -733,13 +736,13 @@ export default function ClientAdminAttendanceDashboard() {
                         
                         {/* Custom visual progress bar */}
                         <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden', display: 'flex', marginBottom: '6px' }}>
-                          <div style={{ width: `${presentPercent}%`, height: '100%', background: '#10b981' }} />
+                          <div style={{ width: `${presentPercent}%`, height: '100%', background: 'linear-gradient(90deg, #C2071A 0%, #900513 100%)' }} />
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700 }}>
-                          <span style={{ color: '#ef4444' }}>{d.absentCount} Absent</span>
+                          <span style={{ color: '#dc2626' }}>{d.absentCount} Absent</span>
                           {d.lateCount > 0 && (
-                            <span style={{ background: '#fef3c7', color: '#d97706', padding: '1px 5px', borderRadius: '4px' }}>
+                            <span style={{ background: '#fef3c7', color: '#d97706', padding: '1px 6px', borderRadius: '4px' }}>
                               {d.lateCount} Late
                             </span>
                           )}

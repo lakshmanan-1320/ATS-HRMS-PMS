@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import {
+  FiCalendar, FiBriefcase, FiUserPlus, FiStar, FiBarChart2,
+  FiCheck, FiAlertCircle
+} from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -17,9 +21,9 @@ const MONTH_NAMES = [
 
 /* ─── Design tokens ─────────────────────────────────────────── */
 const C = {
-  brand:   '#6366f1',
-  brandDk: '#4f46e5',
-  brandLt: '#eef2ff',
+  brand:   '#C2071A',
+  brandDk: '#941018',
+  brandLt: '#feecee',
   green:   '#10b981',
   greenLt: '#d1fae5',
   amber:   '#f59e0b',
@@ -155,7 +159,7 @@ const s = {
     background: `linear-gradient(135deg, ${C.brand} 0%, ${C.brandDk} 100%)`,
     border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700',
     color: C.white, cursor: 'pointer',
-    boxShadow: '0 4px 14px rgba(99,102,241,0.35)', transition: 'all 0.2s',
+    boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s',
   },
   msg: (ok) => ({
     fontSize: '13px', fontWeight: '600',
@@ -169,8 +173,8 @@ const s = {
 
 /* ─── Sub-components ─────────────────────────────────────────── */
 
-function SectionIcon({ emoji, bg }) {
-  return <div style={{ ...s.cardIcon, background: bg }}>{emoji}</div>
+function SectionIcon({ icon: Icon, bg }) {
+  return <div style={{ ...s.cardIcon, background: `linear-gradient(135deg, ${bg} 0%, ${bg} 100%)` }}><Icon size={18} color="#ffffff" /></div>
 }
 
 function Toggle({ checked, onChange, label, hint, last }) {
@@ -315,7 +319,7 @@ export default function LeaveSettingsConfig() {
               {/* ── Card 1: Leave Year Type ── */}
               <div style={s.card}>
                 <div style={s.cardHeader}>
-                  <SectionIcon emoji="📅" bg="#ede9fe" />
+                  <SectionIcon icon={FiCalendar} bg="#7c3aed" />
                   <div>
                     <div style={s.cardTitle}>Leave Year Boundary</div>
                     <div style={s.cardSubtitle}>Define the start and end of the annual leave cycle</div>
@@ -326,8 +330,8 @@ export default function LeaveSettingsConfig() {
                   <div style={s.label}>Leave Year Type</div>
                   <div style={s.radioGrid}>
                     {[
-                      { value: 'financial_year', label: 'Financial Year', desc: 'Custom start month (e.g. April – March)', icon: '🏦' },
-                      { value: 'calendar_year',  label: 'Calendar Year',  desc: 'Fixed: January 1 – December 31',       icon: '🗓️' },
+                      { value: 'financial_year', label: 'Financial Year', desc: 'Custom start month (e.g. April – March)', icon: FiBriefcase },
+                      { value: 'calendar_year',  label: 'Calendar Year',  desc: 'Fixed: January 1 – December 31',       icon: FiCalendar },
                     ].map(opt => (
                       <label key={opt.value} style={s.radioCard(leaveYearType === opt.value)}>
                         <input
@@ -338,7 +342,7 @@ export default function LeaveSettingsConfig() {
                         />
                         <div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span>{opt.icon}</span>
+                            <opt.icon size={13} color={leaveYearType === opt.value ? C.brand : C.slate500} />
                             <span style={s.radioText}>{opt.label}</span>
                           </div>
                           <div style={s.radioDesc}>{opt.desc}</div>
@@ -365,7 +369,7 @@ export default function LeaveSettingsConfig() {
                 )}
 
                 <div style={s.yearBadge}>
-                  <span>📆</span>
+                  <FiCalendar size={12} color={C.brand} />
                   <span>Active cycle: {startLabel} → {endLabel}</span>
                 </div>
               </div>
@@ -373,7 +377,7 @@ export default function LeaveSettingsConfig() {
               {/* ── Card 2: Joining Policy ── */}
               <div style={s.card}>
                 <div style={s.cardHeader}>
-                  <SectionIcon emoji="🧑‍💼" bg="#d1fae5" />
+                  <SectionIcon icon={FiUserPlus} bg="#059669" />
                   <div>
                     <div style={s.cardTitle}>New Employee Joining Policy</div>
                     <div style={s.cardSubtitle}>How leave balances are allocated when a new hire joins</div>
@@ -421,7 +425,7 @@ export default function LeaveSettingsConfig() {
               {/* ── Card 3: Optional Holiday Eligibility ── */}
               <div style={s.card}>
                 <div style={s.cardHeader}>
-                  <SectionIcon emoji="🌟" bg="#fef3c7" />
+                  <SectionIcon icon={FiStar} bg="#d97706" />
                   <div>
                     <div style={s.cardTitle}>Optional Holiday Eligibility</div>
                     <div style={s.cardSubtitle}>Configure how many optional holidays employees can avail per year</div>
@@ -482,9 +486,9 @@ export default function LeaveSettingsConfig() {
                 )}
 
                 {/* How it works info */}
-                <div style={{ ...s.infoBox(C.brandLt, '#c7d2fe', C.brand, '#4338ca'), marginTop: '16px' }}>
+                <div style={{ ...s.infoBox(C.brandLt, '#f7a6af', C.brand, '#7c0a1a'), marginTop: '16px' }}>
                   <div style={s.infoTitle(C.brand)}>How Optional Holidays Work</div>
-                  <div style={s.infoText('#4338ca')}>
+                  <div style={s.infoText('#7c0a1a')}>
                     Optional holidays are specific calendar holidays employees can <em>choose</em> to avail.
                     Each employee is allocated a quota (with pro-rata for new joiners). They can select
                     which optional holidays to avail from their Leave Dashboard, and the system tracks
@@ -496,7 +500,7 @@ export default function LeaveSettingsConfig() {
               {/* ── Card 4: Monthly Paid Leave Cap ── */}
               <div style={s.card}>
                 <div style={s.cardHeader}>
-                  <SectionIcon emoji="📊" bg="#fce7f3" />
+                  <SectionIcon icon={FiBarChart2} bg="#be185d" />
                   <div>
                     <div style={s.cardTitle}>Monthly Paid Leave Capping</div>
                     <div style={s.cardSubtitle}>Limit how many paid leave days an employee can take per calendar month</div>
@@ -563,13 +567,13 @@ export default function LeaveSettingsConfig() {
                   type="submit"
                   style={s.saveBtn}
                   disabled={saving}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(99,102,241,0.4)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(99,102,241,0.35)' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(194,7,26,0.4)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(194,7,26,0.35)' }}
                 >
                   {saving ? 'Saving…' : 'Save Settings'}
                 </button>
-                {success && <span style={s.msg(true)}>✓ {success}</span>}
-                {error   && <span style={s.msg(false)}>⚠ {error}</span>}
+                {success && <span style={s.msg(true)}><FiCheck size={13} /> {success}</span>}
+                {error   && <span style={s.msg(false)}><FiAlertCircle size={13} /> {error}</span>}
               </div>
 
             </form>

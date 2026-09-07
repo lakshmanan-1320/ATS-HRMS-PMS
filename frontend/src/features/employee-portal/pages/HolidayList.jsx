@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
+import { FiCalendar, FiGlobe, FiStar, FiTarget, FiCheck, FiX, FiAlertCircle, FiPlus } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -46,14 +47,14 @@ function KpiCard({ icon, label, value, sub, accent }) {
   return (
     <div style={{
       background: '#fff', borderRadius: '18px', padding: '22px 24px',
-      border: `1px solid ${accent}28`, boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+      border: `1px solid ${accent}28`, boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
       display: 'flex', alignItems: 'center', gap: '18px',
       transition: 'transform 0.2s, box-shadow 0.2s',
     }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 10px 28px rgba(0,0,0,0.1), 0 0 0 1px ${accent}44` }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)' }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 10px 28px rgba(0,0,0,0.08), 0 0 0 1px ${accent}44` }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)' }}
     >
-      <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: `${accent}14`, border: `1px solid ${accent}28`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
+      <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: `${accent}14`, border: `1px solid ${accent}28`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         {icon}
       </div>
       <div style={{ flex: 1 }}>
@@ -81,7 +82,7 @@ function Pagination({ page, total, onChange }) {
         </button>
         {pages.map(p => (
           <button key={p} onClick={() => onChange(p)}
-            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#6366f1' : '#e2e8f0', background: p === page ? '#6366f1' : '#fff', color: p === page ? '#fff' : '#374151' }}>
+            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#C2071A' : '#e2e8f0', background: p === page ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}>
             {p}
           </button>
         ))}
@@ -181,27 +182,32 @@ export default function HolidayList() {
   const isQuotaFull = ohData && ohData.remaining_days <= 0
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <EmployeeSidebar active="holidays" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Holidays" />
-        <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
+        <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           {/* Header */}
           <div style={{ marginBottom: '28px' }}>
-            <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>Holiday Calendar</h1>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>Plan your schedule around official public and optional holidays</p>
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+              </div>
+              Holiday Calendar
+            </h1>
+            <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Plan your schedule around official public and optional holidays</p>
           </div>
 
           {/* KPI Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
-            <KpiCard icon="🗓️" label="Total Holidays" value={holidays.length} sub={`Year ${yearFilter}`} accent="#6366f1" />
-            <KpiCard icon="🌐" label="Public Holidays" value={publicCount} sub="Mandatory days off" accent="#10b981" />
-            <KpiCard icon="✨" label="Optional Holidays" value={optionalCount} sub="Choose your preference" accent="#9333ea" />
+            <KpiCard icon={<FiCalendar size={22} color="#6366f1" />} label="Total Holidays" value={holidays.length} sub={`Year ${yearFilter}`} accent="#6366f1" />
+            <KpiCard icon={<FiGlobe size={22} color="#10b981" />} label="Public Holidays" value={publicCount} sub="Mandatory days off" accent="#10b981" />
+            <KpiCard icon={<FiStar size={22} color="#9333ea" />} label="Optional Holidays" value={optionalCount} sub="Choose your preference" accent="#9333ea" />
             {ohLoading ? (
-              <div style={{ background: '#fff', borderRadius: '18px', padding: '22px 24px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '13px' }}>Loading…</div>
+              <div style={{ background: '#fff', borderRadius: '18px', padding: '22px 24px', border: 'none', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '13px' }}>Loading…</div>
             ) : (
-              <KpiCard icon="🎯" label="My Optional Quota"
+              <KpiCard icon={<FiTarget size={22} color="#f59e0b" />} label="My Optional Quota"
                 value={`${ohUsed}/${ohTotal}`}
                 sub={ohTotal > ohUsed ? `${ohData.remaining_days} slot${ohData.remaining_days !== 1 ? 's' : ''} remaining` : 'Quota fully used'}
                 accent="#f59e0b" />
@@ -216,7 +222,7 @@ export default function HolidayList() {
                 {upcoming.map(h => {
                   const b = BADGE[h.holiday_type] || BADGE.PUBLIC
                   return (
-                    <div key={h.holiday_id} style={{ background: '#fff', border: `1px solid ${b.border}`, borderRadius: '16px', padding: '16px 18px', display: 'flex', gap: '14px', alignItems: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                    <div key={h.holiday_id} style={{ background: '#fff', border: `1px solid ${b.border}`, borderRadius: '16px', padding: '16px 18px', display: 'flex', gap: '14px', alignItems: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
                       <div style={{ width: '52px', height: '56px', borderRadius: '12px', background: `${b.bg}`, border: `1px solid ${b.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <div style={{ fontSize: '10px', fontWeight: '700', color: b.color, textTransform: 'uppercase' }}>{monthShort(h.holiday_date)}</div>
                         <div style={{ fontSize: '22px', fontWeight: '800', color: b.color, lineHeight: 1 }}>{dayNum(h.holiday_date)}</div>
@@ -236,7 +242,7 @@ export default function HolidayList() {
           )}
 
           {/* Filter bar */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '14px 18px', display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', padding: '14px 18px', display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }}>
             <input
               type="text"
               placeholder="Search holiday name or description…"
@@ -270,7 +276,7 @@ export default function HolidayList() {
           </div>
 
           {/* Holidays Table */}
-          <div style={{ background: '#fff', border: '1px solid #e8eaf0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>Loading calendar…</div>
             ) : paged.length === 0 ? (
@@ -280,7 +286,7 @@ export default function HolidayList() {
                 <thead>
                   <tr>
                     {['Holiday Name', 'Date', 'Day', 'Type', 'Description', 'Opt. Holiday'].map(h => (
-                      <th key={h} style={{ padding: '14px 18px', color: '#64748b', fontWeight: '600', borderBottom: '1px solid #e8eaf0', background: '#f8fafc', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em' }}>
+                      <th key={h} style={{ padding: '14px 18px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' }}>
                         {h}
                       </th>
                     ))}
@@ -298,12 +304,14 @@ export default function HolidayList() {
                       <tr key={h.holiday_id}
                         onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        style={{ borderBottom: '1px solid #f1f5f9', transition: 'background 0.15s' }}
+                        style={{ borderBottom: '1px solid #edf2f7', transition: 'background 0.15s' }}
                       >
                         <td style={{ padding: '14px 18px', fontWeight: '700', color: '#0f172a' }}>
                           <div>{h.holiday_name}</div>
                           {isAvailed && (
-                            <div style={{ fontSize: '10px', color: '#d97706', fontWeight: '600', marginTop: '2px' }}>✓ Availed by you</div>
+                            <div style={{ fontSize: '10px', color: '#d97706', fontWeight: '600', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                              <FiCheck size={12} color="#d97706" /> Availed by you
+                            </div>
                           )}
                         </td>
                         <td style={{ padding: '14px 18px', color: '#475569' }}>{dateStr}</td>
@@ -326,16 +334,16 @@ export default function HolidayList() {
                                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                                 padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '700',
                                 cursor: (isDisabled || isToggling) ? 'not-allowed' : 'pointer',
-                                border: `1px solid ${isAvailed ? 'rgba(245,158,11,0.35)' : isDisabled ? '#e2e8f0' : 'rgba(99,102,241,0.3)'}`,
-                                background: isAvailed ? 'rgba(245,158,11,0.1)' : isDisabled ? '#f8fafc' : 'rgba(99,102,241,0.08)',
-                                color: isAvailed ? '#d97706' : isDisabled ? '#cbd5e1' : '#6366f1',
+                                border: `1px solid ${isAvailed ? 'rgba(245,158,11,0.35)' : isDisabled ? '#e2e8f0' : 'rgba(194,7,26,0.3)'}`,
+                                background: isAvailed ? 'rgba(245,158,11,0.1)' : isDisabled ? '#f8fafc' : 'rgba(194,7,26,0.08)',
+                                color: isAvailed ? '#d97706' : isDisabled ? '#cbd5e1' : '#C2071A',
                                 opacity: isDisabled ? 0.5 : 1,
                                 transition: 'all 0.15s',
                               }}>
-                              {isToggling ? '…' : isAvailed ? '✓ Availed' : isDisabled ? 'Quota Full' : '+ Avail'}
+                              {isToggling ? '…' : isAvailed ? <><FiCheck size={12} /> Availed</> : isDisabled ? 'Quota Full' : <><FiPlus size={12} /> Avail</>}
                             </button>
                           ) : (
-                            <span style={{ fontSize: '11px', color: '#e2e8f0' }}>—</span>
+                            <span style={{ fontSize: '11px', color: '#cbd5e1' }}>—</span>
                           )}
                         </td>
                       </tr>
@@ -349,7 +357,7 @@ export default function HolidayList() {
 
           {/* Optional Holiday Quota Panel */}
           {!ohLoading && ohData && ohData.calendar_count > 0 && (
-            <div style={{ marginTop: '24px', background: '#fff', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '20px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <div style={{ marginTop: '24px', background: '#fff', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <div>
                   <div style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>My Optional Holiday Selection</div>
@@ -388,10 +396,10 @@ export default function HolidayList() {
                         <button
                           onClick={() => toggleOH(h.holiday_id)}
                           disabled={!!togglingId}
-                          style={{ background: 'none', border: 'none', cursor: togglingId ? 'not-allowed' : 'pointer', color: '#ef4444', fontSize: '13px', padding: '0 2px', fontWeight: '700', lineHeight: 1 }}
+                          style={{ background: 'none', border: 'none', cursor: togglingId ? 'not-allowed' : 'pointer', color: '#ef4444', fontSize: '13px', padding: '0 2px', fontWeight: '700', lineHeight: 1, display: 'flex', alignItems: 'center' }}
                           title="Un-avail this holiday"
                         >
-                          ×
+                          <FiX size={14} color="#ef4444" />
                         </button>
                       </div>
                     ))}
@@ -411,8 +419,8 @@ export default function HolidayList() {
       {/* Toast */}
       {toast && (
         <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999, background: toast.type === 'error' ? '#ef4444' : '#10b981', color: '#fff', borderRadius: '12px', padding: '12px 18px', fontSize: '13px', fontWeight: '600', boxShadow: '0 8px 24px rgba(0,0,0,0.18)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {toast.type === 'error' ? '⚠' : '✓'} {toast.msg}
-          <button onClick={() => setToast(null)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, marginLeft: '4px', fontSize: '16px', opacity: 0.7 }}>×</button>
+          {toast.type === 'error' ? <FiAlertCircle size={16} color="#ffffff" /> : <FiCheck size={16} color="#ffffff" />} {toast.msg}
+          <button onClick={() => setToast(null)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, marginLeft: '4px', opacity: 0.7 }}><FiX size={16} color="#ffffff" /></button>
         </div>
       )}
     </div>

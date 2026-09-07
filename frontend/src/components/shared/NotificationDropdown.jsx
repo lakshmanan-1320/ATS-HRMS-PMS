@@ -160,22 +160,22 @@ export default function NotificationDropdown({ role = 'employee' }) {
         title="Notifications"
         style={{
           position: 'relative',
-          background: showDropdown ? '#ede9fe' : '#f8fafc',
-          border: `1px solid ${showDropdown ? '#a78bfa' : '#e2e8f0'}`,
-          borderRadius: '10px',
-          width: '42px', height: '42px',
+          background: showDropdown ? 'var(--card-active-bg, #FEECEE)' : '#fff',
+          border: `1px solid ${showDropdown ? 'var(--card-active-border, #F7A6AF)' : '#e4eaf3'}`,
+          borderRadius: '9px',
+          width: '36px', height: '36px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           cursor: 'pointer', transition: 'all 0.2s',
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = '#ede9fe'; e.currentTarget.style.borderColor = '#a78bfa' }}
-        onMouseLeave={e => { if (!showDropdown) { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.borderColor = '#e2e8f0' } }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.borderColor = 'var(--card-active-border, #F7A6AF)' }}
+        onMouseLeave={e => { if (!showDropdown) { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e4eaf3' } }}
       >
-        <FiBell size={18} color="#374151" />
+        <FiBell size={16} color={showDropdown ? 'var(--primary-color, #C2071A)' : '#374151'} />
         {unreadCount > 0 && (
           <span style={{
-            position: 'absolute', top: '6px', right: '6px',
+            position: 'absolute', top: '5px', right: '5px',
             minWidth: '16px', height: '16px', borderRadius: '8px',
-            background: '#ef4444', border: '2px solid #fff',
+            background: 'var(--primary-color, #C2071A)', border: '2px solid #fff',
             fontSize: '9px', color: '#fff', fontWeight: '700',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '0 3px',
@@ -203,7 +203,7 @@ export default function NotificationDropdown({ role = 'employee' }) {
               <span style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a' }}>Notifications</span>
               {unreadCount > 0 && (
                 <span style={{
-                  fontSize: '11px', background: '#ede9fe', color: '#6d28d9',
+                  fontSize: '11px', background: 'var(--card-active-bg, #FEECEE)', color: 'var(--primary-color, #C2071A)',
                   padding: '2px 8px', borderRadius: '20px', fontWeight: '700',
                 }}>
                   {unreadCount} new
@@ -215,7 +215,7 @@ export default function NotificationDropdown({ role = 'employee' }) {
                 onClick={handleMarkAllRead}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '12px', color: '#6366f1', fontWeight: '600',
+                  fontSize: '12px', color: 'var(--primary-color, #C2071A)', fontWeight: '600',
                   display: 'flex', alignItems: 'center', gap: '4px',
                   fontFamily: 'inherit',
                 }}
@@ -291,7 +291,7 @@ export default function NotificationDropdown({ role = 'employee' }) {
                     {isUnread && (
                       <span style={{
                         width: '7px', height: '7px', borderRadius: '50%',
-                        background: '#6366f1', flexShrink: 0, marginTop: '6px',
+                        background: 'var(--primary-color, #C2071A)', flexShrink: 0, marginTop: '6px',
                       }} />
                     )}
                   </div>

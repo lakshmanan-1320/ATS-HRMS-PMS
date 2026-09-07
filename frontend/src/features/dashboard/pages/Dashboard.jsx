@@ -2,6 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
+import {
+  FiBriefcase, FiUsers, FiCalendar, FiDollarSign, FiMail, FiShield,
+  FiClipboard, FiSettings, FiKey, FiBell, FiCheckCircle, FiBarChart2,
+  FiAlertTriangle, FiRefreshCw,
+} from 'react-icons/fi'
 
 const authHdr = () => ({ Authorization: `Bearer ${sessionStorage.getItem('sa_token')}` })
 
@@ -54,14 +60,14 @@ function actionLabel(a) { return ACTION_LABELS[a] || a }
 function actionColor(a) {
   if (a.includes('created'))  return '#10b981'
   if (a.includes('deleted') || a.includes('suspend')) return '#ef4444'
-  if (a.includes('updated') || a.includes('toggled') || a.includes('status')) return '#6366f1'
+  if (a.includes('updated') || a.includes('toggled') || a.includes('status')) return '#0f766e'
   return '#f59e0b'
 }
 
-const MODULE_COLORS = ['#6366f1', '#0ea5e9', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6']
+const MODULE_COLORS = ['#C2071A', '#0f766e', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6']
 
 // ─── SVG Bar Chart ────────────────────────────────────────────────────────────
-function BarChart({ data, color = '#6366f1', height = 160 }) {
+function BarChart({ data, color = '#C2071A', height = 160 }) {
   if (!data || data.length === 0) {
     return (
       <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '13px' }}>
@@ -191,8 +197,8 @@ function KPICard({ label, value, icon, color, sub, loading }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
         <div style={{
           width: '46px', height: '46px', borderRadius: '13px',
-          background: `${color}18`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px',
+          background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           {icon}
         </div>
@@ -264,14 +270,14 @@ export default function Dashboard() {
   const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
   const adminCards = [
-    { icon: '👥', label: 'Client Admins',      desc: 'Create & manage client accounts',  color: '#6366f1', path: '/settings/client-admins' },
-    { icon: '🏢', label: 'Company Details',    desc: 'Configure organisation profile',    color: '#0ea5e9', path: '/settings/company' },
-    { icon: '📧', label: 'SMTP Settings',      desc: 'Configure outbound email server',   color: '#f59e0b', path: '/settings/smtp' },
-    { icon: '🛡️', label: 'Security',           desc: 'OTP & login lockout settings',      color: '#ef4444', path: '/settings/security' },
-    { icon: '📋', label: 'Audit Logs',         desc: 'View all system activity logs',     color: '#8b5cf6', path: '/settings/audit' },
-    { icon: '⚙️', label: 'Module Management',  desc: 'Enable / disable feature modules',  color: '#10b981', path: '/settings/modules' },
-    { icon: '🔑', label: 'Password Policy',    desc: 'Set strength requirements',         color: '#f97316', path: '/settings/password-policy' },
-    { icon: '🔔', label: 'Notifications',      desc: 'Configure notification events',     color: '#06b6d4', path: '/settings/notifications' },
+    { icon: <FiUsers size={19} color="#ffffff" />,      label: 'Client Admins',      desc: 'Create & manage client accounts',  color: '#C2071A', path: '/settings/client-admins' },
+    { icon: <FiBriefcase size={19} color="#ffffff" />,  label: 'Company Details',    desc: 'Configure organisation profile',    color: '#0f766e', path: '/settings/company' },
+    { icon: <FiMail size={19} color="#ffffff" />,       label: 'SMTP Settings',      desc: 'Configure outbound email server',   color: '#f59e0b', path: '/settings/smtp' },
+    { icon: <FiShield size={19} color="#ffffff" />,     label: 'Security',           desc: 'OTP & login lockout settings',      color: '#ef4444', path: '/settings/security' },
+    { icon: <FiClipboard size={19} color="#ffffff" />,  label: 'Audit Logs',         desc: 'View all system activity logs',     color: '#8b5cf6', path: '/settings/audit' },
+    { icon: <FiSettings size={19} color="#ffffff" />,   label: 'Module Management',  desc: 'Enable / disable feature modules',  color: '#10b981', path: '/settings/modules' },
+    { icon: <FiKey size={19} color="#ffffff" />,        label: 'Password Policy',    desc: 'Set strength requirements',         color: '#f97316', path: '/settings/password-policy' },
+    { icon: <FiBell size={19} color="#ffffff" />,       label: 'Notifications',      desc: 'Configure notification events',     color: '#db2777', path: '/settings/notifications' },
   ]
 
   const leaveTotal    = Number(leave.total_leaves    || 0)
@@ -290,66 +296,63 @@ export default function Dashboard() {
       `}</style>
 
       <Sidebar active="dashboard" />
-
-      <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto', maxWidth: 'calc(100vw - 240px)' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Dashboard" />
+        <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
         {/* ── Welcome Banner ── */}
         <div style={{
-          background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #0f172a 100%)',
+          background: 'linear-gradient(96.35deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
+          border: '1px solid #f3dfe3',
           borderRadius: '20px', padding: '26px 32px', marginBottom: '22px',
-          position: 'relative', overflow: 'hidden',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          boxShadow: '0 12px 40px rgba(79,70,229,0.30)',
+          position: 'relative', overflow: 'hidden', boxSizing: 'border-box',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px',
         }}>
-          <div style={{ position: 'absolute', right: '-40px',  top: '-50px',   width: '260px', height: '260px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', right: '80px',   bottom: '-70px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(139,92,246,0.12)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', left: '40%', top: '-30px', width: '180px', height: '180px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', pointerEvents: 'none' }} />
-
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: '22px', fontWeight: '700', color: '#ffffff', marginBottom: '5px' }}>
-              Welcome back, Super Administrator 👋
+          <div style={{ position: 'relative', zIndex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '5px' }}>
+              Welcome back, <span style={{ color: '#C2071A' }}>Super Administrator</span>
             </div>
-            <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.72)' }}>
+            <div style={{ fontSize: '13px', color: '#64748b' }}>
               {dateStr}&nbsp;&nbsp;•&nbsp;&nbsp;{timeStr}
             </div>
             {error && (
-              <div style={{ marginTop: '10px', fontSize: '12px', color: '#fca5a5', background: 'rgba(239,68,68,0.18)', padding: '5px 12px', borderRadius: '8px', display: 'inline-block' }}>
-                ⚠ {error}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '10px', fontSize: '12px', color: '#b91c1c', background: '#fef2f2', border: '1px solid #fecaca', padding: '5px 12px', borderRadius: '8px' }}>
+                <FiAlertTriangle size={12} /> {error}
               </div>
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', position: 'relative', zIndex: 1, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', position: 'relative', zIndex: 1, alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
             {[
               [loading ? '…' : fmtNum(p.total_orgs),           'Organizations'],
               [loading ? '…' : fmtNum(p.active_client_admins), 'Active Clients'],
               [loading ? '…' : fmtNum(emp.total_employees),    'Total Employees'],
             ].map(([val, lbl]) => (
               <div key={lbl} style={{
-                textAlign: 'center', minWidth: '90px',
-                background: 'rgba(255,255,255,0.10)',
-                backdropFilter: 'blur(8px)',
+                textAlign: 'center', minWidth: '90px', boxSizing: 'border-box',
+                background: '#ffffff',
                 borderRadius: '14px', padding: '13px 18px',
-                border: '1px solid rgba(255,255,255,0.16)',
+                border: '1px solid #f3dfe3',
               }}>
-                <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff' }}>{val}</div>
-                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.65)', marginTop: '3px', fontWeight: '500', whiteSpace: 'nowrap' }}>{lbl}</div>
+                <div style={{ fontSize: '22px', fontWeight: '800', color: '#C2071A' }}>{val}</div>
+                <div style={{ fontSize: '10px', color: '#64748b', marginTop: '3px', fontWeight: '500', whiteSpace: 'nowrap' }}>{lbl}</div>
               </div>
             ))}
             <button
               onClick={fetchDashboard}
               disabled={loading}
               style={{
-                background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.26)',
+                background: loading ? 'rgba(194,7,26,0.5)' : 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
+                border: 'none',
                 borderRadius: '12px', padding: '9px 16px',
                 color: '#fff', cursor: loading ? 'not-allowed' : 'pointer',
-                fontSize: '13px', fontWeight: '600',
+                fontSize: '13px', fontWeight: '700',
                 display: 'flex', alignItems: 'center', gap: '6px',
-                opacity: loading ? 0.7 : 1,
-                transition: 'all 0.2s',
+                boxShadow: loading ? 'none' : '0 4px 14px rgba(194,7,26,0.3)',
+                transition: 'all 0.2s', whiteSpace: 'nowrap',
               }}
             >
-              ↻ {loading ? 'Loading…' : 'Refresh'}
+              <FiRefreshCw size={14} /> {loading ? 'Loading…' : 'Refresh'}
             </button>
           </div>
         </div>
@@ -359,23 +362,23 @@ export default function Dashboard() {
           <KPICard
             label="Total Organizations"
             value={fmtNum(p.total_orgs)}
-            icon="🏢"
-            color="#6366f1"
+            icon={<FiBriefcase size={22} color="#ffffff" />}
+            color="#C2071A"
             sub={`${fmtNum(p.total_client_admins)} client admins`}
             loading={loading}
           />
           <KPICard
             label="Total Employees"
             value={fmtNum(empTotal)}
-            icon="👤"
-            color="#0ea5e9"
+            icon={<FiUsers size={22} color="#ffffff" />}
+            color="#0f766e"
             sub={`${fmtNum(empActive)} active · ${fmtNum(empInactive)} inactive`}
             loading={loading}
           />
           <KPICard
             label="Leave Requests (Month)"
             value={fmtNum(leaveTotal)}
-            icon="📅"
+            icon={<FiCalendar size={22} color="#ffffff" />}
             color="#f59e0b"
             sub={`${fmtNum(leavePending)} pending approval`}
             loading={loading}
@@ -383,7 +386,7 @@ export default function Dashboard() {
           <KPICard
             label="Net Payroll Disbursed"
             value={fmtCurrency(payroll.total_net_salary)}
-            icon="💰"
+            icon={<FiDollarSign size={22} color="#ffffff" />}
             color="#10b981"
             sub={`${fmtNum(payroll.total_runs)} run(s) this month`}
             loading={loading}
@@ -401,7 +404,7 @@ export default function Dashboard() {
             </div>
             {loading
               ? <Skeleton h={160} r={10} />
-              : <BarChart data={growth} color="#6366f1" height={160} />
+              : <BarChart data={growth} color="#C2071A" height={160} />
             }
           </div>
 
@@ -549,17 +552,17 @@ export default function Dashboard() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
               {[
-                { label: 'Leave Requests',  value: fmtNum(leaveTotal),                    color: '#f59e0b', icon: '📅', sub: `${fmtNum(leavePending)} pending` },
-                { label: 'Approved Leaves', value: fmtNum(leaveApproved),                  color: '#10b981', icon: '✅', sub: `${fmtNum(leaveRejected)} rejected` },
-                { label: 'Payroll Runs',    value: fmtNum(payroll.total_runs),             color: '#6366f1', icon: '📊', sub: `${fmtNum(payroll.approved_runs)} approved` },
-                { label: 'Net Payroll',     value: fmtCurrency(payroll.total_net_salary),  color: '#0ea5e9', icon: '💰', sub: `${fmtNum(payroll.locked_runs)} locked` },
+                { label: 'Leave Requests',  value: fmtNum(leaveTotal),                    color: '#f59e0b', icon: FiCalendar,     sub: `${fmtNum(leavePending)} pending` },
+                { label: 'Approved Leaves', value: fmtNum(leaveApproved),                  color: '#10b981', icon: FiCheckCircle,  sub: `${fmtNum(leaveRejected)} rejected` },
+                { label: 'Payroll Runs',    value: fmtNum(payroll.total_runs),             color: '#C2071A', icon: FiBarChart2,    sub: `${fmtNum(payroll.approved_runs)} approved` },
+                { label: 'Net Payroll',     value: fmtCurrency(payroll.total_net_salary),  color: '#0f766e', icon: FiDollarSign,   sub: `${fmtNum(payroll.locked_runs)} locked` },
               ].map((item) => (
                 <div key={item.label} style={{
                   background: `${item.color}08`, borderRadius: '13px', padding: '14px',
                   border: `1px solid ${item.color}20`,
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '9px' }}>
-                    <span style={{ fontSize: '15px' }}>{item.icon}</span>
+                    <item.icon size={14} color={item.color} />
                     <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '500' }}>{item.label}</span>
                   </div>
                   <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', lineHeight: 1 }}>
@@ -617,10 +620,10 @@ export default function Dashboard() {
               style={{
                 background: 'none', border: '1px solid #e2e8f0',
                 borderRadius: '9px', padding: '7px 16px',
-                fontSize: '12px', color: '#6366f1', fontWeight: '600',
+                fontSize: '12px', color: '#C2071A', fontWeight: '600',
                 cursor: 'pointer', transition: 'all 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#f5f3ff'; e.currentTarget.style.borderColor = '#6366f1' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#feecee'; e.currentTarget.style.borderColor = '#C2071A' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
             >
               View All →
@@ -701,9 +704,9 @@ export default function Dashboard() {
               >
                 <div style={{
                   width: '42px', height: '42px', borderRadius: '12px',
-                  background: `${c.color}14`,
+                  background: `linear-gradient(135deg, ${c.color} 0%, ${c.color} 100%)`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '19px', marginBottom: '13px',
+                  marginBottom: '13px',
                 }}>
                   {c.icon}
                 </div>
@@ -716,6 +719,7 @@ export default function Dashboard() {
 
         <div style={{ height: '32px' }} />
       </main>
+      </div>
     </div>
   )
 }

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS attendance_shifts (
     grace_minutes             INTEGER NOT NULL DEFAULT 15,
     early_exit_grace_minutes  INTEGER NOT NULL DEFAULT 5,
     minimum_hours             NUMERIC(4,2) NOT NULL DEFAULT 8.00,
-    color_code                VARCHAR(20) DEFAULT '#3b82f6',
+    color_code                VARCHAR(20) DEFAULT '#C2071A',
     is_active                 BOOLEAN NOT NULL DEFAULT TRUE,
     created_at                TIMESTAMPTZ DEFAULT NOW(),
     updated_at                TIMESTAMPTZ DEFAULT NOW()

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAttendanceStore } from '../../../store/attendance.store'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
@@ -8,10 +8,11 @@ import { FiPlus, FiEdit2, FiTrash2, FiMapPin, FiX, FiSearch, FiCompass, FiInfo }
 import { useJsApiLoader, GoogleMap, Marker, Circle, Autocomplete } from '@react-google-maps/api'
 
 const LIBRARIES = ['places']
+const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
 
-// Simple Haversine calculator for frontend test validation
+// Haversine distance calculator in meters
 function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000 // meters
+  const R = 6371000
   const phi1 = (lat1 * Math.PI) / 180
   const phi2 = (lat2 * Math.PI) / 180
   const dPhi = ((lat2 - lat1) * Math.PI) / 180
@@ -24,7 +25,6 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
   return R * c
 }
 
-// Utility to parse address components from Google Places API
 const parseAddressComponents = (addressComponents) => {
   let city = ''
   let state = ''
@@ -40,7 +40,6 @@ const parseAddressComponents = (addressComponents) => {
         country = component.long_name
       }
     }
-    // Fallback for city if empty
     if (!city) {
       for (const component of addressComponents) {
         const types = component.types || []
@@ -55,6 +54,7 @@ const parseAddressComponents = (addressComponents) => {
 }
 
 export default function OfficeLocations() {
+  const navigate = useNavigate()
   const {
     officeLocations,
     loadingLocations,
@@ -69,7 +69,6 @@ export default function OfficeLocations() {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
   const isApiKeyMissing = !apiKey
 
-  // Google Maps SDK Loader
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey || '',
@@ -80,9 +79,8 @@ export default function OfficeLocations() {
   const [editingLocation, setEditingLocation] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searching, setSearching] = useState(false)
-  const [mapCenter, setMapCenter] = useState([13.0827, 80.2707]) // Chennai default
+  const [mapCenter, setMapCenter] = useState([13.0827, 80.2707])
   
-  // Geofence Testing State
   const [testingGeofence, setTestingGeofence] = useState(false)
   const [geofenceTestResult, setGeofenceTestResult] = useState(null)
   const [userCoords, setUserCoords] = useState(null)
@@ -90,13 +88,12 @@ export default function OfficeLocations() {
   const [modalError, setModalError] = useState('')
   const [isCustomRadius, setIsCustomRadius] = useState(false)
 
-  // Default values
   const [formData, setFormData] = useState({
     locationName: '',
     address: '',
     latitude: '13.0827',
     longitude: '80.2707',
-    radiusMeters: 100, // Default 100m
+    radiusMeters: 100,
     isActive: true,
     city: '',
     state: '',
@@ -146,770 +143,630 @@ export default function OfficeLocations() {
     setFormData({
       locationName: loc.location_name,
       address: loc.address || '',
-      latitude: loc.latitude,
-      longitude: loc.longitude,
+      latitude: String(loc.latitude),
+      longitude: String(loc.longitude),
       radiusMeters: rad,
       isActive: loc.is_active,
-      city: '',
-      state: '',
-      country: '',
-      placeId: '',
+      city: loc.city || '',
+      state: loc.state || '',
+      country: loc.country || '',
+      placeId: loc.google_place_id || '',
     })
     setMapCenter([parseFloat(loc.latitude), parseFloat(loc.longitude)])
-    setSearchQuery(loc.address || '')
+    setSearchQuery('')
     setGeofenceTestResult(null)
     setUserCoords(null)
     setModalError('')
     setIsModalOpen(true)
   }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setEditingLocation(null)
-    setGeofenceTestResult(null)
-    setUserCoords(null)
-    setModalError('')
-  }
-
-  const handlePlaceChanged = () => {
-    const place = autocompleteRef.current?.getPlace()
-    if (!place || !place.geometry) {
-      console.warn("No geometry details available for selection.")
-      return
-    }
-
-    const lat = place.geometry.location.lat()
-    const lng = place.geometry.location.lng()
-    const { city, state, country } = parseAddressComponents(place.address_components)
-
-    setFormData(prev => ({
-      ...prev,
-      latitude: lat.toFixed(6),
-      longitude: lng.toFixed(6),
-      address: place.formatted_address || '',
-      city,
-      state,
-      country,
-      placeId: place.place_id || '',
-    }))
-    setSearchQuery(place.formatted_address || '')
-    setMapCenter([lat, lng])
-    setGeofenceTestResult(null)
-    setUserCoords(null)
-    setModalError('')
-  }
-
-  const updateLocationFromCoords = (lat, lng) => {
-    setFormData(prev => ({
-      ...prev,
-      latitude: lat.toFixed(6),
-      longitude: lng.toFixed(6),
-    }))
-    setGeofenceTestResult(null)
-    setUserCoords(null)
-
+  const handleReverseGeocode = (lat, lng) => {
     if (window.google && window.google.maps) {
       const geocoder = new window.google.maps.Geocoder()
-      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      geocoder.geocode({ location: { lat: parseFloat(lat), lng: parseFloat(lng) } }, (results, status) => {
         if (status === 'OK' && results[0]) {
           const place = results[0]
           const { city, state, country } = parseAddressComponents(place.address_components)
           setFormData(prev => ({
             ...prev,
-            address: place.formatted_address,
-            city,
-            state,
-            country,
-            placeId: place.place_id || '',
+            address: place.formatted_address || prev.address,
+            city: city || prev.city,
+            state: state || prev.state,
+            country: country || prev.country,
+            placeId: place.place_id || prev.placeId,
           }))
-          setSearchQuery(place.formatted_address)
-        } else {
-          // Handle specific geocoding errors gracefully
-          if (status === 'ZERO_RESULTS') {
-            console.warn('Geocoding status: ZERO_RESULTS for coords', lat, lng)
-            alert('No address found for these coordinates. Please update manually.')
-          } else if (status === 'OVER_QUERY_LIMIT') {
-            console.warn('Geocoding status: OVER_QUERY_LIMIT')
-            alert('Geocoding quota exceeded. Coordinates updated, but address lookup failed.')
-          } else if (status === 'REQUEST_DENIED') {
-            console.warn('Geocoding status: REQUEST_DENIED')
-            alert('Geocoding request was denied. Check API key restrictions.')
-          } else if (status === 'INVALID_REQUEST') {
-            console.warn('Geocoding status: INVALID_REQUEST')
-          } else {
-            console.warn('Geocoding failed with status:', status)
-          }
         }
       })
     }
   }
 
-  const handleForwardGeocode = (addressString) => {
-    if (!addressString || addressString.trim() === '') return
-    if (window.google && window.google.maps) {
-      const geocoder = new window.google.maps.Geocoder()
-      geocoder.geocode({ address: addressString }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          const place = results[0]
-          const lat = place.geometry.location.lat()
-          const lng = place.geometry.location.lng()
-          const { city, state, country } = parseAddressComponents(place.address_components)
-
-          setFormData(prev => ({
-            ...prev,
-            latitude: lat.toFixed(6),
-            longitude: lng.toFixed(6),
-            city,
-            state,
-            country,
-            placeId: place.place_id || '',
-          }))
-          setMapCenter([lat, lng])
-          setGeofenceTestResult(null)
-          setUserCoords(null)
-          setModalError('')
-        } else {
-          console.warn('Forward geocoding failed with status:', status)
-        }
-      })
-    }
-  }
-
-  const handleMapClick = (e) => {
-    if (!e || !e.latLng) return
-    const lat = e.latLng.lat()
-    const lng = e.latLng.lng()
-    updateLocationFromCoords(lat, lng)
-  }
-
-  const handleUseCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.')
-      return
-    }
-    setSearching(true)
-    setModalError('')
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude
-        const lng = pos.coords.longitude
-
+  const handleForwardGeocode = (addressStr) => {
+    if (!addressStr.trim() || !window.google || !window.google.maps) return
+    const geocoder = new window.google.maps.Geocoder()
+    geocoder.geocode({ address: addressStr }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        const place = results[0]
+        const lat = place.geometry.location.lat()
+        const lng = place.geometry.location.lng()
+        const { city, state, country } = parseAddressComponents(place.address_components)
         setFormData(prev => ({
           ...prev,
           latitude: lat.toFixed(6),
           longitude: lng.toFixed(6),
+          address: place.formatted_address || addressStr,
+          city: city || prev.city,
+          state: state || prev.state,
+          country: country || prev.country,
+          placeId: place.place_id || prev.placeId
         }))
         setMapCenter([lat, lng])
-        setGeofenceTestResult(null)
-        setUserCoords(null)
+      }
+    })
+  }
 
-        // Reverse Geocode
-        if (window.google && window.google.maps) {
-          const geocoder = new window.google.maps.Geocoder()
-          geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-            if (status === 'OK' && results[0]) {
-              const place = results[0]
-              const { city, state, country } = parseAddressComponents(place.address_components)
-              setFormData(prev => ({
-                ...prev,
-                address: place.formatted_address,
-                city,
-                state,
-                country,
-                placeId: place.place_id || '',
-              }))
-              setSearchQuery(place.formatted_address)
-            } else {
-              console.warn('Reverse geocoding failed with status:', status)
-              setFormData(prev => ({
-                ...prev,
-                address: `Current Location Coordinates (${lat.toFixed(6)}, ${lng.toFixed(6)})`,
-                city: '',
-                state: '',
-                country: '',
-                placeId: '',
-              }))
-            }
-            setSearching(false)
-          })
-        } else {
-          setFormData(prev => ({
-            ...prev,
-            address: `Current Location Coordinates (${lat.toFixed(6)}, ${lng.toFixed(6)})`,
-            city: '',
-            state: '',
-            country: '',
-            placeId: '',
-          }))
-          setSearching(false)
-        }
+  const updateLocationFromCoords = (lat, lng) => {
+    const latStr = Number(lat).toFixed(6)
+    const lngStr = Number(lng).toFixed(6)
+    setFormData(prev => ({ ...prev, latitude: latStr, longitude: lngStr }))
+    setMapCenter([parseFloat(latStr), parseFloat(lngStr)])
+    handleReverseGeocode(lat, lng)
+  }
+
+  const handleMapClick = (e) => {
+    if (e.latLng) {
+      updateLocationFromCoords(e.latLng.lat(), e.latLng.lng())
+    }
+  }
+
+  const handlePlaceSelect = () => {
+    if (autocompleteRef.current) {
+      const place = autocompleteRef.current.getPlace()
+      if (place.geometry) {
+        const lat = place.geometry.location.lat().toFixed(6)
+        const lng = place.geometry.location.lng().toFixed(6)
+        const formattedAddress = place.formatted_address || ''
+        const { city, state, country } = parseAddressComponents(place.address_components)
+
+        setFormData(prev => ({
+          ...prev,
+          address: formattedAddress,
+          latitude: lat,
+          longitude: lng,
+          city: city || prev.city,
+          state: state || prev.state,
+          country: country || prev.country,
+          placeId: place.place_id || prev.placeId,
+          locationName: prev.locationName ? prev.locationName : (place.name || '')
+        }))
+        setMapCenter([parseFloat(lat), parseFloat(lng)])
+      }
+    }
+  }
+
+  const handleCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error('Geolocation is not supported by your browser')
+      return
+    }
+    setSearching(true)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        updateLocationFromCoords(pos.coords.latitude, pos.coords.longitude)
+        setSearching(false)
+        toast.success('Location set to current GPS coordinates!')
       },
       (err) => {
-        console.error(err)
-        alert(`Failed to retrieve browser location: ${err.message}`)
         setSearching(false)
+        toast.error('Failed to get current location: ' + err.message)
       },
-      { enableHighAccuracy: true, timeout: 8000 }
+      { enableHighAccuracy: true }
     )
   }
 
   const handleTestGeofence = () => {
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.')
+      toast.error('Geolocation is not supported by your browser')
       return
     }
     setTestingGeofence(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const uLat = pos.coords.latitude
-        const uLng = pos.coords.longitude
-        setUserCoords({ lat: uLat, lng: uLng })
+        const userLat = pos.coords.latitude
+        const userLng = pos.coords.longitude
+        setUserCoords({ lat: userLat, lng: userLng })
 
         const officeLat = parseFloat(formData.latitude)
         const officeLng = parseFloat(formData.longitude)
+        const radius = parseFloat(formData.radiusMeters)
 
-        const distance = calculateHaversineDistance(uLat, uLng, officeLat, officeLng)
-        const inside = distance <= formData.radiusMeters
+        const dist = calculateHaversineDistance(userLat, userLng, officeLat, officeLng)
+        const isInside = dist <= radius
 
         setGeofenceTestResult({
-          distance: distance.toFixed(1),
-          inside,
-          accuracy: pos.coords.accuracy ? pos.coords.accuracy.toFixed(1) : null,
+          distance: dist.toFixed(1),
+          isInside,
+          accuracy: pos.coords.accuracy ? pos.coords.accuracy.toFixed(1) : null
         })
         setTestingGeofence(false)
       },
       (err) => {
-        console.error(err)
-        toast.error(`Failed to retrieve your browser location: ${err.message}`)
         setTestingGeofence(false)
+        toast.error('Failed to get location for geofence test: ' + err.message)
       },
-      { enableHighAccuracy: true, timeout: 8000 }
+      { enableHighAccuracy: true }
     )
   }
 
-  const handleSave = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    try {
-      const payload = {
-        locationName: formData.locationName,
-        address: formData.address,
-        latitude: parseFloat(formData.latitude),
-        longitude: parseFloat(formData.longitude),
-        radiusMeters: formData.radiusMeters,
-        isActive: formData.isActive,
-        placeId: formData.placeId,
-      }
+    setModalError('')
 
+    if (!formData.locationName.trim()) {
+      setModalError('Location Name is required')
+      return
+    }
+    if (!formData.latitude || !formData.longitude) {
+      setModalError('Latitude and Longitude are required')
+      return
+    }
+
+    const payload = {
+      locationName: formData.locationName,
+      location_name: formData.locationName,
+      address: formData.address,
+      latitude: parseFloat(formData.latitude),
+      longitude: parseFloat(formData.longitude),
+      radiusMeters: parseInt(formData.radiusMeters, 10),
+      radius_meters: parseInt(formData.radiusMeters, 10),
+      isActive: formData.isActive,
+      is_active: formData.isActive,
+      city: formData.city,
+      state: formData.state,
+      country: formData.country,
+      placeId: formData.placeId,
+      google_place_id: formData.placeId
+    }
+
+    try {
       if (editingLocation) {
         await updateOfficeLocation(editingLocation.office_location_id, payload)
-        toast.success('Office location updated successfully')
+        toast.success('Office location updated successfully!')
       } else {
         await createOfficeLocation(payload)
-        toast.success('Office location created successfully')
+        toast.success('Office location created successfully!')
       }
-      handleCloseModal()
+      setIsModalOpen(false)
     } catch (err) {
-      console.error(err)
-      toast.error(err.response?.data?.message || err.message || 'Failed to save office location.')
+      setModalError(err.response?.data?.message || err.message || 'Failed to save location')
     }
   }
 
   const handleDelete = async (loc) => {
-    if (loc.policies_count > 0) {
-      toast.error(`Cannot delete this location because it is currently linked to ${loc.policies_count} active policy/policies.`)
-      return
-    }
-    if (!window.confirm(`Are you sure you want to delete "${loc.location_name}"?`)) return
-    try {
-      await deleteOfficeLocation(loc.office_location_id)
-      toast.success('Office location deleted successfully')
-    } catch (err) {
-      console.error(err)
-      toast.error(err.response?.data?.message || err.message || 'Failed to delete office location.')
+    if (window.confirm(`Are you sure you want to delete "${loc.location_name}"?`)) {
+      try {
+        await deleteOfficeLocation(loc.office_location_id)
+        toast.success('Office location deleted')
+      } catch (err) {
+        toast.error(err.response?.data?.message || err.message || 'Failed to delete office location')
+      }
     }
   }
 
+  const handleToggleStatus = async (loc) => {
+    try {
+      await toggleOfficeLocationStatus(loc.office_location_id, !loc.is_active)
+      toast.success(`Office location marked as ${!loc.is_active ? 'Active' : 'Inactive'}`)
+    } catch (err) {
+      toast.error('Failed to update status')
+    }
+  }
+
+  const filteredLocations = officeLocations.filter(loc =>
+    loc.location_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (loc.address && loc.address.toLowerCase().includes(searchQuery.toLowerCase()))
+  )
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f4ff', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="office-locations" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
-          {/* Page Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+          
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiMapPin size={18} color="#fff" />
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: 10,
+                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <FiMapPin size={20} color="#C2071A" strokeWidth={2.5} />
                 </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Office Locations</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500, paddingLeft: 46 }}>
-                Configure company offices and geographical geofence boundaries for checking in.
+                Office Locations & Geofencing
+              </h1>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
+                Configure office boundaries, GPS coordinates, and geofence verification zones
               </p>
             </div>
 
             <button
               onClick={handleOpenCreate}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '7px',
+                padding: '9px 18px', borderRadius: '10px', border: 'none',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                color: '#ffffff', fontSize: '13px', fontWeight: 700,
+                cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                fontFamily: "'Inter', sans-serif"
+              }}
             >
-              <FiPlus size={15} /> Add Location
+              <FiPlus size={16} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+              Add Office Location
             </button>
           </div>
 
-          {/* Startup Key Validation Alert */}
-          {isApiKeyMissing && (
-            <div style={{ padding: '16px 20px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '16px', color: '#b45309', fontSize: '13px', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: 6, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: '700' }}>
-                <FiInfo size={18} color="#d97706" />
-                <span>Google Maps API Key Missing</span>
+          {/* Locations Container Card */}
+          <div style={{
+            background: '#ffffff', border: 'none', borderRadius: '16px',
+            padding: '24px', boxShadow: cardShadow
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '16px', flexWrap: 'wrap' }}>
+              <div style={{ position: 'relative', width: '320px' }}>
+                <FiSearch size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input
+                  type="text"
+                  placeholder="Search location name or address..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%', paddingLeft: '34px', padding: '8px 12px 8px 34px',
+                    borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc',
+                    fontSize: '13px', boxSizing: 'border-box'
+                  }}
+                />
               </div>
-              <span style={{ color: '#78350f', fontSize: '12px' }}>
-                Please define the <code>VITE_GOOGLE_MAPS_API_KEY</code> variable in your frontend <code>.env</code> file. Map loading, reverse geocoding, and address suggestions are disabled until configured.
+
+              <span style={{
+                background: '#FEECEE', color: '#C2071A', padding: '5px 14px',
+                borderRadius: 20, fontWeight: 700, fontSize: 11.5, letterSpacing: '0.02em',
+              }}>
+                {filteredLocations.length} Office Zones
               </span>
             </div>
-          )}
 
-          {/* Error notifications */}
-          {error && (
-            <div style={{ padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '12px', color: '#b91c1c', fontSize: '13px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FiInfo size={16} />
-              <span>{error}</span>
+            {/* Log Table */}
+            <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <thead>
+                  <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Location Name</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Address</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>GPS Coordinates</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Radius</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Status</th>
+                    <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadingLocations ? (
+                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading office locations...</td></tr>
+                  ) : filteredLocations.length === 0 ? (
+                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No office locations found.</td></tr>
+                  ) : filteredLocations.map((loc, i) => (
+                    <tr key={loc.office_location_id} style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}>
+                      <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>
+                        <Link to={`/client-admin/attendance/office-locations/${loc.office_location_id}`} style={{ color: '#0f172a', textDecoration: 'none' }}>
+                          {loc.location_name}
+                        </Link>
+                      </td>
+                      <td style={{ padding: '14px 16px', color: '#475569', maxWidth: '280px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {loc.address || '—'}
+                      </td>
+                      <td style={{ padding: '14px 16px', fontFamily: 'monospace', fontSize: '12px', color: '#334155' }}>
+                        {parseFloat(loc.latitude).toFixed(4)}, {parseFloat(loc.longitude).toFixed(4)}
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700 }}>
+                          {loc.radius_meters}m
+                        </span>
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <span
+                          onClick={() => handleToggleStatus(loc)}
+                          style={{
+                            padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, cursor: 'pointer',
+                            background: loc.is_active ? '#e8fbf0' : '#feecee',
+                            color: loc.is_active ? '#0fa958' : '#dc2626'
+                          }}
+                        >
+                          {loc.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td style={{ padding: '14px 16px', textAlign: 'right' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                          <button onClick={() => handleOpenEdit(loc)} style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#fef3c7', color: '#d97706', cursor: 'pointer' }}>
+                            <FiEdit2 size={14} />
+                          </button>
+                          <button onClick={() => handleDelete(loc)} style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#feecee', color: '#dc2626', cursor: 'pointer' }}>
+                            <FiTrash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
 
-          {/* Locations Grid */}
-          {loadingLocations && officeLocations.length === 0 ? (
-            <div style={{ padding: '60px', textAlign: 'center' }}>
-              <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-              <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading locations…</div>
-            </div>
-          ) : officeLocations.length === 0 ? (
-            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '40px', textAlign: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-              <div style={{ width: 54, height: 54, borderRadius: '14px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                <FiMapPin size={24} color="#94a3b8" />
-              </div>
-              <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: '0 0 6px' }}>No Office Locations Configured</h3>
-              <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0 }}>Click "Add Location" to register an office location and establish your geofences.</p>
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: '20px', marginBottom: '24px' }}>
-              {officeLocations.map((loc) => (
-                <div
-                  key={loc.office_location_id}
-                  style={{
-                    background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden'
-                  }}
-                >
-                  <div>
-                    {/* Header */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginBottom: 8 }}>
-                      <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#0f172a', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '180px' }} title={loc.location_name}>
-                        {loc.location_name}
-                      </h3>
-                      <button
-                        onClick={() => toggleOfficeLocationStatus(loc.office_location_id, !loc.is_active)}
-                        style={{
-                          padding: '3px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: '700', cursor: 'pointer', border: '1px solid', textTransform: 'uppercase',
-                          background: loc.is_active ? '#f0fdf4' : '#fef2f2',
-                          color: loc.is_active ? '#15803d' : '#b91c1c',
-                          borderColor: loc.is_active ? '#bbf7d0' : '#fecaca'
-                        }}
-                      >
-                        {loc.is_active ? 'Active' : 'Inactive'}
-                      </button>
-                    </div>
+          </div>
 
-                    {/* Address */}
-                    <p style={{ margin: '0 0 16px', fontSize: '12px', color: '#64748b', minHeight: '34px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.4 }}>
-                      {loc.address || 'No address specified.'}
-                    </p>
-
-                    {/* Specifications */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', background: '#f8fafc', padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '16px', fontSize: '11px' }}>
-                      <div>
-                        <span style={{ color: '#94a3b8', display: 'block', fontWeight: '500' }}>RADIUS</span>
-                        <strong style={{ color: '#334155' }}>{loc.radius_meters}m</strong>
-                      </div>
-                      <div>
-                        <span style={{ color: '#94a3b8', display: 'block', fontWeight: '500' }}>POLICIES</span>
-                        <strong style={{ color: '#334155' }}>{loc.policies_count}</strong>
-                      </div>
-                      <div>
-                        <span style={{ color: '#94a3b8', display: 'block', fontWeight: '500' }}>LATITUDE</span>
-                        <code style={{ color: '#334155', fontFamily: 'monospace' }}>{Number(loc.latitude).toFixed(4)}</code>
-                      </div>
-                      <div>
-                        <span style={{ color: '#94a3b8', display: 'block', fontWeight: '500' }}>LONGITUDE</span>
-                        <code style={{ color: '#334155', fontFamily: 'monospace' }}>{Number(loc.longitude).toFixed(4)}</code>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div style={{ display: 'flex', gap: 8, borderTop: '1px solid #f1f5f9', paddingTop: '14px', marginTop: 'auto' }}>
-                    <Link
-                      to={`/client-admin/attendance/office-locations/${loc.office_location_id}`}
-                      style={{ flex: 1, textAlign: 'center', padding: '7px 0', background: '#f1f5f9', color: '#475569', fontWeight: '700', borderRadius: '8px', fontSize: '12px', textDecoration: 'none', border: '1px solid #e2e8f0', display: 'inline-block' }}
-                    >
-                      View Details
-                    </Link>
-                    <button
-                      onClick={() => handleOpenEdit(loc)}
-                      style={{ padding: '7px 10px', background: '#eef2ff', color: '#4f46e5', border: '1px solid #c7d2fe', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      title="Edit"
-                    >
-                      <FiEdit2 size={13} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(loc)}
-                      style={{ padding: '7px 10px', background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      title="Delete"
-                    >
-                      <FiTrash2 size={13} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        </main>
+        </div>
       </div>
 
-      {/* Modal - Create/Edit Location (Matches the Keka "Choose location" Image) */}
+      {/* Create / Edit Modal with Interactive Google Map */}
       {isModalOpen && (
-        <div style={modalOverlayStyle} onClick={handleCloseModal}>
-          <div style={modalContainerStyle} onClick={e => e.stopPropagation()}>
-            {/* Modal Header */}
-            <div style={modalHeaderStyle}>
-              <span style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>Choose location</span>
-              <button onClick={handleCloseModal} style={closeButtonStyle}>
-                <FiX size={16} />
-              </button>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px 28px', width: '740px', maxWidth: '95vw', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
+                {editingLocation ? 'Edit Office Location' : 'Add New Office Location'}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><FiX size={18} /></button>
             </div>
 
-            {/* Modal Body / Form */}
-            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: 0 }}>
-              <div style={{ padding: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-                
-                {/* Row 1: Name and Active Checkbox */}
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                  <div style={{ flex: 1 }}>
-                    <label style={labelStyle}>Location Name *</label>
-                    <input
-                      id="office-location-name-input"
-                      type="text"
-                      required
-                      value={formData.locationName}
-                      onChange={(e) => setFormData({ ...formData, locationName: e.target.value })}
-                      placeholder="e.g. Chennai Head Office"
-                      style={inputStyle}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '20px' }}>
-                    <input
-                      type="checkbox"
-                      id="isActive"
-                      checked={formData.isActive}
-                      onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                      style={{ cursor: 'pointer', width: 16, height: 16 }}
-                    />
-                    <label htmlFor="isActive" style={{ fontSize: '13px', fontWeight: '600', color: '#374151', cursor: 'pointer', userSelect: 'none' }}>
-                      Active
-                    </label>
-                  </div>
-                </div>
+            {modalError && (
+              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#feecee', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
+                {modalError}
+              </div>
+            )}
 
-                {/* Row 2: Search Location & Radius (Exactly matches Keka layout) */}
-                <div style={{ display: 'grid', gridTemplateColumns: '3fr 1.2fr', gap: '16px' }}>
-                  <div>
-                    <label style={labelStyle}>Search Location</label>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <div style={{ position: 'relative', flex: 1 }}>
-                        {isApiKeyMissing ? (
-                          <input
-                            id="office-location-search-input-disabled"
-                            type="text"
-                            placeholder="Map search disabled (API key missing)"
-                            disabled
-                            style={{ ...inputStyle, paddingLeft: '32px' }}
-                          />
-                        ) : !isLoaded ? (
-                          <input
-                            id="office-location-search-input-loading"
-                            type="text"
-                            placeholder="Loading search Autocomplete..."
-                            disabled
-                            style={{ ...inputStyle, paddingLeft: '32px' }}
-                          />
-                        ) : (
-                          <Autocomplete
-                            onLoad={(ac) => (autocompleteRef.current = ac)}
-                            onPlaceChanged={handlePlaceChanged}
-                            options={{ types: ['geocode', 'establishment'] }}
-                          >
-                            <div style={{ position: 'relative' }}>
-                              <input
-                                id="office-location-search-input"
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    e.preventDefault()
-                                    handleForwardGeocode(searchQuery)
-                                  }
-                                }}
-                                placeholder="Search building, street, or area..."
-                                style={{ ...inputStyle, paddingLeft: '32px' }}
-                              />
-                            </div>
-                          </Autocomplete>
-                        )}
-                        <FiSearch size={14} color="#9ca3af" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', zIndex: 10 }} />
-                      </div>
-                      <button
-                        id="office-location-use-current-btn"
-                        type="button"
-                        onClick={handleUseCurrentLocation}
-                        disabled={searching}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0 12px', background: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                      >
-                        📍 {searching ? 'Locating...' : 'Use Current Location'}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label style={labelStyle}>Radius (meters) *</label>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <select
-                        id="office-location-radius-select"
-                        value={isCustomRadius ? 'Custom' : formData.radiusMeters}
-                        onChange={(e) => {
-                          const val = e.target.value
-                          if (val === 'Custom') {
-                            setIsCustomRadius(true)
-                          } else {
-                            setIsCustomRadius(false)
-                            setFormData(prev => ({
-                              ...prev,
-                              radiusMeters: parseInt(val, 10) || 100
-                            }))
-                          }
-                          setGeofenceTestResult(null)
-                        }}
-                        style={selectStyle}
-                      >
-                        <option value="50">50m</option>
-                        <option value="100">100m</option>
-                        <option value="200">200m</option>
-                        <option value="500">500m</option>
-                        <option value="1000">1000m</option>
-                        <option value="Custom">Custom...</option>
-                      </select>
-
-                      {isCustomRadius && (
-                        <input
-                          id="office-location-custom-radius-input"
-                          type="number"
-                          required
-                          min="10"
-                          max="10000"
-                          value={formData.radiusMeters}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value) || ''
-                            setFormData(prev => ({
-                              ...prev,
-                              radiusMeters: val
-                            }))
-                            setGeofenceTestResult(null)
-                          }}
-                          placeholder="Radius"
-                          style={{ ...inputStyle, width: '90px' }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Row 3: Google Map with Pin & Translucent Pink Geofence Circle Overlay */}
-                <div style={{ display: 'flex', flexDirection: 'column', height: '340px', position: 'relative' }}>
-                  <div style={{ flex: 1, border: '1px solid #d1d5db', borderRadius: '6px', overflow: 'hidden', background: '#f9fafb' }}>
-                    {isApiKeyMissing ? (
-                      <div style={unavailableMapStyle}>
-                        <FiMapPin size={32} color="#9ca3af" style={{ marginBottom: 12 }} />
-                        <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#374151', margin: '0 0 6px' }}>Interactive Map Unavailable</h4>
-                        <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>Google Maps API Key is not configured. Coords must be entered manually.</p>
-                      </div>
-                    ) : loadError ? (
-                      <div style={unavailableMapStyle}>
-                        <FiInfo size={32} color="#ef4444" style={{ marginBottom: 12 }} />
-                        <h4 style={{ fontSize: '14px', fontWeight: '700', margin: '0 0 6px' }}>Error Loading Google Maps</h4>
-                        <p style={{ fontSize: '12px', color: '#b91c1c', margin: 0 }}>{loadError.message || 'Failed to load Google Maps SDK.'}</p>
-                      </div>
-                    ) : !isLoaded ? (
-                      <div style={unavailableMapStyle}>
-                        <div style={{ width: 32, height: 32, border: '3px solid #e5e7eb', borderTopColor: '#3b82f6', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                        <span style={{ marginTop: 12, color: '#6b7280', fontSize: '12px' }}>Loading Google Map...</span>
-                      </div>
-                    ) : (
-                      <GoogleMap
-                        mapContainerStyle={{ height: '100%', width: '100%' }}
-                        center={{ lat: mapCenter[0], lng: mapCenter[1] }}
-                        zoom={15}
-                        onClick={handleMapClick}
-                        options={{
-                          mapTypeControl: false,
-                          streetViewControl: false,
-                          fullscreenControl: false,
-                        }}
-                      >
-                        <Marker
-                          draggable={true}
-                          position={{ lat: parseFloat(formData.latitude) || 13.0827, lng: parseFloat(formData.longitude) || 80.2707 }}
-                          onDragEnd={(e) => {
-                            const lat = e.latLng.lat()
-                            const lng = e.latLng.lng()
-                            updateLocationFromCoords(lat, lng)
-                          }}
-                        />
-                        <Circle
-                          center={{ lat: parseFloat(formData.latitude) || 13.0827, lng: parseFloat(formData.longitude) || 80.2707 }}
-                          radius={parseFloat(formData.radiusMeters) || 100}
-                          options={{
-                            fillColor: '#ec4899', // Premium Keka translucent pink geofence boundary color
-                            fillOpacity: 0.2,
-                            strokeColor: '#db2777',
-                            strokeOpacity: 0.6,
-                            strokeWeight: 1.5,
-                          }}
-                        />
-                        {userCoords && (
-                          <Marker
-                            position={{ lat: userCoords.lat, lng: userCoords.lng }}
-                            icon="https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                          />
-                        )}
-                      </GoogleMap>
-                    )}
-                  </div>
-                </div>
-
-                {/* Row 4: Editable Latitude and Longitude Coords */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <div>
-                    <label style={labelStyle}>Latitude *</label>
-                    <input
-                      id="office-location-latitude-input"
-                      type="number"
-                      step="any"
-                      required
-                      value={formData.latitude}
-                      onChange={(e) => {
-                        const val = e.target.value
-                        setFormData(prev => ({ ...prev, latitude: val }))
-                        const latNum = parseFloat(val)
-                        if (!isNaN(latNum)) {
-                          setMapCenter([latNum, parseFloat(formData.longitude) || 80.2707])
-                        }
-                      }}
-                      style={{ ...inputStyle, fontFamily: 'monospace' }}
-                      placeholder="e.g. 13.0827"
-                    />
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Longitude *</label>
-                    <input
-                      id="office-location-longitude-input"
-                      type="number"
-                      step="any"
-                      required
-                      value={formData.longitude}
-                      onChange={(e) => {
-                        const val = e.target.value
-                        setFormData(prev => ({ ...prev, longitude: val }))
-                        const lngNum = parseFloat(val)
-                        if (!isNaN(lngNum)) {
-                          setMapCenter([parseFloat(formData.latitude) || 13.0827, lngNum])
-                        }
-                      }}
-                      style={{ ...inputStyle, fontFamily: 'monospace' }}
-                      placeholder="e.g. 80.2707"
-                    />
-                  </div>
-                </div>
-
-                {/* Row 5: Full Address description */}
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Location Name & Status */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', alignItems: 'end' }}>
                 <div>
-                  <label style={labelStyle}>Full Office Address</label>
-                  <textarea
-                    id="office-location-address-textarea"
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    onBlur={(e) => handleForwardGeocode(e.target.value)}
-                    placeholder="Street, City, State..."
-                    rows="2"
-                    style={{ ...inputStyle, resize: 'none' }}
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Location Name *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Headquarters - Tech Park"
+                    value={formData.locationName}
+                    onChange={e => setFormData(prev => ({ ...prev, locationName: e.target.value }))}
+                    required
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }}
                   />
                 </div>
-
-                {/* Row 6: Geofence Tester controls */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
-                  <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: '500' }}>
-                    ℹ️ Drag pin marker directly to adjust coords on map.
-                  </span>
-                  <button
-                    id="office-location-test-geofence-btn"
-                    type="button"
-                    onClick={handleTestGeofence}
-                    disabled={testingGeofence}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#fff', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer' }}
-                  >
-                    <FiCompass size={13} />
-                    {testingGeofence ? 'Tracking...' : 'Test Geofence'}
-                  </button>
+                <div style={{ paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input
+                    type="checkbox"
+                    id="isActiveModal"
+                    checked={formData.isActive}
+                    onChange={e => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
+                    style={{ cursor: 'pointer', width: 16, height: 16 }}
+                  />
+                  <label htmlFor="isActiveModal" style={{ fontSize: '13px', fontWeight: 700, color: '#334155', cursor: 'pointer' }}>
+                    Active
+                  </label>
                 </div>
+              </div>
 
-                {geofenceTestResult && (
-                  <div style={{
-                    padding: '12px', border: '1px solid', borderRadius: '6px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: 2,
-                    background: geofenceTestResult.inside ? '#ecfdf5' : '#fef2f2',
-                    borderColor: geofenceTestResult.inside ? '#a7f3d0' : '#fecaca',
-                    color: geofenceTestResult.inside ? '#047857' : '#b91c1c'
-                  }}>
-                    <div style={{ fontWeight: '700' }}>
-                      {geofenceTestResult.inside ? '✓ Inside Geofence Boundary' : '✗ Outside Geofence Boundary'}
+              {/* Address Search via Google Autocomplete */}
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Search Address / Building</label>
+                {isLoaded && !isApiKeyMissing ? (
+                  <Autocomplete onLoad={ref => (autocompleteRef.current = ref)} onPlaceChanged={handlePlaceSelect}>
+                    <div style={{ position: 'relative' }}>
+                      <FiSearch size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', zIndex: 5 }} />
+                      <input
+                        type="text"
+                        placeholder="Search Google Maps location, area or building..."
+                        value={formData.address}
+                        onChange={e => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                        onBlur={e => handleForwardGeocode(e.target.value)}
+                        style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }}
+                      />
                     </div>
-                    <span style={{ color: '#4b5563' }}>
-                      Distance to Office: <strong>{geofenceTestResult.distance} meters</strong>
-                    </span>
+                  </Autocomplete>
+                ) : (
+                  <div style={{ position: 'relative' }}>
+                    <FiSearch size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                    <input
+                      type="text"
+                      placeholder="Enter office address..."
+                      value={formData.address}
+                      onChange={e => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                      onBlur={e => handleForwardGeocode(e.target.value)}
+                      style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }}
+                    />
                   </div>
                 )}
               </div>
 
-              {/* Modal Footer (Replicates Choose location layout Cancel / Select) */}
-              <div style={modalFooterStyle}>
+              {/* Interactive Google Map Canvas */}
+              <div style={{ height: '300px', width: '100%', borderRadius: '12px', overflow: 'hidden', background: '#f8fafc', position: 'relative', border: '1px solid #e2e8f0' }}>
+                {isApiKeyMissing ? (
+                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center', color: '#64748b' }}>
+                    <FiMapPin size={28} color="#94a3b8" style={{ marginBottom: 8 }} />
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155' }}>Interactive Map Unavailable</div>
+                    <div style={{ fontSize: '11.5px', color: '#94a3b8', marginTop: 4 }}>Google Maps API Key is not configured. Coordinates can be set manually.</div>
+                  </div>
+                ) : loadError ? (
+                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center', color: '#dc2626' }}>
+                    <FiInfo size={28} style={{ marginBottom: 8 }} />
+                    <div style={{ fontSize: '13px', fontWeight: 700 }}>Error Loading Google Maps</div>
+                    <div style={{ fontSize: '11.5px', marginTop: 4 }}>{loadError.message || 'Failed to load Google Maps SDK.'}</div>
+                  </div>
+                ) : !isLoaded ? (
+                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', color: '#64748b' }}>
+                    <div style={{ width: 28, height: 28, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                    <span style={{ marginTop: 10, fontSize: '12px', fontWeight: 600 }}>Loading Google Map…</span>
+                  </div>
+                ) : (
+                  <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={{ lat: mapCenter[0], lng: mapCenter[1] }}
+                    zoom={15}
+                    onClick={handleMapClick}
+                    options={{
+                      mapTypeControl: false,
+                      streetViewControl: false,
+                      fullscreenControl: false,
+                    }}
+                  >
+                    <Marker
+                      draggable={true}
+                      position={{ lat: parseFloat(formData.latitude) || 13.0827, lng: parseFloat(formData.longitude) || 80.2707 }}
+                      onDragEnd={(e) => {
+                        if (e.latLng) {
+                          updateLocationFromCoords(e.latLng.lat(), e.latLng.lng())
+                        }
+                      }}
+                      title="Drag pin to set exact office location"
+                    />
+                    <Circle
+                      center={{ lat: parseFloat(formData.latitude) || 13.0827, lng: parseFloat(formData.longitude) || 80.2707 }}
+                      radius={parseFloat(formData.radiusMeters) || 100}
+                      options={{
+                        fillColor: '#C2071A',
+                        fillOpacity: 0.18,
+                        strokeColor: '#C2071A',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                      }}
+                    />
+                    {userCoords && (
+                      <Marker
+                        position={{ lat: userCoords.lat, lng: userCoords.lng }}
+                        title="Your Current GPS Position"
+                      />
+                    )}
+                  </GoogleMap>
+                )}
+              </div>
+
+              {/* Lat, Lng and Current Location Button */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '12px', alignItems: 'end' }}>
+                <div>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Latitude *</label>
+                  <input
+                    type="text"
+                    value={formData.latitude}
+                    onChange={e => {
+                      const val = e.target.value
+                      setFormData(prev => ({ ...prev, latitude: val }))
+                      const latNum = parseFloat(val)
+                      if (!isNaN(latNum)) setMapCenter([latNum, parseFloat(formData.longitude) || 80.2707])
+                    }}
+                    required
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box', marginTop: '4px', fontFamily: 'monospace' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Longitude *</label>
+                  <input
+                    type="text"
+                    value={formData.longitude}
+                    onChange={e => {
+                      const val = e.target.value
+                      setFormData(prev => ({ ...prev, longitude: val }))
+                      const lngNum = parseFloat(val)
+                      if (!isNaN(lngNum)) setMapCenter([parseFloat(formData.latitude) || 13.0827, lngNum])
+                    }}
+                    required
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box', marginTop: '4px', fontFamily: 'monospace' }}
+                  />
+                </div>
                 <button
-                  id="office-location-cancel-btn"
                   type="button"
-                  onClick={handleCloseModal}
-                  style={modalCancelButtonStyle}
+                  onClick={handleCurrentLocation}
+                  disabled={searching}
+                  style={{
+                    padding: '9px 14px', borderRadius: '8px', border: 'none',
+                    background: '#f1f5f9', color: '#475569', fontWeight: 700, fontSize: '12px', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: '4px'
+                  }}
                 >
+                  <FiCompass size={14} /> My Location
+                </button>
+              </div>
+
+              {/* Radius Select */}
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Geofence Radius (Meters)</label>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {[50, 100, 200, 500, 1000].map(r => (
+                    <button
+                      type="button"
+                      key={r}
+                      onClick={() => {
+                        setIsCustomRadius(false)
+                        setFormData(prev => ({ ...prev, radiusMeters: r }))
+                      }}
+                      style={{
+                        padding: '7px 14px', borderRadius: '8px', border: 'none',
+                        background: (!isCustomRadius && Number(formData.radiusMeters) === r) ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#f1f5f9',
+                        color: (!isCustomRadius && Number(formData.radiusMeters) === r) ? '#ffffff' : '#475569',
+                        fontWeight: 700, fontSize: '12px', cursor: 'pointer'
+                      }}
+                    >
+                      {r}m
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setIsCustomRadius(true)}
+                    style={{
+                      padding: '7px 14px', borderRadius: '8px', border: 'none',
+                      background: isCustomRadius ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#f1f5f9',
+                      color: isCustomRadius ? '#ffffff' : '#475569',
+                      fontWeight: 700, fontSize: '12px', cursor: 'pointer'
+                    }}
+                  >
+                    Custom...
+                  </button>
+
+                  {isCustomRadius && (
+                    <input
+                      type="number"
+                      min="10"
+                      max="10000"
+                      value={formData.radiusMeters}
+                      onChange={e => setFormData(prev => ({ ...prev, radiusMeters: parseInt(e.target.value, 10) || 100 }))}
+                      placeholder="Radius in meters"
+                      style={{ width: '120px', padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '12px' }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Geofence Test Section */}
+              <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>Test Geofence Accuracy</span>
+                  <button
+                    type="button"
+                    onClick={handleTestGeofence}
+                    disabled={testingGeofence}
+                    style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontSize: '11.5px', fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    {testingGeofence ? 'Testing...' : 'Test My Current Location'}
+                  </button>
+                </div>
+                {geofenceTestResult && (
+                  <div style={{ marginTop: '10px', fontSize: '12px', color: geofenceTestResult.isInside ? '#0fa958' : '#dc2626', fontWeight: 700 }}>
+                    Result: {geofenceTestResult.isInside ? 'INSIDE GEOFENCE' : 'OUTSIDE GEOFENCE'} ({geofenceTestResult.distance}m from office center)
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '8px' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 600, cursor: 'pointer' }}>
                   Cancel
                 </button>
-                <button
-                  id="office-location-save-btn"
-                  type="submit"
-                  style={modalSelectButtonStyle}
-                >
-                  Select
+                <button type="submit" style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                  {editingLocation ? 'Update Location' : 'Create Location'}
                 </button>
               </div>
             </form>
@@ -918,132 +775,4 @@ export default function OfficeLocations() {
       )}
     </div>
   )
-}
-
-const labelStyle = {
-  display: 'block',
-  fontSize: '11px',
-  fontWeight: '700',
-  color: '#64748b',
-  marginBottom: '6px',
-  textTransform: 'uppercase',
-  letterSpacing: '0.06em'
-}
-
-const inputStyle = {
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #cbd5e1',
-  borderRadius: '6px',
-  fontSize: '13px',
-  color: '#0f172a',
-  outline: 'none',
-  boxSizing: 'border-box',
-  fontFamily: 'inherit',
-  background: '#fff',
-  transition: 'border-color 0.2s',
-}
-
-const selectStyle = {
-  padding: '8px 12px',
-  border: '1px solid #cbd5e1',
-  borderRadius: '6px',
-  fontSize: '13px',
-  color: '#0f172a',
-  outline: 'none',
-  boxSizing: 'border-box',
-  fontFamily: 'inherit',
-  background: '#fff',
-  cursor: 'pointer',
-  minWidth: '90px'
-}
-
-const modalOverlayStyle = {
-  position: 'fixed',
-  inset: 0,
-  background: 'rgba(15,23,42,0.4)',
-  backdropFilter: 'blur(4px)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1000,
-  padding: 16
-}
-
-const modalContainerStyle = {
-  background: '#fff',
-  borderRadius: '12px',
-  width: '760px',
-  maxWidth: '100%',
-  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-  maxHeight: '90vh',
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'hidden'
-}
-
-const modalHeaderStyle = {
-  padding: '16px 24px',
-  borderBottom: '1px solid #e5e7eb',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center'
-}
-
-const closeButtonStyle = {
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-  color: '#9ca3af',
-  padding: 4,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  transition: 'color 0.2s',
-}
-
-const modalFooterStyle = {
-  display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-  gap: '12px',
-  padding: '16px 24px',
-  borderTop: '1px solid #e5e7eb',
-  background: '#fff'
-}
-
-const modalCancelButtonStyle = {
-  padding: '8px 16px',
-  background: 'none',
-  border: 'none',
-  fontSize: '13px',
-  fontWeight: '600',
-  color: '#6b7280',
-  cursor: 'pointer',
-  transition: 'color 0.2s',
-}
-
-const modalSelectButtonStyle = {
-  padding: '8px 24px',
-  background: '#2563eb', // Matches blue color in screenshot
-  border: 'none',
-  borderRadius: '6px',
-  fontSize: '13px',
-  fontWeight: '600',
-  color: '#fff',
-  cursor: 'pointer',
-  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-  transition: 'background 0.2s',
-}
-
-const unavailableMapStyle = {
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '24px',
-  textAlign: 'center',
-  background: '#f9fafb',
-  color: '#6b7280'
 }

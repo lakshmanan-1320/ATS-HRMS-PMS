@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { FiEdit2, FiInfo, FiX, FiCheck } from 'react-icons/fi'
+import { FiEdit2, FiInfo, FiX, FiCheck, FiAlertCircle } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -108,14 +108,14 @@ export default function LeavePlanConfiguration({ planId }) {
     <div>
       {loading ? (
         <div style={{ padding: '40px', textAlign: 'center' }}>
-          <div style={{ width: 30, height: 30, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ width: 30, height: 30, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
           <div style={{ color: '#64748b', fontSize: '13px' }}>Loading configurations…</div>
         </div>
       ) : (
         <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden' }}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 8, background: '#fafbff' }}>
-            <FiInfo size={14} color="#6366f1" />
-            <span style={{ fontSize: '12px', color: '#4f46e5', fontWeight: '700' }}>
+            <FiInfo size={14} color="#C2071A" />
+            <span style={{ fontSize: '12px', color: '#941018', fontWeight: '700' }}>
               Assign quota, carry forward rules, and cashout criteria for each active leave policy in this plan.
             </span>
           </div>
@@ -182,7 +182,7 @@ export default function LeavePlanConfiguration({ planId }) {
                       <td style={{ padding: '14px 18px' }}>
                         <button
                           onClick={() => openConfigModal(type)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f8fafc', color: '#6366f1', border: '1px solid #c7d2fe', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f8fafc', color: '#C2071A', border: '1px solid #f7a6af', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
                         >
                           <FiEdit2 size={11} /> {conf ? 'Configure' : 'Setup'}
                         </button>
@@ -264,14 +264,17 @@ export default function LeavePlanConfiguration({ planId }) {
               </div>
 
               {error && (
-                <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
-                  ⚠️ {error}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #b91c1c 0%, #b91c1c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <FiAlertCircle size={11} color="#ffffff" />
+                  </div>
+                  {error}
                 </div>
               )}
 
               <div style={{ display: 'flex', gap: 10 }}>
                 <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(99,102,241,0.35)' }}>
+                <button type="submit" style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}>
                   Save Configuration
                 </button>
               </div>

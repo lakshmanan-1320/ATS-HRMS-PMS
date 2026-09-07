@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
+import {
+  FiBriefcase, FiMapPin, FiFileText, FiSettings, FiCheckCircle,
+  FiX, FiSave, FiUploadCloud
+} from 'react-icons/fi'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
 
 const INDUSTRIES = [
   'Information Technology', 'Banking & Finance', 'Healthcare', 'Manufacturing',
@@ -28,7 +33,7 @@ const INDIAN_STATES = [
 ]
 
 const s = {
-  page: { display: 'flex', minHeight: '100vh', background: '#f8fafc' },
+  page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' },
   main: { flex: 1, padding: '40px', overflowY: 'auto', maxWidth: 'calc(100vw - 240px)' },
   header: { marginBottom: '32px' },
   h1: { fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '4px' },
@@ -36,10 +41,10 @@ const s = {
 
   section: {
     background: '#ffffff',
-    border: '1px solid #e8eaf0',
-    borderRadius: '20px', padding: '28px 32px',
+    border: 'none',
+    borderRadius: '16px', padding: '28px 32px',
     marginBottom: '20px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
   },
   sectionHead: {
     display: 'flex', alignItems: 'center', gap: '12px',
@@ -48,9 +53,9 @@ const s = {
   },
   sectionIcon: {
     width: '38px', height: '38px', borderRadius: '10px',
-    background: 'rgba(99,102,241,0.08)',
-    border: '1px solid rgba(99,102,241,0.15)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '17px',
+    background: 'rgba(194, 7, 26, 0.08)',
+    border: '1px solid rgba(194, 7, 26, 0.15)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   sectionTitle: { fontSize: '15px', fontWeight: '700', color: '#1e293b' },
   sectionDesc: { fontSize: '12px', color: '#94a3b8', marginTop: '2px' },
@@ -117,12 +122,13 @@ const s = {
   },
   saveBtn: {
     padding: '12px 32px',
-    background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
     border: 'none', borderRadius: '10px',
-    fontSize: '14px', fontWeight: '700', color: '#fff',
+    fontSize: '14px', fontWeight: '700', color: '#ffffff',
     cursor: 'pointer', letterSpacing: '0.02em',
-    boxShadow: '0 4px 15px rgba(99,102,241,0.35)',
+    boxShadow: '0 4px 15px rgba(194, 7, 26, 0.35)',
     transition: 'all 0.2s',
+    display: 'flex', alignItems: 'center', gap: '8px',
   },
   lastSaved: { fontSize: '12px', color: '#94a3b8' },
 }
@@ -239,7 +245,7 @@ export default function CompanyDetails() {
       value: form[key],
       onChange: e => set(key, e.target.value),
       style: s.input,
-      onFocus: e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' },
+      onFocus: e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' },
       onBlur: e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' },
       ...extra,
     }
@@ -249,7 +255,12 @@ export default function CompanyDetails() {
     <div style={{ ...s.page, alignItems: 'center', justifyContent: 'center' }}>
       <Sidebar active="company" />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#94a3b8', fontSize: '14px' }}>Loading company details...</div>
+        <div style={{
+          width: '32px', height: '32px', borderRadius: '50%',
+          border: '3px solid rgba(194, 7, 26, 0.2)', borderTopColor: '#C2071A',
+          animation: 'spin 0.7s linear infinite', margin: '0 auto 12px',
+        }} />
+        <div style={{ color: '#94a3b8', fontSize: '14px', marginLeft: '12px' }}>Loading company details...</div>
       </div>
     </div>
   )
@@ -257,10 +268,12 @@ export default function CompanyDetails() {
   return (
     <div style={s.page}>
       <Sidebar active="company" />
-      <main style={s.main}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Company Details" />
+        <main style={s.main}>
         {toast && (
           <div style={s.toast(toast.type)}>
-            <span>{toast.type === 'success' ? '✓' : '✕'}</span>
+            {toast.type === 'success' ? <FiCheckCircle size={16} color="#16a34a" /> : <FiX size={16} color="#dc2626" />}
             {toast.msg}
           </div>
         )}
@@ -273,7 +286,9 @@ export default function CompanyDetails() {
         {/* ── Section 1: Identity ─────────────────────────────── */}
         <div style={s.section}>
           <div style={s.sectionHead}>
-            <div style={s.sectionIcon}>🏢</div>
+            <div style={s.sectionIcon}>
+              <FiBriefcase size={18} color="#C2071A" />
+            </div>
             <div>
               <div style={s.sectionTitle}>Company Identity</div>
               <div style={s.sectionDesc}>Basic profile visible across the platform</div>
@@ -291,7 +306,7 @@ export default function CompanyDetails() {
             }} onClick={() => fileRef.current?.click()}>
               {logoPreview
                 ? <img src={logoPreview} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '6px' }} />
-                : <span style={{ fontSize: '28px' }}>🏢</span>
+                : <FiBriefcase size={28} color="#94a3b8" />
               }
             </div>
             <div>
@@ -299,10 +314,13 @@ export default function CompanyDetails() {
               <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '12px' }}>PNG, JPG or SVG · Max 2 MB · Recommended 200×200px</div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button onClick={() => fileRef.current?.click()} style={{
-                  padding: '7px 14px', background: 'rgba(99,102,241,0.08)',
-                  border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px',
-                  color: '#6366f1', fontSize: '12px', fontWeight: '600', cursor: 'pointer',
-                }}>Upload Logo</button>
+                  padding: '7px 14px', background: 'rgba(194, 7, 26, 0.08)',
+                  border: '1px solid rgba(194, 7, 26, 0.2)', borderRadius: '8px',
+                  color: '#C2071A', fontSize: '12px', fontWeight: '600', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                }}>
+                  <FiUploadCloud size={14} color="#C2071A" /> Upload Logo
+                </button>
                 {logoPreview && (
                   <button onClick={removeLogo} style={{
                     padding: '7px 14px', background: 'rgba(239,68,68,0.06)',
@@ -323,7 +341,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Industry</label>
               <select value={form.industry} onChange={e => set('industry', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 <option value="">— Select Industry —</option>
                 {INDUSTRIES.map(i => <option key={i} value={i}>{i}</option>)}
@@ -332,7 +350,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Company Size</label>
               <select value={form.company_size} onChange={e => set('company_size', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 <option value="">— Select Size —</option>
                 {COMPANY_SIZES.map(sz => <option key={sz} value={sz}>{sz} employees</option>)}
@@ -348,7 +366,9 @@ export default function CompanyDetails() {
         {/* ── Section 2: Contact & Address ────────────────────── */}
         <div style={s.section}>
           <div style={s.sectionHead}>
-            <div style={{ ...s.sectionIcon, background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.15)' }}>📍</div>
+            <div style={{ ...s.sectionIcon, background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.15)' }}>
+              <FiMapPin size={18} color="#C2071A" />
+            </div>
             <div>
               <div style={s.sectionTitle}>Contact & Address</div>
               <div style={s.sectionDesc}>Official contact details and registered office address</div>
@@ -377,7 +397,7 @@ export default function CompanyDetails() {
               onChange={e => set('address', e.target.value)}
               placeholder="123, MG Road, Nungambakkam"
               style={s.textarea}
-              onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+              onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
               onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}
             />
           </div>
@@ -390,7 +410,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>State</label>
               <select value={form.state} onChange={e => set('state', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 <option value="">— State —</option>
                 {INDIAN_STATES.map(st => <option key={st} value={st}>{st}</option>)}
@@ -410,7 +430,9 @@ export default function CompanyDetails() {
         {/* ── Section 3: Legal Information ────────────────────── */}
         <div style={s.section}>
           <div style={s.sectionHead}>
-            <div style={{ ...s.sectionIcon, background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.15)' }}>⚖️</div>
+            <div style={{ ...s.sectionIcon, background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.15)' }}>
+              <FiFileText size={18} color="#C2071A" />
+            </div>
             <div>
               <div style={s.sectionTitle}>Legal Information</div>
               <div style={s.sectionDesc}>Statutory registration numbers used in payroll and compliance</div>
@@ -444,7 +466,9 @@ export default function CompanyDetails() {
         {/* ── Section 4: Payroll & HR Config ──────────────────── */}
         <div style={s.section}>
           <div style={s.sectionHead}>
-            <div style={{ ...s.sectionIcon, background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.15)' }}>⚙️</div>
+            <div style={{ ...s.sectionIcon, background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.15)' }}>
+              <FiSettings size={18} color="#C2071A" />
+            </div>
             <div>
               <div style={s.sectionTitle}>Payroll & HR Configuration</div>
               <div style={s.sectionDesc}>Defaults applied across all payroll, attendance, and leave modules</div>
@@ -455,7 +479,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Fiscal Year Start</label>
               <select value={form.fiscal_year_start} onChange={e => set('fiscal_year_start', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {MONTHS.map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
               </select>
@@ -463,7 +487,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Payroll Processing Day</label>
               <select value={form.payroll_day} onChange={e => set('payroll_day', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
                   <option key={d} value={d}>{d}{d === 1 ? 'st' : d === 2 ? 'nd' : d === 3 ? 'rd' : 'th'} of month</option>
@@ -473,7 +497,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Currency</label>
               <select value={form.currency} onChange={e => set('currency', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -484,7 +508,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Work Days / Week</label>
               <select value={form.work_days_per_week} onChange={e => set('work_days_per_week', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {[4, 5, 6, 7].map(d => <option key={d} value={d}>{d} days</option>)}
               </select>
@@ -492,7 +516,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Work Hours / Day</label>
               <select value={form.work_hours_per_day} onChange={e => set('work_hours_per_day', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {[6, 7, 8, 9, 10, 12].map(h => <option key={h} value={h}>{h} hours</option>)}
               </select>
@@ -500,7 +524,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Probation Period</label>
               <select value={form.probation_months} onChange={e => set('probation_months', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {[1, 2, 3, 6, 12].map(m => <option key={m} value={m}>{m} month{m > 1 ? 's' : ''}</option>)}
               </select>
@@ -508,7 +532,7 @@ export default function CompanyDetails() {
             <div style={s.field}>
               <label style={s.label}>Notice Period</label>
               <select value={form.notice_days} onChange={e => set('notice_days', e.target.value)} style={s.select}
-                onFocus={e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }}
+                onFocus={e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
                 onBlur={e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }}>
                 {[15, 30, 45, 60, 90].map(d => <option key={d} value={d}>{d} days</option>)}
               </select>
@@ -525,11 +549,11 @@ export default function CompanyDetails() {
             </div>
             <div style={{ paddingBottom: '2px', fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
               Employee codes will be generated as&nbsp;
-              <span style={{ color: '#6366f1', fontWeight: '600', fontFamily: 'monospace' }}>
+              <span style={{ color: '#C2071A', fontWeight: '600', fontFamily: 'monospace' }}>
                 {(form.emp_code_prefix || 'EMP').toUpperCase()}0001
               </span>
               ,&nbsp;
-              <span style={{ color: '#6366f1', fontWeight: '600', fontFamily: 'monospace' }}>
+              <span style={{ color: '#C2071A', fontWeight: '600', fontFamily: 'monospace' }}>
                 {(form.emp_code_prefix || 'EMP').toUpperCase()}0002
               </span>
               …
@@ -550,13 +574,18 @@ export default function CompanyDetails() {
               opacity: saving ? 0.7 : 1,
               cursor: saving ? 'not-allowed' : 'pointer',
             }}
-            onMouseEnter={e => { if (!saving) e.currentTarget.style.boxShadow = '0 6px 20px rgba(99,102,241,0.5)' }}
-            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 15px rgba(99,102,241,0.35)' }}
+            onMouseEnter={e => { if (!saving) e.currentTarget.style.boxShadow = '0 6px 20px rgba(194, 7, 26, 0.5)' }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 15px rgba(194, 7, 26, 0.35)' }}
           >
-            {saving ? 'Saving...' : '💾  Save Company Details'}
+            <FiSave size={15} color="#ffffff" style={{ stroke: '#ffffff' }} />
+            {saving ? 'Saving...' : 'Save Company Details'}
           </button>
         </div>
+
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </main>
+      </div>
     </div>
   )
 }
+

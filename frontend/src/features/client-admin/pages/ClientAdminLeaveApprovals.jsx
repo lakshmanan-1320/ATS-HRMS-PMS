@@ -5,7 +5,7 @@ import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 import {
   FiRefreshCw, FiCheckCircle, FiXCircle, FiSearch, FiX,
   FiDownload, FiFilter, FiCalendar, FiClock, FiList,
-  FiChevronDown, FiChevronUp, FiUser
+  FiChevronDown, FiChevronUp, FiUser, FiAlertTriangle
 } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
@@ -175,7 +175,7 @@ export default function ClientAdminLeaveApprovals() {
           <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiList size={18} color="#fff" />
                 </div>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Leave Approvals</h1>
@@ -192,7 +192,7 @@ export default function ClientAdminLeaveApprovals() {
                 </button>
               )}
               <button onClick={load}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}>
                 <FiRefreshCw size={13} /> Refresh
               </button>
             </div>
@@ -201,16 +201,16 @@ export default function ClientAdminLeaveApprovals() {
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Requests', color: '#6366f1', bg: '#eef2ff', icon: <FiList size={18} color="#6366f1" /> },
-              { key: 'PENDING',  label: 'Pending',        color: '#d97706', bg: '#fffbeb', icon: <FiClock size={18} color="#d97706" /> },
-              { key: 'APPROVED', label: 'Approved',       color: '#15803d', bg: '#f0fdf4', icon: <FiCheckCircle size={18} color="#15803d" /> },
-              { key: 'REJECTED', label: 'Rejected',       color: '#dc2626', bg: '#fef2f2', icon: <FiXCircle size={18} color="#dc2626" /> },
-            ].map(({ key, label, color, bg, icon }) => (
+              { key: 'ALL',      label: 'Total Requests', color: '#C2071A', icon: <FiList size={18} color="#ffffff" /> },
+              { key: 'PENDING',  label: 'Pending',        color: '#d97706', icon: <FiClock size={18} color="#ffffff" /> },
+              { key: 'APPROVED', label: 'Approved',       color: '#15803d', icon: <FiCheckCircle size={18} color="#ffffff" /> },
+              { key: 'REJECTED', label: 'Rejected',       color: '#dc2626', icon: <FiXCircle size={18} color="#ffffff" /> },
+            ].map(({ key, label, color, icon }) => (
               <div key={key}
                 onClick={() => { setStatus(key); setPage(1) }}
                 style={{ background: '#fff', border: `1.5px solid ${statusFilter === key ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: statusFilter === key ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                <div style={{ width: 42, height: 42, borderRadius: '12px', background: statusFilter === key ? color : bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.15s' }}>
-                  {React.cloneElement(icon, { color: statusFilter === key ? '#fff' : undefined })}
+                <div style={{ width: 42, height: 42, borderRadius: '12px', background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {icon}
                 </div>
                 <div>
                   <div style={{ fontSize: '26px', fontWeight: '800', color: statusFilter === key ? color : '#0f172a', lineHeight: 1 }}>{counts[key]}</div>
@@ -250,7 +250,7 @@ export default function ClientAdminLeaveApprovals() {
 
               <button
                 onClick={() => setShowAdvanced(v => !v)}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#eef2ff' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#c7d2fe' : '#e2e8f0'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#4f46e5' : '#374151', cursor: 'pointer' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#feecee' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#f7a6af' : '#e2e8f0'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#941018' : '#374151', cursor: 'pointer' }}>
                 <FiFilter size={12} />
                 Advanced {hasAdvancedFilters ? '•' : ''}
                 {showAdvanced ? <FiChevronUp size={11} /> : <FiChevronDown size={11} />}
@@ -308,7 +308,7 @@ export default function ClientAdminLeaveApprovals() {
                   <div style={{ display: 'flex', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
                     {[{ val: 'desc', label: '↓ Newest' }, { val: 'asc', label: '↑ Oldest' }].map(o => (
                       <button key={o.val} onClick={() => setSortDir(o.val)}
-                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#6366f1' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
+                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#C2071A' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
                         {o.label}
                       </button>
                     ))}
@@ -331,7 +331,7 @@ export default function ClientAdminLeaveApprovals() {
           {/* Status Tab Pills */}
           <div style={{ display: 'flex', gap: 8, marginBottom: '16px', flexWrap: 'wrap' }}>
             {[
-              { val: 'ALL',      label: 'All',      color: '#6366f1' },
+              { val: 'ALL',      label: 'All',      color: '#C2071A' },
               { val: 'PENDING',  label: 'Pending',  color: '#d97706' },
               { val: 'APPROVED', label: 'Approved', color: '#16a34a' },
               { val: 'REJECTED', label: 'Rejected', color: '#dc2626' },
@@ -355,25 +355,27 @@ export default function ClientAdminLeaveApprovals() {
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
                 <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading leave requests…</div>
               </div>
             ) : error ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ fontSize: '36px', marginBottom: 10 }}>⚠️</div>
+                <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'linear-gradient(135deg, #dc2626 0%, #dc2626 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                  <FiAlertTriangle size={24} color="#ffffff" />
+                </div>
                 <div style={{ color: '#dc2626', fontSize: '14px', fontWeight: '600', marginBottom: 12 }}>{error}</div>
-                <button onClick={load} style={{ padding: '9px 20px', background: '#6366f1', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
+                <button onClick={load} style={{ padding: '9px 20px', background: '#C2071A', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
                   Retry
                 </button>
               </div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
-                  <FiList size={22} color="#94a3b8" />
+                <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'linear-gradient(135deg, #94a3b8 0%, #94a3b8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                  <FiList size={22} color="#ffffff" />
                 </div>
                 <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No leave requests match the current filters</div>
                 {hasAnyFilter && (
-                  <span onClick={resetAll} style={{ color: '#6366f1', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
+                  <span onClick={resetAll} style={{ color: '#C2071A', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
                     Clear all filters
                   </span>
                 )}
@@ -399,7 +401,7 @@ export default function ClientAdminLeaveApprovals() {
                         >
                           <td style={{ padding: '14px 18px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#6366f1,#a855f7)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', flexShrink: 0 }}>
+                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#C2071A,#a855f7)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', flexShrink: 0 }}>
                                 {l.employee_name?.[0]}
                               </div>
                               <div>
@@ -413,17 +415,17 @@ export default function ClientAdminLeaveApprovals() {
                               {l.leave_type_name || '—'}
                             </span>
                           </td>
-                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#6366f1', whiteSpace: 'nowrap' }}>{fmtDate(l.start_date)}</td>
+                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#C2071A', whiteSpace: 'nowrap' }}>{fmtDate(l.start_date)}</td>
                           <td style={{ padding: '14px 18px', fontWeight: '600', color: '#374151', whiteSpace: 'nowrap' }}>{fmtDate(l.end_date)}</td>
                           <td style={{ padding: '14px 18px' }}>
-                            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '8px', background: '#eef2ff', color: '#4f46e5', fontWeight: '800', fontSize: '13px' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '8px', background: '#feecee', color: '#941018', fontWeight: '800', fontSize: '13px' }}>
                               {parseFloat(l.total_leave_days)}
                             </span>
                           </td>
                           <td style={{ padding: '14px 18px', color: '#374151', fontWeight: '500', whiteSpace: 'nowrap' }}>
                             {l.manager_name
                               ? <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><FiUser size={11} color="#94a3b8" />{l.manager_name}</div>
-                              : <span style={{ color: '#cbd5e1' }}>—</span>
+                              : <span style={{ color: '#e2e8f0' }}>—</span>
                             }
                           </td>
                           <td style={{ padding: '14px 18px', color: '#64748b', fontWeight: '500', whiteSpace: 'nowrap' }}>{fmtDate(l.created_at)}</td>
@@ -436,20 +438,20 @@ export default function ClientAdminLeaveApprovals() {
                             {l.current_status === 'PENDING' ? (
                               <div style={{ display: 'flex', gap: 6 }}>
                                 <button onClick={() => openModal('approve', l)}
-                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                                  onMouseEnter={e => e.currentTarget.style.background = '#dcfce7'}
-                                  onMouseLeave={e => e.currentTarget.style.background = '#f0fdf4'}>
-                                  <FiCheckCircle size={12} /> Approve
+                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', background: '#15803d', color: '#ffffff', border: '1px solid #15803d', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                                  onMouseEnter={e => e.currentTarget.style.background = '#166534'}
+                                  onMouseLeave={e => e.currentTarget.style.background = '#15803d'}>
+                                  <FiCheckCircle size={12} color="#ffffff" /> Approve
                                 </button>
                                 <button onClick={() => openModal('reject', l)}
-                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                                  onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
-                                  onMouseLeave={e => e.currentTarget.style.background = '#fef2f2'}>
-                                  <FiXCircle size={12} /> Reject
+                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', background: '#b91c1c', color: '#ffffff', border: '1px solid #b91c1c', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                                  onMouseEnter={e => e.currentTarget.style.background = '#991b1b'}
+                                  onMouseLeave={e => e.currentTarget.style.background = '#b91c1c'}>
+                                  <FiXCircle size={12} color="#ffffff" /> Reject
                                 </button>
                               </div>
                             ) : (
-                              <span style={{ color: '#cbd5e1', fontSize: '13px' }}>—</span>
+                              <span style={{ color: '#e2e8f0', fontSize: '13px' }}>—</span>
                             )}
                           </td>
                         </tr>
@@ -469,7 +471,7 @@ export default function ClientAdminLeaveApprovals() {
               </span>
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#e2e8f0' : '#374151' }}>
                   ‹ Prev
                 </button>
 
@@ -478,14 +480,14 @@ export default function ClientAdminLeaveApprovals() {
                     <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8', fontSize: '13px' }}>…</span>
                   ) : (
                     <button key={p} onClick={() => setPage(p)}
-                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(99,102,241,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {p}
                     </button>
                   )
                 )}
 
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#e2e8f0' : '#374151' }}>
                   Next ›
                 </button>
               </div>
@@ -506,10 +508,10 @@ export default function ClientAdminLeaveApprovals() {
             {/* Modal header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: modal.action === 'approve' ? '#f0fdf4' : '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: modal.action === 'approve' ? 'linear-gradient(135deg, #15803d 0%, #15803d 100%)' : 'linear-gradient(135deg, #dc2626 0%, #dc2626 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {modal.action === 'approve'
-                    ? <FiCheckCircle size={18} color="#15803d" />
-                    : <FiXCircle size={18} color="#dc2626" />}
+                    ? <FiCheckCircle size={18} color="#ffffff" />
+                    : <FiXCircle size={18} color="#ffffff" />}
                 </div>
                 <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
                   {modal.action === 'approve' ? 'Approve Leave Request' : 'Reject Leave Request'}
@@ -523,7 +525,7 @@ export default function ClientAdminLeaveApprovals() {
             {/* Employee + request summary */}
             <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '16px 18px', marginBottom: '18px', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#6366f1,#a855f7)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#C2071A,#a855f7)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', flexShrink: 0 }}>
                   {modal.leave.employee_name?.[0]}
                 </div>
                 <div>
@@ -552,19 +554,19 @@ export default function ClientAdminLeaveApprovals() {
             </div>
 
             {/* Balance card */}
-            <div style={{ background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '12px', padding: '14px 16px', marginBottom: '18px' }}>
-              <div style={{ fontSize: '11px', fontWeight: '700', color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+            <div style={{ background: '#f0fdfa', border: '1px solid #99f6e4', borderRadius: '12px', padding: '14px 16px', marginBottom: '18px' }}>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#0f766e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
                 Leave Balance — {modal.leave.leave_type_name}
               </div>
               {loadingBalance ? (
                 <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <div style={{ width: 14, height: 14, border: '2px solid #bae6fd', borderTopColor: '#0369a1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  <div style={{ width: 14, height: 14, border: '2px solid #99f6e4', borderTopColor: '#0f766e', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                   Fetching balance…
                 </div>
               ) : relevantBalance ? (
                 <div style={{ display: 'flex', gap: 24 }}>
                   {[
-                    { label: 'Allocated', value: parseFloat(relevantBalance.allocated_days), color: '#0369a1' },
+                    { label: 'Allocated', value: parseFloat(relevantBalance.allocated_days), color: '#0f766e' },
                     { label: 'Used',      value: parseFloat(relevantBalance.used_days),      color: '#d97706' },
                     { label: 'Available', value: parseFloat(relevantBalance.available_days), color: Number(relevantBalance.available_days) <= 0 ? '#b91c1c' : '#15803d' },
                   ].map(item => (
@@ -594,8 +596,11 @@ export default function ClientAdminLeaveApprovals() {
             </div>
 
             {modalError && (
-              <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <FiXCircle size={13} /> {modalError}
+              <div style={{ color: '#b91c1c', fontSize: '12px', fontWeight: '600', marginBottom: 14, padding: '8px 12px', background: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #b91c1c 0%, #b91c1c 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FiXCircle size={11} color="#ffffff" />
+                </div>
+                {modalError}
               </div>
             )}
 

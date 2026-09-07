@@ -2,10 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import {
+  FiShield, FiDownload, FiRefreshCw, FiUnlock, FiTrash2, FiEdit2,
+  FiPlus, FiFileText, FiX
+} from 'react-icons/fi'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
 
 const s = {
-  page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, sans-serif' },
+  page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' },
   main: { flex: 1, padding: '40px', overflowY: 'auto' },
   header: { marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   h1: { fontSize: '24px', fontWeight: '800', color: '#0f172a', marginBottom: '4px', margin: 0 },
@@ -32,16 +37,18 @@ const s = {
     display: 'flex', alignItems: 'center', gap: '6px',
   },
   pdfBtn: {
-    padding: '9px 18px', background: '#6366f1',
-    border: '1px solid #6366f1', borderRadius: '10px',
+    padding: '9px 18px',
+    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+    border: 'none', borderRadius: '10px',
     fontSize: '13px', fontWeight: '600', color: '#ffffff',
     cursor: 'pointer', transition: 'all 0.2s',
+    boxShadow: '0 4px 12px rgba(194, 7, 26, 0.3)',
     display: 'flex', alignItems: 'center', gap: '6px',
   },
   tableCard: {
-    background: '#ffffff', border: '1px solid #e8eaf0',
+    background: '#ffffff', border: 'none',
     borderRadius: '16px', overflow: 'hidden',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
   },
   table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
   th: {
@@ -61,9 +68,9 @@ const s = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
   },
   modal: {
-    background: '#ffffff', border: '1px solid #e8eaf0',
-    borderRadius: '20px', padding: '32px', width: '580px', maxWidth: '90%',
-    boxShadow: '0 16px 48px rgba(0,0,0,0.12)',
+    background: '#ffffff', border: 'none',
+    borderRadius: '16px', padding: '32px', width: '580px', maxWidth: '90%',
+    boxShadow: '0 16px 48px rgba(0,0,0,0.15)',
   },
   modalHeader: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -78,7 +85,7 @@ const s = {
   metaPre: {
     background: '#f8fafc', padding: '16px', borderRadius: '10px',
     border: '1px solid #e2e8f0', fontSize: '12px',
-    color: '#4f46e5', overflowX: 'auto', maxHeight: '250px',
+    color: '#C2071A', overflowX: 'auto', maxHeight: '250px',
     fontFamily: 'monospace', lineHeight: '1.6',
   },
   emptyState: { padding: '60px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' },
@@ -95,7 +102,7 @@ const s = {
   },
   pageBtnActive: {
     padding: '6px 14px', borderRadius: '8px',
-    border: '1px solid #6366f1', background: '#6366f1',
+    border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
     fontSize: '13px', fontWeight: '600', color: '#ffffff',
     cursor: 'pointer',
   },
@@ -117,16 +124,16 @@ function getBadgeStyle(action) {
     return { ...s.actionBadge, background: 'rgba(245,158,11,0.1)', color: '#b45309', border: '1px solid rgba(245,158,11,0.2)' }
   if (act.includes('create') || act.includes('add'))
     return { ...s.actionBadge, background: 'rgba(14,165,233,0.1)', color: '#0284c7', border: '1px solid rgba(14,165,233,0.2)' }
-  return { ...s.actionBadge, background: 'rgba(99,102,241,0.08)', color: '#6366f1', border: '1px solid rgba(99,102,241,0.2)' }
+  return { ...s.actionBadge, background: 'rgba(194, 7, 26, 0.08)', color: '#C2071A', border: '1px solid rgba(194, 7, 26, 0.2)' }
 }
 
 function getActionIcon(action) {
   const act = action?.toLowerCase() || ''
-  if (act.includes('login') || act.includes('auth')) return '🔓'
-  if (act.includes('delete') || act.includes('remove')) return '🗑️'
-  if (act.includes('update') || act.includes('save') || act.includes('edit')) return '✏️'
-  if (act.includes('create') || act.includes('add')) return '➕'
-  return '📋'
+  if (act.includes('login') || act.includes('auth')) return <FiUnlock size={14} color="#16a34a" />
+  if (act.includes('delete') || act.includes('remove')) return <FiTrash2 size={14} color="#ef4444" />
+  if (act.includes('update') || act.includes('save') || act.includes('edit')) return <FiEdit2 size={14} color="#b45309" />
+  if (act.includes('create') || act.includes('add')) return <FiPlus size={14} color="#0284c7" />
+  return <FiFileText size={14} color="#C2071A" />
 }
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50, 100]
@@ -213,7 +220,7 @@ export default function AuditLogs() {
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
 
       // Header
-      doc.setFillColor(99, 102, 241)
+      doc.setFillColor(194, 7, 26)
       doc.rect(0, 0, 297, 22, 'F')
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(16)
@@ -258,7 +265,7 @@ export default function AuditLogs() {
           log.ip_address || '—',
         ]),
         styles: { fontSize: 8, cellPadding: 3, overflow: 'ellipsize' },
-        headStyles: { fillColor: [99, 102, 241], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+        headStyles: { fillColor: [194, 7, 26], textColor: 255, fontStyle: 'bold', fontSize: 8 },
         alternateRowStyles: { fillColor: [248, 250, 252] },
         columnStyles: {
           0: { cellWidth: 10, halign: 'center' },
@@ -288,7 +295,7 @@ export default function AuditLogs() {
     }
   }
 
-  const onFocus = e => { e.target.style.border = '1px solid #6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)' }
+  const onFocus = e => { e.target.style.border = '1px solid #C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }
   const onBlur  = e => { e.target.style.border = '1px solid #e2e8f0'; e.target.style.boxShadow = 'none' }
 
   function renderPageNumbers() {
@@ -321,7 +328,9 @@ export default function AuditLogs() {
   return (
     <div style={s.page}>
       <Sidebar active="audit" />
-      <main style={s.main}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Audit Logs" />
+        <main style={s.main}>
 
         {/* Header */}
         <div style={s.header}>
@@ -334,20 +343,20 @@ export default function AuditLogs() {
               style={s.pdfBtn}
               onClick={handleDownloadPDF}
               disabled={pdfLoading}
-              onMouseEnter={e => { e.currentTarget.style.background = '#4f46e5' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#6366f1' }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(194, 7, 26, 0.4)' }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(194, 7, 26, 0.3)' }}
             >
-              <span style={{ fontSize: '14px' }}>⬇</span>
+              <FiDownload size={14} color="#ffffff" style={{ stroke: '#ffffff' }} />
               {pdfLoading ? 'Generating…' : 'Download PDF'}
             </button>
             <button
               style={s.refreshBtn}
               onClick={handleRefresh}
               disabled={loading}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.color = '#6366f1' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#C2071A'; e.currentTarget.style.color = '#C2071A' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#475569' }}
             >
-              <span style={{ fontSize: '14px' }}>⟳</span>
+              <FiRefreshCw size={14} color="#475569" />
               {loading ? 'Loading…' : 'Refresh'}
             </button>
           </div>
@@ -357,15 +366,15 @@ export default function AuditLogs() {
         {total > 0 && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Events', value: total, color: '#6366f1' },
+              { label: 'Total Events', value: total, color: '#C2071A' },
               { label: 'Login / Auth', value: logs.filter(l => l.action?.toLowerCase().includes('login') || l.action?.toLowerCase().includes('auth')).length, color: '#16a34a' },
               { label: 'Updates', value: logs.filter(l => l.action?.toLowerCase().includes('update') || l.action?.toLowerCase().includes('edit') || l.action?.toLowerCase().includes('save')).length, color: '#b45309' },
               { label: 'Deletions', value: logs.filter(l => l.action?.toLowerCase().includes('delete') || l.action?.toLowerCase().includes('remove')).length, color: '#ef4444' },
             ].map(stat => (
               <div key={stat.label} style={{
-                background: '#ffffff', border: '1px solid #e8eaf0',
-                borderRadius: '12px', padding: '16px 20px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                background: '#ffffff', border: 'none',
+                borderRadius: '16px', padding: '16px 20px',
+                boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
               }}>
                 <div style={{ fontSize: '24px', fontWeight: '800', color: stat.color }}>{stat.value}</div>
                 <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>{stat.label}</div>
@@ -401,6 +410,7 @@ export default function AuditLogs() {
             onChange={e => { setDateFrom(e.target.value); setPage(1) }}
             title="From date"
             style={{ ...s.select, color: dateFrom ? '#1e293b' : '#94a3b8' }}
+            onFocus={onFocus} onBlur={onBlur}
           />
           <input
             type="date"
@@ -408,6 +418,7 @@ export default function AuditLogs() {
             onChange={e => { setDateTo(e.target.value); setPage(1) }}
             title="To date"
             style={{ ...s.select, color: dateTo ? '#1e293b' : '#94a3b8' }}
+            onFocus={onFocus} onBlur={onBlur}
           />
           {hasActiveFilters && (
             <button
@@ -430,11 +441,23 @@ export default function AuditLogs() {
         <div style={s.tableCard}>
           {loading ? (
             <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
+              <div style={{
+                width: '32px', height: '32px', borderRadius: '50%',
+                border: '3px solid rgba(194, 7, 26, 0.2)', borderTopColor: '#C2071A',
+                animation: 'spin 0.7s linear infinite', margin: '0 auto 12px',
+              }} />
               Loading audit logs…
             </div>
           ) : logs.length === 0 ? (
             <div style={s.emptyState}>
-              <div style={{ fontSize: '36px', marginBottom: '12px' }}>🛡️</div>
+              <div style={{
+                width: '44px', height: '44px', borderRadius: '12px',
+                background: 'rgba(194, 7, 26, 0.08)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 12px',
+              }}>
+                <FiShield size={24} color="#C2071A" />
+              </div>
               <div>No audit logs matched the current filters.</div>
             </div>
           ) : (
@@ -453,7 +476,7 @@ export default function AuditLogs() {
                       key={log.id}
                       style={{ ...s.tr, borderBottom: i < logs.length - 1 ? '1px solid #f1f5f9' : 'none' }}
                       onClick={() => setActiveLog(log)}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.03)' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(194, 7, 26, 0.03)' }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
                     >
                       <td style={s.td}>
@@ -468,9 +491,9 @@ export default function AuditLogs() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <div style={{
                             width: '28px', height: '28px', borderRadius: '8px',
-                            background: 'rgba(99,102,241,0.08)',
+                            background: 'rgba(194, 7, 26, 0.08)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '12px', fontWeight: '700', color: '#6366f1', flexShrink: 0,
+                            fontSize: '12px', fontWeight: '700', color: '#C2071A', flexShrink: 0,
                           }}>
                             {(log.actor_email || 'S')?.charAt(0).toUpperCase()}
                           </div>
@@ -479,7 +502,7 @@ export default function AuditLogs() {
                       </td>
                       <td style={s.td}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ fontSize: '13px' }}>{getActionIcon(log.action)}</span>
+                          {getActionIcon(log.action)}
                           <span style={getBadgeStyle(log.action)}>{log.action}</span>
                         </div>
                       </td>
@@ -542,6 +565,8 @@ export default function AuditLogs() {
             </>
           )}
         </div>
+
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </main>
 
       {/* Detail Modal */}
@@ -553,8 +578,8 @@ export default function AuditLogs() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{
                   width: '36px', height: '36px', borderRadius: '10px',
-                  background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.15)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px',
+                  background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.15)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   {getActionIcon(activeLog.action)}
                 </div>
@@ -563,7 +588,7 @@ export default function AuditLogs() {
                   <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '1px' }}>Click outside to close</div>
                 </div>
               </div>
-              <button style={s.closeBtn} onClick={() => setActiveLog(null)}>×</button>
+              <button style={s.closeBtn} onClick={() => setActiveLog(null)}><FiX size={16} /></button>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '13px' }}>
@@ -577,7 +602,7 @@ export default function AuditLogs() {
                 </div>
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>IP Address</div>
-                  <code style={{ color: '#4f46e5', fontSize: '13px' }}>{activeLog.ip_address || '—'}</code>
+                  <code style={{ color: '#C2071A', fontSize: '13px' }}>{activeLog.ip_address || '—'}</code>
                 </div>
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: '600', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>Actor</div>
@@ -613,6 +638,8 @@ export default function AuditLogs() {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }
+

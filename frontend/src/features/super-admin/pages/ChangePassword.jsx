@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { FiLock, FiEye, FiEyeOff, FiCheck, FiAlertCircle, FiX, FiShield } from 'react-icons/fi'
+import { FiLock, FiEye, FiEyeOff, FiCheck, FiAlertCircle, FiCheckCircle, FiX, FiShield, FiKey, FiInfo, FiHelpCircle } from 'react-icons/fi'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
 
 function validateAgainstPolicy(password, policy) {
   const rules = []
@@ -39,8 +40,8 @@ const inputBase = {
 }
 
 const onFocus = e => {
-  e.target.style.border = '1px solid #6366f1'
-  e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'
+  e.target.style.border = '1px solid #C2071A'
+  e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)'
 }
 const onBlur = e => {
   e.target.style.border = '1px solid #e2e8f0'
@@ -50,9 +51,9 @@ const onBlur = e => {
 function SectionLabel({ icon, title }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-      <span style={{ fontSize: '14px' }}>{icon}</span>
+      <span style={{ fontSize: '14px', display: 'flex', alignItems: 'center' }}>{icon}</span>
       <span style={{
-        fontSize: '11px', fontWeight: '700', color: '#6366f1',
+        fontSize: '11px', fontWeight: '700', color: '#C2071A',
         textTransform: 'uppercase', letterSpacing: '0.08em',
       }}>{title}</span>
       <div style={{ flex: 1, height: '1px', background: '#e8eaf0', marginLeft: '4px' }} />
@@ -97,7 +98,7 @@ function PasswordField({ id, label, value, onChange, show, onToggle, placeholder
             display: 'flex', alignItems: 'center',
             transition: 'color 0.2s',
           }}
-          onMouseEnter={e => e.currentTarget.style.color = '#6366f1'}
+          onMouseEnter={e => e.currentTarget.style.color = '#C2071A'}
           onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}
         >
           {show ? <FiEyeOff size={15} /> : <FiEye size={15} />}
@@ -166,18 +167,21 @@ export default function ChangePassword() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <Sidebar active="change-password" />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Change Password" />
+        <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
 
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
-
-        {/* Page header — same pattern as SMTP */}
+        {/* Page header */}
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
             <div style={{
               width: '36px', height: '36px', borderRadius: '10px',
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '17px', boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-            }}>🔐</div>
+              boxShadow: '0 4px 12px rgba(194, 7, 26, 0.3)',
+            }}>
+              <FiLock size={18} color="#ffffff" style={{ stroke: '#ffffff' }} />
+            </div>
             <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
               Change Password
             </h1>
@@ -198,7 +202,10 @@ export default function ChangePassword() {
             border: `1px solid ${alert.type === 'success' ? '#86efac' : '#fca5a5'}`,
             color: alert.type === 'success' ? '#16a34a' : '#dc2626',
           }}>
-            <span style={{ fontSize: '16px' }}>{alert.type === 'success' ? '✓' : '⚠'}</span>
+            {alert.type === 'success'
+              ? <FiCheckCircle size={16} color="#16a34a" />
+              : <FiAlertCircle size={16} color="#dc2626" />
+            }
             {alert.msg}
           </div>
         )}
@@ -209,14 +216,14 @@ export default function ChangePassword() {
             {/* ── Left: main card ── */}
             <div style={{
               background: '#ffffff',
-              borderRadius: '20px',
-              border: '1px solid #e8eaf0',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+              borderRadius: '16px',
+              border: 'none',
+              boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
               overflow: 'hidden',
             }}>
-              {/* Card gradient header — identical to SMTP */}
+              {/* Card gradient header */}
               <div style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #7c3aed 100%)',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                 padding: '24px 32px',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>
@@ -226,13 +233,15 @@ export default function ChangePassword() {
                     background: 'rgba(255,255,255,0.15)',
                     border: '1px solid rgba(255,255,255,0.25)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '22px', backdropFilter: 'blur(8px)',
-                  }}>🔐</div>
+                    backdropFilter: 'blur(8px)',
+                  }}>
+                    <FiLock size={22} color="#ffffff" style={{ stroke: '#ffffff' }} />
+                  </div>
                   <div>
                     <div style={{ fontSize: '17px', fontWeight: '700', color: '#ffffff' }}>
                       Update Password
                     </div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginTop: '3px' }}>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', marginTop: '3px' }}>
                       All fields are required
                     </div>
                   </div>
@@ -242,8 +251,8 @@ export default function ChangePassword() {
                   background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)',
                   borderRadius: '20px', padding: '6px 14px', backdropFilter: 'blur(8px)',
                 }}>
-                  <span style={{ fontSize: '12px' }}>🔒</span>
-                  <span style={{ fontSize: '12px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>
+                  <FiLock size={12} color="#ffffff" style={{ stroke: '#ffffff' }} />
+                  <span style={{ fontSize: '12px', fontWeight: '600', color: '#ffffff' }}>
                     Encrypted
                   </span>
                 </div>
@@ -253,7 +262,7 @@ export default function ChangePassword() {
               <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '0' }}>
 
                 {/* Section 1: Current */}
-                <SectionLabel icon="🔑" title="Current Password" />
+                <SectionLabel icon={<FiKey size={14} color="#C2071A" />} title="Current Password" />
                 <div style={{ marginBottom: '28px' }}>
                   <PasswordField
                     id="currentPassword"
@@ -267,7 +276,7 @@ export default function ChangePassword() {
                 </div>
 
                 {/* Section 2: New */}
-                <SectionLabel icon="✨" title="New Password" />
+                <SectionLabel icon={<FiLock size={14} color="#C2071A" />} title="New Password" />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '28px' }}>
                   <PasswordField
                     id="newPassword"
@@ -322,21 +331,21 @@ export default function ChangePassword() {
                   )}
                 </div>
 
-                {/* Encryption info pill — mirrors SMTP */}
+                {/* Encryption info pill */}
                 <div style={{
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  padding: '10px 16px', borderRadius: '10px',
-                  background: 'rgba(99,102,241,0.04)',
-                  border: '1px solid rgba(99,102,241,0.12)',
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  padding: '12px 16px', borderRadius: '10px',
+                  background: 'rgba(194, 7, 26, 0.04)',
+                  border: '1px solid rgba(194, 7, 26, 0.12)',
                 }}>
-                  <span style={{ fontSize: '13px' }}>ℹ️</span>
-                  <span style={{ fontSize: '12px', color: '#6366f1', fontWeight: '500' }}>
+                  <FiInfo size={16} color="#C2071A" style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: '12px', color: '#C2071A', fontWeight: '500' }}>
                     Your password is encrypted and never stored in plaintext. Changes take effect immediately.
                   </span>
                 </div>
               </div>
 
-              {/* Card footer — identical structure to SMTP */}
+              {/* Card footer */}
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
                 padding: '20px 32px',
@@ -350,18 +359,18 @@ export default function ChangePassword() {
                     display: 'flex', alignItems: 'center', gap: '7px',
                     padding: '10px 28px',
                     background: loading
-                      ? '#c7d2fe'
-                      : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                      ? '#fca5a5'
+                      : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                     border: 'none', borderRadius: '10px',
                     fontSize: '13px', fontWeight: '700',
-                    color: '#fff', cursor: loading ? 'not-allowed' : 'pointer',
-                    boxShadow: loading ? 'none' : '0 4px 12px rgba(99,102,241,0.4)',
+                    color: '#ffffff', cursor: loading ? 'not-allowed' : 'pointer',
+                    boxShadow: loading ? 'none' : '0 4px 12px rgba(194, 7, 26, 0.3)',
                     transition: 'all 0.2s',
                   }}
-                  onMouseEnter={e => { if (!loading) e.currentTarget.style.boxShadow = '0 6px 20px rgba(99,102,241,0.5)' }}
-                  onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(99,102,241,0.4)' }}
+                  onMouseEnter={e => { if (!loading) e.currentTarget.style.boxShadow = '0 6px 20px rgba(194, 7, 26, 0.4)' }}
+                  onMouseLeave={e => { if (!loading) e.currentTarget.style.boxShadow = '0 4px 12px rgba(194, 7, 26, 0.3)' }}
                 >
-                  {loading ? <><Spinner /> Updating…</> : <><FiCheck size={15} /> Update Password</>}
+                  {loading ? <><Spinner /> Updating…</> : <><FiCheckCircle size={15} color="#ffffff" style={{ stroke: '#ffffff' }} /> Update Password</>}
                 </button>
               </div>
             </div>
@@ -372,9 +381,9 @@ export default function ChangePassword() {
               {/* Password requirements card */}
               <div style={{
                 background: '#ffffff',
-                borderRadius: '20px',
-                border: '1px solid #e8eaf0',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+                borderRadius: '16px',
+                border: 'none',
+                boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                 overflow: 'hidden',
               }}>
                 <div style={{
@@ -384,10 +393,10 @@ export default function ChangePassword() {
                 }}>
                   <div style={{
                     width: '30px', height: '30px', borderRadius: '8px',
-                    background: 'rgba(99,102,241,0.1)',
+                    background: 'rgba(194, 7, 26, 0.1)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <FiShield size={14} color="#6366f1" />
+                    <FiShield size={14} color="#C2071A" />
                   </div>
                   <p style={{ margin: 0, fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
                     Password Requirements
@@ -434,17 +443,17 @@ export default function ChangePassword() {
 
               {/* Security tips card */}
               <div style={{
-                background: 'linear-gradient(135deg, #3730a3 0%, #4338ca 50%, #6d28d9 100%)',
-                borderRadius: '20px',
-                border: '1px solid rgba(99,102,241,0.3)',
-                boxShadow: '0 4px 16px rgba(67,56,202,0.35)',
+                background: 'linear-gradient(135deg, #900513 0%, #C2071A 50%, #7f000d 100%)',
+                borderRadius: '16px',
+                border: 'none',
+                boxShadow: '0 4px 16px rgba(194, 7, 26, 0.35)',
                 padding: '22px',
                 position: 'relative', overflow: 'hidden',
               }}>
                 <div style={{
                   position: 'absolute', top: '-30px', right: '-30px',
                   width: '120px', height: '120px', borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)',
                   pointerEvents: 'none',
                 }} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', position: 'relative' }}>
@@ -454,7 +463,7 @@ export default function ChangePassword() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
                   }}>
-                    <FiShield size={14} color="#ffffff" />
+                    <FiShield size={14} color="#ffffff" style={{ stroke: '#ffffff' }} />
                   </div>
                   <div style={{
                     margin: 0, fontSize: '13px', fontWeight: '700',
@@ -477,11 +486,11 @@ export default function ChangePassword() {
                   }}>
                     <div style={{
                       width: '6px', height: '6px', borderRadius: '50%',
-                      background: '#a5b4fc', marginTop: '5px', flexShrink: 0,
+                      background: '#fca5a5', marginTop: '5px', flexShrink: 0,
                     }} />
                     <div style={{
                       margin: 0, fontSize: '12.5px', fontWeight: '500',
-                      color: '#e0e7ff',
+                      color: '#ffffff',
                       lineHeight: '1.55',
                       textShadow: '0 1px 2px rgba(0,0,0,0.3)',
                     }}>
@@ -491,7 +500,7 @@ export default function ChangePassword() {
                 ))}
               </div>
 
-              {/* Session note — same amber pill as before */}
+              {/* Session note */}
               <div style={{
                 padding: '14px 16px', borderRadius: '12px',
                 background: '#fffbeb', border: '1px solid #fde68a',
@@ -505,16 +514,16 @@ export default function ChangePassword() {
             </div>
           </div>
 
-          {/* Bottom tip — mirrors SMTP */}
+          {/* Bottom tip */}
           <div style={{
             display: 'flex', alignItems: 'flex-start', gap: '10px',
             marginTop: '16px', padding: '14px 18px',
-            borderRadius: '12px', background: 'rgba(99,102,241,0.04)',
-            border: '1px solid rgba(99,102,241,0.1)',
+            borderRadius: '12px', background: 'rgba(194, 7, 26, 0.04)',
+            border: '1px solid rgba(194, 7, 26, 0.1)',
           }}>
-            <span style={{ fontSize: '16px', marginTop: '1px' }}>💡</span>
+            <FiHelpCircle size={16} color="#C2071A" style={{ marginTop: '1px', flexShrink: 0 }} />
             <div>
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#4f46e5', marginBottom: '3px' }}>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: '#C2071A', marginBottom: '3px' }}>
                 Tip
               </div>
               <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
@@ -526,6 +535,7 @@ export default function ChangePassword() {
 
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </main>
+      </div>
     </div>
   )
 }
@@ -540,3 +550,4 @@ function Spinner() {
     }} />
   )
 }
+

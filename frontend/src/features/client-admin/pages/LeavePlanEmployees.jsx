@@ -132,7 +132,7 @@ export default function LeavePlanEmployees({ planId }) {
         </div>
         <button
           onClick={openAssignModal}
-          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#4f46e5', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#feecee', border: '1px solid #f7a6af', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#941018', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <FiUserPlus size={13} /> Assign Employees
         </button>
@@ -140,7 +140,7 @@ export default function LeavePlanEmployees({ planId }) {
 
       {loading ? (
         <div style={{ padding: '40px', textAlign: 'center' }}>
-          <div style={{ width: 30, height: 30, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ width: 30, height: 30, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
           <div style={{ color: '#64748b', fontSize: '13px' }}>Loading assigned employees…</div>
         </div>
       ) : filteredAssigned.length === 0 ? (
@@ -221,7 +221,7 @@ export default function LeavePlanEmployees({ planId }) {
                           type="checkbox"
                           checked={filteredUnassigned.length > 0 && filteredUnassigned.every(e => selectedIds.includes(e.employee_id))}
                           onChange={() => handleToggleAll(filteredUnassigned)}
-                          style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#6366f1' }}
+                          style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#C2071A' }}
                         />
                       </th>
                       <th style={{ padding: '10px 14px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Employee</th>
@@ -242,7 +242,7 @@ export default function LeavePlanEmployees({ planId }) {
                               type="checkbox"
                               checked={isSel}
                               onChange={() => handleToggleSelect(emp.employee_id)}
-                              style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#6366f1' }}
+                              style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#C2071A' }}
                             />
                           </td>
                           <td style={{ padding: '10px 14px', fontWeight: '600', color: '#0f172a' }}>
@@ -264,7 +264,7 @@ export default function LeavePlanEmployees({ planId }) {
               <button
                 onClick={handleAssign}
                 disabled={selectedIds.length === 0 || assigning}
-                style={{ flex: 2, padding: '11px', background: selectedIds.length === 0 ? '#cbd5e1' : 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: selectedIds.length === 0 ? 'not-allowed' : 'pointer', boxShadow: selectedIds.length === 0 ? 'none' : '0 4px 14px rgba(99,102,241,0.35)' }}
+                style={{ flex: 2, padding: '11px', background: selectedIds.length === 0 ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: selectedIds.length === 0 ? 'not-allowed' : 'pointer', boxShadow: selectedIds.length === 0 ? 'none' : '0 4px 14px rgba(194,7,26,0.35)' }}
               >
                 {assigning ? 'Assigning…' : `Assign ${selectedIds.length} Selected`}
               </button>

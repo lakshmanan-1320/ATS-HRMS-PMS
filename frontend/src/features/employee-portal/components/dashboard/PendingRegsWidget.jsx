@@ -1,16 +1,17 @@
 import React from 'react'
 import { EditReqIcon, CalIcon } from '../shared/Icons'
-import { WidgetCard, EmptyState } from '../shared/UI'
+import { WidgetCard, EmptyState, ViewAllLink } from '../shared/UI'
 import { COLORS } from '../../theme'
 
-export default function PendingRegsWidget({ regs }) {
+export default function PendingRegsWidget({ regs, onViewAll }) {
   return (
     <WidgetCard
       icon={<EditReqIcon />}
-      iconBg="rgba(99,102,241,0.1)"
+      iconBg="rgba(194,7,26,0.1)"
       iconColor={COLORS.primary}
       title="Regularization Requests"
       subtitle="Attendance corrections"
+      action={onViewAll && <ViewAllLink onClick={onViewAll} />}
     >
       {regs.length === 0 ? (
         <EmptyState message="No pending regularizations" positive />
@@ -26,7 +27,7 @@ export default function PendingRegsWidget({ regs }) {
                     <CalIcon />{rDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </div>
                 </div>
-                <span style={{ fontSize: '10px', fontWeight: '700', color: COLORS.primary, background: 'rgba(99,102,241,0.1)', padding: '2px 7px', borderRadius: '10px', whiteSpace: 'nowrap', marginLeft: '8px' }}>Pending</span>
+                <span style={{ fontSize: '10px', fontWeight: '700', color: COLORS.primary, background: 'rgba(194,7,26,0.1)', padding: '2px 7px', borderRadius: '10px', whiteSpace: 'nowrap', marginLeft: '8px' }}>Pending</span>
               </div>
             )
           })}

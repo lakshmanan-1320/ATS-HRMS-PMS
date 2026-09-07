@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
@@ -7,6 +8,7 @@ import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar'
 import Sidebar from '../../../components/layout/Sidebar'
 import { useModules } from '../../../hooks/useModules'
 import { useJsApiLoader } from '@react-google-maps/api'
+import { useChatbot } from '../../../context/ChatbotContext.jsx'
 
 import {
   getMyProfile, getMyGoals, getMyTeam, getAuthMe,
@@ -14,10 +16,11 @@ import {
   getMyLeaves, getMyRegularizations, getUpcomingHolidays,
   checkIn, checkOut,
 } from '../api'
-import { COLORS, GRADIENTS } from '../theme'
-import { Spinner, KpiCard } from '../components/shared/UI'
+import { COLORS } from '../theme'
+import { Spinner } from '../components/shared/UI'
 import { toast } from 'react-toastify'
 import { TargetIcon, ClockIcon, CheckCircleIcon, BellIcon, UsersIcon, LeafIcon } from '../components/shared/Icons'
+import { FiArrowRight, FiHeadphones } from 'react-icons/fi'
 
 import AttendanceCard       from '../components/dashboard/AttendanceCard'
 import GoalDistributionCard from '../components/dashboard/GoalDistributionCard'
@@ -28,6 +31,7 @@ import BirthdaysWidget      from '../components/dashboard/BirthdaysWidget'
 import TeamAttendanceWidget from '../components/dashboard/TeamAttendanceWidget'
 import PendingLeavesWidget  from '../components/dashboard/PendingLeavesWidget'
 import PendingRegsWidget    from '../components/dashboard/PendingRegsWidget'
+import QuickActionsWidget   from '../components/dashboard/QuickActionsWidget'
 
 const GOOGLE_MAPS_LIBRARIES = ['places']
 
@@ -53,7 +57,37 @@ const parseGoogleGeocodeAddress = (addressComponents) => {
   return { suburb, city, state, country }
 }
 
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
+const STAT_TINTS = {
+  red:    { bg: 'rgba(194,7,26,0.1)',  color: '#C2071A' },
+  blue:   { bg: 'rgba(59,130,246,0.1)', color: '#3b82f6' },
+  green:  { bg: 'rgba(16,185,129,0.1)', color: '#10b981' },
+  amber:  { bg: 'rgba(245,158,11,0.1)', color: '#f59e0b' },
+  purple: { bg: 'rgba(124,58,237,0.1)', color: '#7c3aed' },
+}
+
+function StatCard({ icon, label, value, sub, tint }) {
+  return (
+    <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: `1px solid ${COLORS.borderLight}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', minWidth: 0, boxSizing: 'border-box' }}>
+      <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: tint.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tint.color, marginBottom: '14px' }}>
+        {icon}
+      </div>
+      <div style={{ fontSize: '24px', fontWeight: '800', color: COLORS.text, lineHeight: 1 }}>{value}</div>
+      <div style={{ fontSize: '12px', fontWeight: '700', color: COLORS.text, marginTop: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</div>
+      {sub && <div style={{ fontSize: '10px', color: COLORS.textMuted, marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{sub}</div>}
+    </div>
+  )
+}
+
 export default function EmployeeDashboard() {
+  const navigate = useNavigate()
+  const { openChat } = useChatbot()
   const [profile, setProfile]         = useState(null)
   const [goals, setGoals]             = useState([])
   const [team, setTeam]               = useState([])
@@ -100,16 +134,6 @@ export default function EmployeeDashboard() {
     } else {
       toast.success(message)
     }
-  }
-
-  function formatTimeStr(t) {
-    if (!t) return '—'
-    const parts = t.split(':')
-    const h = parseInt(parts[0], 10)
-    const m = parts[1]
-    const ampm = h >= 12 ? 'PM' : 'AM'
-    const displayH = h % 12 === 0 ? 12 : h % 12
-    return `${displayH.toString().padStart(2, '0')}:${m} ${ampm}`
   }
 
   const resolveAddress = (lat, lon) => {
@@ -361,8 +385,10 @@ export default function EmployeeDashboard() {
   const attendanceEnabled = authMe?.attendance_enabled
   const formattedDate = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
 
+  const greeting = getGreeting()
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: COLORS.bg, fontFamily: 'Roboto, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: COLORS.bg, fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
       {userRole === 'client_admin'
         ? <ClientAdminSidebar active="attendance" />
         : userRole === 'super_admin'
@@ -379,226 +405,216 @@ export default function EmployeeDashboard() {
 
         {/* ── Welcome Banner ───────────────────────────────────────────────── */}
         <div style={{
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #0f172a 100%)',
-          borderRadius: '20px', padding: '26px 32px', marginBottom: '22px',
+          background: 'linear-gradient(96deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
+          border: `1px solid ${COLORS.borderLight}`,
+          borderRadius: '20px', padding: '24px 32px', marginBottom: '22px',
+          minHeight: '150px', boxSizing: 'border-box',
           position: 'relative', overflow: 'hidden',
-          boxShadow: '0 8px 30px rgba(99,102,241,0.18)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         }}>
-          <div style={{ position: 'absolute', left: '-50px', top: '-50px', width: '260px', height: '260px', background: 'radial-gradient(circle, rgba(99,102,241,0.38) 0%, transparent 65%)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', right: '8%', bottom: '-40px', width: '180px', height: '180px', background: 'radial-gradient(circle, rgba(139,92,246,0.28) 0%, transparent 65%)', pointerEvents: 'none' }} />
-
-          <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '18px' }}>
-            <div>
-              <div style={{ fontSize: '21px', fontWeight: '700', color: '#fff', marginBottom: '5px' }}>
-                Welcome back, {profile?.first_name} 👋
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: COLORS.text }}>
+                {greeting}, <span style={{ color: COLORS.primary }}>{profile?.first_name}!</span>
               </div>
-              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.58)', display: 'flex', gap: '5px', alignItems: 'center', flexWrap: 'wrap' }}>
-                <span>{profile?.designation}</span>
-                <span style={{ opacity: 0.4 }}>·</span>
-                <span>{profile?.department_name}</span>
-                <span style={{ opacity: 0.4 }}>·</span>
-                <span>{profile?.level_name}</span>
+              <div style={{ fontSize: '13px', color: COLORS.textSub, marginTop: '4px', maxWidth: '420px' }}>
+                Here's your overview for today. Stay on track and keep making progress.
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
-              {isPmsActive ? (
-                [
-                  { val: `${completionPct}%`, label: 'Goal Completion', color: '#a5b4fc' },
-                  { val: `${avgProgress}%`,   label: 'Avg Progress',    color: '#34d399' },
-                  { val: goals.length,        label: 'Total Goals',     color: '#fbbf24' },
-                  ...(isManager ? [{ val: team.length, label: 'Team Size', color: '#f0abfc' }] : []),
-                ].map((m, i) => (
-                  <React.Fragment key={i}>
-                    {i > 0 && <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.1)' }} />}
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '22px', fontWeight: '800', color: m.color }}>{m.val}</div>
-                      <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.55)', marginTop: '2px' }}>{m.label}</div>
-                    </div>
-                  </React.Fragment>
-                ))
-              ) : (
-                [
-                  { val: `${totalLeaveAvail}d`, label: 'Leave Balance', color: '#a5b4fc' },
-                  { val: pendingLeaves.length, label: 'Pending Leaves', color: '#fbbf24' },
-                  { val: pendingRegs.length,   label: 'Pending Regs',   color: '#34d399' },
-                  ...(isManager ? [{ val: team.length, label: 'Team Size', color: '#f0abfc' }] : []),
-                ].map((m, i) => (
-                  <React.Fragment key={i}>
-                    {i > 0 && <div style={{ width: '1px', height: '36px', background: 'rgba(255,255,255,0.1)' }} />}
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '22px', fontWeight: '800', color: m.color }}>{m.val}</div>
-                      <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.55)', marginTop: '2px' }}>{m.label}</div>
-                    </div>
-                  </React.Fragment>
-                ))
-              )}
+            <div style={{ flexShrink: 0 }}>
+              <div style={{ fontSize: '13px', fontStyle: 'italic', fontWeight: '700', color: COLORS.primary, lineHeight: 1.4, whiteSpace: 'nowrap' }}>
+                "Small steps every day lead to big results."
+              </div>
             </div>
           </div>
-
-          <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: isManager ? 'rgba(34,197,94,0.18)' : 'rgba(99,102,241,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>
-                {isManager ? '👔' : '👤'}
-              </div>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255,255,255,0.92)' }}>{profile?.first_name} {profile?.last_name}</div>
-                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', marginTop: '1px' }}>{profile?.employee_code}</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-              {profile?.manager_first_name && (
-                <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(99,102,241,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', flexShrink: 0 }}>👔</div>
-                  <div>
-                    <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', marginBottom: '1px' }}>Reports To</div>
-                    <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.9)' }}>{profile.manager_first_name} {profile.manager_last_name}</div>
-                    <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)' }}>{profile.manager_designation}</div>
-                  </div>
-                </div>
-              )}
-              {profile?.shift_name && (
-                <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: profile.shift_color_code || 'rgba(99,102,241,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', flexShrink: 0 }}>⏰</div>
-                  <div>
-                    <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', marginBottom: '1px' }}>Current Shift</div>
-                    <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      {profile.shift_name}
-                      <span style={{ fontSize: '9px', background: 'rgba(255,255,255,0.15)', padding: '1px 4px', borderRadius: '4px' }}>{profile.shift_code}</span>
-                    </div>
-                    <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)' }}>{formatTimeStr(profile.shift_start_time)} - {formatTimeStr(profile.shift_end_time)}</div>
-                  </div>
-                </div>
-              )}
-              {leaveBalances.slice(0, 4).map((b, i) => {
-                const avail = Number(b.available_days ?? b.balance ?? b.remaining ?? 0)
-                const color = avail === 0 ? '#f87171' : avail <= 2 ? '#fbbf24' : '#a78bfa'
-                return (
-                  <div key={i} style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${color}40`, borderRadius: '9px', padding: '6px 10px', textAlign: 'center', minWidth: '52px' }}>
-                    <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.45)', marginBottom: '2px', whiteSpace: 'nowrap', maxWidth: '64px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.leave_type_name || b.type || 'Leave'}</div>
-                    <div style={{ fontSize: '14px', fontWeight: '800', color }}>{avail}</div>
-                    <div style={{ fontSize: '8px', color: 'rgba(255,255,255,0.35)' }}>days</div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+          <svg width="150" height="78" viewBox="0 0 150 78" style={{ position: 'absolute', right: '18px', bottom: 0, opacity: 0.9, pointerEvents: 'none' }}>
+            <polygon points="0,78 45,20 72,48 100,10 150,78" fill="#f7a6af" opacity="0.55" />
+            <polygon points="22,78 75,26 128,78" fill="#C2071A" opacity="0.9" />
+            <line x1="75" y1="26" x2="75" y2="8" stroke="#7c0a1a" strokeWidth="2" />
+            <polygon points="75,8 89,14 75,20" fill="#941018" />
+          </svg>
         </div>
 
         {/* ── KPI Cards ─────────────────────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: '14px', marginBottom: '22px', alignItems: 'start' }}>
           {isPmsActive ? (
             <>
-              <KpiCard icon={<TargetIcon />}      label="Total Goals"      value={goals.length}   sub={`${completionPct}% complete`}  gradient={GRADIENTS.primary} />
-              <KpiCard icon={<ClockIcon />}       label="Active Goals"     value={activeGoals}    sub="In progress"                   gradient={GRADIENTS.blue}    />
-              <KpiCard icon={<CheckCircleIcon />} label="Completed"        value={completedGoals} sub={`of ${goals.length} total`}    gradient={GRADIENTS.green}   />
-              <KpiCard icon={<BellIcon />}        label="Pending Approval" value={pendingGoals}   sub="Awaiting review"               gradient={GRADIENTS.amber}   />
+              <StatCard icon={<TargetIcon size={18} />}      label="Total Goals"      value={goals.length}   sub={`${completionPct}% complete`}  tint={STAT_TINTS.red}    />
+              <StatCard icon={<ClockIcon size={18} />}       label="Active Goals"     value={activeGoals}    sub="In progress"                   tint={STAT_TINTS.blue}   />
+              <StatCard icon={<CheckCircleIcon size={18} />} label="Completed"        value={completedGoals} sub={`of ${goals.length} total`}    tint={STAT_TINTS.green}  />
+              <StatCard icon={<BellIcon size={18} />}        label="Pending Approval" value={pendingGoals}   sub="Awaiting review"               tint={STAT_TINTS.amber}  />
               {isManager
-                ? <KpiCard icon={<UsersIcon />} label="Team Members"  value={team.length}        sub="Direct reports"                gradient={GRADIENTS.pink}    />
-                : <KpiCard icon={<LeafIcon />}  label="Leave Balance" value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '—'} sub="Available days" gradient={GRADIENTS.purple} />
+                ? <StatCard icon={<UsersIcon size={18} />} label="Team Members"  value={team.length}        sub="Direct reports"                tint={STAT_TINTS.purple} />
+                : <StatCard icon={<LeafIcon size={18} />}  label="Leave Balance" value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '—'} sub="Available days" tint={STAT_TINTS.purple} />
               }
             </>
           ) : (
             <>
-              <KpiCard icon={<LeafIcon />}        label="Leave Balance"    value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '0d'} sub="Available days"    gradient={GRADIENTS.purple}  />
-              <KpiCard icon={<ClockIcon />}       label="Pending Leaves"   value={pendingLeaves.length} sub="Awaiting approval"         gradient={GRADIENTS.amber}   />
-              <KpiCard icon={<CheckCircleIcon />} label="Regularizations"  value={pendingRegs.length}   sub="Pending review"           gradient={GRADIENTS.blue}    />
-              <KpiCard icon={<BellIcon />}        label="Upcoming Holiday" value={upcomingHolidays.length} sub="In coming weeks"       gradient={GRADIENTS.green}   />
+              <StatCard icon={<LeafIcon size={18} />}        label="Leave Balance"    value={totalLeaveAvail > 0 ? `${totalLeaveAvail}d` : '0d'} sub="Available days"    tint={STAT_TINTS.purple} />
+              <StatCard icon={<ClockIcon size={18} />}       label="Pending Leaves"   value={pendingLeaves.length} sub="Awaiting approval"         tint={STAT_TINTS.amber}  />
+              <StatCard icon={<CheckCircleIcon size={18} />} label="Regularizations"  value={pendingRegs.length}   sub="Pending review"           tint={STAT_TINTS.blue}   />
+              <StatCard icon={<BellIcon size={18} />}        label="Upcoming Holiday" value={upcomingHolidays.length} sub="In coming weeks"       tint={STAT_TINTS.green}  />
               {isManager && (
-                <KpiCard icon={<UsersIcon />} label="Team Members"  value={team.length}        sub="Direct reports"                gradient={GRADIENTS.pink}    />
+                <StatCard icon={<UsersIcon size={18} />} label="Team Members"  value={team.length}        sub="Direct reports"                tint={STAT_TINTS.purple} />
               )}
             </>
           )}
         </div>
 
-        {/* ── Analytics Row ─────────────────────────────────────────────────── */}
+        {/* ── Main Dashboard Layout Grid (Compact, Seamless, Zero Gaps) ───────── */}
         {isPmsActive ? (
-          <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? '1fr 1fr 1fr' : '1fr 1fr', gap: '18px', marginBottom: '18px' }}>
-            {isEmployee && (
-              <AttendanceCard
-                isCheckIn={isCheckIn}
-                hasCheckedOut={hasCheckedOut}
-                punchTime={punchTime}
-                checkoutTime={checkoutTime}
-                elapsedSeconds={elapsedSeconds}
-                locationAddress={locationAddress}
-                punching={punching}
-                isHoliday={isHoliday}
-                holidayName={holidayName}
-                isOnLeave={isOnLeave}
-                attendanceEnabled={attendanceEnabled}
-                formattedDate={formattedDate}
-                onPunch={handlePunch}
-                shiftName={profile?.shift_name}
-                shiftCode={profile?.shift_code}
-                shiftStartTime={profile?.shift_start_time}
-                shiftEndTime={profile?.shift_end_time}
-                shiftColorCode={profile?.shift_color_code}
-                shiftGraceMinutes={profile?.shift_grace_minutes}
-              />
-            )}
+          <>
+            {/* PMS Active Top Analytics Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? 'repeat(auto-fit, minmax(320px, 1fr))' : 'repeat(auto-fit, minmax(300px, 1fr))', gap: '18px', marginBottom: '22px', alignItems: 'start' }}>
+              {isEmployee && (
+                <AttendanceCard
+                  isCheckIn={isCheckIn}
+                  hasCheckedOut={hasCheckedOut}
+                  punchTime={punchTime}
+                  checkoutTime={checkoutTime}
+                  elapsedSeconds={elapsedSeconds}
+                  locationAddress={locationAddress}
+                  punching={punching}
+                  isHoliday={isHoliday}
+                  holidayName={holidayName}
+                  isOnLeave={isOnLeave}
+                  attendanceEnabled={attendanceEnabled}
+                  formattedDate={formattedDate}
+                  onPunch={handlePunch}
+                  shiftName={profile?.shift_name}
+                  shiftCode={profile?.shift_code}
+                  shiftStartTime={profile?.shift_start_time}
+                  shiftEndTime={profile?.shift_end_time}
+                  shiftColorCode={profile?.shift_color_code}
+                  shiftGraceMinutes={profile?.shift_grace_minutes}
+                />
+              )}
 
-            <GoalDistributionCard
-              goals={goals}
-              avgProgress={avgProgress}
-              completionPct={completionPct}
-              onTrack={onTrack}
-            />
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <PerformanceScoreCard
                 avgProgress={avgProgress}
                 completionPct={completionPct}
                 totalGoals={goals.length}
                 completedGoals={completedGoals}
                 onTrack={onTrack}
+                onViewAll={() => navigate('/employee/performance')}
               />
-              <UpcomingDeadlinesCard goals={upcomingGoals} />
+
+              <GoalDistributionCard
+                goals={goals}
+                completionPct={completionPct}
+                onViewAll={() => navigate('/employee/performance')}
+              />
             </div>
-          </div>
+
+            {/* PMS Secondary Widgets 2-Column Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '18px', marginBottom: '22px', alignItems: 'start' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', minWidth: 0 }}>
+                <UpcomingDeadlinesCard goals={upcomingGoals} onViewAll={() => navigate('/employee/performance')} />
+                <QuickActionsWidget />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', minWidth: 0 }}>
+                <PendingLeavesWidget leaves={pendingLeaves} onViewAll={() => navigate('/employee/leave-request')} />
+                <PendingRegsWidget regs={pendingRegs} onViewAll={() => navigate('/employee/regularization')} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '18px' }}>
+                  <HolidaysWidget holidays={upcomingHolidays} onViewAll={() => navigate('/employee/holidays')} />
+                  <BirthdaysWidget birthdays={birthdays} />
+                </div>
+                {isManager && <TeamAttendanceWidget members={teamMembers} />}
+              </div>
+            </div>
+          </>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? '1.2fr 1fr' : '1fr', gap: '18px', marginBottom: '18px' }}>
-            {isEmployee && (
-              <AttendanceCard
-                isCheckIn={isCheckIn}
-                hasCheckedOut={hasCheckedOut}
-                punchTime={punchTime}
-                checkoutTime={checkoutTime}
-                elapsedSeconds={elapsedSeconds}
-                locationAddress={locationAddress}
-                punching={punching}
-                isHoliday={isHoliday}
-                holidayName={holidayName}
-                isOnLeave={isOnLeave}
-                attendanceEnabled={attendanceEnabled}
-                formattedDate={formattedDate}
-                onPunch={handlePunch}
-                shiftName={profile?.shift_name}
-                shiftCode={profile?.shift_code}
-                shiftStartTime={profile?.shift_start_time}
-                shiftEndTime={profile?.shift_end_time}
-                shiftColorCode={profile?.shift_color_code}
-                shiftGraceMinutes={profile?.shift_grace_minutes}
-              />
-            )}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              <PendingLeavesWidget leaves={pendingLeaves} />
-              <PendingRegsWidget   regs={pendingRegs}     />
+          /* Standard HRMS 2-Column Balanced Dashboard Grid */
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '18px', marginBottom: '22px', alignItems: 'start' }}>
+            {/* Left Column - Attendance Card & Quick Actions */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', minWidth: 0 }}>
+              {isEmployee && (
+                <AttendanceCard
+                  isCheckIn={isCheckIn}
+                  hasCheckedOut={hasCheckedOut}
+                  punchTime={punchTime}
+                  checkoutTime={checkoutTime}
+                  elapsedSeconds={elapsedSeconds}
+                  locationAddress={locationAddress}
+                  punching={punching}
+                  isHoliday={isHoliday}
+                  holidayName={holidayName}
+                  isOnLeave={isOnLeave}
+                  attendanceEnabled={attendanceEnabled}
+                  formattedDate={formattedDate}
+                  onPunch={handlePunch}
+                  shiftName={profile?.shift_name}
+                  shiftCode={profile?.shift_code}
+                  shiftStartTime={profile?.shift_start_time}
+                  shiftEndTime={profile?.shift_end_time}
+                  shiftColorCode={profile?.shift_color_code}
+                  shiftGraceMinutes={profile?.shift_grace_minutes}
+                />
+              )}
+              <QuickActionsWidget />
+            </div>
+
+            {/* Right Column - Pending Requests, Holidays & Birthdays */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', minWidth: 0 }}>
+              <PendingLeavesWidget leaves={pendingLeaves} onViewAll={() => navigate('/employee/leave-request')} />
+              <PendingRegsWidget regs={pendingRegs} onViewAll={() => navigate('/employee/regularization')} />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '18px' }}>
+                <HolidaysWidget holidays={upcomingHolidays} onViewAll={() => navigate('/employee/holidays')} />
+                <BirthdaysWidget birthdays={birthdays} />
+              </div>
+              {isManager && <TeamAttendanceWidget members={teamMembers} />}
             </div>
           </div>
         )}
 
-        {/* ── Quick Info Widgets ─────────────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
-          <HolidaysWidget       holidays={upcomingHolidays} />
-          <BirthdaysWidget      birthdays={birthdays}       />
-          {isManager && <TeamAttendanceWidget members={teamMembers} />}
-          {isPmsActive && (
-            <>
-              <PendingLeavesWidget  leaves={pendingLeaves}      />
-              <PendingRegsWidget    regs={pendingRegs}          />
-            </>
-          )}
+        {/* ── Motivation / Support Banner ─────────────────────────────────────── */}
+        <div style={{ display: 'grid', gridTemplateColumns: isEmployee ? '2fr 1fr' : '1fr', gap: '18px' }}>
+          <div style={{
+            background: 'linear-gradient(96deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
+            border: `1px solid ${COLORS.borderLight}`, borderRadius: '18px', padding: '20px 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+            position: 'relative', overflow: 'hidden', flexWrap: 'wrap', minWidth: 0, boxSizing: 'border-box',
+          }}>
+            <div style={{ position: 'relative', zIndex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: '15px', fontWeight: '800', color: COLORS.text }}>Keep going, great things take time.</div>
+              <div style={{ fontSize: '12px', color: COLORS.textSub, marginTop: '4px' }}>Stay consistent and make every day count.</div>
+            </div>
+            {isPmsActive && (
+              <button
+                onClick={() => navigate('/employee/goals/create')}
+                style={{
+                  position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  padding: '10px 18px', background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
+                  color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700',
+                  cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(194,7,26,0.3)',
+                }}
+              >
+                Set a New Goal <FiArrowRight size={14} />
+              </button>
+            )}
+          </div>
+
+          <div style={{
+            background: COLORS.surface, border: `1px solid ${COLORS.borderLight}`, borderRadius: '18px',
+            padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap',
+            minWidth: 0, boxSizing: 'border-box',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(194,7,26,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: COLORS.primary, flexShrink: 0 }}>
+                <FiHeadphones size={16} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: '13px', fontWeight: '700', color: COLORS.text, whiteSpace: 'nowrap' }}>Need Help?</div>
+                <div style={{ fontSize: '11px', color: COLORS.textMuted, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Our support team is here for you.</div>
+              </div>
+            </div>
+            <button
+              onClick={() => openChat()}
+              style={{ padding: '8px 14px', background: '#fff', border: `1px solid ${COLORS.border}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: COLORS.primary, cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              Contact Support →
+            </button>
+          </div>
         </div>
 
         </main>

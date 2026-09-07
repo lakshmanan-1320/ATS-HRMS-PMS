@@ -145,8 +145,9 @@ export const useAttendanceStore = create((set, get) => ({
       await get().fetchPolicies()
       toast.success('Policy successfully assigned.')
     } catch (err) {
-      const msg = err.response?.data?.message || 'Assignment failed.'
+      const msg = err.response?.data?.message || err.message || 'Assignment failed.'
       set({ error: msg })
+      toast.error(msg)
       throw new Error(msg)
     } finally {
       set({ loading: false })

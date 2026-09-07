@@ -2,13 +2,19 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
+import {
+  FiUsers, FiUserCheck, FiUserX, FiPlus, FiBriefcase,
+  FiSearch, FiEye, FiEyeOff, FiEdit2, FiTrash2,
+  FiAlertTriangle, FiX, FiCheckCircle, FiAlertCircle, FiChevronDown
+} from 'react-icons/fi'
 
 const STATUSES = ['active', 'inactive', 'suspended']
 
 const STATUS_META = {
-  active:    { color: '#22c55e', bg: 'rgba(34,197,94,0.12)',   label: 'Active' },
-  inactive:  { color: '#64748b', bg: 'rgba(100,116,139,0.12)', label: 'Inactive' },
-  suspended: { color: '#ef4444', bg: 'rgba(239,68,68,0.12)',   label: 'Suspended' },
+  active:    { color: '#15803d', bg: '#dcfce7', label: 'Active' },
+  inactive:  { color: '#64748b', bg: '#f1f5f9', label: 'Inactive' },
+  suspended: { color: '#b91c1c', bg: '#fee2e2', label: 'Suspended' },
 }
 
 function StatusBadge({ value }) {
@@ -17,10 +23,10 @@ function StatusBadge({ value }) {
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: '5px',
       padding: '3px 10px', borderRadius: '20px', fontSize: '11px',
-      fontWeight: '600', letterSpacing: '0.03em',
+      fontWeight: '700', letterSpacing: '0.03em',
       color: m.color, background: m.bg,
     }}>
-      {value === 'active' ? '●' : value === 'suspended' ? '⊘' : '○'} {m.label}
+      {m.label}
     </span>
   )
 }
@@ -30,14 +36,16 @@ function Toast({ toasts }) {
     <div style={{ position: 'fixed', top: '24px', right: '24px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {toasts.map(t => (
         <div key={t.id} style={{
-          padding: '12px 18px', borderRadius: '12px', fontSize: '13px', fontWeight: '500',
+          padding: '12px 18px', borderRadius: '12px', fontSize: '13px', fontWeight: '700',
           minWidth: '280px', maxWidth: '360px',
           background: t.type === 'error' ? '#fef2f2' : '#f0fdf4',
           border: `1px solid ${t.type === 'error' ? '#fca5a5' : '#86efac'}`,
           color: t.type === 'error' ? '#dc2626' : '#16a34a',
           boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+          display: 'flex', alignItems: 'center', gap: '8px'
         }}>
-          {t.type === 'error' ? '✗' : '✓'} {t.msg}
+          {t.type === 'error' ? <FiAlertCircle size={16} color="#dc2626" /> : <FiCheckCircle size={16} color="#16a34a" />}
+          <span>{t.msg}</span>
         </div>
       ))}
     </div>
@@ -47,8 +55,8 @@ function Toast({ toasts }) {
 function Field({ label, name, type = 'text', placeholder, required, hint, value, error, onChange }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', letterSpacing: '0.04em' }}>
-        {label}{required && <span style={{ color: '#6366f1', marginLeft: '2px' }}>*</span>}
+      <label style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        {label}{required && <span style={{ color: '#ef4444', marginLeft: '2px' }}>*</span>}
       </label>
       <input
         type={type}
@@ -57,15 +65,15 @@ function Field({ label, name, type = 'text', placeholder, required, hint, value,
         onChange={e => onChange(name, e.target.value)}
         style={{
           padding: '10px 14px', background: '#f8fafc',
-          border: `1px solid ${error ? 'rgba(239,68,68,0.5)' : '#e2e8f0'}`,
+          border: `1px solid ${error ? '#ef4444' : '#cbd5e1'}`,
           borderRadius: '10px', color: '#1e293b', fontSize: '13px',
           outline: 'none', width: '100%', boxSizing: 'border-box',
           fontFamily: 'inherit',
         }}
-        onFocus={e => e.target.style.borderColor = '#6366f1'}
-        onBlur={e => e.target.style.borderColor = error ? 'rgba(239,68,68,0.5)' : '#e2e8f0'}
+        onFocus={e => e.target.style.borderColor = '#C2071A'}
+        onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#cbd5e1'}
       />
-      {error && <span style={{ color: '#ef4444', fontSize: '11px' }}>{error}</span>}
+      {error && <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: '600' }}>{error}</span>}
       {hint && !error && <span style={{ color: '#94a3b8', fontSize: '11px' }}>{hint}</span>}
     </div>
   )
@@ -75,8 +83,8 @@ function PasswordField({ label, name, placeholder, required, hint, value, error,
   const [show, setShow] = useState(false)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', letterSpacing: '0.04em' }}>
-        {label}{required && <span style={{ color: '#6366f1', marginLeft: '2px' }}>*</span>}
+      <label style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        {label}{required && <span style={{ color: '#ef4444', marginLeft: '2px' }}>*</span>}
       </label>
       <div style={{ position: 'relative' }}>
         <input
@@ -86,12 +94,12 @@ function PasswordField({ label, name, placeholder, required, hint, value, error,
           onChange={e => onChange(name, e.target.value)}
           style={{
             padding: '10px 42px 10px 14px', background: '#f8fafc',
-            border: `1px solid ${error ? 'rgba(239,68,68,0.5)' : '#e2e8f0'}`,
+            border: `1px solid ${error ? '#ef4444' : '#cbd5e1'}`,
             borderRadius: '10px', color: '#1e293b', fontSize: '13px',
             outline: 'none', width: '100%', boxSizing: 'border-box', fontFamily: 'inherit',
           }}
-          onFocus={e => e.target.style.borderColor = '#6366f1'}
-          onBlur={e => e.target.style.borderColor = error ? 'rgba(239,68,68,0.5)' : '#e2e8f0'}
+          onFocus={e => e.target.style.borderColor = '#C2071A'}
+          onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#cbd5e1'}
         />
         <button
           type="button"
@@ -99,14 +107,14 @@ function PasswordField({ label, name, placeholder, required, hint, value, error,
           style={{
             position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
             background: 'none', border: 'none', cursor: 'pointer',
-            color: '#94a3b8', fontSize: '15px', padding: '0', lineHeight: 1,
+            color: '#94a3b8', fontSize: '15px', padding: '0', lineHeight: 1, display: 'flex', alignItems: 'center'
           }}
           title={show ? 'Hide password' : 'Show password'}
         >
-          {show ? '🙈' : '👁'}
+          {show ? <FiEyeOff size={16} /> : <FiEye size={16} />}
         </button>
       </div>
-      {error && <span style={{ color: '#ef4444', fontSize: '11px' }}>{error}</span>}
+      {error && <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: '600' }}>{error}</span>}
       {hint && !error && <span style={{ color: '#94a3b8', fontSize: '11px' }}>{hint}</span>}
     </div>
   )
@@ -115,18 +123,17 @@ function PasswordField({ label, name, placeholder, required, hint, value, error,
 function PhoneField({ label, required, value, error, onChange }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', letterSpacing: '0.04em' }}>
-        {label}{required && <span style={{ color: '#6366f1', marginLeft: '2px' }}>*</span>}
+      <label style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        {label}{required && <span style={{ color: '#ef4444', marginLeft: '2px' }}>*</span>}
       </label>
       <div style={{
         display: 'flex', alignItems: 'center',
-        border: `1px solid ${error ? 'rgba(239,68,68,0.5)' : '#e2e8f0'}`,
+        border: `1px solid ${error ? '#ef4444' : '#cbd5e1'}`,
         borderRadius: '10px', background: '#f8fafc', overflow: 'hidden',
       }}>
         <span style={{
-          padding: '10px 12px', color: '#94a3b8', fontSize: '13px',
-          borderRight: '1px solid #e2e8f0', whiteSpace: 'nowrap',
-          userSelect: 'none',
+          padding: '10px 12px', color: '#64748b', fontSize: '13px', fontWeight: '700',
+          borderRight: '1px solid #cbd5e1', whiteSpace: 'nowrap', userSelect: 'none',
         }}>
           +91
         </span>
@@ -145,14 +152,14 @@ function PhoneField({ label, required, value, error, onChange }) {
             border: 'none', color: '#1e293b', fontSize: '13px',
             outline: 'none', fontFamily: 'inherit',
           }}
-          onFocus={e => e.currentTarget.parentElement.style.borderColor = '#6366f1'}
-          onBlur={e => e.currentTarget.parentElement.style.borderColor = error ? 'rgba(239,68,68,0.5)' : '#e2e8f0'}
+          onFocus={e => e.currentTarget.parentElement.style.borderColor = '#C2071A'}
+          onBlur={e => e.currentTarget.parentElement.style.borderColor = error ? '#ef4444' : '#cbd5e1'}
         />
-        <span style={{ padding: '10px 12px', fontSize: '11px', color: value.length === 10 ? '#22c55e' : '#cbd5e1' }}>
+        <span style={{ padding: '10px 12px', fontSize: '11px', color: value.length === 10 ? '#15803d' : '#94a3b8', fontWeight: '700' }}>
           {value.length}/10
         </span>
       </div>
-      {error && <span style={{ color: '#ef4444', fontSize: '11px' }}>{error}</span>}
+      {error && <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: '600' }}>{error}</span>}
     </div>
   )
 }
@@ -319,18 +326,36 @@ export default function ClientAdmins() {
     setFormErrors(p => ({ ...p, [name]: '' }))
   }
 
-  return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
-      <Sidebar active="client-admins" />
-      <Toast toasts={toasts} />
+  const thStyle = {
+    padding: '14px 16px',
+    textAlign: 'left',
+    fontSize: '11px',
+    fontWeight: '700',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    color: '#ffffff',
+          background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+    borderBottom: 'none'
+  }
 
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+  return (
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+      <Sidebar active="client-admins" />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Client Admins" />
+        <Toast toasts={toasts} />
+        <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', marginBottom: '4px' }}>Client Admins</h1>
-            <p style={{ color: '#64748b', fontSize: '14px' }}>
+            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiUsers size={20} color="#C2071A" strokeWidth={2.5} />
+              </div>
+              Client Admins
+            </h1>
+            <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
               Create and manage client administrator accounts — {admins.length} total
             </p>
           </div>
@@ -338,67 +363,75 @@ export default function ClientAdmins() {
             onClick={openCreate}
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
-              padding: '10px 20px', background: '#6366f1', border: 'none',
-              borderRadius: '12px', color: '#fff', fontSize: '13px',
-              fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-              transition: 'all 0.15s',
+              padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none',
+              borderRadius: '12px', color: '#ffffff', fontSize: '13px',
+              fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+              boxShadow: '0 4px 12px rgba(194, 7, 26, 0.25)', transition: 'all 0.15s ease'
             }}
-            onMouseEnter={e => e.currentTarget.style.background = '#4f46e5'}
-            onMouseLeave={e => e.currentTarget.style.background = '#6366f1'}
           >
-            + Add Client Admin
+            <FiPlus size={16} color="#ffffff" stroke="#ffffff" />
+            <span>Add Client Admin</span>
           </button>
         </div>
 
         {/* Stats row */}
         {admins.length > 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px', marginBottom: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '16px', marginBottom: '28px' }}>
             {[
-              { label: 'Total', value: admins.length, color: '#6366f1' },
-              { label: 'Active', value: admins.filter(a => a.status === 'active').length, color: '#22c55e' },
-              { label: 'Inactive', value: admins.filter(a => a.status === 'inactive').length, color: '#64748b' },
-              { label: 'Suspended', value: admins.filter(a => a.status === 'suspended').length, color: '#ef4444' },
+              { label: 'Total Admins', value: admins.length, color: '#C2071A', bg: '#FEECEE' },
+              { label: 'Active', value: admins.filter(a => a.status === 'active').length, color: '#15803d', bg: '#dcfce7' },
+              { label: 'Inactive', value: admins.filter(a => a.status === 'inactive').length, color: '#64748b', bg: '#f1f5f9' },
+              { label: 'Suspended', value: admins.filter(a => a.status === 'suspended').length, color: '#b91c1c', bg: '#fee2e2' },
             ].map(s => (
               <div key={s.label} style={{
-                background: '#ffffff', border: '1px solid #e8eaf0',
-                borderRadius: '12px', padding: '16px 20px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                background: '#ffffff', border: 'none',
+                borderRadius: '16px', padding: '20px',
+                boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+                display: 'flex', alignItems: 'center', gap: '14px'
               }}>
-                <div style={{ fontSize: '24px', fontWeight: '800', color: s.color }}>{s.value}</div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>{s.label}</div>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', color: s.color, fontSize: '16px' }}>
+                  {s.value}
+                </div>
+                <div>
+                  <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a' }}>{s.value}</div>
+                  <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
+                </div>
               </div>
             ))}
           </div>
         )}
 
         {/* Filters */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search by name or email..."
-            style={{
-              flex: '1', minWidth: '220px', padding: '9px 14px',
-              background: '#ffffff', border: '1px solid #e2e8f0',
-              borderRadius: '10px', color: '#1e293b', fontSize: '13px',
-              outline: 'none', fontFamily: 'inherit',
-            }}
-            onFocus={e => e.target.style.borderColor = '#6366f1'}
-            onBlur={e => e.target.style.borderColor = '#e2e8f0'}
-          />
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ position: 'relative', flex: '1', minWidth: '240px' }}>
+            <FiSearch size={16} color="#94a3b8" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search by name or email..."
+              style={{
+                width: '100%', padding: '10px 14px 10px 40px',
+                background: '#ffffff', border: '1px solid #cbd5e1',
+                borderRadius: '10px', color: '#1e293b', fontSize: '13px',
+                outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box'
+              }}
+            />
+          </div>
           <div style={{ display: 'flex', gap: '6px' }}>
             {['all', 'active', 'inactive', 'suspended'].map(s => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
                 style={{
-                  padding: '9px 14px', borderRadius: '10px', fontSize: '12px',
-                  fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-                  border: statusFilter === s ? '1px solid rgba(99,102,241,0.5)' : '1px solid #e2e8f0',
-                  background: statusFilter === s ? 'rgba(99,102,241,0.08)' : '#ffffff',
-                  color: statusFilter === s ? '#6366f1' : '#64748b',
+                  padding: '9px 16px', borderRadius: '10px', fontSize: '12px',
+                  fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                  border: statusFilter === s ? 'none' : '1px solid #cbd5e1',
+                  background: statusFilter === s ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#ffffff',
+                  color: statusFilter === s ? '#ffffff' : '#64748b',
                   textTransform: 'capitalize',
+                  boxShadow: statusFilter === s ? '0 2px 8px rgba(194,7,26,0.25)' : 'none',
+                  transition: 'all 0.15s ease'
                 }}
               >
                 {s === 'all' ? 'All' : s}
@@ -409,200 +442,196 @@ export default function ClientAdmins() {
 
         {/* Table */}
         <div style={{
-          background: '#ffffff', border: '1px solid #e8eaf0',
+          background: '#ffffff', border: 'none',
           borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+          boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
         }}>
           {loading ? (
-            <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
-              Loading...
+            <div style={{ padding: '60px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
+              Loading client admins...
             </div>
           ) : filtered.length === 0 ? (
             <div style={{ padding: '60px', textAlign: 'center' }}>
-              <div style={{ fontSize: '36px', marginBottom: '12px' }}>👥</div>
-              <div style={{ color: '#94a3b8', fontSize: '14px' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 12, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                <FiUsers size={24} color="#C2071A" />
+              </div>
+              <div style={{ color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
                 {admins.length === 0
                   ? 'No client admins yet. Click "Add Client Admin" to create one.'
                   : 'No results match your search.'}
               </div>
             </div>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid #e8eaf0' }}>
-                  {['Client Admin', 'Company / Organization', 'Phone', 'Status', 'Goal Mode', 'Created', 'Actions'].map(h => (
-                    <th key={h} style={{
-                      padding: '12px 16px', textAlign: 'left',
-                      fontSize: '11px', fontWeight: '700', letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: '#94a3b8',
-                      background: '#f8fafc',
-                    }}>
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((a, i) => (
-                  <tr
-                    key={a.client_admin_id}
-                    style={{
-                      borderBottom: i < filtered.length - 1 ? '1px solid #f1f5f9' : 'none',
-                      transition: 'background 0.12s',
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(99,102,241,0.04)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  >
-                    {/* Name + Email */}
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{
-                          width: '36px', height: '36px', borderRadius: '10px',
-                          background: 'rgba(99,102,241,0.1)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '14px', fontWeight: '700', color: '#6366f1', flexShrink: 0,
-                        }}>
-                          {a.full_name?.charAt(0)?.toUpperCase() || '?'}
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{a.full_name}</div>
-                          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '1px' }}>{a.email}</div>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Company / Organization */}
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{
-                          width: '28px', height: '28px', borderRadius: '8px',
-                          background: 'rgba(59,130,246,0.1)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '13px', flexShrink: 0
-                        }}>
-                          🏢
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
-                            {a.company_name || a.organization_name || '—'}
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' }}>
+                    {['Client Admin', 'Company / Organization', 'Phone', 'Status', 'Goal Mode', 'Created', 'Actions'].map(h => (
+                      <th key={h} style={thStyle}>
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map((a, i) => (
+                    <tr
+                      key={a.client_admin_id}
+                      style={{
+                        borderBottom: i < filtered.length - 1 ? '1px solid #edf2f7' : 'none',
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      {/* Name + Email */}
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{
+                            width: '36px', height: '36px', borderRadius: '10px',
+                            background: '#FEECEE',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: '14px', fontWeight: '800', color: '#C2071A', flexShrink: 0,
+                          }}>
+                            {a.full_name?.charAt(0)?.toUpperCase() || '?'}
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>{a.full_name}</div>
+                            <div style={{ fontSize: '12px', color: '#64748b', marginTop: '1px', fontWeight: 500 }}>{a.email}</div>
                           </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Phone */}
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ fontSize: '13px', color: a.phone ? '#475569' : '#cbd5e1' }}>
-                        {a.phone || '—'}
-                      </div>
-                    </td>
-
-                    {/* Status — clickable dropdown */}
-                    <td style={{ padding: '14px 16px', position: 'relative' }}>
-                      <div
-                        onClick={e => { e.stopPropagation(); setStatusPopup(statusPopup === a.client_admin_id ? null : a.client_admin_id) }}
-                        style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        <StatusBadge value={a.status} />
-                        <span style={{ color: '#94a3b8', fontSize: '10px' }}>▼</span>
-                      </div>
-                      {statusPopup === a.client_admin_id && (
-                        <div
-                          onClick={e => e.stopPropagation()}
-                          style={{
-                            position: 'absolute', top: '100%', left: '16px', zIndex: 100,
-                            background: '#ffffff', border: '1px solid #e2e8f0',
-                            borderRadius: '10px', overflow: 'hidden',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)', minWidth: '140px',
-                          }}
-                        >
-                          {STATUSES.map(s => (
-                            <button
-                              key={s}
-                              onClick={() => handleStatusChange(a.client_admin_id, s)}
-                              style={{
-                                display: 'flex', alignItems: 'center', gap: '8px',
-                                width: '100%', padding: '10px 14px',
-                                background: a.status === s ? 'rgba(99,102,241,0.06)' : 'none',
-                                border: 'none', cursor: 'pointer', fontSize: '12px',
-                                color: STATUS_META[s]?.color, fontFamily: 'inherit',
-                                textAlign: 'left', fontWeight: '500',
-                              }}
-                            >
-                              {STATUS_META[s]?.label}
-                              {a.status === s && <span style={{ marginLeft: 'auto', fontSize: '10px' }}>✓</span>}
-                            </button>
-                          ))}
+                      {/* Company / Organization */}
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{
+                            width: '28px', height: '28px', borderRadius: '8px',
+                            background: '#FEECEE',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            flexShrink: 0
+                          }}>
+                            <FiBriefcase size={14} color="#C2071A" />
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>
+                              {a.company_name || a.organization_name || '—'}
+                            </div>
+                          </div>
                         </div>
-                      )}
-                    </td>
+                      </td>
 
-                    {/* Goal Mode */}
-                    <td style={{ padding: '14px 16px' }}>
-                      <select
-                        value={a.goal_mode || 'hybrid'}
-                        onChange={async e => {
-                          const mode = e.target.value
-                          try {
-                            await axios.patch(`/api/super-admin/client-admins/${a.id}/goal-mode`, { goal_mode: mode }, { headers })
-                            setAdmins(p => p.map(x => x.id === a.id ? { ...x, goal_mode: mode } : x))
-                            toast(`Goal mode set to ${mode}.`)
-                          } catch { toast('Failed to update goal mode.', 'error') }
-                        }}
-                        style={{
-                          padding: '5px 10px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                          background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)',
-                          color: '#6366f1', cursor: 'pointer', fontFamily: 'inherit', outline: 'none',
-                        }}
-                      >
-                        <option value="top_down">Top-Down</option>
-                        <option value="bottom_up">Bottom-Up</option>
-                        <option value="hybrid">Hybrid</option>
-                      </select>
-                    </td>
+                      {/* Phone */}
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ fontSize: '13px', color: a.phone ? '#475569' : '#94a3b8', fontWeight: 600 }}>
+                          {a.phone || '—'}
+                        </div>
+                      </td>
 
-                    {/* Created */}
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ fontSize: '12px', color: '#94a3b8' }}>
-                        {new Date(a.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </div>
-                    </td>
-
-                    {/* Actions */}
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <button
-                          onClick={() => openEdit(a)}
-                          style={{
-                            padding: '6px 14px', borderRadius: '8px', fontSize: '12px',
-                            fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-                            background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)',
-                            color: '#6366f1', transition: 'all 0.12s',
-                          }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(99,102,241,0.15)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(99,102,241,0.08)'}
+                      {/* Status — clickable dropdown */}
+                      <td style={{ padding: '14px 16px', position: 'relative' }}>
+                        <div
+                          onClick={e => { e.stopPropagation(); setStatusPopup(statusPopup === a.client_admin_id ? null : a.client_admin_id) }}
+                          style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                         >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => setDeleteConfirm(a.client_admin_id)}
-                          style={{
-                            padding: '6px 14px', borderRadius: '8px', fontSize: '12px',
-                            fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-                            background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)',
-                            color: '#ef4444', transition: 'all 0.12s',
+                          <StatusBadge value={a.status} />
+                          <FiChevronDown size={12} color="#64748b" />
+                        </div>
+                        {statusPopup === a.client_admin_id && (
+                          <div
+                            onClick={e => e.stopPropagation()}
+                            style={{
+                              position: 'absolute', top: '100%', left: '16px', zIndex: 100,
+                              background: '#ffffff', border: '1px solid #cbd5e1',
+                              borderRadius: '10px', overflow: 'hidden',
+                              boxShadow: '0 8px 32px rgba(0,0,0,0.12)', minWidth: '140px',
+                            }}
+                          >
+                            {STATUSES.map(s => (
+                              <button
+                                key={s}
+                                onClick={() => handleStatusChange(a.client_admin_id, s)}
+                                style={{
+                                  display: 'flex', alignItems: 'center', gap: '8px',
+                                  width: '100%', padding: '10px 14px',
+                                  background: a.status === s ? '#FEECEE' : 'none',
+                                  border: 'none', cursor: 'pointer', fontSize: '12px',
+                                  color: STATUS_META[s]?.color, fontFamily: 'inherit',
+                                  textAlign: 'left', fontWeight: '700',
+                                }}
+                              >
+                                {STATUS_META[s]?.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* Goal Mode */}
+                      <td style={{ padding: '14px 16px' }}>
+                        <select
+                          value={a.goal_mode || 'hybrid'}
+                          onChange={async e => {
+                            const mode = e.target.value
+                            try {
+                              await axios.patch(`/api/super-admin/client-admins/${a.id}/goal-mode`, { goal_mode: mode }, { headers })
+                              setAdmins(p => p.map(x => x.id === a.id ? { ...x, goal_mode: mode } : x))
+                              toast(`Goal mode set to ${mode}.`)
+                            } catch { toast('Failed to update goal mode.', 'error') }
                           }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.12)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.06)'}
+                          style={{
+                            padding: '6px 10px', borderRadius: 8, fontSize: 12, fontWeight: 700,
+                            background: '#FEECEE', border: '1px solid rgba(194, 7, 26, 0.2)',
+                            color: '#C2071A', cursor: 'pointer', fontFamily: 'inherit', outline: 'none',
+                          }}
                         >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                          <option value="top_down">Top-Down</option>
+                          <option value="bottom_up">Bottom-Up</option>
+                          <option value="hybrid">Hybrid</option>
+                        </select>
+                      </td>
+
+                      {/* Created */}
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>
+                          {new Date(a.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            onClick={() => openEdit(a)}
+                            style={{
+                              padding: '6px 12px', borderRadius: '8px', fontSize: '12px',
+                              fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                              background: '#FEECEE', border: '1px solid rgba(194,7,26,0.2)',
+                              color: '#C2071A', transition: 'all 0.12s', display: 'flex', alignItems: 'center', gap: '4px'
+                            }}
+                          >
+                            <FiEdit2 size={13} color="#C2071A" />
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirm(a.client_admin_id)}
+                            style={{
+                              padding: '6px 12px', borderRadius: '8px', fontSize: '12px',
+                              fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                              background: '#fee2e2', border: '1px solid rgba(185,28,28,0.2)',
+                              color: '#b91c1c', transition: 'all 0.12s', display: 'flex', alignItems: 'center', gap: '4px'
+                            }}
+                          >
+                            <FiTrash2 size={13} color="#b91c1c" />
+                            <span>Delete</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </main>
@@ -612,27 +641,27 @@ export default function ClientAdmins() {
         <div
           style={{
             position: 'fixed', inset: 0, zIndex: 200,
-            background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(6px)',
+            background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(4px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
           }}
           onClick={e => { if (e.target === e.currentTarget) setModal(null) }}
         >
           <div style={{
-            background: '#ffffff', border: '1px solid #e8eaf0',
+            background: '#ffffff', border: 'none',
             borderRadius: '20px', width: '100%', maxWidth: '520px',
             maxHeight: '90vh', overflowY: 'auto',
-            boxShadow: '0 24px 64px rgba(0,0,0,0.12)',
+            boxShadow: '0 24px 64px rgba(0,0,0,0.18)',
           }}>
             {/* Modal header */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '24px 28px 20px', borderBottom: '1px solid #e8eaf0',
+              padding: '24px 28px 20px', borderBottom: '1px solid #edf2f7',
             }}>
               <div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b' }}>
+                <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a' }}>
                   {modal === 'create' ? 'Add Client Admin' : 'Edit Client Admin'}
                 </div>
-                <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
                   {modal === 'create' ? 'Create a new client administrator account' : `Editing ${editTarget?.full_name}`}
                 </div>
               </div>
@@ -641,18 +670,17 @@ export default function ClientAdmins() {
                 style={{
                   width: '32px', height: '32px', borderRadius: '8px',
                   background: '#f1f5f9', border: 'none',
-                  color: '#94a3b8', cursor: 'pointer', fontSize: '18px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#64748b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
               >
-                ×
+                <FiX size={18} />
               </button>
             </div>
 
             {/* Modal body */}
             <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b' }}>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Assign to Company / Organization <span style={{ color: '#ef4444' }}>*</span>
                 </label>
                 <select
@@ -669,14 +697,14 @@ export default function ClientAdmins() {
                   }}
                   style={{
                     padding: '10px 14px', background: '#f8fafc',
-                    border: formErrors.company_name ? '1px solid #ef4444' : '1px solid #e2e8f0',
+                    border: formErrors.company_name ? '1px solid #ef4444' : '1px solid #cbd5e1',
                     borderRadius: '10px', fontSize: '13px', outline: 'none', color: '#1e293b', fontFamily: 'inherit'
                   }}
                 >
                   <option value="">+ Create New Company Name Below...</option>
                   {companiesList.map(c => (
                     <option key={c.organization_id} value={c.organization_id}>
-                      🏢 {c.company_name}
+                      {c.company_name}
                     </option>
                   ))}
                 </select>
@@ -726,7 +754,7 @@ export default function ClientAdmins() {
 
               {/* Notes */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', letterSpacing: '0.04em' }}>Notes</label>
+                <label style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Notes</label>
                 <textarea
                   value={form.notes}
                   onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
@@ -734,12 +762,12 @@ export default function ClientAdmins() {
                   rows={3}
                   style={{
                     padding: '10px 14px', background: '#f8fafc',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid #cbd5e1',
                     borderRadius: '10px', color: '#1e293b', fontSize: '13px',
                     outline: 'none', resize: 'vertical', fontFamily: 'inherit', lineHeight: '1.5',
                   }}
-                  onFocus={e => e.target.style.borderColor = '#6366f1'}
-                  onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                  onFocus={e => e.target.style.borderColor = '#C2071A'}
+                  onBlur={e => e.target.style.borderColor = '#cbd5e1'}
                 />
               </div>
             </div>
@@ -747,14 +775,14 @@ export default function ClientAdmins() {
             {/* Modal footer */}
             <div style={{
               display: 'flex', justifyContent: 'flex-end', gap: '12px',
-              padding: '16px 28px 24px', borderTop: '1px solid #e8eaf0',
+              padding: '16px 28px 24px', borderTop: '1px solid #edf2f7',
             }}>
               <button
                 onClick={() => setModal(null)}
                 style={{
                   padding: '10px 20px', borderRadius: '10px', fontSize: '13px',
-                  fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-                  background: '#f1f5f9', border: '1px solid #e2e8f0',
+                  fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                  background: '#ffffff', border: '1px solid #cbd5e1',
                   color: '#64748b',
                 }}
               >
@@ -765,10 +793,10 @@ export default function ClientAdmins() {
                 disabled={saving}
                 style={{
                   padding: '10px 24px', borderRadius: '10px', fontSize: '13px',
-                  fontWeight: '600', cursor: saving ? 'not-allowed' : 'pointer',
+                  fontWeight: '700', cursor: saving ? 'not-allowed' : 'pointer',
                   fontFamily: 'inherit',
-                  background: saving ? 'rgba(99,102,241,0.5)' : '#6366f1',
-                  border: 'none', color: '#fff', transition: 'all 0.15s', minWidth: '110px',
+                  background: saving ? '#fca5a5' : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                  border: 'none', color: '#ffffff', boxShadow: '0 4px 12px rgba(194, 7, 26, 0.25)', minWidth: '110px',
                 }}
               >
                 {saving ? 'Saving...' : modal === 'create' ? 'Create Admin' : 'Save Changes'}
@@ -782,28 +810,30 @@ export default function ClientAdmins() {
       {deleteConfirm && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 300,
-          background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(6px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
         }}>
           <div style={{
-            background: '#ffffff', border: '1px solid rgba(239,68,68,0.2)',
-            borderRadius: '16px', padding: '28px 32px', width: '100%', maxWidth: '400px',
-            boxShadow: '0 16px 48px rgba(0,0,0,0.1)',
+            background: '#ffffff', border: 'none',
+            borderRadius: '20px', padding: '28px 32px', width: '100%', maxWidth: '400px',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
           }}>
-            <div style={{ fontSize: '20px', marginBottom: '10px' }}>⚠️</div>
-            <div style={{ fontSize: '15px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+              <FiAlertTriangle size={24} color="#b91c1c" />
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', marginBottom: '8px' }}>
               Delete Client Admin?
             </div>
-            <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px', lineHeight: '1.6' }}>
+            <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '24px', lineHeight: '1.6', fontWeight: 500 }}>
               This action cannot be undone. The account will be permanently removed.
             </div>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button
                 onClick={() => setDeleteConfirm(null)}
                 style={{
-                  padding: '9px 18px', borderRadius: '10px', fontSize: '13px',
-                  fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-                  background: '#f1f5f9', border: '1px solid #e2e8f0',
+                  padding: '10px 18px', borderRadius: '10px', fontSize: '13px',
+                  fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                  background: '#ffffff', border: '1px solid #cbd5e1',
                   color: '#64748b',
                 }}
               >
@@ -812,18 +842,19 @@ export default function ClientAdmins() {
               <button
                 onClick={() => handleDelete(deleteConfirm)}
                 style={{
-                  padding: '9px 18px', borderRadius: '10px', fontSize: '13px',
-                  fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit',
-                  background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)',
-                  color: '#ef4444',
+                  padding: '10px 18px', borderRadius: '10px', fontSize: '13px',
+                  fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none',
+                  color: '#ffffff', boxShadow: '0 4px 12px rgba(185,28,28,0.25)', display: 'flex', alignItems: 'center', gap: '8px'
                 }}
               >
-                Yes, Delete
+                <FiTrash2 size={16} /> Yes, Delete
               </button>
             </div>
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }

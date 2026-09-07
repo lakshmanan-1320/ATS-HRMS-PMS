@@ -1,15 +1,21 @@
 import React from 'react'
+import { FiCheckCircle, FiTarget } from 'react-icons/fi'
 import { CalIcon } from '../shared/Icons'
+import { WidgetCard, ViewAllLink } from '../shared/UI'
 import { COLORS } from '../../theme'
 
-export default function UpcomingDeadlinesCard({ goals }) {
+export default function UpcomingDeadlinesCard({ goals, onViewAll }) {
   return (
-    <div style={{ background: COLORS.surface, borderRadius: '18px', padding: '20px 22px', border: `1px solid ${COLORS.borderLight}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', flex: 1 }}>
-      <div style={{ fontSize: '13px', fontWeight: '700', color: COLORS.text, marginBottom: '2px' }}>Upcoming Deadlines</div>
-      <div style={{ fontSize: '11px', color: COLORS.textMuted, marginBottom: '12px' }}>Next 30 days</div>
-
+    <WidgetCard
+      icon={<FiTarget size={14} />}
+      iconBg="rgba(194,7,26,0.1)"
+      iconColor={COLORS.primary}
+      title="Upcoming Deadlines"
+      subtitle="Next 30 days"
+      action={onViewAll && <ViewAllLink onClick={onViewAll} />}
+    >
       {goals.length === 0 ? (
-        <div style={{ textAlign: 'center', color: COLORS.green, fontSize: '12px', padding: '12px 0', fontWeight: '600' }}>✅ No upcoming deadlines</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: COLORS.green, fontSize: '12px', padding: '12px 0', fontWeight: '600' }}><FiCheckCircle size={13} /> No upcoming deadlines</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {goals.map((goal, idx) => {
@@ -32,6 +38,6 @@ export default function UpcomingDeadlinesCard({ goals }) {
           })}
         </div>
       )}
-    </div>
+    </WidgetCard>
   )
 }

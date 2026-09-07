@@ -102,15 +102,15 @@ export default function ManagerOvertimeApprovals() {
     subtitle: { fontSize: '13px', color: '#64748b', margin: '0 0 28px 0', fontWeight: '500' },
     tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '8px' },
     tabBtn: (active) => ({
-      padding: '8px 16px', background: active ? 'rgba(99, 102, 241, 0.08)' : 'transparent',
-      border: 'none', color: active ? '#4f46e5' : '#64748b', fontSize: '13px', fontWeight: '700',
-      cursor: 'pointer', transition: 'all 0.2s', borderBottom: active ? '2px solid #4f46e5' : 'none',
+      padding: '8px 16px', background: active ? 'rgba(194, 7, 26, 0.08)' : 'transparent',
+      border: 'none', color: active ? '#C2071A' : '#64748b', fontSize: '13px', fontWeight: '700',
+      cursor: 'pointer', transition: 'all 0.2s', borderBottom: active ? '2px solid #C2071A' : 'none',
       borderRadius: active ? '8px 8px 0 0' : '8px', fontFamily: 'inherit'
     }),
-    card: { background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' },
+    card: { background: '#ffffff', border: 'none', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' },
     table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
-    th: { padding: '12px 16px', color: '#475569', fontWeight: '700', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em', background: '#f8fafc' },
-    tr: { borderBottom: '1px solid #e2e8f0', transition: 'background 0.2s' },
+    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' },
+    tr: { borderBottom: '1px solid #edf2f7', transition: 'background 0.2s' },
     td: { padding: '12px 16px', color: '#1e293b', fontWeight: '500' },
     badge: (status) => {
       let bg = '#f1f5f9'; let color = '#475569'; let border = 'rgba(71,85,105,0.2)';
@@ -119,14 +119,14 @@ export default function ManagerOvertimeApprovals() {
       else if (status === 'PENDING') { bg = '#fef3c7'; color = '#b45309'; border = 'rgba(180,83,9,0.2)'; }
       return { display: 'inline-block', fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '6px', textTransform: 'uppercase', background: bg, color: color, border: `1px solid ${border}` }
     },
-    btnApprove: { padding: '6px 12px', background: 'rgba(21,128,61,0.06)', border: '1px solid rgba(21,128,61,0.2)', borderRadius: '8px', fontSize: '12px', fontWeight: '700', color: '#15803d', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', fontFamily: 'inherit' },
-    btnReject: { padding: '6px 12px', background: 'rgba(185,28,28,0.06)', border: '1px solid rgba(185,28,28,0.2)', borderRadius: '8px', fontSize: '12px', fontWeight: '700', color: '#b91c1c', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', fontFamily: 'inherit' },
-    modalBackdrop: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.3)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 },
-    modalContent: { background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', width: '90%', maxWidth: '480px', padding: '24px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' },
+    btnApprove: { padding: '6px 12px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px', fontSize: '12px', fontWeight: '700', color: '#059669', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', fontFamily: 'inherit' },
+    btnReject: { padding: '6px 12px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', fontSize: '12px', fontWeight: '700', color: '#ef4444', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', fontFamily: 'inherit' },
+    modalBackdrop: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 },
+    modalContent: { background: '#ffffff', border: 'none', borderRadius: '16px', width: '90%', maxWidth: '480px', padding: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' },
     formGroup: { display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' },
     label: { fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' },
     input: { padding: '10px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', fontFamily: 'inherit' },
-    btn: { padding: '10px 20px', background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit' },
+    btn: { padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit' },
     btnSec: { padding: '10px 20px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#64748b', cursor: 'pointer', fontFamily: 'inherit' },
     alert: (isError) => ({ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', borderRadius: '10px', border: `1px solid ${isError ? '#fca5a5' : '#86efac'}`, background: isError ? '#fee2e2' : '#dcfce7', color: isError ? '#b91c1c' : '#15803d', fontSize: '13px', fontWeight: '600', marginBottom: '16px' })
   }
@@ -137,8 +137,15 @@ export default function ManagerOvertimeApprovals() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar />
         <main style={s.main}>
-          <h1 style={s.h1}>Overtime Approvals Panel</h1>
-          <p style={s.subtitle}>Review, verify calculated check-ins, adjust approved hours, and approve or reject overtime requests.</p>
+          <div style={{ marginBottom: '28px' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+              </div>
+              Overtime Approvals Panel
+            </h1>
+            <p style={s.subtitle}>Review, verify calculated check-ins, adjust approved hours, and approve or reject overtime requests.</p>
+          </div>
 
           <div style={s.tabs}>
             <button style={s.tabBtn(activeTab === 'pending')} onClick={() => setActiveTab('pending')}>
@@ -200,7 +207,7 @@ export default function ManagerOvertimeApprovals() {
                             </td>
                             <td style={s.td}>{(req.shift_min_hours || 8.0).toFixed(1)} hrs</td>
                             <td style={s.td}>{(req.worked_hours || 0.0).toFixed(1)} hrs</td>
-                            <td style={{ ...s.td, fontWeight: '700', color: '#4f46e5' }}>{reqHrs} hrs</td>
+                            <td style={{ ...s.td, fontWeight: '700', color: '#C2071A' }}>{reqHrs} hrs</td>
                             {activeTab === 'history' && (
                               <td style={{ ...s.td, fontWeight: '800', color: '#15803d' }}>{appHrs} hrs</td>
                             )}

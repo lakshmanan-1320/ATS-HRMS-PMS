@@ -52,7 +52,7 @@ export function MiniBarChart({ bars, height = 64 }) {
   )
 }
 
-export function MiniRing({ pct, size = 56, color = '#6366f1' }) {
+export function MiniRing({ pct, size = 56, color = '#C2071A' }) {
   const r = (size - 7) / 2
   const circ = 2 * Math.PI * r
   return (

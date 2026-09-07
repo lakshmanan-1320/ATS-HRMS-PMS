@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import {
+  FiKey, FiClock, FiAlertTriangle, FiLock, FiHelpCircle, FiCheckCircle, FiAlertCircle
+} from 'react-icons/fi'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
 
 const REQUIREMENTS = [
   { key: 'requireUppercase', label: 'Uppercase Letter', desc: 'At least one uppercase letter (A–Z)', example: 'e.g. Password' },
@@ -18,10 +22,10 @@ function Toggle({ enabled, onChange }) {
       style={{
         position: 'relative', width: '52px', height: '28px',
         borderRadius: '14px',
-        background: enabled ? '#6366f1' : '#e2e8f0',
-        border: `1px solid ${enabled ? '#6366f1' : '#e2e8f0'}`,
+        background: enabled ? '#C2071A' : '#e2e8f0',
+        border: `1px solid ${enabled ? '#C2071A' : '#e2e8f0'}`,
         cursor: 'pointer', transition: 'all 0.25s', padding: 0, flexShrink: 0,
-        boxShadow: enabled ? '0 0 12px rgba(99,102,241,0.4)' : 'none',
+        boxShadow: enabled ? '0 0 12px rgba(194,7,26,0.4)' : 'none',
       }}
     >
       <span style={{
@@ -110,20 +114,23 @@ export default function PasswordPolicy() {
   const activeRequirements = REQUIREMENTS.filter(r => policy[r.key]).length
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <Sidebar active="password-policy" />
-
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Password Policy" />
+        <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
 
         {/* Page header */}
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
             <div style={{
               width: '36px', height: '36px', borderRadius: '10px',
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '17px', boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-            }}>🔑</div>
+              boxShadow: '0 4px 12px rgba(194, 7, 26, 0.3)',
+            }}>
+              <FiKey size={18} color="#ffffff" style={{ stroke: '#ffffff' }} />
+            </div>
             <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
               Password Policy
             </h1>
@@ -145,7 +152,7 @@ export default function PasswordPolicy() {
               border: `1px solid ${alert.type === 'success' ? '#86efac' : '#fca5a5'}`,
               color: alert.type === 'success' ? '#16a34a' : '#dc2626',
             }}>
-              <span style={{ fontSize: '16px' }}>{alert.type === 'success' ? '✓' : '⚠'}</span>
+              {alert.type === 'success' ? <FiCheckCircle size={16} color="#16a34a" /> : <FiAlertCircle size={16} color="#dc2626" />}
               {alert.msg}
             </div>
           )}
@@ -155,48 +162,49 @@ export default function PasswordPolicy() {
 
           {/* Main card */}
           <div style={{
-            background: '#ffffff', borderRadius: '20px',
-            border: '1px solid #e8eaf0',
-            boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+            background: '#ffffff', borderRadius: '16px',
+            border: 'none',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
             overflow: 'hidden', marginBottom: '16px',
           }}>
 
             {/* Card header */}
             <div style={{
-              background: 'linear-gradient(135deg, #1e293b 0%, #334155 60%, #475569 100%)',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
               padding: '24px 32px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <div style={{
                   width: '48px', height: '48px', borderRadius: '14px',
-                  background: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.2)',
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '22px',
-                }}>🔑</div>
+                }}>
+                  <FiKey size={22} color="#ffffff" style={{ stroke: '#ffffff' }} />
+                </div>
                 <div>
                   <div style={{ fontSize: '17px', fontWeight: '700', color: '#ffffff' }}>
                     Password Requirements
                   </div>
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '3px' }}>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', marginTop: '3px' }}>
                     Applied when users set or change their password
                   </div>
                 </div>
               </div>
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
-                background: activeRequirements >= 3 ? 'rgba(34,197,94,0.2)' : activeRequirements === 0 ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)',
-                border: `1px solid ${activeRequirements >= 3 ? 'rgba(34,197,94,0.4)' : activeRequirements === 0 ? 'rgba(239,68,68,0.4)' : 'rgba(245,158,11,0.4)'}`,
+                background: activeRequirements >= 3 ? 'rgba(34,197,94,0.2)' : activeRequirements === 0 ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.2)',
+                border: `1px solid ${activeRequirements >= 3 ? 'rgba(34,197,94,0.4)' : activeRequirements === 0 ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.3)'}`,
                 borderRadius: '20px', padding: '6px 14px',
               }}>
                 <div style={{
                   width: '7px', height: '7px', borderRadius: '50%',
-                  background: activeRequirements >= 3 ? '#22c55e' : activeRequirements === 0 ? '#ef4444' : '#f59e0b',
+                  background: activeRequirements >= 3 ? '#22c55e' : activeRequirements === 0 ? '#ef4444' : '#ffffff',
                 }} />
                 <span style={{
                   fontSize: '12px', fontWeight: '600',
-                  color: activeRequirements >= 3 ? '#86efac' : activeRequirements === 0 ? '#fca5a5' : '#fde68a',
+                  color: activeRequirements >= 3 ? '#86efac' : activeRequirements === 0 ? '#fca5a5' : '#ffffff',
                 }}>
                   {activeRequirements} / {REQUIREMENTS.length} rules active
                 </span>
@@ -227,7 +235,7 @@ export default function PasswordPolicy() {
                   >−</button>
                   <div style={{
                     minWidth: '52px', textAlign: 'center',
-                    fontSize: '22px', fontWeight: '800', color: '#6366f1',
+                    fontSize: '22px', fontWeight: '800', color: '#C2071A',
                   }}>
                     {policy.minLength}
                   </div>
@@ -247,7 +255,7 @@ export default function PasswordPolicy() {
                 type="range" min={4} max={32}
                 value={policy.minLength}
                 onChange={e => setPolicy(p => ({ ...p, minLength: Number(e.target.value) }))}
-                style={{ width: '100%', marginTop: '14px', accentColor: '#6366f1' }}
+                style={{ width: '100%', marginTop: '14px', accentColor: '#C2071A' }}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
                 <span>4 (minimum)</span>
@@ -274,9 +282,9 @@ export default function PasswordPolicy() {
                       <span style={{
                         fontSize: '11px', fontWeight: '700', padding: '2px 9px',
                         borderRadius: '20px',
-                        background: on ? 'rgba(99,102,241,0.08)' : 'rgba(239,68,68,0.08)',
-                        color: on ? '#6366f1' : '#ef4444',
-                        border: `1px solid ${on ? 'rgba(99,102,241,0.15)' : 'rgba(239,68,68,0.2)'}`,
+                        background: on ? 'rgba(194,7,26,0.08)' : 'rgba(239,68,68,0.08)',
+                        color: on ? '#C2071A' : '#ef4444',
+                        border: `1px solid ${on ? 'rgba(194,7,26,0.15)' : 'rgba(239,68,68,0.2)'}`,
                       }}>
                         {on ? '● Required' : '○ Optional'}
                       </span>
@@ -295,9 +303,9 @@ export default function PasswordPolicy() {
 
           {/* Password expiry card */}
           <div style={{
-            background: '#ffffff', borderRadius: '20px',
-            border: '1px solid #e8eaf0',
-            boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+            background: '#ffffff', borderRadius: '16px',
+            border: 'none',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
             overflow: 'hidden', marginBottom: '16px',
           }}>
             <div style={{ padding: '24px 32px', borderBottom: '1px solid #f1f5f9' }}>
@@ -305,8 +313,10 @@ export default function PasswordPolicy() {
                 <div style={{
                   width: '40px', height: '40px', borderRadius: '11px',
                   background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.15)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px',
-                }}>⏱</div>
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <FiClock size={18} color="#d97706" />
+                </div>
                 <div>
                   <div style={{ fontSize: '15px', fontWeight: '700', color: '#1e293b' }}>Password Expiry</div>
                   <div style={{ fontSize: '12px', color: '#64748b' }}>
@@ -323,9 +333,11 @@ export default function PasswordPolicy() {
                   style={{
                     width: '100px', padding: '10px 14px',
                     border: '1px solid #e2e8f0', borderRadius: '10px',
-                    fontSize: '16px', fontWeight: '700', color: '#6366f1',
+                    fontSize: '16px', fontWeight: '700', color: '#C2071A',
                     textAlign: 'center', outline: 'none',
                   }}
+                  onFocus={e => { e.target.style.borderColor = '#C2071A'; e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)' }}
+                  onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.boxShadow = 'none' }}
                 />
                 <span style={{ fontSize: '13px', color: '#64748b' }}>days</span>
                 {policy.maxAgeDays > 0 && (
@@ -355,7 +367,7 @@ export default function PasswordPolicy() {
                 background: '#fffbeb', borderTop: '1px solid #fde68a',
                 display: 'flex', alignItems: 'flex-start', gap: '10px',
               }}>
-                <span style={{ fontSize: '15px' }}>⚠️</span>
+                <FiAlertTriangle size={16} color="#92400e" style={{ flexShrink: 0, marginTop: '1px' }} />
                 <div style={{ fontSize: '12px', color: '#92400e', lineHeight: '1.6' }}>
                   Users whose password was last changed more than <strong>{policy.maxAgeDays} days</strong> ago will be required to reset it at their next login.
                 </div>
@@ -377,15 +389,15 @@ export default function PasswordPolicy() {
               style={{
                 display: 'flex', alignItems: 'center', gap: '7px',
                 padding: '10px 24px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                 border: 'none', borderRadius: '10px',
                 fontSize: '13px', fontWeight: '700',
-                color: '#fff', cursor: saving ? 'not-allowed' : 'pointer',
-                boxShadow: '0 4px 12px rgba(99,102,241,0.4)',
+                color: '#ffffff', cursor: saving ? 'not-allowed' : 'pointer',
+                boxShadow: '0 4px 12px rgba(194, 7, 26, 0.3)',
                 opacity: saving ? 0.75 : 1,
               }}
             >
-              <span>🔒</span>
+              <FiCheckCircle size={15} color="#ffffff" style={{ stroke: '#ffffff' }} />
               {saving ? 'Saving…' : 'Save Password Policy'}
             </button>
           </div>
@@ -394,11 +406,11 @@ export default function PasswordPolicy() {
           <div style={{
             display: 'flex', alignItems: 'flex-start', gap: '10px',
             padding: '14px 18px', borderRadius: '12px',
-            background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.1)',
+            background: 'rgba(194, 7, 26, 0.04)', border: '1px solid rgba(194, 7, 26, 0.1)',
           }}>
-            <span style={{ fontSize: '16px', marginTop: '1px' }}>💡</span>
+            <FiHelpCircle size={16} color="#C2071A" style={{ marginTop: '1px', flexShrink: 0 }} />
             <div>
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#4f46e5', marginBottom: '3px' }}>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: '#C2071A', marginBottom: '3px' }}>
                 When is this policy enforced?
               </div>
               <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
@@ -409,6 +421,8 @@ export default function PasswordPolicy() {
 
         </form>
       </main>
+      </div>
     </div>
   )
 }
+

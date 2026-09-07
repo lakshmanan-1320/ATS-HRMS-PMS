@@ -5,7 +5,7 @@ import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 import {
   FiGift, FiPlus, FiUpload, FiDownload, FiEdit2, FiTrash2,
   FiLock, FiSearch, FiX, FiCalendar, FiFilter, FiCheckCircle,
-  FiAlertCircle, FiLoader
+  FiAlertCircle, FiLoader, FiCheck
 } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
@@ -242,7 +242,7 @@ export default function HolidayManagement() {
           <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiGift size={18} color="#fff" />
                 </div>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Holiday Management</h1>
@@ -256,11 +256,11 @@ export default function HolidayManagement() {
                 onClick={handleOpenImport}
                 style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 16px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#374151', cursor: 'pointer', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}
               >
-                <FiUpload size={14} color="#6366f1" /> Bulk Import
+                <FiUpload size={14} color="#C2071A" /> Bulk Import
               </button>
               <button
                 onClick={handleOpenCreate}
-                style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}
               >
                 <FiPlus size={15} /> Create Holiday
               </button>
@@ -270,13 +270,13 @@ export default function HolidayManagement() {
           {/* Stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Holidays', value: stats.total,    color: '#6366f1', bg: '#eef2ff', icon: <FiGift size={18} color="#6366f1" /> },
-              { label: 'Public',         value: stats.pub,      color: '#15803d', bg: '#f0fdf4', icon: <FiCheckCircle size={18} color="#15803d" /> },
-              { label: 'Optional',       value: stats.optional, color: '#6d28d9', bg: '#faf5ff', icon: <FiCalendar size={18} color="#6d28d9" /> },
-              { label: 'Upcoming',       value: stats.upcoming, color: '#d97706', bg: '#fffbeb', icon: <FiCalendar size={18} color="#d97706" /> },
-            ].map(({ label, value, color, bg, icon }) => (
+              { label: 'Total Holidays', value: stats.total,    color: '#C2071A', icon: <FiGift size={18} color="#ffffff" /> },
+              { label: 'Public',         value: stats.pub,      color: '#15803d', icon: <FiCheckCircle size={18} color="#ffffff" /> },
+              { label: 'Optional',       value: stats.optional, color: '#6d28d9', icon: <FiCalendar size={18} color="#ffffff" /> },
+              { label: 'Upcoming',       value: stats.upcoming, color: '#d97706', icon: <FiCalendar size={18} color="#ffffff" /> },
+            ].map(({ label, value, color, icon }) => (
               <div key={label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 42, height: 42, borderRadius: '12px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 42, height: 42, borderRadius: '12px', background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {icon}
                 </div>
                 <div>
@@ -346,17 +346,19 @@ export default function HolidayManagement() {
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
                 <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading holidays…</div>
               </div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ fontSize: '40px', marginBottom: '12px' }}>🎉</div>
+                <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'linear-gradient(135deg, #94a3b8 0%, #94a3b8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                  <FiGift size={22} color="#ffffff" />
+                </div>
                 <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>
                   {hasFilters ? 'No holidays match your search' : `No holidays configured for ${yearFilter}`}
                 </div>
                 {hasFilters
-                  ? <span onClick={() => { setSearch(''); setTypeFilter('') }} style={{ color: '#6366f1', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>Clear filters</span>
+                  ? <span onClick={() => { setSearch(''); setTypeFilter('') }} style={{ color: '#C2071A', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>Clear filters</span>
                   : <span style={{ color: '#94a3b8', fontSize: '13px' }}>Click "Create Holiday" to add one.</span>
                 }
               </div>
@@ -383,13 +385,13 @@ export default function HolidayManagement() {
                         >
                           <td style={{ padding: '14px 18px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                              <div style={{ width: 32, height: 32, borderRadius: '8px', background: past ? '#f1f5f9' : badge.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', flexShrink: 0 }}>
-                                {past ? '🔒' : '🎉'}
+                              <div style={{ width: 32, height: 32, borderRadius: '8px', background: `linear-gradient(135deg, ${past ? '#94a3b8' : badge.color} 0%, ${past ? '#94a3b8' : badge.color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                {past ? <FiLock size={14} color="#ffffff" /> : <FiGift size={14} color="#ffffff" />}
                               </div>
                               <span style={{ fontWeight: '700', color: '#0f172a' }}>{h.holiday_name}</span>
                             </div>
                           </td>
-                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#6366f1', whiteSpace: 'nowrap' }}>{fmtDate(h.holiday_date)}</td>
+                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#C2071A', whiteSpace: 'nowrap' }}>{fmtDate(h.holiday_date)}</td>
                           <td style={{ padding: '14px 18px', color: '#374151', fontWeight: '500' }}>{getDayOfWeek(h.holiday_date)}</td>
                           <td style={{ padding: '14px 18px' }}>
                             <span style={{ display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '6px', textTransform: 'uppercase', background: badge.bg, color: badge.color, border: `1px solid ${badge.border}`, letterSpacing: '0.04em' }}>
@@ -397,7 +399,7 @@ export default function HolidayManagement() {
                             </span>
                           </td>
                           <td style={{ padding: '14px 18px', color: '#64748b', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {h.description || <span style={{ color: '#cbd5e1' }}>—</span>}
+                            {h.description || <span style={{ color: '#e2e8f0' }}>—</span>}
                           </td>
                           <td style={{ padding: '14px 18px' }}>
                             <button
@@ -422,19 +424,19 @@ export default function HolidayManagement() {
                               <div style={{ display: 'flex', gap: 6 }}>
                                 <button
                                   onClick={() => handleOpenEdit(h)}
-                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#eef2ff', color: '#4f46e5', border: '1px solid #c7d2fe', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                                  onMouseEnter={e => e.currentTarget.style.background = '#e0e7ff'}
-                                  onMouseLeave={e => e.currentTarget.style.background = '#eef2ff'}
+                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#C2071A', color: '#ffffff', border: '1px solid #C2071A', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                                  onMouseEnter={e => e.currentTarget.style.background = '#941018'}
+                                  onMouseLeave={e => e.currentTarget.style.background = '#C2071A'}
                                 >
-                                  <FiEdit2 size={11} /> Edit
+                                  <FiEdit2 size={11} color="#ffffff" /> Edit
                                 </button>
                                 <button
                                   onClick={() => handleDelete(h.holiday_id)}
-                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
-                                  onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
-                                  onMouseLeave={e => e.currentTarget.style.background = '#fef2f2'}
+                                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 11px', background: '#b91c1c', color: '#ffffff', border: '1px solid #b91c1c', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                                  onMouseEnter={e => e.currentTarget.style.background = '#991b1b'}
+                                  onMouseLeave={e => e.currentTarget.style.background = '#b91c1c'}
                                 >
-                                  <FiTrash2 size={11} /> Delete
+                                  <FiTrash2 size={11} color="#ffffff" /> Delete
                                 </button>
                               </div>
                             )}
@@ -457,7 +459,7 @@ export default function HolidayManagement() {
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151' }}
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#e2e8f0' : '#374151' }}
                 >‹ Prev</button>
 
                 {getPageNumbers(page, totalPages).map((p, i) =>
@@ -465,14 +467,14 @@ export default function HolidayManagement() {
                     <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8', fontSize: '13px' }}>…</span>
                   ) : (
                     <button key={p} onClick={() => setPage(p)}
-                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(99,102,241,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >{p}</button>
                   )
                 )}
 
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151' }}
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#e2e8f0' : '#374151' }}
                 >Next ›</button>
               </div>
             </div>
@@ -490,7 +492,7 @@ export default function HolidayManagement() {
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {editingHoliday ? <FiEdit2 size={16} color="#fff" /> : <FiPlus size={18} color="#fff" />}
                 </div>
                 <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
@@ -528,7 +530,7 @@ export default function HolidayManagement() {
               )}
 
               <button type="submit" disabled={formSaving}
-                style={{ width: '100%', padding: '11px', background: formSaving ? '#a5b4fc' : 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: formSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.3)', marginTop: '4px' }}>
+                style={{ width: '100%', padding: '11px', background: formSaving ? 'rgba(194,7,26,0.5)' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: formSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)', marginTop: '4px' }}>
                 {formSaving ? 'Saving…' : editingHoliday ? 'Save Changes' : 'Create Holiday'}
               </button>
             </form>
@@ -587,7 +589,7 @@ export default function HolidayManagement() {
                   </div>
                 </div>
                 <button onClick={() => setImportOpen(false)}
-                  style={{ width: '100%', padding: '11px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer' }}>
+                  style={{ width: '100%', padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer' }}>
                   Done
                 </button>
               </div>
@@ -595,9 +597,9 @@ export default function HolidayManagement() {
               <>
                 {/* Template download + file upload */}
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                  <div style={{ flex: 1, border: '2px dashed #c7d2fe', borderRadius: '12px', padding: '20px', textAlign: 'center', background: '#fafbff', cursor: 'pointer' }}
+                  <div style={{ flex: 1, border: '2px dashed #f7a6af', borderRadius: '12px', padding: '20px', textAlign: 'center', background: '#fafbff', cursor: 'pointer' }}
                     onClick={() => fileInputRef.current?.click()}>
-                    <FiUpload size={22} color="#6366f1" style={{ marginBottom: 8 }} />
+                    <FiUpload size={22} color="#C2071A" style={{ marginBottom: 8 }} />
                     <div style={{ fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: 4 }}>
                       {importRows.length > 0 ? `${importRows.length} row${importRows.length !== 1 ? 's' : ''} loaded` : 'Click to upload CSV'}
                     </div>
@@ -606,7 +608,7 @@ export default function HolidayManagement() {
                   </div>
                   <button onClick={downloadTemplate}
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '16px 20px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', cursor: 'pointer', color: '#374151', fontSize: '12px', fontWeight: '700' }}>
-                    <FiDownload size={18} color="#6366f1" />
+                    <FiDownload size={18} color="#C2071A" />
                     Download<br />Template
                   </button>
                 </div>
@@ -662,8 +664,8 @@ export default function HolidayManagement() {
                               <td style={{ padding: '8px 12px', color: '#64748b', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.description || '—'}</td>
                               <td style={{ padding: '8px 12px' }}>
                                 {r._errors.length === 0
-                                  ? <span style={{ color: '#15803d', fontWeight: '700', fontSize: '11px' }}>✓ Valid</span>
-                                  : <span style={{ color: '#b91c1c', fontWeight: '700', fontSize: '10px' }} title={r._errors.join(', ')}>✗ {r._errors[0]}</span>
+                                  ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#15803d', fontWeight: '700', fontSize: '11px' }}><FiCheck size={11} /> Valid</span>
+                                  : <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#b91c1c', fontWeight: '700', fontSize: '10px' }} title={r._errors.join(', ')}><FiX size={11} /> {r._errors[0]}</span>
                                 }
                               </td>
                             </tr>
@@ -682,7 +684,7 @@ export default function HolidayManagement() {
                   <button
                     onClick={handleImport}
                     disabled={validImportCount === 0 || importState === 'importing'}
-                    style={{ flex: 2, padding: '10px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: validImportCount === 0 ? 'not-allowed' : 'pointer', background: validImportCount === 0 ? '#a5b4fc' : 'linear-gradient(135deg,#10b981,#059669)', boxShadow: validImportCount > 0 ? '0 4px 12px rgba(16,185,129,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
+                    style={{ flex: 2, padding: '10px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: validImportCount === 0 ? 'not-allowed' : 'pointer', background: validImportCount === 0 ? '#94a3b8' : 'linear-gradient(135deg,#10b981,#059669)', boxShadow: validImportCount > 0 ? '0 4px 12px rgba(16,185,129,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
                     {importState === 'importing'
                       ? <><FiLoader size={13} style={{ animation: 'spin 0.8s linear infinite' }} /> Importing…</>
                       : <><FiUpload size={13} /> Import {validImportCount > 0 ? `${validImportCount} Holiday${validImportCount !== 1 ? 's' : ''}` : 'Holidays'}</>

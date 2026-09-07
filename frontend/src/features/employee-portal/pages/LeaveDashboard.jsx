@@ -5,6 +5,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
+import { FiPlus, FiDownload, FiAlertCircle, FiCalendar, FiClock, FiCheck, FiX } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -48,7 +49,7 @@ function Pagination({ page, totalPages, onChange }) {
       >← Prev</button>
       {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
         <button key={p} onClick={() => onChange(p)}
-          style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', borderColor: p === page ? '#6366f1' : '#e2e8f0', background: p === page ? '#6366f1' : '#fff', color: p === page ? '#fff' : '#374151' }}
+          style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', borderColor: p === page ? '#C2071A' : '#e2e8f0', background: p === page ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}
         >{p}</button>
       ))}
       <button
@@ -209,14 +210,14 @@ export default function LeaveDashboard() {
 
   // ── Styles ───────────────────────────────────────────────────────
   const s = {
-    page: { display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, system-ui, sans-serif' },
-    main: { flex: 1, padding: '32px 40px', overflowY: 'auto' },
+    page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
+    main: { flex: 1, padding: '28px 32px', overflowY: 'auto' },
     section: { fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' },
     divider: { flex: 1, height: '1px', background: '#e8eaf0' },
     balanceGrid: { display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' },
-    tableCard: { background: '#fff', border: '1px solid #e8eaf0', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '32px' },
-    th: { padding: '12px 18px', color: '#64748b', fontWeight: '600', borderBottom: '1px solid #e8eaf0', background: '#f8fafc', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.06em' },
-    td: { padding: '13px 18px', color: '#1e293b', borderBottom: '1px solid #f1f5f9', fontSize: '13px' },
+    tableCard: { background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', marginBottom: '32px' },
+    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' },
+    td: { padding: '14px 16px', color: '#1e293b', borderBottom: '1px solid #edf2f7', fontSize: '13px' },
     emptyCell: { padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' },
     badge: (st) => ({
       display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px',
@@ -228,12 +229,12 @@ export default function LeaveDashboard() {
     tabBar: { display: 'flex', gap: 0, padding: '0 18px', borderBottom: '1px solid #e8eaf0' },
     tab: (active) => ({
       padding: '13px 20px', fontSize: '13px', fontWeight: active ? '700' : '500',
-      color: active ? '#6366f1' : '#64748b', border: 'none', borderBottom: active ? '2px solid #6366f1' : '2px solid transparent',
+      color: active ? '#C2071A' : '#64748b', border: 'none', borderBottom: active ? '2.5px solid #C2071A' : '2.5px solid transparent',
       background: 'none', cursor: 'pointer', marginBottom: '-1px', transition: 'all 0.15s',
     }),
     cancelBtn: { padding: '4px 10px', background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', fontSize: '11px', fontWeight: '600', color: '#ef4444', cursor: 'pointer' },
-    exportBtn: { marginLeft: 'auto', padding: '6px 14px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '8px', fontSize: '12px', fontWeight: '700', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' },
-    applyBtn: { padding: '10px 20px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' },
+    exportBtn: { marginLeft: 'auto', padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+    applyBtn: { padding: '9px 18px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
   }
 
   return (
@@ -244,13 +245,19 @@ export default function LeaveDashboard() {
         <main style={s.main}>
 
           {/* Page Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px' }}>My Leave Dashboard</h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>Track balances, optional holidays, and manage your time off</p>
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+                </div>
+                My Leave Dashboard
+              </h1>
+              <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Track balances, optional holidays, and manage your time off</p>
             </div>
             <button style={s.applyBtn} onClick={() => navigate('/employee/leave-request')}>
-              + Apply Leave / Permission
+              <FiPlus size={16} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+              Apply Leave / Permission
             </button>
           </div>
 
@@ -262,7 +269,7 @@ export default function LeaveDashboard() {
             <div style={s.balanceGrid}>
               {balances.map(b => {
                 const usedPct = UsedPct(parseFloat(b.used_days), parseFloat(b.allocated_days))
-                const accent  = b.is_paid_leave ? '#6366f1' : '#10b981'
+                const accent  = b.is_paid_leave ? '#C2071A' : '#10b981'
                 return (
                   <div
                     key={b.leave_balance_id}
@@ -271,21 +278,21 @@ export default function LeaveDashboard() {
                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)' }}
                   >
                     {/* Left: gradient panel */}
-                    <div style={{ background: `linear-gradient(145deg, ${accent}, ${accent}aa)`, padding: '18px 24px', width: '210px', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div style={{ background: b.is_paid_leave ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)', padding: '18px 24px', width: '210px', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <div>
-                        <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>{b.leave_type_name}</div>
+                        <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.75)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>{b.leave_type_name}</div>
                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
                           <span style={{ fontSize: '38px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>{b.available_days}</span>
-                          <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', fontWeight: '500', paddingBottom: '5px' }}>days available</span>
+                          <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', fontWeight: '500', paddingBottom: '5px' }}>days available</span>
                         </div>
                       </div>
                       <div style={{ marginTop: '14px' }}>
                         <div style={{ height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.22)', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${Math.min(100, usedPct)}%`, background: 'rgba(255,255,255,0.8)', borderRadius: '4px', transition: 'width 0.6s ease' }} />
+                          <div style={{ height: '100%', width: `${Math.min(100, usedPct)}%`, background: 'rgba(255,255,255,0.85)', borderRadius: '4px', transition: 'width 0.6s ease' }} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
-                          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>Utilization</span>
-                          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.9)', fontWeight: '700' }}>{Math.round(usedPct)}% used</span>
+                          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.6)' }}>Utilization</span>
+                          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.95)', fontWeight: '700' }}>{Math.round(usedPct)}% used</span>
                         </div>
                       </div>
                     </div>
@@ -346,13 +353,13 @@ export default function LeaveDashboard() {
 
               {ohData.calendar_count < ohData.configured_max && ohData.calendar_count > 0 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)', fontSize: '12px', color: '#d97706' }}>
-                  <span>⚠</span>
+                  <FiAlertCircle size={14} color="#d97706" />
                   <span>Your configured entitlement is {ohData.configured_max} optional holidays, but only <strong>{ohData.calendar_count}</strong> {ohData.calendar_count !== 1 ? 'are' : 'is'} available in the calendar. Your effective limit is <strong>{ohData.allocated_days}</strong>.</span>
                 </div>
               )}
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px', marginBottom: '20px' }}>
-                {[['Limit', ohData.allocated_days, '#6366f1'], ['Availed', ohData.used_days, '#d97706'], ['Remaining', ohData.remaining_days, '#059669']].map(([lbl, val, col]) => (
+                {[['Limit', ohData.allocated_days, '#C2071A'], ['Availed', ohData.used_days, '#d97706'], ['Remaining', ohData.remaining_days, '#059669']].map(([lbl, val, col]) => (
                   <div key={lbl} style={{ background: '#f8fafc', borderRadius: '12px', padding: '14px', textAlign: 'center', border: `1px solid ${col}22` }}>
                     <div style={{ fontSize: '26px', fontWeight: '800', color: col, lineHeight: 1, marginBottom: '4px' }}>{val}</div>
                     <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{lbl}</div>
@@ -389,8 +396,8 @@ export default function LeaveDashboard() {
                         onClick={() => { if (!isDisabled && !isToggling) toggleOH(h.holiday_id) }}
                         title={isDisabled ? 'Quota exhausted — un-avail another first' : h.is_availed ? 'Click to un-avail' : `Click to avail (${ohData.remaining_days} slot${ohData.remaining_days !== 1 ? 's' : ''} remaining)`}
                       >
-                        <div style={{ width: '20px', height: '20px', borderRadius: '6px', flexShrink: 0, border: `2px solid ${h.is_availed ? '#f59e0b' : '#cbd5e1'}`, background: h.is_availed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#000', fontWeight: '800', transition: 'all 0.15s' }}>
-                          {isToggling ? '…' : h.is_availed ? '✓' : ''}
+                        <div style={{ width: '20px', height: '20px', borderRadius: '6px', flexShrink: 0, border: `2px solid ${h.is_availed ? '#f59e0b' : '#cbd5e1'}`, background: h.is_availed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#fff', fontWeight: '800', transition: 'all 0.15s' }}>
+                          {isToggling ? '…' : h.is_availed ? <FiCheck size={12} color="#ffffff" /> : ''}
                         </div>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{h.holiday_name}</div>
@@ -437,7 +444,9 @@ export default function LeaveDashboard() {
                     Clear
                   </button>
                 )}
-                <button style={s.exportBtn} onClick={exportLeavesPDF}>⬇ Export PDF</button>
+                <button style={s.exportBtn} onClick={exportLeavesPDF}>
+                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" /> Export PDF
+                </button>
               </div>
             ) : (
               <div style={s.filterBar}>
@@ -451,7 +460,9 @@ export default function LeaveDashboard() {
                     Clear
                   </button>
                 )}
-                <button style={{ ...s.exportBtn, background: 'linear-gradient(135deg,#10b981,#059669)' }} onClick={exportPermPDF}>⬇ Export PDF</button>
+                <button style={s.exportBtn} onClick={exportPermPDF}>
+                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" /> Export PDF
+                </button>
               </div>
             )}
 
@@ -487,7 +498,7 @@ export default function LeaveDashboard() {
                           </td>
                           <td style={{ ...s.td, fontWeight: '700', color: '#0f172a' }}>{parseFloat(r.total_leave_days)}</td>
                           <td style={s.td}>
-                            <span style={{ fontSize: '11px', color: '#6366f1', fontWeight: '600' }}>
+                            <span style={{ fontSize: '11px', color: '#C2071A', fontWeight: '600' }}>
                               {r.session_type === 'FULL_DAY' ? 'Full Day' : r.session_type === 'FIRST_HALF' ? 'First Half' : r.session_type === 'SECOND_HALF' ? 'Second Half' : r.session_type}
                             </span>
                           </td>
@@ -554,8 +565,8 @@ export default function LeaveDashboard() {
 
         {toast && (
           <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999, background: toast.type === 'error' ? '#ef4444' : '#10b981', color: '#fff', borderRadius: '12px', padding: '12px 18px', fontSize: '13px', fontWeight: '600', boxShadow: '0 8px 24px rgba(0,0,0,0.18)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {toast.type === 'error' ? '⚠' : '✓'} {toast.msg}
-            <button onClick={() => setToast(null)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, marginLeft: '4px', fontSize: '16px', opacity: 0.7 }}>×</button>
+            {toast.type === 'error' ? <FiAlertCircle size={16} color="#ffffff" /> : <FiCheck size={16} color="#ffffff" />} {toast.msg}
+            <button onClick={() => setToast(null)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, marginLeft: '4px', fontSize: '16px', opacity: 0.7 }}><FiX size={16} color="#ffffff" /></button>
           </div>
         )}
       </div>

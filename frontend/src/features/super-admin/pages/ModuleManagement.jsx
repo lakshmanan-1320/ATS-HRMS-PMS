@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Sidebar from '../../../components/layout/Sidebar';
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar';
 import { clearModuleCache } from '../../../hooks/useModules';
+import {
+  FiClock, FiCalendar, FiDollarSign, FiAward, FiTarget,
+  FiBarChart2, FiTrendingUp, FiMessageSquare, FiFileText,
+  FiUserCheck, FiRefreshCw, FiAlertTriangle, FiPieChart, FiGrid,
+  FiSettings, FiSliders, FiUsers, FiCheckCircle, FiAlertCircle
+} from 'react-icons/fi';
 
 const api = axios.create({ baseURL: '/api' });
 api.interceptors.request.use(cfg => {
@@ -12,23 +19,23 @@ api.interceptors.request.use(cfg => {
 
 const MODULE_META = {
   // Core HRMS
-  attendance:            { icon: '🕐', color: '#f59e0b' },
-  leave:                 { icon: '🏖️', color: '#06b6d4' },
-  payroll:               { icon: '💰', color: '#10b981' },
+  attendance:            { icon: FiClock, color: '#C2071A' },
+  leave:                 { icon: FiCalendar, color: '#C2071A' },
+  payroll:               { icon: FiDollarSign, color: '#C2071A' },
   // PMS Master
-  pms:                   { icon: '🏆', color: '#6366f1' },
+  pms:                   { icon: FiAward, color: '#C2071A' },
   // PMS Features
-  goals:                 { icon: '🎯', color: '#6366f1' },
-  performance:           { icon: '📊', color: '#8b5cf6' },
+  goals:                 { icon: FiTarget, color: '#C2071A' },
+  performance:           { icon: FiBarChart2, color: '#C2071A' },
   // PMS Techniques
-  kpi:                   { icon: '📈', color: '#00b386' },
-  continuous_feedback:   { icon: '💬', color: '#0f766e' },
-  competency_assessment: { icon: '📝', color: '#b45309' },
-  self_assessment:       { icon: '🙋', color: '#6366f1' },
-  '360_feedback':        { icon: '🔄', color: '#8b5cf6' },
-  pip:                   { icon: '🚨', color: '#ef4444' },
-  bell_curve:            { icon: '📉', color: '#f59e0b' },
-  nine_box:              { icon: '🔲', color: '#3b82f6' },
+  kpi:                   { icon: FiTrendingUp, color: '#C2071A' },
+  continuous_feedback:   { icon: FiMessageSquare, color: '#C2071A' },
+  competency_assessment: { icon: FiFileText, color: '#C2071A' },
+  self_assessment:       { icon: FiUserCheck, color: '#C2071A' },
+  '360_feedback':        { icon: FiRefreshCw, color: '#C2071A' },
+  pip:                   { icon: FiAlertTriangle, color: '#ef4444' },
+  bell_curve:            { icon: FiPieChart, color: '#C2071A' },
+  nine_box:              { icon: FiGrid, color: '#C2071A' },
 };
 
 function Toggle({ checked, onChange, disabled }) {
@@ -38,7 +45,7 @@ function Toggle({ checked, onChange, disabled }) {
       disabled={disabled}
       style={{
         width: '44px', height: '24px', borderRadius: '12px', border: 'none',
-        background: checked ? '#6366f1' : '#cbd5e1',
+        background: checked ? '#C2071A' : '#cbd5e1',
         cursor: disabled ? 'not-allowed' : 'pointer',
         position: 'relative', transition: 'background 0.2s', flexShrink: 0,
         opacity: disabled ? 0.45 : 1,
@@ -61,12 +68,15 @@ function Toast({ msg, type, onClose }) {
   return (
     <div style={{
       position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
-      padding: '12px 20px', borderRadius: '10px', fontSize: '13px', fontWeight: '600',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+      padding: '12px 20px', borderRadius: '12px', fontSize: '13px', fontWeight: '700',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '8px',
       background: type === 'error' ? '#fef2f2' : '#f0fdf4',
       border: `1px solid ${type === 'error' ? '#fca5a5' : '#86efac'}`,
       color: type === 'error' ? '#dc2626' : '#16a34a',
-    }}>{msg}</div>
+    }}>
+      {type === 'error' ? <FiAlertCircle size={16} color="#dc2626" /> : <FiCheckCircle size={16} color="#16a34a" />}
+      <span>{msg}</span>
+    </div>
   );
 }
 
@@ -196,13 +206,14 @@ export default function ModuleManagement() {
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-      gap: '14px',
+      gap: '16px',
       opacity: locked ? 0.65 : 1,
       pointerEvents: locked ? 'none' : 'auto',
       transition: 'opacity 0.2s',
     }}>
       {items.map(mod => {
-        const meta = MODULE_META[mod.module_key] || { icon: '⚙️', color: '#6366f1' };
+        const meta = MODULE_META[mod.module_key] || { icon: FiSettings, color: '#C2071A' };
+        const IconComponent = meta.icon;
         const isToggling = toggling === mod.module_key;
         const active = locked ? false : mod.is_enabled;
 
@@ -211,36 +222,35 @@ export default function ModuleManagement() {
             key={mod.module_key}
             style={{
               background: '#ffffff',
-              border: `1px solid ${active ? 'rgba(99,102,241,0.2)' : '#e2e8f0'}`,
-              borderRadius: '14px', padding: '18px 20px',
+              border: 'none',
+              borderRadius: '16px', padding: '20px',
               transition: 'all 0.2s',
               boxShadow: active
-                ? '0 2px 10px rgba(99,102,241,0.06)'
-                : '0 1px 4px rgba(0,0,0,0.02)',
+                ? '0 4px 20px -2px rgba(194, 7, 26, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04)'
+                : '0 4px 20px -2px rgba(0, 0, 0, 0.04)',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{
-                  width: '40px', height: '40px', borderRadius: '10px',
-                  background: active ? `${meta.color}15` : '#f1f5f9',
+                  width: '40px', height: '40px', borderRadius: '12px',
+                  background: active ? '#FEECEE' : '#f1f5f9',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '20px', flexShrink: 0,
-                  transition: 'all 0.2s',
+                  flexShrink: 0, transition: 'all 0.2s',
                 }}>
-                  {meta.icon}
+                  <IconComponent size={20} color={active ? '#C2071A' : '#94a3b8'} />
                 </div>
                 <div>
                   <div style={{
-                    fontSize: '14px', fontWeight: '600',
-                    color: active ? '#1e293b' : '#94a3b8',
+                    fontSize: '14px', fontWeight: '700',
+                    color: active ? '#0f172a' : '#94a3b8',
                     transition: 'color 0.2s',
                   }}>
                     {mod.module_name}
                   </div>
                   <div style={{
-                    marginTop: '3px',
-                    fontSize: '11px', fontWeight: '600', letterSpacing: '0.04em',
+                    marginTop: '4px',
+                    fontSize: '11px', fontWeight: '700', letterSpacing: '0.04em',
                     padding: '2px 8px', borderRadius: '20px', display: 'inline-block',
                     background: active ? '#dcfce7' : '#f1f5f9',
                     color: active ? '#15803d' : '#64748b',
@@ -259,13 +269,13 @@ export default function ModuleManagement() {
               <div style={{
                 marginTop: '12px', fontSize: '12px',
                 color: active ? '#64748b' : '#94a3b8',
-                lineHeight: '1.5',
+                lineHeight: '1.5', fontWeight: 500
               }}>
                 {mod.description}
               </div>
             )}
             {isToggling && (
-              <div style={{ marginTop: '8px', fontSize: '11px', color: '#6366f1', fontWeight: '600' }}>
+              <div style={{ marginTop: '8px', fontSize: '11px', color: '#C2071A', fontWeight: '700' }}>
                 Updating...
               </div>
             )}
@@ -276,17 +286,21 @@ export default function ModuleManagement() {
   );
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <Sidebar active="modules" />
-      <Toast msg={toast.msg} type={toast.type} onClose={() => setToast({ msg: '', type: 'success' })} />
-
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="Module Management" />
+        <Toast msg={toast.msg} type={toast.type} onClose={() => setToast({ msg: '', type: 'success' })} />
+        <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         {/* Header */}
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#0f172a' }}>
+        <div style={{ marginBottom: '28px' }}>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FiSliders size={20} color="#C2071A" strokeWidth={2.5} />
+            </div>
             Module Management
           </h1>
-          <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#64748b' }}>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
             Enable or disable HR & Payroll suite modules, master PMS controls, and performance evaluation techniques per client.
           </p>
         </div>
@@ -296,25 +310,25 @@ export default function ModuleManagement() {
           <div style={{
             width: '260px', flexShrink: 0,
             background: '#ffffff',
-            border: '1px solid #e8eaf0',
+            border: 'none',
             borderRadius: '16px', overflow: 'hidden',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
           }}>
             <div style={{
               padding: '14px 16px',
-              borderBottom: '1px solid #e8eaf0',
+              borderBottom: '1px solid #edf2f7',
               fontSize: '11px', fontWeight: '700', letterSpacing: '0.1em',
-              textTransform: 'uppercase', color: '#94a3b8',
-              background: '#f8fafc',
+              textTransform: 'uppercase', color: '#ffffff',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
             }}>
               Clients ({clients.length})
             </div>
             {loading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+              <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px', fontWeight: 600 }}>
                 Loading...
               </div>
             ) : clients.length === 0 ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+              <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px', fontWeight: 600 }}>
                 No clients found
               </div>
             ) : clients.map(client => {
@@ -325,23 +339,23 @@ export default function ModuleManagement() {
                   onClick={() => setSelectedClient(client)}
                   style={{
                     width: '100%', textAlign: 'left', border: 'none',
-                    padding: '12px 16px', cursor: 'pointer',
-                    background: isSelected ? 'rgba(99,102,241,0.06)' : 'transparent',
-                    borderLeft: isSelected ? '3px solid #6366f1' : '3px solid transparent',
+                    padding: '14px 16px', cursor: 'pointer',
+                    background: isSelected ? '#FEECEE' : 'transparent',
+                    borderLeft: isSelected ? '4px solid #C2071A' : '4px solid transparent',
                     transition: 'all 0.15s', fontFamily: 'inherit',
                   }}
-                  onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'rgba(99,102,241,0.03)'; }}
+                  onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = '#f8fafc'; }}
                   onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
                 >
-                  <div style={{ fontSize: '13px', fontWeight: '600', color: isSelected ? '#6366f1' : '#1e293b' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: isSelected ? '#C2071A' : '#1e293b' }}>
                     {client.full_name}
                   </div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
                     {client.email}
                   </div>
                   <div style={{ marginTop: '4px' }}>
                     <span style={{
-                      fontSize: '10px', fontWeight: '600', padding: '2px 7px', borderRadius: '20px',
+                      fontSize: '10px', fontWeight: '700', padding: '2px 7px', borderRadius: '20px',
                       background: client.status === 'active' ? '#dcfce7' : '#fee2e2',
                       color: client.status === 'active' ? '#15803d' : '#b91c1c',
                     }}>
@@ -358,10 +372,10 @@ export default function ModuleManagement() {
             {!selectedClient ? (
               <div style={{
                 background: '#ffffff',
-                border: '1px solid #e8eaf0',
+                border: 'none',
                 borderRadius: '16px', padding: '48px',
-                textAlign: 'center', color: '#94a3b8', fontSize: '14px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600,
+                boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
               }}>
                 Select a client to manage their modules
               </div>
@@ -370,26 +384,26 @@ export default function ModuleManagement() {
                 {/* Client header summary */}
                 <div style={{
                   background: '#ffffff',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '14px', padding: '16px 20px',
-                  marginBottom: '20px',
+                  border: 'none',
+                  borderRadius: '16px', padding: '18px 24px',
+                  marginBottom: '24px',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+                  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                     <div style={{
-                      width: '38px', height: '38px', borderRadius: '10px',
-                      background: 'rgba(99,102,241,0.1)',
+                      width: '42px', height: '42px', borderRadius: '12px',
+                      background: '#FEECEE',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '16px', fontWeight: '700', color: '#6366f1',
+                      fontSize: '16px', fontWeight: '800', color: '#C2071A',
                     }}>
                       {selectedClient.full_name?.charAt(0)?.toUpperCase() || '?'}
                     </div>
                     <div>
-                      <div style={{ fontSize: '15px', fontWeight: '700', color: '#1e293b' }}>
+                      <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
                         {selectedClient.full_name}
                       </div>
-                      <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+                      <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
                         {selectedClient.email}
                       </div>
                     </div>
@@ -400,15 +414,17 @@ export default function ModuleManagement() {
                       color: isPmsActive ? '#15803d' : '#64748b',
                       background: isPmsActive ? '#dcfce7' : '#f1f5f9',
                       padding: '6px 14px', borderRadius: '20px',
-                      border: `1px solid ${isPmsActive ? '#86efac' : '#cbd5e1'}`,
+                      border: `1px solid ${isPmsActive ? 'rgba(21,128,61,0.2)' : '#cbd5e1'}`,
+                      display: 'flex', alignItems: 'center', gap: '6px'
                     }}>
-                      {isPmsActive ? '🏆 PMS Enabled' : 'PMS Disabled'}
+                      <FiAward size={14} color={isPmsActive ? '#15803d' : '#64748b'} />
+                      <span>{isPmsActive ? 'PMS Enabled' : 'PMS Disabled'}</span>
                     </div>
                     <div style={{
-                      fontSize: '13px', fontWeight: '600',
-                      color: '#6366f1', background: 'rgba(99,102,241,0.08)',
+                      fontSize: '12px', fontWeight: '700',
+                      color: '#C2071A', background: '#FEECEE',
                       padding: '6px 14px', borderRadius: '20px',
-                      border: '1px solid rgba(99,102,241,0.15)',
+                      border: '1px solid rgba(194, 7, 26, 0.2)',
                     }}>
                       {enabledCount} / {modules.length} modules enabled
                     </div>
@@ -418,9 +434,10 @@ export default function ModuleManagement() {
                 {moduleLoading ? (
                   <div style={{
                     background: '#ffffff',
-                    border: '1px solid #e8eaf0',
-                    borderRadius: '14px', padding: '48px',
-                    textAlign: 'center', color: '#94a3b8', fontSize: '14px',
+                    border: 'none',
+                    borderRadius: '16px', padding: '48px',
+                    textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600,
+                    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                   }}>
                     Loading modules...
                   </div>
@@ -429,11 +446,12 @@ export default function ModuleManagement() {
                     {/* SECTION 1: Core HRMS Modules */}
                     <div style={{ marginBottom: '32px' }}>
                       <div style={{
-                        fontSize: '13px', fontWeight: '700', letterSpacing: '0.08em',
-                        textTransform: 'uppercase', color: '#0ea5e9', marginBottom: '14px',
+                        fontSize: '12px', fontWeight: '800', letterSpacing: '0.08em',
+                        textTransform: 'uppercase', color: '#C2071A', marginBottom: '16px',
                         display: 'flex', alignItems: 'center', gap: '8px',
                       }}>
-                        <span>⚙️</span> Core HR & Payroll Suite (HRMS)
+                        <FiClock size={16} color="#C2071A" />
+                        <span>Core HR & Payroll Suite (HRMS)</span>
                       </div>
                       {renderModuleGrid(hrmsModules)}
                     </div>
@@ -441,23 +459,21 @@ export default function ModuleManagement() {
                     {/* SECTION 2: Master Performance Management Suite (PMS) Card */}
                     <div style={{
                       background: '#ffffff',
-                      border: `1.5px solid ${isPmsActive ? '#6366f1' : '#cbd5e1'}`,
-                      borderRadius: '18px', padding: '24px',
-                      marginBottom: '28px',
-                      boxShadow: isPmsActive
-                        ? '0 4px 16px rgba(99,102,241,0.08)'
-                        : '0 2px 8px rgba(0,0,0,0.03)',
+                      border: 'none',
+                      borderRadius: '16px', padding: '24px',
+                      marginBottom: '32px',
+                      boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
                       transition: 'all 0.2s',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                           <div style={{
                             width: '48px', height: '48px', borderRadius: '14px',
-                            background: isPmsActive ? 'rgba(99,102,241,0.12)' : '#f1f5f9',
+                            background: isPmsActive ? '#FEECEE' : '#f1f5f9',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '26px', flexShrink: 0,
+                            flexShrink: 0,
                           }}>
-                            🏆
+                            <FiAward size={24} color={isPmsActive ? '#C2071A' : '#94a3b8'} />
                           </div>
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -473,7 +489,7 @@ export default function ModuleManagement() {
                                 {isPmsActive ? 'SUITE ENABLED' : 'SUITE DISABLED'}
                               </span>
                             </div>
-                            <p style={{ margin: '6px 0 0', fontSize: '13px', color: '#64748b', lineHeight: '1.5', maxWidth: '640px' }}>
+                            <p style={{ margin: '6px 0 0', fontSize: '13px', color: '#64748b', lineHeight: '1.5', maxWidth: '640px', fontWeight: 500 }}>
                               Master toggle for all appraisals, goals, reviews, feedback, calibration, and measurement techniques.
                               Turning this off disables the Performance Management Suite, hiding all performance links from client admins and employees.
                             </p>
@@ -489,25 +505,27 @@ export default function ModuleManagement() {
                     </div>
 
                     {/* SECTION 3: Performance Core Modules */}
-                    <div style={{ marginBottom: '28px' }}>
+                    <div style={{ marginBottom: '32px' }}>
                       <div style={{
-                        fontSize: '13px', fontWeight: '700', letterSpacing: '0.08em',
-                        textTransform: 'uppercase', color: isPmsActive ? '#6366f1' : '#94a3b8', marginBottom: '14px',
+                        fontSize: '12px', fontWeight: '800', letterSpacing: '0.08em',
+                        textTransform: 'uppercase', color: isPmsActive ? '#C2071A' : '#94a3b8', marginBottom: '16px',
                         display: 'flex', alignItems: 'center', gap: '8px',
                       }}>
-                        <span>🎯</span> PMS Core Feature Modules {!isPmsActive && '(Disabled)'}
+                        <FiTarget size={16} color={isPmsActive ? '#C2071A' : '#94a3b8'} />
+                        <span>PMS Core Feature Modules {!isPmsActive && '(Disabled)'}</span>
                       </div>
                       {renderModuleGrid(pmsFeatureModules, !isPmsActive)}
                     </div>
 
                     {/* SECTION 4: Performance Measurement Techniques */}
-                    <div style={{ marginBottom: '28px' }}>
+                    <div style={{ marginBottom: '32px' }}>
                       <div style={{
-                        fontSize: '13px', fontWeight: '700', letterSpacing: '0.08em',
-                        textTransform: 'uppercase', color: isPmsActive ? '#0f766e' : '#94a3b8', marginBottom: '14px',
+                        fontSize: '12px', fontWeight: '800', letterSpacing: '0.08em',
+                        textTransform: 'uppercase', color: isPmsActive ? '#C2071A' : '#94a3b8', marginBottom: '16px',
                         display: 'flex', alignItems: 'center', gap: '8px',
                       }}>
-                        <span>⚡</span> Performance Measurement Techniques {!isPmsActive && '(Disabled)'}
+                        <FiBarChart2 size={16} color={isPmsActive ? '#C2071A' : '#94a3b8'} />
+                        <span>Performance Measurement Techniques {!isPmsActive && '(Disabled)'}</span>
                       </div>
                       {renderModuleGrid(pmsTechniqueModules, !isPmsActive)}
                     </div>
@@ -516,36 +534,35 @@ export default function ModuleManagement() {
                     {isGoalsEnabled && (
                       <div style={{
                         background: '#ffffff',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '18px', padding: '24px',
+                        border: 'none',
+                        borderRadius: '16px', padding: '24px',
                         marginBottom: '28px',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                        boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
                       }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
                           <div style={{
                             width: '38px', height: '38px', borderRadius: '10px',
-                            background: 'rgba(99,102,241,0.1)',
+                            background: '#FEECEE',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '20px',
                           }}>
-                            🎯
+                            <FiTarget size={20} color="#C2071A" />
                           </div>
                           <div>
                             <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
                               Goal Creation Permissions & Workflow
                             </h3>
-                            <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#64748b' }}>
+                            <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#64748b', fontWeight: 500 }}>
                               Define who can initiate and assign goal plans for this client organization.
                             </p>
                           </div>
                         </div>
 
                         {goalConfigLoading ? (
-                          <div style={{ padding: '16px', color: '#94a3b8', fontSize: '13px' }}>
+                          <div style={{ padding: '16px', color: '#64748b', fontSize: '13px', fontWeight: 600 }}>
                             Loading goal configuration...
                           </div>
                         ) : goalConfig ? (
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
                             {GOAL_CONFIG_META.map(item => {
                               const val = Boolean(goalConfig[item.key]);
                               const isGoalToggling = goalToggling === item.key;
@@ -554,8 +571,8 @@ export default function ModuleManagement() {
                                   key={item.key}
                                   style={{
                                     background: '#f8fafc',
-                                    border: `1px solid ${val ? 'rgba(99,102,241,0.2)' : '#e2e8f0'}`,
-                                    borderRadius: '12px', padding: '16px',
+                                    border: `1px solid ${val ? 'rgba(194, 7, 26, 0.2)' : '#e2e8f0'}`,
+                                    borderRadius: '14px', padding: '18px',
                                     display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px',
                                   }}
                                 >
@@ -563,11 +580,11 @@ export default function ModuleManagement() {
                                     <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>
                                       {item.label}
                                     </div>
-                                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', lineHeight: '1.4' }}>
+                                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', lineHeight: '1.4', fontWeight: 500 }}>
                                       {item.desc}
                                     </div>
                                     {isGoalToggling && (
-                                      <div style={{ marginTop: '6px', fontSize: '11px', color: '#6366f1' }}>
+                                      <div style={{ marginTop: '6px', fontSize: '11px', color: '#C2071A', fontWeight: '700' }}>
                                         Updating...
                                       </div>
                                     )}
@@ -591,6 +608,8 @@ export default function ModuleManagement() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }
+

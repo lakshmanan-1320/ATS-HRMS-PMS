@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
+import SuperAdminTopBar from '../../../components/layout/SuperAdminTopBar.jsx'
+import {
+  FiMail, FiLock, FiServer, FiInfo, FiKey,
+  FiSend, FiCheckCircle, FiAlertCircle, FiRefreshCw,
+  FiSave, FiShield, FiHelpCircle, FiEye, FiEyeOff
+} from 'react-icons/fi'
 
 const DEFAULTS = {
   host: 'smtp.hostinger.com',
@@ -15,35 +21,35 @@ const DEFAULTS = {
 const inputBase = {
   width: '100%', padding: '11px 14px',
   background: '#ffffff',
-  border: '1px solid #e2e8f0',
+  border: '1px solid #cbd5e1',
   borderRadius: '10px', fontSize: '13px',
   color: '#1e293b', outline: 'none',
   transition: 'border 0.2s, box-shadow 0.2s',
   fontFamily: 'inherit', boxSizing: 'border-box',
 }
 
-function SectionLabel({ icon, title }) {
+function SectionLabel({ icon: Icon, title }) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: '8px',
       marginBottom: '16px',
     }}>
-      <span style={{ fontSize: '14px' }}>{icon}</span>
+      {Icon && <Icon size={16} color="#C2071A" />}
       <span style={{
-        fontSize: '11px', fontWeight: '700', color: '#6366f1',
+        fontSize: '11px', fontWeight: '800', color: '#C2071A',
         textTransform: 'uppercase', letterSpacing: '0.08em',
       }}>{title}</span>
-      <div style={{ flex: 1, height: '1px', background: '#e8eaf0', marginLeft: '4px' }} />
+      <div style={{ flex: 1, height: '1px', background: '#edf2f7', marginLeft: '4px' }} />
     </div>
   )
 }
 
 function Field({ label, children }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
       <label style={{
-        fontSize: '11px', fontWeight: '600', color: '#64748b',
-        textTransform: 'uppercase', letterSpacing: '0.06em',
+        fontSize: '11px', fontWeight: '700', color: '#475569',
+        textTransform: 'uppercase', letterSpacing: '0.05em',
       }}>{label}</label>
       {children}
     </div>
@@ -106,34 +112,36 @@ export default function SmtpSettings() {
   }
 
   const onFocus = e => {
-    e.target.style.border = '1px solid #6366f1'
-    e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'
+    e.target.style.border = '1px solid #C2071A'
+    e.target.style.boxShadow = '0 0 0 3.5px rgba(194, 7, 26, 0.12)'
   }
   const onBlur = e => {
-    e.target.style.border = '1px solid #e2e8f0'
+    e.target.style.border = '1px solid #cbd5e1'
     e.target.style.boxShadow = 'none'
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <Sidebar active="smtp" />
-
-      <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <SuperAdminTopBar title="SMTP / Email Settings" />
+        <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
 
         {/* Page header */}
-        <div style={{ marginBottom: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
             <div style={{
-              width: '36px', height: '36px', borderRadius: '10px',
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              width: '38px', height: '38px', borderRadius: '10px',
+              background: '#FEECEE',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '17px', boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-            }}>📧</div>
-            <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+            }}>
+              <FiMail size={20} color="#C2071A" strokeWidth={2.5} />
+            </div>
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
               SMTP Settings
             </h1>
           </div>
-          <p style={{ fontSize: '13px', color: '#64748b', margin: 0, paddingLeft: '46px' }}>
+          <p style={{ fontSize: '13px', color: '#64748b', margin: 0, paddingLeft: '48px', fontWeight: 500 }}>
             Configure the outbound email server for OTP delivery and system notifications
           </p>
         </div>
@@ -145,27 +153,27 @@ export default function SmtpSettings() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '10px',
               padding: '14px 18px', borderRadius: '12px', marginBottom: '20px',
-              fontSize: '13px', fontWeight: '500',
+              fontSize: '13px', fontWeight: '700',
               background: alert.type === 'success' ? '#f0fdf4' : '#fef2f2',
               border: `1px solid ${alert.type === 'success' ? '#86efac' : '#fca5a5'}`,
               color: alert.type === 'success' ? '#16a34a' : '#dc2626',
             }}>
-              <span style={{ fontSize: '16px' }}>{alert.type === 'success' ? '✓' : '⚠'}</span>
-              {alert.msg}
+              {alert.type === 'success' ? <FiCheckCircle size={18} color="#16a34a" /> : <FiAlertCircle size={18} color="#dc2626" />}
+              <span>{alert.msg}</span>
             </div>
           )}
 
           {/* Main card */}
           <div style={{
-            background: '#ffffff', borderRadius: '20px',
-            border: '1px solid #e8eaf0',
-            boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+            background: '#ffffff', borderRadius: '16px',
+            border: 'none',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
             overflow: 'hidden',
           }}>
 
             {/* Card gradient header */}
             <div style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
               padding: '24px 32px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
@@ -175,24 +183,26 @@ export default function SmtpSettings() {
                   background: 'rgba(255,255,255,0.15)',
                   border: '1px solid rgba(255,255,255,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '22px', backdropFilter: 'blur(8px)',
-                }}>📧</div>
+                  backdropFilter: 'blur(8px)',
+                }}>
+                  <FiMail size={24} color="#ffffff" stroke="#ffffff" />
+                </div>
                 <div>
-                  <div style={{ fontSize: '17px', fontWeight: '700', color: '#ffffff' }}>
+                  <div style={{ fontSize: '18px', fontWeight: '800', color: '#ffffff' }}>
                     Email Server Configuration
                   </div>
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginTop: '3px' }}>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginTop: '3px', fontWeight: 500 }}>
                     Outbound SMTP for transactional emails and OTP delivery
                   </div>
                 </div>
               </div>
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
-                background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)',
+                background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)',
                 borderRadius: '20px', padding: '6px 14px', backdropFilter: 'blur(8px)',
               }}>
-                <span style={{ fontSize: '12px' }}>🔒</span>
-                <span style={{ fontSize: '12px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>
+                <FiLock size={14} color="#ffffff" />
+                <span style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff' }}>
                   AES-256 Encrypted
                 </span>
               </div>
@@ -202,8 +212,8 @@ export default function SmtpSettings() {
             <div style={{ padding: '32px' }}>
 
               {/* Section 1: Server */}
-              <SectionLabel icon="🖥️" title="Server Configuration" />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '28px' }}>
+              <SectionLabel icon={FiServer} title="Server Configuration" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px' }}>
                 <Field label="SMTP Host">
                   <input
                     style={inputBase} value={form.host}
@@ -239,21 +249,21 @@ export default function SmtpSettings() {
 
               {/* Encryption info pill */}
               <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                padding: '10px 16px', borderRadius: '10px',
-                background: 'rgba(99,102,241,0.04)',
-                border: '1px solid rgba(99,102,241,0.12)',
+                display: 'flex', alignItems: 'center', gap: '10px',
+                padding: '12px 16px', borderRadius: '12px',
+                background: '#FEECEE',
+                border: '1px solid rgba(194, 7, 26, 0.2)',
                 marginBottom: '28px',
               }}>
-                <span style={{ fontSize: '13px' }}>ℹ️</span>
-                <span style={{ fontSize: '12px', color: '#6366f1', fontWeight: '500' }}>
+                <FiInfo size={18} color="#C2071A" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '12px', color: '#C2071A', fontWeight: '600', lineHeight: 1.5 }}>
                   Use <strong>SSL on port 465</strong> for Hostinger, or <strong>TLS on port 587</strong> for Gmail/Outlook.
                   Credentials are never transmitted in plaintext.
                 </span>
               </div>
 
               {/* Section 2: Authentication */}
-              <SectionLabel icon="🔑" title="Authentication" />
+              <SectionLabel icon={FiKey} title="Authentication" />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '28px' }}>
                 <Field label="SMTP Username">
                   <input
@@ -280,14 +290,15 @@ export default function SmtpSettings() {
                         transform: 'translateY(-50%)',
                         background: 'none', border: 'none', cursor: 'pointer',
                         color: '#94a3b8', fontSize: '16px', lineHeight: 1, padding: 0,
+                        display: 'flex', alignItems: 'center'
                       }}
-                    >{showPass ? '🙈' : '👁'}</button>
+                    >{showPass ? <FiEyeOff size={16} /> : <FiEye size={16} />}</button>
                   </div>
                 </Field>
               </div>
 
               {/* Section 3: Sender Identity */}
-              <SectionLabel icon="✉️" title="Sender Identity" />
+              <SectionLabel icon={FiSend} title="Sender Identity" />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '8px' }}>
                 <Field label="From Address">
                   <input
@@ -304,7 +315,7 @@ export default function SmtpSettings() {
                   />
                 </Field>
               </div>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '10px 0 0' }}>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '10px 0 0', fontWeight: 500 }}>
                 Recipients will see this name and address in their inbox.
               </p>
             </div>
@@ -313,21 +324,21 @@ export default function SmtpSettings() {
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '20px 32px',
-              borderTop: '1px solid #e8eaf0',
+              borderTop: '1px solid #edf2f7',
               background: '#f8fafc',
             }}>
               {/* Connection status */}
               <div>
                 {status === null && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#e2e8f0' }} />
-                    <span style={{ fontSize: '12px', color: '#94a3b8' }}>Connection not tested</span>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#cbd5e1' }} />
+                    <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>Connection not tested</span>
                   </div>
                 )}
                 {status === 'testing' && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', animation: 'pulse 1s infinite' }} />
-                    <span style={{ fontSize: '12px', color: '#d97706', fontWeight: '500' }}>Testing connection…</span>
+                    <span style={{ fontSize: '12px', color: '#d97706', fontWeight: '700' }}>Testing connection…</span>
                   </div>
                 )}
                 {status === 'ok' && (
@@ -336,12 +347,9 @@ export default function SmtpSettings() {
                     padding: '8px 14px', borderRadius: '20px',
                     background: '#f0fdf4', border: '1px solid #86efac',
                   }}>
-                    <div style={{
-                      width: '8px', height: '8px', borderRadius: '50%',
-                      background: '#22c55e', boxShadow: '0 0 0 2px rgba(34,197,94,0.25)',
-                    }} />
-                    <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: '600' }}>
-                      Connection verified ✓
+                    <FiCheckCircle size={14} color="#16a34a" />
+                    <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: '700' }}>
+                      Connection verified
                     </span>
                   </div>
                 )}
@@ -351,9 +359,9 @@ export default function SmtpSettings() {
                     padding: '8px 14px', borderRadius: '20px',
                     background: '#fef2f2', border: '1px solid #fca5a5',
                   }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }} />
-                    <span style={{ fontSize: '12px', color: '#dc2626', fontWeight: '600' }}>
-                      Connection failed ✗
+                    <FiAlertCircle size={14} color="#dc2626" />
+                    <span style={{ fontSize: '12px', color: '#dc2626', fontWeight: '700' }}>
+                      Connection failed
                     </span>
                   </div>
                 )}
@@ -369,17 +377,17 @@ export default function SmtpSettings() {
                     display: 'flex', alignItems: 'center', gap: '7px',
                     padding: '10px 20px',
                     background: '#ffffff',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid #cbd5e1',
                     borderRadius: '10px', fontSize: '13px',
-                    fontWeight: '600', color: '#475569',
+                    fontWeight: '700', color: '#475569',
                     cursor: testing ? 'not-allowed' : 'pointer',
                     transition: 'all 0.2s', opacity: testing ? 0.7 : 1,
                   }}
-                  onMouseEnter={e => { if (!testing) { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.color = '#6366f1' } }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#475569' }}
+                  onMouseEnter={e => { if (!testing) { e.currentTarget.style.borderColor = '#C2071A'; e.currentTarget.style.color = '#C2071A' } }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#475569' }}
                 >
-                  <span style={{ fontSize: '15px' }}>⟳</span>
-                  {testing ? 'Testing…' : 'Test Connection'}
+                  <FiRefreshCw size={15} color={testing ? '#94a3b8' : '#C2071A'} />
+                  <span>{testing ? 'Testing…' : 'Test Connection'}</span>
                 </button>
                 <button
                   type="submit"
@@ -387,18 +395,16 @@ export default function SmtpSettings() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: '7px',
                     padding: '10px 24px',
-                    background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
                     border: 'none', borderRadius: '10px',
                     fontSize: '13px', fontWeight: '700',
-                    color: '#fff', cursor: saving ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 4px 12px rgba(99,102,241,0.4)',
+                    color: '#ffffff', cursor: saving ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 4px 12px rgba(194, 7, 26, 0.25)',
                     transition: 'all 0.2s', opacity: saving ? 0.75 : 1,
                   }}
-                  onMouseEnter={e => { if (!saving) e.currentTarget.style.boxShadow = '0 6px 20px rgba(99,102,241,0.5)' }}
-                  onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(99,102,241,0.4)' }}
                 >
-                  <span style={{ fontSize: '15px' }}>💾</span>
-                  {saving ? 'Saving…' : 'Save Settings'}
+                  <FiSave size={15} color="#ffffff" stroke="#ffffff" />
+                  <span>{saving ? 'Saving…' : 'Save Settings'}</span>
                 </button>
               </div>
             </div>
@@ -406,17 +412,20 @@ export default function SmtpSettings() {
 
           {/* Bottom tip */}
           <div style={{
-            display: 'flex', alignItems: 'flex-start', gap: '10px',
-            marginTop: '16px', padding: '14px 18px',
-            borderRadius: '12px', background: 'rgba(99,102,241,0.04)',
-            border: '1px solid rgba(99,102,241,0.1)',
+            display: 'flex', alignItems: 'flex-start', gap: '12px',
+            marginTop: '20px', padding: '16px 20px',
+            borderRadius: '16px', background: '#ffffff',
+            border: 'none',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
           }}>
-            <span style={{ fontSize: '16px', marginTop: '1px' }}>💡</span>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FiHelpCircle size={18} color="#C2071A" />
+            </div>
             <div>
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#4f46e5', marginBottom: '3px' }}>
+              <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: '3px' }}>
                 Testing recommendation
               </div>
-              <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6' }}>
+              <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.6', fontWeight: 500 }}>
                 Always click <strong>Test Connection</strong> after saving to confirm emails can be delivered.
                 A test email will be sent to the configured From Address.
               </div>
@@ -424,6 +433,8 @@ export default function SmtpSettings() {
           </div>
         </form>
       </main>
+      </div>
     </div>
   )
 }
+

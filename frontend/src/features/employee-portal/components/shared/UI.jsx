@@ -1,4 +1,5 @@
 import React from 'react'
+import { FiCheck, FiX, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi'
 import { COLORS, STATUS_COLOR, GRADIENTS } from '../../theme'
 
 export function KpiCard({ icon, label, value, sub, gradient }) {
@@ -62,7 +63,7 @@ export function Spinner({ label = 'Loading…' }) {
 
 export function Toast({ message, type = 'success', onClose }) {
   const bg    = type === 'success' ? COLORS.green : type === 'error' ? COLORS.red : COLORS.amber
-  const icon  = type === 'success' ? '✓' : type === 'error' ? '✕' : '!'
+  const Icon  = type === 'success' ? FiCheck : type === 'error' ? FiX : FiAlertTriangle
   return (
     <div style={{
       position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
@@ -73,34 +74,54 @@ export function Toast({ message, type = 'success', onClose }) {
       animation: 'slideIn 0.25s ease',
     }}>
       <style>{`@keyframes slideIn{from{transform:translateX(60px);opacity:0}to{transform:translateX(0);opacity:1}}`}</style>
-      <span style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', flexShrink: 0 }}>{icon}</span>
+      <span style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon size={11} color="#ffffff" /></span>
       {message}
       {onClose && <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 0, marginLeft: '4px', opacity: 0.7, fontSize: '16px' }}>×</button>}
     </div>
   )
 }
 
-export function WidgetCard({ icon, iconBg, iconColor, title, subtitle, children }) {
+export function WidgetCard({ icon, iconBg, iconColor, title, subtitle, action, children }) {
   return (
-    <div style={{ background: COLORS.surface, borderRadius: '18px', padding: '20px 22px', border: `1px solid ${COLORS.borderLight}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-        <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor }}>
-          {icon}
+    <div style={{ background: COLORS.surface, borderRadius: '18px', padding: '20px 22px', border: `1px solid ${COLORS.borderLight}`, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', minWidth: 0, boxSizing: 'border-box', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '14px', minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+          <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, flexShrink: 0 }}>
+            {icon}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: COLORS.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
+            {subtitle && <div style={{ fontSize: '10px', color: COLORS.textMuted }}>{subtitle}</div>}
+          </div>
         </div>
-        <div>
-          <div style={{ fontSize: '12px', fontWeight: '700', color: COLORS.text }}>{title}</div>
-          {subtitle && <div style={{ fontSize: '10px', color: COLORS.textMuted }}>{subtitle}</div>}
-        </div>
+        {action}
       </div>
       {children}
     </div>
   )
 }
 
+export function ViewAllLink({ onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+        fontSize: '11px', fontWeight: '700', color: COLORS.primary,
+        display: 'flex', alignItems: 'center', gap: '3px', flexShrink: 0,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      View all <span aria-hidden="true">→</span>
+    </button>
+  )
+}
+
 export function EmptyState({ message, positive = false }) {
   return (
-    <div style={{ textAlign: 'center', color: positive ? COLORS.green : COLORS.textMuted, fontSize: '11px', padding: '16px 0', fontWeight: positive ? '600' : '400' }}>
-      {positive ? `✅ ${message}` : message}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', textAlign: 'center', color: positive ? COLORS.green : COLORS.textMuted, fontSize: '11px', padding: '16px 0', fontWeight: positive ? '600' : '400' }}>
+      {positive && <FiCheckCircle size={12} />}
+      {message}
     </div>
   )
 }
