@@ -1,11 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
+import {
+  FiFolder,
+  FiPlus,
+  FiEdit2,
+  FiChevronRight,
+  FiChevronDown,
+  FiCheckCircle,
+  FiXCircle,
+  FiX,
+  FiCheck,
+  FiSlash,
+  FiAlertTriangle,
+  FiInfo,
+  FiTrendingUp,
+  FiMinus,
+  FiLayers,
+  FiUser
+} from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 
 const STATUS_META = {
-  active:   { color: '#15803d', bg: '#dcfce7', dot: '#22c55e', label: 'Active' },
-  inactive: { color: '#475569', bg: '#f1f5f9', dot: '#94a3b8', label: 'Inactive' },
+  active:   { color: '#0fa958', bg: '#e8fbf0', dot: '#10b981', label: 'Active' },
+  inactive: { color: '#64748b', bg: '#f1f5f9', dot: '#94a3b8', label: 'Inactive' },
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
@@ -18,12 +36,13 @@ function Toast({ toasts }) {
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '12px 16px', borderRadius: 12, fontSize: 13, fontWeight: 600,
           minWidth: 280, maxWidth: 360,
-          background: t.type === 'error' ? '#fff1f2' : '#f0fdf4',
-          border: `1.5px solid ${t.type === 'error' ? '#fca5a5' : '#86efac'}`,
-          color: t.type === 'error' ? '#b91c1c' : '#15803d',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.10)',
+          background: t.type === 'error' ? '#feecee' : '#e8fbf0',
+          border: `1.5px solid ${t.type === 'error' ? '#f7a6af' : '#a7f3d0'}`,
+          color: t.type === 'error' ? '#dc2626' : '#0fa958',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+          fontFamily: "'Inter', sans-serif",
         }}>
-          <span style={{ fontSize: 16, flexShrink: 0 }}>{t.type === 'error' ? '✗' : '✓'}</span>
+          {t.type === 'error' ? <FiXCircle size={18} color="#dc2626" /> : <FiCheckCircle size={18} color="#0fa958" />}
           {t.msg}
         </div>
       ))}
@@ -35,22 +54,22 @@ function Toast({ toasts }) {
 
 function Field({ label, name, placeholder, required, value, error, onChange }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label style={{ fontSize: 12, fontWeight: 700, color: '#64748b', letterSpacing: '0.04em' }}>
-        {label}{required && <span style={{ color: '#6366f1', marginLeft: 2 }}>*</span>}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontFamily: "'Inter', sans-serif" }}>
+      <label style={{ fontSize: 12, fontWeight: 700, color: '#4b5563', letterSpacing: '0.02em' }}>
+        {label}{required && <span style={{ color: 'var(--primary-color, #C2071A)', marginLeft: 2 }}>*</span>}
       </label>
       <input
         value={value}
         placeholder={placeholder}
         onChange={e => onChange(name, e.target.value)}
         style={{
-          padding: '10px 14px', background: '#f8fafc',
+          padding: '10px 14px', background: '#ffffff',
           border: `1.5px solid ${error ? '#ef4444' : '#e2e8f0'}`,
-          borderRadius: 10, color: '#1e293b', fontSize: 13,
+          borderRadius: 10, color: '#111827', fontSize: 13,
           outline: 'none', width: '100%', boxSizing: 'border-box', fontFamily: 'inherit',
           transition: 'border-color 0.15s ease',
         }}
-        onFocus={e => e.target.style.borderColor = '#6366f1'}
+        onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
         onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#e2e8f0'}
       />
       {error && <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 600 }}>{error}</span>}
@@ -60,8 +79,8 @@ function Field({ label, name, placeholder, required, value, error, onChange }) {
 
 function TextareaField({ label, name, placeholder, value, error, onChange }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label style={{ fontSize: 12, fontWeight: 700, color: '#64748b', letterSpacing: '0.04em' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontFamily: "'Inter', sans-serif" }}>
+      <label style={{ fontSize: 12, fontWeight: 700, color: '#4b5563', letterSpacing: '0.02em' }}>
         {label}
       </label>
       <textarea
@@ -70,14 +89,14 @@ function TextareaField({ label, name, placeholder, value, error, onChange }) {
         rows={3}
         onChange={e => onChange(name, e.target.value)}
         style={{
-          padding: '10px 14px', background: '#f8fafc',
+          padding: '10px 14px', background: '#ffffff',
           border: `1.5px solid ${error ? '#ef4444' : '#e2e8f0'}`,
-          borderRadius: 10, color: '#1e293b', fontSize: 13,
+          borderRadius: 10, color: '#111827', fontSize: 13,
           outline: 'none', width: '100%', boxSizing: 'border-box',
           fontFamily: 'inherit', resize: 'vertical', minHeight: 80,
           transition: 'border-color 0.15s ease',
         }}
-        onFocus={e => e.target.style.borderColor = '#6366f1'}
+        onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
         onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#e2e8f0'}
       />
       {error && <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 600 }}>{error}</span>}
@@ -230,7 +249,7 @@ export default function Departments() {
     const sm = STATUS_META[item.status] || STATUS_META.inactive
     const popupKey = `${parentId ?? 'top'}-${item.department_id}`
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', fontFamily: "'Inter', sans-serif" }}>
         <button
           onClick={e => { e.stopPropagation(); setStatusPopup(statusPopup === popupKey ? null : popupKey) }}
           style={{
@@ -242,14 +261,14 @@ export default function Departments() {
         >
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: sm.dot, flexShrink: 0 }} />
           {sm.label}
-          <span style={{ fontSize: 9, opacity: 0.7 }}>▾</span>
+          <FiChevronDown size={11} style={{ opacity: 0.7 }} />
         </button>
         {statusPopup === popupKey && (
           <div
             onClick={e => e.stopPropagation()}
             style={{
               position: 'absolute', top: 34, left: 0, zIndex: 100,
-              background: '#fff', border: '1.5px solid #e2e8f0',
+              background: '#fff', border: '1px solid #e2e8f0',
               borderRadius: 12, padding: 6, minWidth: 138,
               boxShadow: '0 12px 28px rgba(0,0,0,0.10)',
             }}
@@ -260,14 +279,14 @@ export default function Departments() {
                 <button key={s} onClick={() => handleStatusChange(item, s, parentId)} style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   width: '100%', padding: '8px 10px',
-                  background: item.status === s ? 'rgba(99,102,241,0.07)' : 'none',
+                  background: item.status === s ? 'var(--card-active-bg, #FEECEE)' : 'none',
                   border: 'none', borderRadius: 8, cursor: 'pointer',
                   fontSize: 12, color: m.color, fontFamily: 'inherit', textAlign: 'left',
                   fontWeight: item.status === s ? 700 : 500,
                 }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: m.dot, flexShrink: 0 }} />
                   {m.label}
-                  {item.status === s && <span style={{ marginLeft: 'auto', fontSize: 10, color: '#6366f1' }}>✓</span>}
+                  {item.status === s && <FiCheck size={13} color="var(--primary-color, #C2071A)" style={{ marginLeft: 'auto' }} />}
                 </button>
               )
             })}
@@ -277,27 +296,67 @@ export default function Departments() {
     )
   }
 
+  // Stat cards matching exact Org Chart replica layout
+  const STAT_CARDS = [
+    {
+      label: 'Total Departments',
+      value: total,
+      icon: FiFolder,
+      badgeText: '0%',
+      badgeType: 'neutral',
+      badgeBg: '#eff3f8',
+      badgeColor: '#64748b',
+      subtext: 'Organizational units',
+      subtext2: 'Active structures'
+    },
+    {
+      label: 'Active Departments',
+      value: active,
+      icon: FiFolder,
+      badgeText: 'Active',
+      badgeType: 'up',
+      badgeBg: '#e6f7ed',
+      badgeColor: '#10b981',
+      subtext: 'Operational units',
+      subtext2: `${active} active departments`
+    },
+    {
+      label: 'Inactive Departments',
+      value: inactive,
+      icon: FiFolder,
+      badgeText: 'Inactive',
+      badgeType: 'neutral',
+      badgeBg: '#f1f5f9',
+      badgeColor: '#64748b',
+      subtext: 'Archived units',
+      subtext2: 'Pending review'
+    },
+  ]
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f3f7fa', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="departments" />
       <Toast toasts={toasts} />
       <style>{`@keyframes dept-spin{to{transform:rotate(360deg)}}`}</style>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <ClientAdminTopBar />
-        <main style={{ flex: 1, padding: '32px 36px', overflowY: 'auto' }}>
+        <ClientAdminTopBar title="Departments" />
+        <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto', background: '#f3f7fa' }}>
 
         {/* ── Header ── */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <div style={{
-              width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-              background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+              background: 'var(--card-active-bg, #FEECEE)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 20, boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
-            }}>🏢</div>
+            }}>
+              <FiFolder size={22} color="var(--primary-color, #C2071A)" />
+            </div>
             <div>
-              <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#1e293b', lineHeight: 1.2 }}>Departments</h1>
-              <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: 13 }}>
+              <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#111827', letterSpacing: '-0.4px', lineHeight: 1.2 }}>
+                Departments
+              </h1>
+              <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: 13, fontWeight: 500 }}>
                 Manage departments and sub-departments in your organisation
               </p>
             </div>
@@ -306,52 +365,95 @@ export default function Departments() {
             onClick={openCreate}
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
-              padding: '11px 22px',
-              background: 'linear-gradient(135deg,#6366f1,#4f46e5)',
-              border: 'none', borderRadius: 12, cursor: 'pointer',
-              fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
-              boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
+              padding: '10px 20px',
+              background: 'var(--primary-color, #C2071A)',
+              border: 'none', borderRadius: 10, cursor: 'pointer',
+              fontSize: 13, fontWeight: 700, color: '#ffffff', fontFamily: 'inherit',
+              boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(99,102,241,0.40)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(99,102,241,0.35)' }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(194, 7, 26, 0.35)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(194, 7, 26, 0.25)' }}
           >
-            <span style={{ fontSize: 16, lineHeight: 1, color: '#fff' }}>+</span> Add Department
+            <FiPlus size={18} color="#ffffff" stroke="#ffffff" style={{ flexShrink: 0, strokeWidth: 2.5, color: '#ffffff', stroke: '#ffffff' }} /> Add Department
           </button>
         </div>
 
-        {/* ── Stats ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginBottom: 24 }}>
-          {[
-            { label: 'Total Departments', value: total,    color: '#6366f1', gradient: 'linear-gradient(135deg,#6366f1,#8b5cf6)', icon: '🏢' },
-            { label: 'Active',            value: active,   color: '#10b981', gradient: 'linear-gradient(135deg,#10b981,#06b6d4)', icon: '✅' },
-            { label: 'Inactive',          value: inactive, color: '#64748b', gradient: 'linear-gradient(135deg,#64748b,#94a3b8)', icon: '⏸' },
-          ].map(s => (
-            <div key={s.label} style={{
-              padding: '18px 20px', background: '#fff',
-              border: '1.5px solid #e2e8f0', borderRadius: 16,
-              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-              display: 'flex', alignItems: 'center', gap: 14,
-              position: 'relative', overflow: 'hidden',
-              transition: 'all 0.2s ease',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = s.color }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = '#e2e8f0' }}
-            >
-              <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 4, background: s.gradient, borderRadius: '0 16px 16px 0' }} />
-              <div style={{ width: 46, height: 46, borderRadius: 13, background: `${s.color}14`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
-                {s.icon}
+        {/* ── Stats matching Org Chart cards replica ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+          {STAT_CARDS.map(card => {
+            const CardIcon = card.icon
+            return (
+              <div
+                key={card.label}
+                style={{
+                  background: '#ffffff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.03)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.03)'
+                }}
+              >
+                {/* Top Row: Icon Container + Badge */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 12,
+                    background: '#f4f5f7',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <CardIcon size={20} color="#9ca3af" />
+                  </div>
+                  <span style={{
+                    background: card.badgeBg,
+                    color: card.badgeColor,
+                    fontSize: '11.5px',
+                    fontWeight: '700',
+                    padding: '4px 10px',
+                    borderRadius: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                  }}>
+                    {card.badgeType === 'up' && <FiTrendingUp size={12} />}
+                    {card.badgeType === 'neutral' && <FiMinus size={12} />}
+                    {card.badgeText}
+                  </span>
+                </div>
+
+                {/* Metric Value */}
+                <div style={{ fontSize: 30, fontWeight: 800, color: '#111827', lineHeight: 1.1, marginBottom: 4 }}>
+                  {card.value}
+                </div>
+
+                {/* Title */}
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 6 }}>
+                  {card.label}
+                </div>
+
+                {/* Subtexts */}
+                <div style={{ fontSize: 11.5, color: '#94a3b8', fontWeight: 500, lineHeight: 1.4 }}>
+                  <div>{card.subtext}</div>
+                  {card.subtext2 && <div style={{ marginTop: 2 }}>{card.subtext2}</div>}
+                </div>
               </div>
-              <div>
-                <div style={{ fontSize: 26, fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.value}</div>
-                <div style={{ fontSize: 10.5, color: '#64748b', marginTop: 4, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* ── Department List Panel ── */}
-        <div style={{ background: '#fff', borderRadius: 20, border: '1.5px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+        <div style={{ background: '#ffffff', borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', overflow: 'hidden' }}>
 
           {/* Column headers */}
           {depts.length > 0 && !loading && (
@@ -359,7 +461,7 @@ export default function Departments() {
               display: 'grid', gridTemplateColumns: COLS,
               padding: '12px 24px',
               background: '#f8fafc',
-              borderBottom: '1.5px solid #e2e8f0',
+              borderBottom: '1px solid #e2e8f0',
               fontSize: 10.5, fontWeight: 800, color: '#94a3b8',
               letterSpacing: '0.07em', textTransform: 'uppercase',
             }}>
@@ -377,25 +479,28 @@ export default function Departments() {
             {loading ? (
               <div style={{ textAlign: 'center', padding: '60px 20px' }}>
                 <div style={{
-                  width: 44, height: 44, borderRadius: '50%',
-                  border: '4px solid #e2e8f0', borderTopColor: '#6366f1',
+                  width: 40, height: 40, borderRadius: '50%',
+                  border: '3px solid #e2e8f0', borderTopColor: 'var(--primary-color, #C2071A)',
                   animation: 'dept-spin 0.75s linear infinite',
                   margin: '0 auto 16px',
                 }} />
-                <div style={{ fontSize: 14, color: '#64748b', fontWeight: 500 }}>Loading departments…</div>
+                <div style={{ fontSize: 13.5, color: '#64748b', fontWeight: 500 }}>Loading departments…</div>
               </div>
 
             ) : depts.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                <div style={{ fontSize: 48, marginBottom: 12 }}>🏢</div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>No departments yet</div>
+                <FiFolder size={48} color="#94a3b8" style={{ marginBottom: 12 }} />
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#111827', marginBottom: 6 }}>No departments yet</div>
                 <div style={{ fontSize: 13, color: '#64748b', marginBottom: 20 }}>Click "Add Department" to create your first department.</div>
                 <button onClick={openCreate} style={{
-                  padding: '10px 22px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)',
+                  padding: '10px 22px', background: 'var(--primary-color, #C2071A)',
                   border: 'none', borderRadius: 10, cursor: 'pointer',
                   fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
-                  boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-                }}>+ Add Department</button>
+                  boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                }}>
+                  <FiPlus size={16} color="#ffffff" stroke="#ffffff" style={{ flexShrink: 0, strokeWidth: 2.5, color: '#ffffff', stroke: '#ffffff' }} /> Add Department
+                </button>
               </div>
 
             ) : (
@@ -406,27 +511,27 @@ export default function Departments() {
 
                 return (
                   <React.Fragment key={dept.department_id}>
-                    {/* ── Department row ── */}
+                    {/* ── Department row matching Org Chart node styling ── */}
                     <div style={{
                       display: 'grid', gridTemplateColumns: COLS,
                       padding: '13px 16px', alignItems: 'center',
-                      background: '#fff',
-                      border: '1.5px solid #e2e8f0',
-                      borderLeft: '4px solid #6366f1',
-                      borderRadius: 14,
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                      transition: 'all 0.2s cubic-bezier(.4,0,.2,1)',
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderLeft: '4px solid var(--primary-color, #C2071A)',
+                      borderRadius: 12,
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
+                      transition: 'all 0.2s ease',
                     }}
                       onMouseEnter={e => {
-                        e.currentTarget.style.borderColor = '#6366f1'
+                        e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'
                         e.currentTarget.style.transform = 'translateY(-2px)'
-                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(99,102,241,0.08),0 0 0 3px rgba(99,102,241,0.06)'
+                        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.06)'
                       }}
                       onMouseLeave={e => {
                         e.currentTarget.style.borderColor = '#e2e8f0'
-                        e.currentTarget.style.borderLeftColor = '#6366f1'
+                        e.currentTarget.style.borderLeftColor = 'var(--primary-color, #C2071A)'
                         e.currentTarget.style.transform = 'translateY(0)'
-                        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'
+                        e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.02)'
                       }}
                     >
                       {/* Expand toggle */}
@@ -437,33 +542,34 @@ export default function Departments() {
                           style={{
                             width: 28, height: 28, borderRadius: 8, border: 'none',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            cursor: 'pointer', fontSize: 10, fontWeight: 900,
-                            background: isExpanded ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : 'rgba(99,102,241,0.08)',
-                            color: isExpanded ? '#fff' : '#6366f1',
+                            cursor: 'pointer',
+                            background: isExpanded ? 'var(--primary-color, #C2071A)' : 'var(--card-active-bg, #FEECEE)',
+                            color: isExpanded ? '#ffffff' : 'var(--primary-color, #C2071A)',
                             transition: 'all 0.15s ease',
                           }}
                         >
-                          {isExpanded ? '▼' : '▶'}
+                          {isExpanded ? <FiChevronDown size={14} color="#fff" /> : <FiChevronRight size={14} color="var(--primary-color, #C2071A)" />}
                         </button>
                       </div>
 
-                      {/* Name + sub count */}
+                      {/* Name + sub count + Brand Red Circle Avatar */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
                         <div style={{
                           width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
-                          background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                          background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontSize: 13, fontWeight: 700, color: '#fff',
-                          boxShadow: '0 2px 8px rgba(99,102,241,0.3)',
+                          boxShadow: '0 2px 8px rgba(194, 7, 26, 0.2)',
                         }}>
                           {initials(dept.name)}
                         </div>
                         <div>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>{dept.name}</div>
+                          <div style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>{dept.name}</div>
                           {dept.sub_count > 0 && (
                             <div style={{
-                              fontSize: 10, color: '#6366f1', background: 'rgba(99,102,241,0.08)',
-                              border: '1px solid rgba(99,102,241,0.2)',
+                              fontSize: 10, color: 'var(--primary-color, #C2071A)',
+                              background: 'var(--card-active-bg, #FEECEE)',
+                              border: '1px solid var(--card-active-border, #F7A6AF)',
                               padding: '1px 7px', borderRadius: 6, fontWeight: 700,
                               width: 'fit-content', marginTop: 3,
                             }}>
@@ -474,7 +580,7 @@ export default function Departments() {
                       </div>
 
                       {/* Description */}
-                      <div style={{ fontSize: 12, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 12 }}>
+                      <div style={{ fontSize: 12.5, color: '#4b5563', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 12 }}>
                         {dept.description || <span style={{ color: '#cbd5e1' }}>—</span>}
                       </div>
 
@@ -492,28 +598,32 @@ export default function Departments() {
                           onClick={() => openEdit(dept)}
                           title="Edit department"
                           style={{
-                            width: 32, height: 32, border: '1.5px solid rgba(99,102,241,0.25)',
-                            borderRadius: 9, cursor: 'pointer', fontSize: 13, fontFamily: 'inherit',
+                            width: 32, height: 32, border: '1px solid var(--card-active-border, #F7A6AF)',
+                            borderRadius: 9, cursor: 'pointer',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: 'rgba(99,102,241,0.07)', color: '#6366f1',
+                            background: 'var(--card-active-bg, #FEECEE)', color: 'var(--primary-color, #C2071A)',
                             transition: 'all 0.15s ease',
                           }}
-                          onMouseEnter={e => { e.currentTarget.style.background = '#6366f1'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#6366f1' }}
-                          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.07)'; e.currentTarget.style.color = '#6366f1'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.25)' }}
-                        >✏️</button>
+                          onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary-color, #C2071A)'; e.currentTarget.style.color = '#fff' }}
+                          onMouseLeave={e => { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
+                        >
+                          <FiEdit2 size={14} />
+                        </button>
                         <button
                           onClick={() => openAddSub(dept)}
                           title="Add sub-department"
                           style={{
-                            width: 32, height: 32, border: '1.5px solid rgba(16,185,129,0.25)',
-                            borderRadius: 9, cursor: 'pointer', fontSize: 16, fontWeight: 700, fontFamily: 'inherit',
+                            width: 32, height: 32, border: '1px solid #a7f3d0',
+                            borderRadius: 9, cursor: 'pointer',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: 'rgba(16,185,129,0.07)', color: '#10b981',
+                            background: '#e8fbf0', color: '#10b981',
                             transition: 'all 0.15s ease',
                           }}
-                          onMouseEnter={e => { e.currentTarget.style.background = '#10b981'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#10b981' }}
-                          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(16,185,129,0.07)'; e.currentTarget.style.color = '#10b981'; e.currentTarget.style.borderColor = 'rgba(16,185,129,0.25)' }}
-                        >+</button>
+                          onMouseEnter={e => { e.currentTarget.style.background = '#10b981'; e.currentTarget.style.color = '#fff' }}
+                          onMouseLeave={e => { e.currentTarget.style.background = '#e8fbf0'; e.currentTarget.style.color = '#10b981' }}
+                        >
+                          <FiPlus size={16} />
+                        </button>
                       </div>
                     </div>
 
@@ -521,7 +631,7 @@ export default function Departments() {
                     {isExpanded && (
                       isLoadingSub ? (
                         <div style={{ padding: '10px 20px 10px 60px', fontSize: 12, color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #e2e8f0', borderTopColor: '#6366f1', animation: 'dept-spin 0.75s linear infinite', flexShrink: 0 }} />
+                          <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #e2e8f0', borderTopColor: 'var(--primary-color, #C2071A)', animation: 'dept-spin 0.75s linear infinite', flexShrink: 0 }} />
                           Loading sub-departments…
                         </div>
                       ) : subs.length === 0 ? (
@@ -533,7 +643,7 @@ export default function Departments() {
                           <span style={{ color: '#cbd5e1', fontSize: 14 }}>└</span>
                           No sub-departments yet.
                           <button onClick={() => openAddSub(dept)} style={{
-                            background: 'none', border: 'none', color: '#6366f1',
+                            background: 'none', border: 'none', color: 'var(--primary-color, #C2071A)',
                             cursor: 'pointer', fontSize: 12, fontFamily: 'inherit',
                             padding: 0, fontWeight: 700, textDecoration: 'underline',
                           }}>Add one</button>
@@ -545,28 +655,28 @@ export default function Departments() {
                             <div style={{
                               position: 'absolute', left: -20, top: 0,
                               bottom: si === subs.length - 1 ? '50%' : 0,
-                              width: 2, background: 'linear-gradient(to bottom,#c7d2fe,#e2e8f0)', borderRadius: 1,
+                              width: 2, background: 'linear-gradient(to bottom,#fed7aa,#EFF3F8)', borderRadius: 1,
                             }} />
                             <div style={{
                               position: 'absolute', left: -20, top: '50%',
                               width: 16, height: 2,
-                              background: 'linear-gradient(to right,#c7d2fe,#0ea5e9)', borderRadius: 1,
+                              background: 'linear-gradient(to right,#fca5a5,#C2071A)', borderRadius: 1,
                             }} />
                             <div style={{
                               position: 'absolute', left: -5, top: 'calc(50% - 4px)',
                               width: 8, height: 8, borderRadius: '50%',
-                              background: '#fff', border: '2px solid #0ea5e9',
+                              background: '#fff', border: '2px solid var(--primary-color, #C2071A)',
                             }} />
 
                             <div style={{
                               display: 'grid', gridTemplateColumns: COLS,
                               padding: '12px 16px', alignItems: 'center',
-                              background: '#f8faff',
-                              border: '1.5px solid #e0e7ff',
+                              background: '#ffffff',
+                              border: '1px solid #e2e8f0',
                               borderLeft: '4px solid #0ea5e9',
                               borderRadius: 12,
                               marginBottom: si === subs.length - 1 ? 0 : 6,
-                              boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                              boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
                               transition: 'all 0.2s ease',
                             }}
                               onMouseEnter={e => {
@@ -575,30 +685,30 @@ export default function Departments() {
                                 e.currentTarget.style.boxShadow = '0 6px 14px rgba(14,165,233,0.08)'
                               }}
                               onMouseLeave={e => {
-                                e.currentTarget.style.borderColor = '#e0e7ff'
+                                e.currentTarget.style.borderColor = '#e2e8f0'
                                 e.currentTarget.style.borderLeftColor = '#0ea5e9'
                                 e.currentTarget.style.transform = 'translateY(0)'
-                                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.03)'
+                                e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.02)'
                               }}
                             >
                               <div /> {/* spacer for toggle column */}
 
-                              {/* Sub-dept name */}
+                              {/* Sub-dept name + Brand Red Circle Avatar */}
                               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <div style={{
                                   width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                                  background: 'linear-gradient(135deg,#0ea5e9,#06b6d4)',
+                                  background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
                                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                                   fontSize: 11, fontWeight: 700, color: '#fff',
-                                  boxShadow: '0 2px 6px rgba(14,165,233,0.3)',
+                                  boxShadow: '0 2px 6px rgba(194, 7, 26, 0.2)',
                                 }}>
                                   {initials(sub.name)}
                                 </div>
-                                <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{sub.name}</span>
+                                <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{sub.name}</span>
                               </div>
 
                               {/* Description */}
-                              <div style={{ fontSize: 12, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 12 }}>
+                              <div style={{ fontSize: 12.5, color: '#4b5563', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 12 }}>
                                 {sub.description || <span style={{ color: '#cbd5e1' }}>—</span>}
                               </div>
 
@@ -616,15 +726,17 @@ export default function Departments() {
                                   onClick={() => openEdit(sub)}
                                   title="Edit sub-department"
                                   style={{
-                                    width: 32, height: 32, border: '1.5px solid rgba(99,102,241,0.25)',
-                                    borderRadius: 9, cursor: 'pointer', fontSize: 13,
+                                    width: 32, height: 32, border: '1px solid var(--card-active-border, #F7A6AF)',
+                                    borderRadius: 9, cursor: 'pointer',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    background: 'rgba(99,102,241,0.07)', color: '#6366f1',
+                                    background: 'var(--card-active-bg, #FEECEE)', color: 'var(--primary-color, #C2071A)',
                                     transition: 'all 0.15s ease',
                                   }}
-                                  onMouseEnter={e => { e.currentTarget.style.background = '#6366f1'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#6366f1' }}
-                                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.07)'; e.currentTarget.style.color = '#6366f1'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.25)' }}
-                                >✏️</button>
+                                  onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary-color, #C2071A)'; e.currentTarget.style.color = '#fff' }}
+                                  onMouseLeave={e => { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
+                                >
+                                  <FiEdit2 size={14} />
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -646,18 +758,19 @@ export default function Departments() {
             position: 'fixed', inset: 0, zIndex: 1000,
             background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(6px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
+            fontFamily: "'Inter', sans-serif",
           }}
           onClick={e => { if (e.target === e.currentTarget) setModal(null) }}
         >
           <div style={{
-            background: '#fff', border: '1.5px solid #e2e8f0',
-            borderRadius: 22, width: '100%', maxWidth: 480,
+            background: '#ffffff', border: '1px solid #e2e8f0',
+            borderRadius: 20, width: '100%', maxWidth: 480,
             boxShadow: '0 24px 48px rgba(0,0,0,0.12)',
             overflow: 'hidden',
           }}>
-            {/* Modal header strip */}
+            {/* Modal header strip with brand red gradient */}
             <div style={{
-              background: 'linear-gradient(135deg,#6366f1,#4f46e5)',
+              background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
               padding: '20px 28px',
               display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
             }}>
@@ -667,7 +780,7 @@ export default function Departments() {
                     ? (editTarget?.parent_id ? 'Edit Sub-Department' : 'Edit Department')
                     : parentDept ? 'Add Sub-Department' : 'Add Department'}
                 </h2>
-                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', margin: '4px 0 0' }}>
+                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', margin: '4px 0 0' }}>
                   {modal === 'edit'
                     ? `Editing: ${editTarget?.name}`
                     : parentDept ? `Under: ${parentDept.name}` : 'Create a new department'}
@@ -677,13 +790,15 @@ export default function Departments() {
                 onClick={() => setModal(null)}
                 style={{
                   width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 8,
-                  cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 700,
+                  background: 'rgba(255,255,255,0.18)', border: 'none', borderRadius: 8,
+                  cursor: 'pointer', color: '#fff',
                   transition: 'background 0.15s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
-              >✕</button>
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
+              >
+                <FiX size={16} color="#fff" />
+              </button>
             </div>
 
             {/* Modal body */}
@@ -693,20 +808,20 @@ export default function Departments() {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 10,
                   padding: '10px 14px', marginBottom: 20,
-                  background: 'rgba(99,102,241,0.06)',
-                  border: '1.5px solid rgba(99,102,241,0.18)',
+                  background: 'var(--card-active-bg, #FEECEE)',
+                  border: '1px solid var(--card-active-border, #F7A6AF)',
                   borderRadius: 10,
                 }}>
                   <div style={{
                     width: 26, height: 26, borderRadius: 7, flexShrink: 0,
-                    background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                    background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: 10, fontWeight: 700, color: '#fff',
                   }}>
                     {initials(parentDept.name)}
                   </div>
                   <span style={{ fontSize: 12, color: '#64748b' }}>Parent department:</span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#6366f1' }}>{parentDept.name}</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary-color, #C2071A)' }}>{parentDept.name}</span>
                 </div>
               )}
 
@@ -731,7 +846,7 @@ export default function Departments() {
                   onClick={() => setModal(null)}
                   style={{
                     flex: 1, padding: 11, background: '#f8fafc',
-                    border: '1.5px solid #e2e8f0', borderRadius: 10,
+                    border: '1px solid #e2e8f0', borderRadius: 10,
                     cursor: 'pointer', fontSize: 13, color: '#64748b',
                     fontFamily: 'inherit', fontWeight: 600, transition: 'all 0.15s ease',
                   }}
@@ -745,10 +860,10 @@ export default function Departments() {
                   disabled={saving}
                   style={{
                     flex: 2, padding: 11,
-                    background: saving ? 'rgba(99,102,241,0.5)' : 'linear-gradient(135deg,#6366f1,#4f46e5)',
+                    background: saving ? 'rgba(194,7,26,0.6)' : 'var(--primary-color, #C2071A)',
                     border: 'none', borderRadius: 10, cursor: saving ? 'not-allowed' : 'pointer',
                     fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
-                    boxShadow: saving ? 'none' : '0 4px 14px rgba(99,102,241,0.3)',
+                    boxShadow: saving ? 'none' : '0 4px 14px rgba(194, 7, 26, 0.25)',
                     transition: 'all 0.15s ease',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   }}
@@ -770,3 +885,4 @@ export default function Departments() {
     </div>
   )
 }
+

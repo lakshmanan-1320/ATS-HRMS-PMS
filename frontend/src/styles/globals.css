@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand Core Colors */
+  --primary-color: #C2071A;
+  --sidebar-bg: #161616;
+  --navbar-active-gradient: linear-gradient(135deg, #D01021 0%, #B40619 100%);
+  --hero-card-gradient: linear-gradient(96.35deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%);
+  --card-active-border: #F7A6AF;
+  --card-active-bg: #FEECEE;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -5,11 +17,11 @@
 }
 
 body {
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f5f6fa;
-  color: #1e293b;
+  background: #f3f7fa;
+  color: var(--figma-navy);
   min-height: 100vh;
 }
 
@@ -33,36 +45,20 @@ select, option {
 }
 
 /* Ensure global readability on light backgrounds for content pages */
-main h1, main h2, main h3, main h4,
+main h1:not(.welcome-banner-card *), main h2:not(.welcome-banner-card *), main h3:not(.welcome-banner-card *), main h4:not(.welcome-banner-card *),
 .page-title, .section-title {
   color: #1e293b !important;
 }
 
-main p, .page-desc {
+main p:not(.welcome-banner-card *), .page-desc {
   color: #475569 !important;
 }
 
-/* Welcome banner overrides — keep heading and paragraph text white */
-body.client-admin-theme main .welcome-banner-card h1,
-body.client-admin-theme main .welcome-banner-card h2,
-body.client-admin-theme main .welcome-banner-card h3,
-body.client-admin-theme main .welcome-banner-card h4,
-main .welcome-banner-card h1,
-main .welcome-banner-card h2,
-main .welcome-banner-card h3,
-main .welcome-banner-card h4 {
-  color: #ffffff !important;
-}
-body.client-admin-theme main .welcome-banner-card p,
-main .welcome-banner-card p {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
 /* -------------------------------------------------------------
-   Client Admin Light Theme Overrides (#f5f6fa background)
+   Client Admin Light Theme Overrides (#f3f7fa background)
 ------------------------------------------------------------- */
 body.client-admin-theme {
-  background: #f5f6fa !important;
+  background: #f3f7fa !important;
   color: #1e293b !important;
 }
 
@@ -71,13 +67,13 @@ body.client-admin-theme #root > div,
 body.client-admin-theme #root > div[style*="background"],
 body.client-admin-theme div[style*="display: flex"][style*="min-height: 100vh"],
 body.client-admin-theme div[style*="display:flex"][style*="min-height:100vh"] {
-  background: #f5f6fa !important;
+  background: #f3f7fa !important;
   color: #1e293b !important;
 }
 
 /* Main content area */
 body.client-admin-theme main {
-  background: #f5f6fa !important;
+  background: #f3f7fa !important;
 }
 
 /* Headings and primary text in main content */
@@ -125,8 +121,7 @@ body.client-admin-theme main div[style*="border:1px solid rgba(99,102,241"] {
   border-color: #cbd5e1 !important;
 }
 
-/* Welcome Banner Card premium high-visibility gradient styling */
-.welcome-banner-card,
+/* Premium high-visibility dark-gradient card styling (marker background #090d16) */
 body.client-admin-theme main div[style*="background: #090d16"],
 body.client-admin-theme main div[style*="background:#090d16"],
 main div[style*="background: #090d16"],
@@ -136,9 +131,7 @@ main div[style*="background:#090d16"] {
   box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2) !important;
 }
 
-/* All text inside the welcome banner must be white */
-.welcome-banner-card span,
-.welcome-banner-card div,
+/* All text inside a marked dark card must be white */
 body.client-admin-theme main div[style*="background: #090d16"] span,
 body.client-admin-theme main div[style*="background:#090d16"] span,
 main div[style*="background: #090d16"] span,

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Sidebar from '../../../components/layout/Sidebar.jsx'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 const authHdr = () => ({ Authorization: `Bearer ${sessionStorage.getItem('sa_token')}` })
 
 // ─── Formatting helpers ───────────────────────────────────────────────────────
@@ -237,7 +236,7 @@ export default function Dashboard() {
   const fetchDashboard = useCallback(async () => {
     try {
       setLoading(true)
-      const res = await axios.get(`${API}/super-admin/dashboard`, { headers: authHdr() })
+      const res = await axios.get('/api/super-admin/dashboard', { headers: authHdr() })
       setData(res.data)
       setError(null)
     } catch {

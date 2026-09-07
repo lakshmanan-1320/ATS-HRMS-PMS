@@ -77,17 +77,23 @@ export default function AddEmployee() {
   const [configComponents, setConfigComponents] = useState([])
   const [previewSummary, setPreviewSummary] = useState(null)
 
-  const token = sessionStorage.getItem('sa_token')
-  const api = axios.create({ baseURL: '/api/client-admin', headers: { Authorization: `Bearer ${token}` } })
+  const getToken = () => sessionStorage.getItem('sa_token') || sessionStorage.getItem('token') || localStorage.getItem('sa_token') || localStorage.getItem('token') || ''
+  const api = axios.create({ baseURL: '/api/client-admin' })
+  api.interceptors.request.use((config) => {
+    const t = getToken()
+    if (t) config.headers.Authorization = `Bearer ${t}`
+    return config
+  })
 
   useEffect(() => {
     const redirect = (err) => { if (err.response?.status === 401) { sessionStorage.clear(); window.location.href = '/login' } }
+    const authHeaders = { headers: { Authorization: `Bearer ${getToken()}` } }
     api.get('/employees/next-code').then(r => setFormState(p => ({ ...p, employee_code: r.data.code || '' }))).catch(redirect)
     api.get('/departments').then(r => setDepartments(r.data)).catch(redirect)
     api.get('/hierarchy-levels').then(r => setHierarchyLevels(r.data)).catch(redirect)
     api.get('/employees/managers').then(r => setEmployees(r.data)).catch(redirect)
     
-    axios.get('/api/v1/payroll/components', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get('/api/v1/payroll/components', authHeaders)
       .then(r => {
         const list = r.data?.data || []
         setComponents(list)
@@ -108,7 +114,7 @@ export default function AddEmployee() {
       })
       .catch(() => {})
 
-    axios.get('/api/attendance/policies', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get('/api/attendance/policies', authHeaders)
       .then(r => setPolicies(r.data?.data || [])).catch(() => {})
   }, [])
 
@@ -150,7 +156,7 @@ export default function AddEmployee() {
           manual_amount: c.manual_amount !== undefined && c.manual_amount !== null && c.manual_amount !== '' ? parseFloat(c.manual_amount) : 0,
           is_fixed_override: !!c.is_fixed_override
         }))
-      }, { headers: { Authorization: `Bearer ${token}` } })
+      }, { headers: { Authorization: `Bearer ${getToken()}` } })
       
       if (data?.success && data?.data) {
         const roundedComps = (data.data.components || []).map(bc => {
@@ -225,40 +231,52 @@ export default function AddEmployee() {
       }
       const { data } = await api.post('/employees', payload)
       
-      // Save salary configuration
-      const empId = data.data.employee_id
-      const amt = parseFloat(salaryAmt) || 0
-      const gross = salaryType === 'ANNUAL_CTC' ? amt / 12 : amt
-      const earningsSum = configComponents.filter(c => c.component_type === 'EARNING').reduce((sum, c) => sum + parseFloat(c.calculated_amount), 0)
-      const employerContribSum = configComponents.filter(c => c.component_type === 'EMPLOYER_CONTRIBUTION').reduce((sum, c) => sum + parseFloat(c.calculated_amount), 0)
-      const ctcAmount = (earningsSum + employerContribSum) * (salaryType === 'ANNUAL_CTC' ? 12 : 1)
+      const createdEmp = data?.data?.employee_id ? data.data : (data?.data || data)
+      const empId = createdEmp?.employee_id || createdEmp?.id
 
-      await axios.post(`/api/v1/payroll/employees/${empId}/salary-config`, {
-        salary_type: salaryType,
-        gross_salary: gross,
-        ctc_amount: ctcAmount,
-        effective_from: effectiveFrom,
-        components: configComponents.map(c => ({
-          component_id: c.component_id,
-          percentage: parseFloat(c.percentage) || 0,
-          fixed_amount: parseFloat(c.fixed_amount) || 0,
-          calculated_amount: parseFloat(c.calculated_amount) || 0,
-          is_manual_override: !!c.is_manual_override,
-          manual_amount: c.is_manual_override ? parseFloat(c.manual_amount || 0) : null
-        }))
-      }, { headers: { Authorization: `Bearer ${token}` } })
+      if (empId && String(empId) !== 'undefined') {
+        try {
+          const amt = parseFloat(salaryAmt) || 0
+          const gross = salaryType === 'ANNUAL_CTC' ? amt / 12 : amt
+          const earningsSum = configComponents.filter(c => c.component_type === 'EARNING').reduce((sum, c) => sum + parseFloat(c.calculated_amount || 0), 0)
+          const employerContribSum = configComponents.filter(c => c.component_type === 'EMPLOYER_CONTRIBUTION').reduce((sum, c) => sum + parseFloat(c.calculated_amount || 0), 0)
+          const ctcAmount = (earningsSum + employerContribSum) * (salaryType === 'ANNUAL_CTC' ? 12 : 1)
 
-      if (data.data?.tempPassword) {
+          await axios.post(`/api/v1/payroll/employees/${empId}/salary-config`, {
+            salary_type: salaryType,
+            gross_salary: gross,
+            ctc_amount: ctcAmount,
+            effective_from: effectiveFrom,
+            components: configComponents.map(c => ({
+              component_id: c.component_id,
+              percentage: parseFloat(c.percentage) || 0,
+              fixed_amount: parseFloat(c.fixed_amount) || 0,
+              calculated_amount: parseFloat(c.calculated_amount) || 0,
+              is_manual_override: !!c.is_manual_override,
+              manual_amount: c.is_manual_override ? parseFloat(c.manual_amount || 0) : null
+            }))
+          }, { headers: { Authorization: `Bearer ${getToken()}` } })
+        } catch (salaryErr) {
+          console.warn('Salary config assignment note:', salaryErr?.response?.data?.message || salaryErr.message)
+        }
+      }
+
+      if (createdEmp?.tempPassword) {
         setCredentials({
-          name: `${data.data.first_name} ${data.data.last_name}`,
-          email: data.data.email,
-          employeeCode: data.data.employee_code,
-          tempPassword: data.data.tempPassword,
+          name: `${createdEmp.first_name || ''} ${createdEmp.last_name || ''}`.trim(),
+          email: createdEmp.email,
+          employeeCode: createdEmp.employee_code,
+          tempPassword: createdEmp.tempPassword,
         })
       } else {
         navigate('/client-admin/employees')
       }
     } catch (err) {
+      if (err.response?.status === 401) {
+        sessionStorage.clear()
+        window.location.href = '/login'
+        return
+      }
       setToast({ msg: err.response?.data?.message || 'Failed to save.', type: 'error' })
       setTimeout(() => setToast(null), 4500)
     } finally {

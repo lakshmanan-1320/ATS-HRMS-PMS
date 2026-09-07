@@ -70,18 +70,24 @@ export default function EditEmployee() {
   const [configComponents, setConfigComponents] = useState([])
   const [previewSummary, setPreviewSummary] = useState(null)
 
-  const token = sessionStorage.getItem('sa_token')
-  const api = axios.create({ baseURL: '/api/client-admin', headers: { Authorization: `Bearer ${token}` } })
+  const getToken = () => sessionStorage.getItem('sa_token') || sessionStorage.getItem('token') || localStorage.getItem('sa_token') || localStorage.getItem('token') || ''
+  const api = axios.create({ baseURL: '/api/client-admin' })
+  api.interceptors.request.use((config) => {
+    const t = getToken()
+    if (t) config.headers.Authorization = `Bearer ${t}`
+    return config
+  })
 
   useEffect(() => {
-    const redirect = () => { sessionStorage.clear(); window.location.href = '/login' }
+    const redirect = (err) => { if (err.response?.status === 401) { sessionStorage.clear(); window.location.href = '/login' } }
+    const authHeaders = { headers: { Authorization: `Bearer ${getToken()}` } }
     Promise.all([
       api.get(`/employees/${id}`),
       api.get('/departments'),
       api.get('/hierarchy-levels'),
       api.get('/employees/managers', { params: { exclude_id: id } }),
-      axios.get('/api/attendance/policies', { headers: { Authorization: `Bearer ${token}` } }),
-      axios.get(`/api/v1/payroll/employees/${id}/salary-config`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => null)
+      axios.get('/api/attendance/policies', authHeaders),
+      axios.get(`/api/v1/payroll/employees/${id}/salary-config`, authHeaders).catch(() => null)
     ]).then(([empRes, deptRes, hlRes, mgrRes, policyRes, salaryRes]) => {
       const e = empRes.data
       setEmpName(`${e.first_name || ''} ${e.last_name || ''}`.trim())
@@ -281,27 +287,31 @@ export default function EditEmployee() {
       await api.put(`/employees/${id}`, payload)
       
       // Save salary configuration
-      if (salaryAmt) {
-        const amt = parseFloat(salaryAmt) || 0
-        const gross = salaryType === 'ANNUAL_CTC' ? amt / 12 : amt
-        const earningsSum = configComponents.filter(c => c.component_type === 'EARNING').reduce((sum, c) => sum + parseFloat(c.calculated_amount), 0)
-        const employerContribSum = configComponents.filter(c => c.component_type === 'EMPLOYER_CONTRIBUTION').reduce((sum, c) => sum + parseFloat(c.calculated_amount), 0)
-        const ctcAmount = (earningsSum + employerContribSum) * (salaryType === 'ANNUAL_CTC' ? 12 : 1)
+      if (salaryAmt && id && String(id) !== 'undefined') {
+        try {
+          const amt = parseFloat(salaryAmt) || 0
+          const gross = salaryType === 'ANNUAL_CTC' ? amt / 12 : amt
+          const earningsSum = configComponents.filter(c => c.component_type === 'EARNING').reduce((sum, c) => sum + parseFloat(c.calculated_amount || 0), 0)
+          const employerContribSum = configComponents.filter(c => c.component_type === 'EMPLOYER_CONTRIBUTION').reduce((sum, c) => sum + parseFloat(c.calculated_amount || 0), 0)
+          const ctcAmount = (earningsSum + employerContribSum) * (salaryType === 'ANNUAL_CTC' ? 12 : 1)
 
-        await axios.post(`/api/v1/payroll/employees/${id}/salary-config`, {
-          salary_type: salaryType,
-          gross_salary: gross,
-          ctc_amount: ctcAmount,
-          effective_from: effectiveFrom,
-          components: configComponents.map(c => ({
-            component_id: c.component_id,
-            percentage: parseFloat(c.percentage) || 0,
-            fixed_amount: parseFloat(c.fixed_amount) || 0,
-            calculated_amount: parseFloat(c.calculated_amount) || 0,
-            is_manual_override: !!c.is_manual_override,
-            manual_amount: c.is_manual_override ? parseFloat(c.manual_amount || 0) : null
-          }))
-        }, { headers: { Authorization: `Bearer ${token}` } })
+          await axios.post(`/api/v1/payroll/employees/${id}/salary-config`, {
+            salary_type: salaryType,
+            gross_salary: gross,
+            ctc_amount: ctcAmount,
+            effective_from: effectiveFrom,
+            components: configComponents.map(c => ({
+              component_id: c.component_id,
+              percentage: parseFloat(c.percentage) || 0,
+              fixed_amount: parseFloat(c.fixed_amount) || 0,
+              calculated_amount: parseFloat(c.calculated_amount) || 0,
+              is_manual_override: !!c.is_manual_override,
+              manual_amount: c.is_manual_override ? parseFloat(c.manual_amount || 0) : null
+            }))
+          }, { headers: { Authorization: `Bearer ${getToken()}` } })
+        } catch (salaryErr) {
+          console.warn('Salary config update note:', salaryErr?.response?.data?.message || salaryErr.message)
+        }
       }
 
       navigate(`/client-admin/employees/${id}`)

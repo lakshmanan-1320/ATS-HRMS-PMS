@@ -821,6 +821,11 @@ async function getEmployeeSalaryComponents(configId, txClient = null) {
 }
 
 async function saveEmployeeSalaryConfig(organizationId, employeeId, payload, txClient = null) {
+  if (!employeeId || employeeId === 'undefined' || !/^[0-9a-fA-F-]{36}$/.test(String(employeeId))) {
+    const ApiError = require('../../utils/apiError');
+    const { STATUS_CODES } = require('../../constants/statusCodes');
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'A valid Employee ID (UUID) is required.');
+  }
   const run = txClient || { query };
   const { salary_type, gross_salary, ctc_amount, effective_from, components } = payload;
 

@@ -18,6 +18,9 @@ async function run() {
       const seedHolidays = require('./seeders/005_default_holidays')
       const seedHRPolicies = require('./seeders/007_hr_policies_seeder')
       const indexPolicies = require('./seeders/008_index_policies_seeder')
+      const seedAttendance = require('./seeders/008_attendance_mock_seeder')
+      const seedLeave = require('./seeders/009_leave_mock_seeder')
+      const seedPayroll = require('./seeders/010_payroll_mock_seeder')
       
       await verifyAdmin()
       await createClientAdmin()
@@ -28,6 +31,9 @@ async function run() {
       await seedHolidays()
       await seedHRPolicies()
       await indexPolicies()
+      await seedAttendance()
+      await seedLeave()
+      await seedPayroll()
       
       logger.info('All seeders completed.')
       if (isMainScript) process.exit(0)

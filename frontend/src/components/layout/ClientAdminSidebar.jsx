@@ -106,7 +106,7 @@ export default function ClientAdminSidebar({ active }) {
         { id: 'holidays',       icon: FiGift,        label: 'Holiday Calendar', path: '/client-admin/holidays' },
       ]
     },
-    isEnabled('attendance') && { id: 'regularizations',icon: FiCheckSquare, label: 'Regularization',     path: '/client-admin/regularizations' },
+    isEnabled('attendance') && { id: 'regularizations',icon: FiCheckSquare, label: 'Regularization',     path: '/client-admin/regularizations', badge: '12' },
     isEnabled('attendance') && { id: 'permissions',    icon: FiShield,      label: 'Permissions',        path: '/client-admin/permissions' },
   ].filter(Boolean)
 

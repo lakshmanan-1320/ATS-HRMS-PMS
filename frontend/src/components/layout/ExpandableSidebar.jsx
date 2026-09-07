@@ -43,7 +43,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
   }
 
   // Retrieve user email from session storage, fallback based on role
-  const userEmail = sessionStorage.getItem('sa_email') || `${roleName.toLowerCase().replace(' ', '')}@insighthcm.in`
+  const userEmail = sessionStorage.getItem('sa_email') || `${roleName.toLowerCase().replace(/\s+/g, '')}@insighthcm.in`
   
   // Format display name nicely
   const displayName = userEmail
@@ -67,17 +67,19 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
 
   // Filter sections and links based on search query
   const filteredSections = sections.map(section => {
-    const filteredLinks = section.links.filter(link =>
-      link.label.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    const filteredLinks = section.links.filter(link => {
+      const matchLabel = link.label.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchChildren = link.children && link.children.some(child => child.label.toLowerCase().includes(searchQuery.toLowerCase()))
+      return matchLabel || matchChildren
+    })
     return { ...section, links: filteredLinks }
   }).filter(section => section.links.length > 0)
 
   const styles = {
     aside: {
-      width: isCollapsed ? '72px' : '270px',
-      minWidth: isCollapsed ? '72px' : '270px',
-      background: '#111827',
+      width: isCollapsed ? '76px' : '280px',
+      minWidth: isCollapsed ? '76px' : '280px',
+      background: 'var(--sidebar-bg, #161616)',
       display: 'flex',
       flexDirection: 'column',
       padding: '0px',
@@ -85,20 +87,21 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       top: 0,
       height: '100vh',
       overflow: 'hidden',
-      fontFamily: "'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       userSelect: 'none',
       zIndex: 100,
       color: '#ffffff',
       boxSizing: 'border-box',
       transition: 'width 0.25s ease, min-width 0.25s ease',
+      borderRight: '1px solid rgba(255, 255, 255, 0.05)',
     },
     header: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: isCollapsed ? 'center' : 'space-between',
-      padding: isCollapsed ? '20px 0' : '20px 16px',
-      background: 'linear-gradient(to right, #1f2937, #111827)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+      padding: isCollapsed ? '20px 0' : '20px 18px 16px',
+      background: '#161616',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
       flexShrink: 0,
     },
     brandArea: {
@@ -110,20 +113,11 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       flex: 1,
     },
     brandLogo: {
-      height: '52px',
+      height: '42px',
       width: 'auto',
-      maxWidth: '195px',
+      maxWidth: '185px',
       objectFit: 'contain',
       display: 'block',
-    },
-    brandName: {
-      fontSize: '17px',
-      fontWeight: '700',
-      color: '#ffffff',
-      letterSpacing: '-0.02em',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
     },
     hamburger: {
       cursor: 'pointer',
@@ -131,10 +125,10 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '4px',
-      borderRadius: '6px',
-      background: 'none',
-      border: 'none',
+      padding: '6px',
+      borderRadius: '8px',
+      background: 'rgba(255, 255, 255, 0.04)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
       flexShrink: 0,
       transition: 'color 0.2s, background 0.2s',
     },
@@ -151,29 +145,42 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
     searchIcon: {
       position: 'absolute',
       left: '12px',
-      color: 'rgba(255, 255, 255, 0.7)',
+      color: 'rgba(255, 255, 255, 0.45)',
       pointerEvents: 'none',
+      width: '16px',
+      height: '16px',
     },
     searchInput: {
       width: '100%',
       height: '38px',
-      padding: '0 12px 0 38px',
-      background: 'rgba(255, 255, 255, 0.08)',
-      border: '1px solid rgba(255, 255, 255, 0.12)',
-      borderRadius: '10px',
+      padding: '0 45px 0 36px',
+      background: '#242426',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderRadius: '8px',
       color: '#ffffff',
-      fontSize: '14px',
+      fontSize: '13.5px',
       outline: 'none',
       fontFamily: 'inherit',
       boxSizing: 'border-box',
       transition: 'background 0.2s, border-color 0.2s',
     },
+    shortcutBadge: {
+      position: 'absolute',
+      right: '10px',
+      background: '#3f3f46',
+      color: 'rgba(255, 255, 255, 0.7)',
+      fontSize: '10px',
+      fontWeight: '600',
+      padding: '2px 5px',
+      borderRadius: '4px',
+      pointerEvents: 'none',
+    },
     nav: {
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      gap: isCollapsed ? '4px' : '24px',
-      padding: isCollapsed ? '12px 8px 24px' : '16px 16px 24px',
+      gap: isCollapsed ? '4px' : '22px',
+      padding: isCollapsed ? '12px 8px 24px' : '16px 16px 20px',
       overflowY: 'auto',
       overflowX: 'hidden',
     },
@@ -186,17 +193,17 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '0 8px 6px',
+      padding: '2px 8px 6px',
     },
     sectionTitle: {
       fontSize: '11px',
       fontWeight: '700',
-      color: 'rgba(255, 255, 255, 0.5)',
+      color: 'rgba(255, 255, 255, 0.45)',
       textTransform: 'uppercase',
       letterSpacing: '0.08em',
     },
     sectionMinus: {
-      color: 'rgba(255, 255, 255, 0.3)',
+      color: 'rgba(255, 255, 255, 0.25)',
       fontSize: '10px',
     },
     linkButton: (isActive, isSoon) => ({
@@ -204,16 +211,18 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       alignItems: 'center',
       justifyContent: isCollapsed ? 'center' : 'space-between',
       width: '100%',
-      padding: isCollapsed ? '10px' : '12px 14px',
-      background: isActive ? 'rgba(99, 102, 241, 0.18)' : 'none',
-      border: isActive ? '1px solid rgba(99, 102, 241, 0.45)' : '1px solid transparent',
+      padding: isCollapsed ? '10px' : '10.5px 14px',
+      margin: '1px 0',
+      background: isActive ? 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))' : 'none',
+      border: 'none',
       borderRadius: '10px',
+      boxShadow: isActive ? '0 4px 14px rgba(208, 16, 33, 0.4)' : 'none',
       cursor: isSoon ? 'default' : 'pointer',
-      fontSize: '15px',
-      fontWeight: isActive ? '600' : '500',
+      fontSize: '14px',
+      fontWeight: isActive ? '600' : '400',
       color: isActive ? '#ffffff' : isSoon ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.85)',
       textAlign: 'left',
-      transition: 'all 0.2s',
+      transition: 'all 0.2s ease',
       fontFamily: 'inherit',
       outline: 'none',
       boxSizing: 'border-box',
@@ -224,12 +233,18 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       gap: '12px',
     },
     badge: {
-      background: 'rgba(99, 102, 241, 0.22)',
-      color: '#a5b4fc',
-      fontSize: '11px',
+      background: '#C2071A',
+      color: '#ffffff',
+      fontSize: '10.5px',
       fontWeight: '700',
-      padding: '2px 8px',
-      borderRadius: '20px',
+      width: '20px',
+      height: '20px',
+      borderRadius: '50%',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0 2px 6px rgba(194, 7, 26, 0.5)',
+      flexShrink: 0,
     },
     soonBadge: {
       background: 'rgba(255, 255, 255, 0.1)',
@@ -242,9 +257,10 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       letterSpacing: '0.05em',
     },
     footer: {
-      padding: '16px 20px',
-      borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+      padding: '14px 16px',
+      borderTop: '1px solid rgba(255, 255, 255, 0.06)',
       position: 'relative',
+      background: '#161616',
     },
     profileCard: {
       display: 'flex',
@@ -253,28 +269,29 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       background: 'none',
       border: 'none',
       borderRadius: '10px',
-      padding: '10px 12px',
+      padding: '8px 10px',
       cursor: 'pointer',
       transition: 'background 0.2s',
     },
     profileLeft: {
       display: 'flex',
       alignItems: 'center',
-      gap: '10px',
+      gap: '12px',
       overflow: 'hidden',
     },
     avatarCircle: {
-      width: '32px',
-      height: '32px',
+      width: '34px',
+      height: '34px',
       borderRadius: '50%',
-      background: '#6366f1',
+      background: '#C2071A',
       color: '#ffffff',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: '13px',
+      fontSize: '14px',
       fontWeight: '700',
       flexShrink: 0,
+      boxShadow: '0 2px 8px rgba(194, 7, 26, 0.4)',
     },
     profileInfo: {
       display: 'flex',
@@ -282,7 +299,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       overflow: 'hidden',
     },
     profileName: {
-      fontSize: '13px',
+      fontSize: '13.5px',
       fontWeight: '600',
       color: '#ffffff',
       whiteSpace: 'nowrap',
@@ -290,26 +307,26 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       textOverflow: 'ellipsis',
     },
     profileEmail: {
-      fontSize: '11px',
-      color: 'rgba(255, 255, 255, 0.7)',
+      fontSize: '11.5px',
+      color: 'rgba(255, 255, 255, 0.55)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       marginTop: '1px',
     },
     profileMore: {
-      color: 'rgba(255, 255, 255, 0.7)',
+      color: 'rgba(255, 255, 255, 0.6)',
       fontSize: '16px',
     },
     dropdown: {
       position: 'absolute',
       bottom: '64px',
-      left: '20px',
-      right: '20px',
-      background: '#1f2937',
+      left: '16px',
+      right: '16px',
+      background: '#242426',
       border: '1px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '12px',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.4)',
+      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
       overflow: 'hidden',
       display: showDropdown ? 'block' : 'none',
       zIndex: 200,
@@ -317,7 +334,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
     dropdownItem: {
       display: 'flex',
       alignItems: 'center',
-      gap: '10px',
+      gap: '12px',
       width: '100%',
       padding: '12px 16px',
       background: 'none',
@@ -333,23 +350,24 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
     childGroup: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '2px',
-      marginTop: '2px',
+      gap: '4px',
+      marginTop: '4px',
       marginLeft: '12px',
       paddingLeft: '14px',
-      borderLeft: '1px solid rgba(99, 102, 241, 0.3)',
+      borderLeft: '1px solid rgba(255, 255, 255, 0.12)',
     },
     childLinkButton: (isActive, isSoon) => ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       width: '100%',
-      padding: '9px 12px',
-      background: isActive ? 'rgba(99, 102, 241, 0.18)' : 'none',
-      border: isActive ? '1px solid rgba(99, 102, 241, 0.45)' : '1px solid transparent',
+      padding: '8.5px 12px',
+      background: isActive ? 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))' : 'none',
+      border: 'none',
       borderRadius: '8px',
+      boxShadow: isActive ? '0 2px 10px rgba(208, 16, 33, 0.35)' : 'none',
       cursor: isSoon ? 'default' : 'pointer',
-      fontSize: '13.5px',
+      fontSize: '13px',
       fontWeight: isActive ? '600' : '400',
       color: isActive ? '#ffffff' : isSoon ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.75)',
       textAlign: 'left',
@@ -363,13 +381,13 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       alignItems: 'center',
       justifyContent: isCollapsed ? 'center' : 'space-between',
       width: '100%',
-      padding: isCollapsed ? '10px' : '12px 14px',
-      background: hasActiveChild ? 'rgba(99, 102, 241, 0.10)' : 'none',
-      border: '1px solid transparent',
+      padding: isCollapsed ? '10px' : '10.5px 14px',
+      background: hasActiveChild ? 'rgba(255, 255, 255, 0.08)' : 'none',
+      border: 'none',
       borderRadius: '10px',
       cursor: 'pointer',
-      fontSize: '15px',
-      fontWeight: hasActiveChild ? '600' : '500',
+      fontSize: '14px',
+      fontWeight: hasActiveChild ? '600' : '400',
       color: hasActiveChild ? '#ffffff' : 'rgba(255, 255, 255, 0.85)',
       textAlign: 'left',
       transition: 'all 0.2s',
@@ -382,7 +400,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
   const handleMouseEnterButton = (e, isActive, isSoon) => {
     if (isSoon) return
     if (!isActive) {
-      e.currentTarget.style.background = 'rgba(99, 102, 241, 0.12)'
+      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
       e.currentTarget.style.color = '#ffffff'
     }
   }
@@ -396,7 +414,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
   }
 
   const handleMouseEnterProfile = (e) => {
-    e.currentTarget.style.background = 'rgba(99, 102, 241, 0.15)'
+    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
   }
 
   const handleMouseLeaveProfile = (e) => {
@@ -404,7 +422,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
   }
 
   const handleMouseEnterDropdownItem = (e) => {
-    e.currentTarget.style.background = 'rgba(99, 102, 241, 0.15)'
+    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
   }
 
   const handleMouseLeaveDropdownItem = (e) => {
@@ -421,9 +439,9 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
             onClick={() => setIsCollapsed(false)}
             title="Expand sidebar"
             onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
           >
-            <img src="/insight-tech-icon.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            <img src="/insight-tech-icon.png" alt="Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
           </button>
         ) : (
           <>
@@ -435,7 +453,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
               onClick={() => setIsCollapsed(true)}
               title="Collapse sidebar"
               onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none' }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
             >
               <FiMenu size={18} />
             </button>
@@ -446,34 +464,23 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
       {/* Search Bar matching mockup */}
       <div style={styles.searchContainer}>
         <div style={styles.searchBox}>
-          <FiSearch size={16} style={styles.searchIcon} />
+          <FiSearch style={styles.searchIcon} />
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search menu..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={styles.searchInput}
             onFocus={(e) => {
-              e.target.style.background = 'rgba(99, 102, 241, 0.25)'
-              e.target.style.borderColor = 'rgba(99, 102, 241, 0.7)'
+              e.target.style.background = '#2a2a2d'
+              e.target.style.borderColor = 'rgba(208, 16, 33, 0.5)'
             }}
             onBlur={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.08)'
-              e.target.style.borderColor = 'rgba(255, 255, 255, 0.12)'
-            }}
-            onMouseEnter={(e) => {
-              if (document.activeElement !== e.target) {
-                e.target.style.background = 'rgba(255, 255, 255, 0.12)'
-                e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (document.activeElement !== e.target) {
-                e.target.style.background = 'rgba(255, 255, 255, 0.08)'
-                e.target.style.borderColor = 'rgba(255, 255, 255, 0.12)'
-              }
+              e.target.style.background = '#242426'
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.08)'
             }}
           />
+          <span style={styles.shortcutBadge}>⌘ K</span>
         </div>
       </div>
 
@@ -504,7 +511,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
                       style={styles.parentLinkButton(isExpanded, hasActiveChild)}
                       onMouseEnter={(e) => {
                         if (!hasActiveChild) {
-                          e.currentTarget.style.background = 'rgba(99, 102, 241, 0.12)'
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
                           e.currentTarget.style.color = '#ffffff'
                         }
                       }}
@@ -516,7 +523,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
                       }}
                     >
                       <div style={styles.linkInner}>
-                        <Icon size={19} style={{ color: hasActiveChild ? '#ffffff' : 'rgba(255,255,255,0.7)', flexShrink: 0 }} />
+                        <Icon size={18} style={{ color: hasActiveChild ? '#ffffff' : 'rgba(255,255,255,0.7)', flexShrink: 0, width: 18, height: 18 }} />
                         {!isCollapsed && <span>{link.label}</span>}
                       </div>
                       {!isCollapsed && (isExpanded
@@ -537,7 +544,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
                               style={styles.childLinkButton(isChildActive, child.soon)}
                               onMouseEnter={(e) => {
                                 if (!isChildActive && !child.soon) {
-                                  e.currentTarget.style.background = 'rgba(99, 102, 241, 0.10)'
+                                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
                                   e.currentTarget.style.color = '#ffffff'
                                 }
                               }}
@@ -549,7 +556,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
                               }}
                             >
                               <div style={styles.linkInner}>
-                                <ChildIcon size={16} style={{ color: isChildActive ? '#ffffff' : child.soon ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.6)', flexShrink: 0 }} />
+                                <ChildIcon size={16} style={{ color: isChildActive ? '#ffffff' : child.soon ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.6)', flexShrink: 0, width: 16, height: 16 }} />
                                 <span>{child.label}</span>
                               </div>
                               {child.soon && <span style={styles.soonBadge}>Soon</span>}
@@ -575,7 +582,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
                   onBlur={(e) => handleMouseLeaveButton(e, isActive, link.soon)}
                 >
                   <div style={styles.linkInner}>
-                    <Icon size={19} style={{ color: isActive ? '#ffffff' : link.soon ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', flexShrink: 0 }} />
+                    <Icon size={18} style={{ color: isActive ? '#ffffff' : link.soon ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', flexShrink: 0, width: 18, height: 18 }} />
                     {!isCollapsed && <span>{link.label}</span>}
                   </div>
 
@@ -607,7 +614,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
               onMouseEnter={handleMouseEnterDropdownItem}
               onMouseLeave={handleMouseLeaveDropdownItem}
             >
-              <FiLock size={16} />
+              <FiLock size={16} style={{ width: 16, height: 16 }} />
               <span>Change Password</span>
             </button>
           )}
@@ -617,7 +624,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
             onMouseEnter={handleMouseEnterDropdownItem}
             onMouseLeave={handleMouseLeaveDropdownItem}
           >
-            <FiLogOut size={16} />
+            <FiLogOut size={16} style={{ width: 16, height: 16 }} />
             <span>Sign Out</span>
           </button>
         </div>
@@ -654,3 +661,5 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
     </aside>
   )
 }
+
+

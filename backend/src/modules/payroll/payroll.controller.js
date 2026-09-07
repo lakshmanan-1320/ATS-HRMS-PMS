@@ -254,44 +254,78 @@ const handleBulkImportAdjustments = catchAsync(async (req, res) => {
   });
 });
 
-// --- Dynamic Payroll Components ---
+// --- Payroll Components ---
 const handleListPayrollComponents = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
-  const result = await service.getPayrollComponents(orgId);
-  res.status(STATUS_CODES.OK).json({ success: true, data: result });
+  const result = await service.listPayrollComponents(orgId);
+  res.status(STATUS_CODES.OK).json({
+    success: true,
+    data: result
+  });
 });
 
 const handleGetPayrollComponentById = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const { id } = req.params;
   const result = await service.getPayrollComponentById(orgId, id);
-  res.status(STATUS_CODES.OK).json({ success: true, data: result });
+  res.status(STATUS_CODES.OK).json({
+    success: true,
+    data: result
+  });
 });
 
 const handleCreatePayrollComponent = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
-  const result = await service.createPayrollComponent(orgId, req.validatedBody);
-  res.status(STATUS_CODES.CREATED).json({ success: true, data: result });
+  const userId = req.user.id;
+  const result = await service.createPayrollComponent(orgId, req.validatedBody, userId);
+  await logAudit(req, {
+    action: 'CREATE_PAYROLL_COMPONENT',
+    module: 'PAYROLL',
+    details: { component_id: result.component_id, component_name: result.component_name }
+  });
+  res.status(STATUS_CODES.CREATED).json({
+    success: true,
+    data: result
+  });
 });
 
 const handleUpdatePayrollComponent = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const { id } = req.params;
   const result = await service.updatePayrollComponent(orgId, id, req.validatedBody);
-  res.status(STATUS_CODES.OK).json({ success: true, data: result });
+  await logAudit(req, {
+    action: 'UPDATE_PAYROLL_COMPONENT',
+    module: 'PAYROLL',
+    details: { component_id: id, component_name: result.component_name }
+  });
+  res.status(STATUS_CODES.OK).json({
+    success: true,
+    data: result
+  });
 });
 
 const handleDeletePayrollComponent = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const { id } = req.params;
   await service.deletePayrollComponent(orgId, id);
-  res.status(STATUS_CODES.OK).json({ success: true, message: 'Component deleted successfully.' });
+  await logAudit(req, {
+    action: 'DELETE_PAYROLL_COMPONENT',
+    module: 'PAYROLL',
+    details: { component_id: id }
+  });
+  res.status(STATUS_CODES.OK).json({
+    success: true,
+    message: 'Payroll component deleted.'
+  });
 });
 
 // --- Employee Salary Configuration ---
 const handleGetEmployeeSalaryConfig = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const { employee_id } = req.params;
+  if (!employee_id || employee_id === 'undefined' || !/^[0-9a-fA-F-]{36}$/.test(String(employee_id))) {
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'A valid Employee ID (UUID) is required.');
+  }
   const { date } = req.query;
   const result = await service.getEmployeeSalaryConfig(orgId, employee_id, date);
   res.status(STATUS_CODES.OK).json({ success: true, data: result });
@@ -300,11 +334,13 @@ const handleGetEmployeeSalaryConfig = catchAsync(async (req, res) => {
 const handleSaveEmployeeSalaryConfig = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const { employee_id } = req.params;
+  if (!employee_id || employee_id === 'undefined' || !/^[0-9a-fA-F-]{36}$/.test(String(employee_id))) {
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, 'A valid Employee ID (UUID) is required.');
+  }
   const result = await service.saveEmployeeSalaryConfig(orgId, employee_id, req.validatedBody);
   res.status(STATUS_CODES.CREATED).json({ success: true, data: result });
 });
 
-// --- Salary Revisions ---
 const handleCreateRevision = catchAsync(async (req, res) => {
   const orgId = req.user.organizationId;
   const userId = req.user.userId || req.user.id;
