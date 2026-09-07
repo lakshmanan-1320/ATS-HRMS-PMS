@@ -164,6 +164,15 @@ export default function AttendanceReports() {
 
   const selectedReportInfo = REPORT_TYPES.find(r => r.id === activeReport)
 
+  const records = useMemo(() => {
+    if (!reportData) return []
+    if (Array.isArray(reportData)) return reportData
+    if (Array.isArray(reportData.records)) return reportData.records
+    if (Array.isArray(reportData.data)) return reportData.data
+    if (Array.isArray(reportData.rows)) return reportData.rows
+    return []
+  }, [reportData])
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="attendance-reports" />
@@ -285,8 +294,14 @@ export default function AttendanceReports() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <button
                       onClick={() => setActiveReport(null)}
-                      style={{ background: '#f1f5f9', border: 'none', borderRadius: '8px', padding: '6px 10px', fontSize: '12px', fontWeight: 700, color: '#475569', cursor: 'pointer' }}
+                      style={{
+                        background: '#f1f5f9', border: 'none', borderRadius: '8px',
+                        padding: '6px 12px', fontSize: '12px', fontWeight: 700,
+                        color: '#475569', cursor: 'pointer', display: 'flex',
+                        alignItems: 'center', gap: '6px', transition: 'all 0.15s ease'
+                      }}
                     >
+                      <FiChevronLeft size={16} strokeWidth={2.5} />
                       Back to All Reports
                     </button>
                     <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{selectedReportInfo?.title}</h2>
@@ -328,6 +343,54 @@ export default function AttendanceReports() {
                     <input type="text" placeholder="Search keywords..." value={search} onChange={e => setSearch(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
                   </div>
                 </div>
+
+                {/* Summary Stat Cards for Attendance Summary */}
+                {activeReport === 'summary' && reportData && !Array.isArray(reportData) && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+                    <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Total Employees</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', marginTop: '2px' }}>{reportData.totalEmployees ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#dcfce7', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#166534', fontWeight: 600 }}>Present</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#15803d', marginTop: '2px' }}>{reportData.present ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#fee2e2', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#991b1b', fontWeight: 600 }}>Absent</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#dc2626', marginTop: '2px' }}>{reportData.absent ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#fef3c7', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#92400e', fontWeight: 600 }}>Late Arrivals</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#d97706', marginTop: '2px' }}>{reportData.lateArrivals ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#ffedd5', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#9a3412', fontWeight: 600 }}>Early Exits</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#c2410c', marginTop: '2px' }}>{reportData.earlyExits ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#e0f2fe', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#075985', fontWeight: 600 }}>Compliance Rate</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#0284c7', marginTop: '2px' }}>{reportData.complianceRate ?? 100}%</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Summary Stat Cards for Geofence Compliance */}
+                {activeReport === 'geofence' && reportData?.summary && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+                    <div style={{ background: '#dcfce7', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#166534', fontWeight: 600 }}>Inside Geofence</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#15803d', marginTop: '2px' }}>{reportData.summary.insideFenceCount ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#fee2e2', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#991b1b', fontWeight: 600 }}>Outside Geofence</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#dc2626', marginTop: '2px' }}>{reportData.summary.outsideFenceCount ?? 0}</div>
+                    </div>
+                    <div style={{ background: '#f1f5f9', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>Location Not Verified</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#334155', marginTop: '2px' }}>{reportData.summary.locationNotVerifiedCount ?? 0}</div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Data Table */}
@@ -336,14 +399,16 @@ export default function AttendanceReports() {
                   <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading report data...</div>
                 ) : error ? (
                   <div style={{ padding: '20px', background: '#feecee', color: '#dc2626', borderRadius: '10px', fontSize: '13px', fontWeight: 600 }}>{error}</div>
-                ) : !reportData || (Array.isArray(reportData) && reportData.length === 0) ? (
+                ) : activeReport === 'employee' && !selectedEmployeeId ? (
+                  <div style={{ padding: '40px', textAlign: 'center', color: '#64748b', fontWeight: 500 }}>Please select an employee from the filter dropdown above to view their attendance history.</div>
+                ) : !records || records.length === 0 ? (
                   <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No records found for the selected parameters.</div>
                 ) : (
                   <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
                         <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
-                          {Object.keys(reportData[0] || {}).map(key => (
+                          {Object.keys(records[0] || {}).map(key => (
                             <th key={key} style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                               {key.replace(/_/g, ' ')}
                             </th>
@@ -351,7 +416,7 @@ export default function AttendanceReports() {
                         </tr>
                       </thead>
                       <tbody>
-                        {reportData.map((row, idx) => (
+                        {records.map((row, idx) => (
                           <tr key={idx} style={{ borderBottom: '1px solid #edf2f7', background: idx % 2 === 0 ? '#ffffff' : '#fafafa' }}>
                             {Object.entries(row).map(([k, val], i) => (
                               <td key={i} style={{ padding: '14px 16px', color: '#1e293b' }}>

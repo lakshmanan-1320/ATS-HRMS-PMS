@@ -173,8 +173,17 @@ const s = {
 
 /* ─── Sub-components ─────────────────────────────────────────── */
 
-function SectionIcon({ icon: Icon, bg }) {
-  return <div style={{ ...s.cardIcon, background: `linear-gradient(135deg, ${bg} 0%, ${bg} 100%)` }}><Icon size={18} color="#ffffff" /></div>
+function SectionIcon({ icon: Icon }) {
+  return (
+    <div style={{
+      ...s.cardIcon,
+      background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+      color: '#ffffff',
+      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)'
+    }}>
+      <Icon size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+    </div>
+  )
 }
 
 function Toggle({ checked, onChange, label, hint, last }) {
@@ -319,7 +328,7 @@ export default function LeaveSettingsConfig() {
               {/* ── Card 1: Leave Year Type ── */}
               <div style={s.card}>
                 <div style={s.cardHeader}>
-                  <SectionIcon icon={FiCalendar} bg="#7c3aed" />
+                  <SectionIcon icon={FiCalendar} bg="#C2071A" />
                   <div>
                     <div style={s.cardTitle}>Leave Year Boundary</div>
                     <div style={s.cardSubtitle}>Define the start and end of the annual leave cycle</div>

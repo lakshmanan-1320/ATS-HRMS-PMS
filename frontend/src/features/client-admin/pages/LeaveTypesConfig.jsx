@@ -202,10 +202,10 @@ export default function LeaveTypesConfig() {
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#C2071A', icon: <FiList size={18} color="#ffffff" /> },
-              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#16a34a', icon: <FiCheckCircle size={18} color="#ffffff" /> },
-              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#0f766e', icon: <FiDollarSign size={18} color="#ffffff" /> },
-              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#dc2626', icon: <FiXCircle size={18} color="#ffffff" /> },
+              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#C2071A', icon: <FiList size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#C2071A', icon: <FiCheckCircle size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#C2071A', icon: <FiDollarSign size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#C2071A', icon: <FiXCircle size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
             ].map(({ key, label, value, color, icon }) => {
               const active = isStatActive(key)
               return (
@@ -219,7 +219,7 @@ export default function LeaveTypesConfig() {
                     setPage(1)
                   }}
                   style={{ background: '#fff', border: `1.5px solid ${active ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                  <div style={{ width: 42, height: 42, borderRadius: '12px', background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: 42, height: 42, borderRadius: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
                     {icon}
                   </div>
                   <div>

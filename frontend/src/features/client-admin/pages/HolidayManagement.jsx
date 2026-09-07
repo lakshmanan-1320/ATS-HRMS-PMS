@@ -270,17 +270,17 @@ export default function HolidayManagement() {
           {/* Stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Holidays', value: stats.total,    color: '#C2071A', icon: <FiGift size={18} color="#ffffff" /> },
-              { label: 'Public',         value: stats.pub,      color: '#15803d', icon: <FiCheckCircle size={18} color="#ffffff" /> },
-              { label: 'Optional',       value: stats.optional, color: '#6d28d9', icon: <FiCalendar size={18} color="#ffffff" /> },
-              { label: 'Upcoming',       value: stats.upcoming, color: '#d97706', icon: <FiCalendar size={18} color="#ffffff" /> },
-            ].map(({ label, value, color, icon }) => (
+              { label: 'Total Holidays', value: stats.total,    icon: <FiGift size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { label: 'Public',         value: stats.pub,      icon: <FiCheckCircle size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { label: 'Optional',       value: stats.optional, icon: <FiCalendar size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { label: 'Upcoming',       value: stats.upcoming, icon: <FiCalendar size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+            ].map(({ label, value, icon }) => (
               <div key={label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 42, height: 42, borderRadius: '12px', background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 42, height: 42, borderRadius: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
                   {icon}
                 </div>
                 <div>
-                  <div style={{ fontSize: '26px', fontWeight: '800', color, lineHeight: 1 }}>{value}</div>
+                  <div style={{ fontSize: '26px', fontWeight: '800', color: '#C2071A', lineHeight: 1 }}>{value}</div>
                   <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginTop: 3 }}>{label}</div>
                 </div>
               </div>
