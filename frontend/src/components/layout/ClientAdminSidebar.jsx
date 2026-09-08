@@ -86,12 +86,12 @@ export default function ClientAdminSidebar({ active }) {
       icon: FiClock,
       label: 'Attendance',
       children: [
-        { id: 'attendance-dashboard', icon: FiActivity, label: 'Dashboard', path: '/client-admin/attendance/dashboard' },
-        { id: 'attendance-tracking', icon: FiUsers, label: 'Attendance Tracking', path: '/client-admin/attendance/tracking' },
-        { id: 'attendance-policies', icon: FiSettings, label: 'Attendance Policies', path: '/client-admin/attendance/policies' },
-        { id: 'office-locations', icon: FiMap, label: 'Office Locations', path: '/client-admin/attendance/office-locations' },
-        { id: 'shifts-schedules', icon: FiClock, label: 'Shifts & Schedules', path: '/client-admin/attendance/shifts-schedules' },
-        { id: 'attendance-reports', icon: FiClipboard, label: 'Reports', path: '/client-admin/attendance/reports' },
+        { id: 'attendance-dashboard', icon: FiActivity,  label: 'Dashboard',           path: '/client-admin/attendance/dashboard' },
+        { id: 'attendance-tracking',  icon: FiUsers,     label: 'Attendance Tracking', path: '/client-admin/attendance/tracking' },
+        { id: 'shifts-schedules',     icon: FiClock,     label: 'Shifts & Schedules',  path: '/client-admin/attendance/shifts-schedules' },
+        { id: 'office-locations',     icon: FiMap,       label: 'Office Locations',    path: '/client-admin/attendance/office-locations' },
+        { id: 'attendance-policies',  icon: FiSettings,  label: 'Attendance Policies', path: '/client-admin/attendance/policies' },
+        { id: 'attendance-reports',   icon: FiClipboard, label: 'Reports',             path: '/client-admin/attendance/reports' },
       ]
     },
     isEnabled('leave') && {
@@ -99,28 +99,27 @@ export default function ClientAdminSidebar({ active }) {
       icon: FiCalendar,
       label: 'Leave Management',
       children: [
+        { id: 'leave-approvals',icon: FiCheckSquare, label: 'Leave Approvals',  path: '/client-admin/leave-approvals' },
         { id: 'leave',          icon: FiCalendar,    label: 'Leave Types',      path: '/client-admin/leave' },
         { id: 'leave-plans',    icon: FiCalendar,    label: 'Leave Plans',      path: '/client-admin/leave/plans' },
         { id: 'leave-settings', icon: FiSettings,    label: 'Leave Settings',   path: '/client-admin/leave-settings' },
-        { id: 'leave-approvals',icon: FiCheckSquare, label: 'Leave Approvals',  path: '/client-admin/leave-approvals' },
         { id: 'holidays',       icon: FiGift,        label: 'Holiday Calendar', path: '/client-admin/holidays' },
       ]
     },
-    isEnabled('attendance') && { id: 'regularizations',icon: FiCheckSquare, label: 'Regularization',     path: '/client-admin/regularizations', badge: '12' },
-    isEnabled('attendance') && { id: 'permissions',    icon: FiShield,      label: 'Permissions',        path: '/client-admin/permissions' },
+    isEnabled('attendance') && { id: 'regularizations', icon: FiCheckSquare, label: 'Regularization', path: '/client-admin/regularizations', badge: '12' },
   ].filter(Boolean)
 
   const payrollLinks = [
-    isEnabled('payroll') && { id: 'payroll',  icon: FiCreditCard, label: 'Payroll',  path: '/client-admin/payroll' },
-    isEnabled('payroll') && { id: 'reports',  icon: FiClipboard,  label: 'Reports',  path: '/client-admin/reports' },
+    isEnabled('payroll') && { id: 'payroll', icon: FiCreditCard, label: 'Payroll', path: '/client-admin/payroll' },
+    isEnabled('payroll') && { id: 'reports', icon: FiClipboard,  label: 'Reports', path: '/client-admin/reports' },
   ].filter(Boolean)
 
   const sections = [
     {
       title: 'Overview',
       links: [
-        { id: 'dashboard', icon: FiHome,     label: 'Dashboard', path: '/client-admin/dashboard' },
-        { id: 'org-chart', icon: FiMap,      label: 'Org Chart', path: '/client-admin/org-chart' },
+        { id: 'dashboard', icon: FiHome, label: 'Dashboard', path: '/client-admin/dashboard' },
+        { id: 'org-chart', icon: FiMap,  label: 'Org Chart', path: '/client-admin/org-chart' },
       ]
     },
     {
@@ -130,11 +129,12 @@ export default function ClientAdminSidebar({ active }) {
         { id: 'hierarchy',   icon: FiGitMerge, label: 'Hierarchy Levels', path: '/client-admin/hierarchy' },
         { id: 'employees',   icon: FiUsers,    label: 'Employees',        path: '/client-admin/employees' },
         { id: 'policies',    icon: FiFileText, label: 'HR Policies',      path: '/client-admin/policies' },
-      ]
+        isEnabled('attendance') && { id: 'permissions', icon: FiShield, label: 'Permissions', path: '/client-admin/permissions' },
+      ].filter(Boolean)
     },
-    ...(performanceLinks.length > 0       ? [{ title: 'Performance',      links: performanceLinks       }] : []),
-    ...(attendanceLeaveLinks.length > 0   ? [{ title: 'Attendance & Leave', links: attendanceLeaveLinks }] : []),
-    ...(payrollLinks.length > 0           ? [{ title: 'Payroll',           links: payrollLinks           }] : []),
+    ...(attendanceLeaveLinks.length > 0 ? [{ title: 'Attendance & Leave', links: attendanceLeaveLinks }] : []),
+    ...(performanceLinks.length > 0     ? [{ title: 'Performance',      links: performanceLinks     }] : []),
+    ...(payrollLinks.length > 0         ? [{ title: 'Payroll',          links: payrollLinks         }] : []),
     {
       title: 'Account',
       links: [

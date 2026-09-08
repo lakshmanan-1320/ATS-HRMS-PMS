@@ -141,9 +141,6 @@ export default function EmployeeTopBar({ title }) {
                 fontFamily: FONT_HEAD, fontSize: '12.5px', color: '#0f1b3d', width: '100%'
               }}
             />
-            {!searchQuery && (
-              <span style={{ fontFamily: FONT_HEAD, fontSize: '9.5px', color: '#7b8aa8', background: '#eff3f9', borderRadius: '4px', padding: '2px 6px', flexShrink: 0 }}>⌘ K</span>
-            )}
             {searchQuery && (
               <button onClick={() => setSearchQuery('')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#94a3b8' }}>
                 <FiX size={13} />

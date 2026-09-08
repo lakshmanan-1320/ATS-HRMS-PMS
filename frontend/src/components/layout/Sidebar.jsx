@@ -38,29 +38,39 @@ export default function Sidebar({ active }) {
 
   const sections = [
     {
-      title: 'General',
+      title: 'Overview',
       links: [
         { id: 'dashboard', icon: FiHome, label: 'Home', path: '/dashboard' }
       ]
     },
     {
-      title: 'Administration',
+      title: 'Tenant Management',
       links: [
-        { id: 'companies', icon: FiBriefcase, label: 'Companies', path: '/settings/companies' },
-        { id: 'client-admins', icon: FiUsers, label: 'Client Admins', path: '/settings/client-admins' },
+        { id: 'companies',     icon: FiBriefcase, label: 'Companies',     path: '/settings/companies' },
+        { id: 'client-admins', icon: FiUsers,     label: 'Client Admins', path: '/settings/client-admins' },
+      ]
+    },
+    {
+      title: 'Platform Modules',
+      links: [
         { id: 'modules', icon: FiLayers, label: 'Module Management', path: '/settings/modules' },
+      ]
+    },
+    {
+      title: 'System Settings',
+      links: [
         {
           id: 'settings-group',
           icon: FiSettings,
           label: 'Settings',
           path: null,
           children: [
-            { id: 'smtp', icon: FiMail, label: 'SMTP / Email Settings', path: '/settings/smtp' },
-            { id: 'security', icon: FiShield, label: 'Security & Authentication', path: '/settings/security' },
-            { id: 'audit', icon: FiClipboard, label: 'Audit Log Settings', path: '/settings/audit' },
-            { id: 'notifications', icon: FiBell, label: 'Notification Settings', path: '/settings/notifications' },
-            { id: 'password-policy', icon: FiKey, label: 'Password Policy', path: '/settings/password-policy' },
-            { id: 'session', icon: FiClock, label: 'Session & Timeout', path: '/settings/session-timeout' },
+            { id: 'smtp',            icon: FiMail,      label: 'SMTP / Email Settings',     path: '/settings/smtp' },
+            { id: 'security',        icon: FiShield,    label: 'Security & Authentication', path: '/settings/security' },
+            { id: 'password-policy', icon: FiKey,       label: 'Password Policy',           path: '/settings/password-policy' },
+            { id: 'session',         icon: FiClock,     label: 'Session & Timeout',         path: '/settings/session-timeout' },
+            { id: 'notifications',   icon: FiBell,      label: 'Notification Settings',     path: '/settings/notifications' },
+            { id: 'audit',           icon: FiClipboard, label: 'Audit Log Settings',        path: '/settings/audit' },
           ]
         }
       ]

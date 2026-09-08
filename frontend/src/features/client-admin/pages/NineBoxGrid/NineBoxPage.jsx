@@ -4,6 +4,7 @@ import { FiGrid } from 'react-icons/fi';
 
 import ClientAdminSidebar from '../../../../components/layout/ClientAdminSidebar';
 import ClientAdminTopBar from '../../../../components/layout/ClientAdminTopBar';
+import PageHeader from '../../../../components/common/PageHeader';
 import {
   getNineBoxGrid,
   generateNineBoxGrid,
@@ -116,48 +117,11 @@ const loadGrid = async () => {
             borderBottom: '1px solid #e2e8f0',
           }}
         >
-          <Row justify="space-between" align="middle">
-            <Col>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div
-                  style={{
-                    background: 'rgba(99,102,241,0.1)',
-                    color: '#6366f1',
-                    padding: 10,
-                    borderRadius: 12,
-                    display: 'flex',
-                  }}
-                >
-                  <FiGrid size={24} />
-                </div>
-
-                <div>
-                  <Title
-                    level={2}
-                    style={{
-                      margin: 0,
-                      fontWeight: 800,
-                      color: '#0f172a',
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    Talent Calibration Matrix
-                  </Title>
-
-                  <Paragraph
-                    style={{
-                      margin: '4px 0 0 0',
-                      color: '#64748b',
-                      fontSize: 14,
-                    }}
-                  >
-                    Assess employee performance and future potential using the
-                    9-box talent framework.
-                  </Paragraph>
-                </div>
-              </div>
-            </Col>
-          </Row>
+          <PageHeader
+            icon={FiGrid}
+            title="Talent Calibration Matrix"
+            subtitle="Assess employee performance and future potential using the 9-box talent framework."
+          />
 
           {/* Tabs */}
           <div style={{ display: 'flex', gap: 24, marginTop: 24 }}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import {
+  FiGitMerge,
   FiLayers,
   FiUsers,
   FiPlus,
@@ -21,6 +22,8 @@ import {
 } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 
 const STATUS_META = {
   active:     { label: 'Active',   color: '#0fa958', bg: '#e8fbf0', dot: '#10b981' },
@@ -369,38 +372,38 @@ export default function HierarchyLevels() {
         <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
 
         {/* ── Page Header ── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: '#111827', letterSpacing: '-0.02em' }}>Reporting Hierarchy</h1>
-            <p style={{ margin: '4px 0 0', color: '#6b7280', fontSize: 14 }}>
-              Define authority levels from highest to lowest. Use arrows to reorder.
-            </p>
-          </div>
-          <button
-            onClick={openAdd}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '10px 18px', background: 'var(--primary-color, #C2071A)',
-              color: '#ffffff', border: 'none', borderRadius: 8,
-              fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
-              transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
-          >
-            <FiPlus size={18} color="#ffffff" stroke="#ffffff" style={{ flexShrink: 0, strokeWidth: 2.5, color: '#ffffff', stroke: '#ffffff' }} /> Add Level
-          </button>
-        </div>
+        <PageHeader
+          icon={FiGitMerge}
+          title="Reporting Hierarchy"
+          subtitle="Define authority levels from highest to lowest. Use arrows to reorder."
+          actions={
+            <button
+              onClick={openAdd}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '10px 18px', background: 'var(--primary-color, #C2071A)',
+                color: '#ffffff', border: 'none', borderRadius: 8,
+                fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
+                transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+            >
+              <AddIcon size={20} />
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>Add Level</span>
+            </button>
+          }
+        />
 
         {/* ── Stat Cards Row ── */}
         {!loading && levels.length > 0 && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 24 }}>
             {[
-              { label: 'Total Levels', value: levels.length, icon: <FiLayers size={20} color="#9ca3af" /> },
-              { label: 'Top Authority', value: levels[0]?.designation || '—', icon: <FiAward size={20} color="#9ca3af" /> },
-              { label: 'Entry Level', value: levels[levels.length - 1]?.designation || '—', icon: <FiShield size={20} color="#9ca3af" /> },
-              { label: 'Total Employees', value: levels.reduce((a, l) => a + (l.employee_count || 0), 0), icon: <FiUsers size={20} color="#9ca3af" /> },
+              { label: 'Total Levels', value: levels.length, icon: <FiLayers size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Top Authority', value: levels[0]?.designation || '—', icon: <FiAward size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Entry Level', value: levels[levels.length - 1]?.designation || '—', icon: <FiShield size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Total Employees', value: levels.reduce((a, l) => a + (l.employee_count || 0), 0), icon: <FiUsers size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
             ].map((s, idx) => (
               <div key={idx} style={{
                 background: '#ffffff',
@@ -414,8 +417,7 @@ export default function HierarchyLevels() {
                 fontFamily: "'Inter', sans-serif"
               }}>
                 <div style={{
-                  width: 40, height: 40, borderRadius: 12,
-                  background: '#f4f5f7',
+                  width: 40, height: 40,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0
                 }}>
@@ -490,7 +492,8 @@ export default function HierarchyLevels() {
                 boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
               }}
             >
-              <FiPlus size={16} color="#ffffff" stroke="#ffffff" style={{ flexShrink: 0, strokeWidth: 2.5, color: '#ffffff', stroke: '#ffffff' }} /> Add First Level
+              <AddIcon size={20} />
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>Add First Level</span>
             </button>
           </div>
         ) : (

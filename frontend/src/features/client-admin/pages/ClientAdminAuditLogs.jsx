@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import {
   FiShield, FiSearch, FiX, FiFilter, FiChevronDown, FiChevronUp,
   FiDownload, FiRefreshCw, FiCalendar, FiLogIn, FiAlertTriangle,
@@ -169,50 +170,46 @@ export default function ClientAdminAuditLogs() {
         <main style={{ flex: 1, padding: '32px 36px', overflowY: 'auto' }}>
 
           {/* Header Banner */}
-          <div style={{ marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 700, color: 'var(--primary-color, #C2071A)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                <FiShield size={14} /> Security & System Compliance
-              </div>
-              <h1 style={{ margin: '4px 0 0', fontSize: 24, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Audit Logs</h1>
-              <p style={{ margin: '4px 0 0', fontSize: 13, color: '#6b7280', fontWeight: 500 }}>
-                Track administrative actions, user logins, and system-wide security events.
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-              {logs.length > 0 && (
+          <PageHeader
+            icon={FiShield}
+            title="Audit Logs"
+            subtitle="Track administrative actions, user logins, and system-wide security events."
+            actions={
+              <>
+                {logs.length > 0 && (
+                  <button
+                    onClick={() => exportLogsCSV(logs)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', background: 'linear-gradient(135deg, #0fa958 0%, #059669 100%)', color: '#ffffff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(15, 169, 88, 0.25)', transition: 'all 0.2s ease' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                  >
+                    <FiDownload size={15} color="#ffffff" /> Export CSV
+                  </button>
+                )}
                 <button
-                  onClick={() => exportLogsCSV(logs)}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 20px', background: 'linear-gradient(135deg, #0fa958 0%, #059669 100%)', color: '#ffffff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(15, 169, 88, 0.25)', transition: 'all 0.2s ease' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                  onClick={() => load(page)}
+                  disabled={loading}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 22px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)', opacity: loading ? 0.7 : 1, transition: 'all 0.2s ease' }}
+                  onMouseEnter={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                  onMouseLeave={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
-                  <FiDownload size={15} color="#ffffff" /> Export CSV
+                  <FiRefreshCw size={16} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff', strokeWidth: 2.5, flexShrink: 0, animation: loading ? 'spin 0.8s linear infinite' : 'none' }} />
+                  {loading ? 'Loading…' : 'Refresh'}
                 </button>
-              )}
-              <button
-                onClick={() => load(page)}
-                disabled={loading}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 22px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)', opacity: loading ? 0.7 : 1, transition: 'all 0.2s ease' }}
-                onMouseEnter={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                onMouseLeave={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <FiRefreshCw size={16} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff', strokeWidth: 2.5, flexShrink: 0, animation: loading ? 'spin 0.8s linear infinite' : 'none' }} />
-                {loading ? 'Loading…' : 'Refresh'}
-              </button>
-            </div>
-          </div>
+              </>
+            }
+          />
 
           {/* Borderless Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Events',    value: total,             color: 'var(--primary-color, #C2071A)', bg: 'rgba(194, 7, 26, 0.08)', icon: <FiList size={22} color="var(--primary-color, #C2071A)" /> },
-              { label: 'Login Events',    value: pageCounts.login,  color: '#0fa958', bg: '#e8fbf0', icon: <FiLogIn size={22} color="#0fa958" /> },
-              { label: 'Data Changes',    value: pageCounts.create + pageCounts.update, color: '#d97706', bg: '#fef3c7', icon: <FiEdit size={22} color="#d97706" /> },
-              { label: 'Security Events', value: pageCounts.security, color: '#dc2626', bg: '#feecee', icon: <FiAlertTriangle size={22} color="#dc2626" /> },
-            ].map(({ label, value, color, bg, icon }) => (
+              { label: 'Total Events',    value: total,             icon: <FiList size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Login Events',    value: pageCounts.login,  icon: <FiLogIn size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Data Changes',    value: pageCounts.create + pageCounts.update, icon: <FiEdit size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Security Events', value: pageCounts.security, icon: <FiAlertTriangle size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+            ].map(({ label, value, icon }) => (
               <div key={label} style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '20px 22px', boxShadow: cardShadow, display: 'flex', alignItems: 'center', gap: 16 }}>
-                <div style={{ width: 48, height: 48, borderRadius: '12px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {icon}
                 </div>
                 <div>
@@ -227,7 +224,7 @@ export default function ClientAdminAuditLogs() {
           <div style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '16px 20px', marginBottom: '16px', boxShadow: cardShadow }}>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
               {/* Search */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 240px', minWidth: '240px', background: '#ffffff', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', borderRadius: '10px', padding: '0 12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
                 <button
                   onClick={applySearch}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', display: 'flex', padding: 0 }}>
@@ -236,6 +233,7 @@ export default function ClientAdminAuditLogs() {
                 <input
                   placeholder="Search actor email or target…"
                   value={searchInput}
+                  className="ca-borderless-input"
                   onChange={e => setSearchInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && applySearch()}
                   style={{ border: 'none', background: 'transparent', padding: '9px 0', fontSize: '13px', color: '#111827', outline: 'none', fontFamily: 'inherit', width: '100%' }}

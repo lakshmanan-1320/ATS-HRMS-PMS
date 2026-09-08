@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import { useAttendanceStore } from '../../../store/attendance.store.js'
 import {
   FiUsers, FiCheckCircle, FiXCircle, FiClock,
@@ -266,81 +267,68 @@ export default function ClientAdminAttendanceDashboard() {
 
         <div style={mainContentStyle}>
           {/* Header */}
-          <div style={headerContainerStyle}>
-            <div>
-              <h1 style={titleStyle}>
-                <div style={{
-                  width: 38, height: 38, borderRadius: 10,
-                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+          <PageHeader
+            icon={FiClock}
+            title="Attendance Dashboard"
+            subtitle={`Real-time tracking, metrics, and compliance logs • ${formatDisplayDate(selectedDate)}`}
+            actions={
+              <>
+                <div style={filterGroupStyle}>
+                  <button
+                    id="filter-today"
+                    style={filterButtonStyle(activeFilter === 'today')}
+                    onClick={() => setActiveFilter('today')}
+                  >
+                    Today
+                  </button>
+                  <button
+                    id="filter-yesterday"
+                    style={filterButtonStyle(activeFilter === 'yesterday')}
+                    onClick={() => setActiveFilter('yesterday')}
+                  >
+                    Yesterday
+                  </button>
+                  <button
+                    id="filter-7days"
+                    style={filterButtonStyle(activeFilter === '7days')}
+                    onClick={() => setActiveFilter('7days')}
+                  >
+                    Last 7 Days
+                  </button>
+                  <button
+                    id="filter-month"
+                    style={filterButtonStyle(activeFilter === 'current_month')}
+                    onClick={() => setActiveFilter('current_month')}
+                  >
+                    Current Month
+                  </button>
                 </div>
-                Attendance Dashboard
-              </h1>
-              <p style={dateSubStyle}>
-                Real-time tracking, metrics, and compliance logs •{' '}
-                <span style={{ color: '#C2071A', fontWeight: 700 }}>
-                  {formatDisplayDate(selectedDate)}
-                </span>
-              </p>
-            </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={filterGroupStyle}>
                 <button
-                  id="filter-today"
-                  style={filterButtonStyle(activeFilter === 'today')}
-                  onClick={() => setActiveFilter('today')}
+                  id="btn-refresh"
+                  onClick={handleRefresh}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 16px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    cursor: 'pointer',
+                    color: '#ffffff',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    fontFamily: "'Inter', sans-serif",
+                  }}
                 >
-                  Today
+                  <FiRefreshCw size={15} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin-anim' : ''} />
+                  Refresh
                 </button>
-                <button
-                  id="filter-yesterday"
-                  style={filterButtonStyle(activeFilter === 'yesterday')}
-                  onClick={() => setActiveFilter('yesterday')}
-                >
-                  Yesterday
-                </button>
-                <button
-                  id="filter-7days"
-                  style={filterButtonStyle(activeFilter === '7days')}
-                  onClick={() => setActiveFilter('7days')}
-                >
-                  Last 7 Days
-                </button>
-                <button
-                  id="filter-month"
-                  style={filterButtonStyle(activeFilter === 'current_month')}
-                  onClick={() => setActiveFilter('current_month')}
-                >
-                  Current Month
-                </button>
-              </div>
-
-              <button
-                id="btn-refresh"
-                onClick={handleRefresh}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px 16px',
-                  borderRadius: '10px',
-                  border: 'none',
-                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                  cursor: 'pointer',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                  fontFamily: "'Inter', sans-serif",
-                }}
-              >
-                <FiRefreshCw size={15} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin-anim' : ''} />
-                Refresh
-              </button>
-            </div>
-          </div>
+              </>
+            }
+          />
 
           <style>{`
             .spin-anim { animation: spin 1s linear infinite; }

@@ -98,21 +98,35 @@ function NotificationPanel({ notifications, onClose, onMarkAllRead, onViewAll, o
               style={{
                 display: 'flex', alignItems: 'flex-start', gap: '12px',
                 padding: '12px 18px',
-                background: n.read ? 'transparent' : `${meta.color}08`,
-                borderLeft: n.read ? '3px solid transparent' : `3px solid ${meta.color}`,
-                borderBottom: i < notifications.length - 1 ? '1px solid #f8fafc' : 'none',
+                background: '#ffffff',
+                borderLeft: 'none',
+                borderBottom: i < notifications.length - 1 ? '1px solid #f1f5f9' : 'none',
                 cursor: 'pointer',
+                transition: 'background 0.15s ease',
               }}
+              onMouseEnter={e => e.currentTarget.style.background = '#fef8f8'}
+              onMouseLeave={e => e.currentTarget.style.background = '#ffffff'}
             >
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${meta.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Icon size={15} color={meta.color} />
+              <div style={{
+                width: '34px', height: '34px', borderRadius: '10px',
+                background: 'var(--card-active-bg, #FEECEE)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Icon size={16} color="var(--primary-color, #C2071A)" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: FONT_HEAD, fontSize: '12.5px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4 }}>{n.title}</div>
+                <div style={{ fontFamily: FONT_HEAD, fontSize: '13px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4 }}>{n.title}</div>
                 <div style={{ fontFamily: FONT_HEAD, fontSize: '11px', color: '#64748b', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <FiClock size={10} /> 22h ago
+                  <FiClock size={11} color="#94a3b8" /> 22h ago
                 </div>
               </div>
+              {!n.read && (
+                <span style={{
+                  width: '7px', height: '7px', borderRadius: '50%',
+                  background: 'var(--primary-color, #C2071A)', flexShrink: 0, marginTop: '6px'
+                }} />
+              )}
             </div>
           )
         })}
@@ -238,7 +252,7 @@ export default function ClientAdminTopBar({ title }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
             width: '32px', height: '32px', borderRadius: '8px',
-            background: 'var(--card-active-bg, #FEECEE)',
+            background: '#FEECEE',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
           }}>
             <img src="/insight-tech-icon.png" alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
@@ -273,9 +287,6 @@ export default function ClientAdminTopBar({ title }) {
                 fontFamily: FONT_HEAD, fontSize: '12.5px', color: '#0f1b3d', width: '100%'
               }}
             />
-            {!searchQuery && (
-              <span style={{ fontFamily: FONT_HEAD, fontSize: '9.5px', color: '#7b8aa8', background: '#eff3f9', borderRadius: '4px', padding: '2px 6px', flexShrink: 0 }}>⌘ K</span>
-            )}
             {searchQuery && (
               <button onClick={() => setSearchQuery('')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#94a3b8' }}>
                 <FiX size={13} />

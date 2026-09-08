@@ -5,6 +5,8 @@ import { useAuthStore } from '../../../store/auth.store'
 import { useGoalStore } from '../goal.store'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar'
+import PageHeader from '../../../components/common/PageHeader'
+import { FiTarget } from 'react-icons/fi'
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar'
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar'
 import GoalDashboardCards from '../components/GoalDashboardCards'
@@ -296,50 +298,39 @@ export default function GoalPage({ isSubComponent = false }) {
       <Toast toasts={toasts} />
 
       {/* ─── Page Header ─── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>Goals</h1>
-          <p style={{ margin: '4px 0 0 0', fontSize: 13, color: '#64748b', fontWeight: 500 }}>Manage and track goal plans across your organization.</p>
-        </div>
-
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          {/* Submit Goal Plan — only for roles that go through approval flow */}
-          {!bypassesApproval && activeTab === 'my' && goals.some(g => ['DRAFT', 'CHANGES_REQUESTED'].includes(g.status)) && (
-            <button
-              onClick={() => setShowSubmitDialog(true)}
-              style={{
-                padding: '10px 22px', borderRadius: 10, border: 'none',
-                background: 'linear-gradient(135deg, #059669, #047857)',
-                color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(5,150,105,0.3)',
-                transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 6,
-              }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <FiUpload style={{ flexShrink: 0 }} /> Submit Goal Plan
-            </button>
-          )}
-
-          {/* Create Goal */}
-          {canCreateGoal() && (
-            <button
-              onClick={() => { setEditGoal(null); setShowForm(true) }}
-              style={{
-                padding: '10px 22px', borderRadius: 10, border: 'none',
-                background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
-                transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 6,
-              }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              + Create Goal
-            </button>
-          )}
-        </div>
-      </div>
+      <PageHeader
+        icon={FiTarget}
+        title="Goals Management"
+        subtitle="Manage and track goal plans across your organization."
+        actions={
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            {!bypassesApproval && activeTab === 'my' && goals.some(g => ['DRAFT', 'CHANGES_REQUESTED'].includes(g.status)) && (
+              <button
+                onClick={() => setShowSubmitDialog(true)}
+                style={{
+                  padding: '9px 18px', background: '#10b981', border: 'none', borderRadius: '10px',
+                  color: '#fff', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                  boxShadow: '0 4px 14px rgba(16,185,129,0.3)', transition: 'all 0.2s',
+                }}
+              >
+                Submit Goal Plan
+              </button>
+            )}
+            {canCreate && (
+              <button
+                onClick={() => { setEditingGoal(null); setShowForm(true) }}
+                style={{
+                  padding: '9px 18px', background: 'var(--primary-color, #C2071A)', border: 'none', borderRadius: '10px',
+                  color: '#fff', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
+                  boxShadow: '0 4px 14px rgba(194,7,26,0.3)', transition: 'all 0.2s',
+                }}
+              >
+                + Create Goal
+              </button>
+            )}
+          </div>
+        }
+      />
 
       {/* ─── Tab Switcher (For Managers & Admins) ─── */}
       {(role === 'client_admin' || isManager || role === 'manager' || role === 'hr') && (

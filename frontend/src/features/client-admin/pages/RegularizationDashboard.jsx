@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import { FiCheckCircle, FiXCircle, FiX, FiSearch, FiDownload, FiSettings, FiList, FiClock, FiCalendar, FiFilter } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
@@ -194,27 +195,21 @@ export default function RegularizationDashboard() {
         <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           {/* Page Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiList size={18} color="#fff" />
-                </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Regularizations Dashboard</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Manage organizational regularization policies and monitor attendance correction requests
-              </p>
-            </div>
-            {filteredRequests.length > 0 && (
-              <button
-                onClick={() => exportRegCSV(filteredRequests)}
-                style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#10b981,#059669)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}
-              >
-                <FiDownload size={14} /> Export CSV
-              </button>
-            )}
-          </div>
+          <PageHeader
+            icon={FiList}
+            title="Regularizations Dashboard"
+            subtitle="Manage organizational regularization policies and monitor attendance correction requests"
+            actions={
+              filteredRequests.length > 0 && (
+                <button
+                  onClick={() => exportRegCSV(filteredRequests)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#10b981,#059669)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}
+                >
+                  <FiDownload size={14} /> Export CSV
+                </button>
+              )
+            }
+          />
 
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 import {
   FiGift, FiPlus, FiUpload, FiDownload, FiEdit2, FiTrash2,
   FiLock, FiSearch, FiX, FiCalendar, FiFilter, FiCheckCircle,
@@ -239,44 +241,39 @@ export default function HolidayManagement() {
         <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           {/* Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiGift size={18} color="#fff" />
-                </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Holiday Management</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Create and configure organizational holidays for leave and attendance tracking
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button
-                onClick={handleOpenImport}
-                style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 16px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#374151', cursor: 'pointer', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}
-              >
-                <FiUpload size={14} color="#C2071A" /> Bulk Import
-              </button>
-              <button
-                onClick={handleOpenCreate}
-                style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}
-              >
-                <FiPlus size={15} /> Create Holiday
-              </button>
-            </div>
-          </div>
+          <PageHeader
+            icon={FiGift}
+            title="Holiday Management"
+            subtitle="Create and configure organizational holidays for leave and attendance tracking"
+            actions={
+              <>
+                <button
+                  onClick={handleOpenImport}
+                  style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 16px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#374151', cursor: 'pointer', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}
+                >
+                  <FiUpload size={14} color="#C2071A" /> Bulk Import
+                </button>
+                <button
+                  onClick={handleOpenCreate}
+                  style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}
+                >
+                  <AddIcon size={20} />
+                  <span style={{ color: '#ffffff', fontWeight: 700 }}>Create Holiday</span>
+                </button>
+              </>
+            }
+          />
 
           {/* Stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Holidays', value: stats.total,    icon: <FiGift size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
-              { label: 'Public',         value: stats.pub,      icon: <FiCheckCircle size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
-              { label: 'Optional',       value: stats.optional, icon: <FiCalendar size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
-              { label: 'Upcoming',       value: stats.upcoming, icon: <FiCalendar size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { label: 'Total Holidays', value: stats.total,    icon: <FiGift size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Public',         value: stats.pub,      icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Optional',       value: stats.optional, icon: <FiCalendar size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Upcoming',       value: stats.upcoming, icon: <FiCalendar size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
             ].map(({ label, value, icon }) => (
               <div key={label} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 42, height: 42, borderRadius: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                <div style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {icon}
                 </div>
                 <div>
@@ -301,11 +298,12 @@ export default function HolidayManagement() {
 
             <div style={{ width: '1px', height: '28px', background: '#e2e8f0' }} />
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 180px', minWidth: '180px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 220px', minWidth: '160px', maxWidth: '220px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
               <FiSearch size={13} color="#94a3b8" />
               <input
                 placeholder="Search holidays…"
                 value={search}
+                className="ca-borderless-input"
                 onChange={e => { setSearch(e.target.value); setPage(1) }}
                 style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }}
               />

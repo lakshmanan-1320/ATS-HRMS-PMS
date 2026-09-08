@@ -139,26 +139,27 @@ export default function EmployeeSidebar({ active }) {
   })
 
   const sections = [
-    { title: 'Overview',      links: [] },
-    { title: 'Performance',   links: [] },
-    { title: 'Time & Leave',  links: [] },
-    { title: 'Approvals',     links: [] },
-    { title: 'Account',       links: [] },
+    { title: 'Overview',          links: [] },
+    { title: 'Team Approvals',    links: [] },
+    { title: 'Performance',       links: [] },
+    { title: 'Time & Leave',      links: [] },
+    { title: 'My Financials',     links: [] },
+    { title: 'Account',           links: [] },
   ]
 
   processedLinks.forEach(link => {
-    if (link.id === 'admin-dashboard' || link.id === 'dashboard' || link.id === 'policies') {
+    if (['admin-dashboard', 'dashboard', 'team', 'policies'].includes(link.id)) {
       sections[0].links.push(link)
-    } else if (link.id === 'team') {
-      sections[0].links.push(link)
-    } else if (['goals', 'appraisal', 'manager-goals', 'manager-appraisal', 'kpi-reviews', 'performance', 'pip'].includes(link.id)) {
+    } else if (['leave-approvals', 'regularization-approvals', 'team-attendance', 'overtime-approvals'].includes(link.id)) {
       sections[1].links.push(link)
-    } else if (['attendance', 'leave-management-group', 'regularization', 'payroll'].includes(link.id)) {
+    } else if (['goals', 'appraisal', 'manager-goals', 'manager-appraisal', 'kpi-reviews', 'performance', 'pip'].includes(link.id)) {
       sections[2].links.push(link)
-    } else if (['regularization-approvals', 'team-attendance', 'overtime-approvals'].includes(link.id)) {
+    } else if (['attendance', 'leave-management-group', 'regularization'].includes(link.id)) {
       sections[3].links.push(link)
-    } else if (link.id === 'change-password') {
+    } else if (['payroll', 'overtime'].includes(link.id)) {
       sections[4].links.push(link)
+    } else if (link.id === 'change-password') {
+      sections[5].links.push(link)
     } else {
       sections[0].links.push(link)
     }

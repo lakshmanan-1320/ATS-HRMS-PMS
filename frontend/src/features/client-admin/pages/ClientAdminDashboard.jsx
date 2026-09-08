@@ -93,7 +93,7 @@ const BRAND = {
   red: 'var(--primary-color)',
   redDark: '#B40619',
   redBright: 'var(--primary-color)',
-  redTint: 'var(--card-active-bg)',
+  redTint: '#FEECEE',
   navy: '#0f1b3d',
   navySoft: '#16234a',
   slate: '#42557e',
@@ -137,7 +137,7 @@ function NotificationPanel({ notifications, onClose, onMarkAllRead, onViewAll, o
             <div style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#6b7280', fontWeight: '500' }}>No pending actions</div>
           </div>
         ) : notifications.map((n, i) => {
-          const meta = NOTIF_META[n.type] || { icon: FiInfo, color: '#6366f1', label: n.type || 'Alert' }
+          const meta = NOTIF_META[n.type] || { icon: FiInfo, label: n.type || 'Alert' }
           const Icon = meta.icon
           return (
             <div key={i}
@@ -145,21 +145,35 @@ function NotificationPanel({ notifications, onClose, onMarkAllRead, onViewAll, o
               style={{
                 display: 'flex', alignItems: 'flex-start', gap: '12px',
                 padding: '12px 18px',
-                background: n.read ? 'transparent' : `${meta.color}08`,
-                borderLeft: n.read ? '3px solid transparent' : `3px solid ${meta.color}`,
-                borderBottom: i < notifications.length - 1 ? '1px solid #f8fafc' : 'none',
+                background: '#ffffff',
+                borderLeft: 'none',
+                borderBottom: i < notifications.length - 1 ? '1px solid #f1f5f9' : 'none',
                 cursor: 'pointer',
+                transition: 'background 0.15s ease',
               }}
+              onMouseEnter={e => e.currentTarget.style.background = '#fef8f8'}
+              onMouseLeave={e => e.currentTarget.style.background = '#ffffff'}
             >
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${meta.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Icon size={15} color={meta.color} />
+              <div style={{
+                width: '34px', height: '34px', borderRadius: '10px',
+                background: 'var(--card-active-bg, #FEECEE)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Icon size={16} color="var(--primary-color, #C2071A)" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '12.5px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4 }}>{n.title}</div>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: n.read ? '500' : '700', lineHeight: 1.4 }}>{n.title}</div>
                 <div style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#64748b', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <FiClock size={10} /> 22h ago
+                  <FiClock size={11} color="#94a3b8" /> 22h ago
                 </div>
               </div>
+              {!n.read && (
+                <span style={{
+                  width: '7px', height: '7px', borderRadius: '50%',
+                  background: 'var(--primary-color, #C2071A)', flexShrink: 0, marginTop: '6px'
+                }} />
+              )}
             </div>
           )
         })}
@@ -179,25 +193,25 @@ function MetricCard({ label, value, sub, accent, icon: Icon, trend, trendLabel }
   return (
     <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ width: '31px', height: '31px', borderRadius: '9px', backgroundImage: solid('#f6f6f6'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Icon size={17} color={accent} />
+        <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundImage: solid('#f6f6f6'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Icon size={19} color={accent} />
         </div>
         {trend !== undefined && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', height: '22px', padding: '3px 9px', borderRadius: '11px', backgroundImage: solid(trendBg) }}>
-            {trend > 0 ? <FiTrendingUp size={11} color={trendColor} /> : trend < 0 ? <FiTrendingDown size={11} color={trendColor} /> : <FiMinus size={11} color={trendColor} />}
-            <span style={{ fontFamily: FONT_HEAD, fontSize: '10.2px', fontWeight: 600, color: trendColor }}>{trend > 0 ? `+ ${trend}%` : `${trend}%`}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', height: '24px', padding: '3px 10px', borderRadius: '12px', backgroundImage: solid(trendBg) }}>
+            {trend > 0 ? <FiTrendingUp size={12} color={trendColor} /> : trend < 0 ? <FiTrendingDown size={12} color={trendColor} /> : <FiMinus size={12} color={trendColor} />}
+            <span style={{ fontFamily: FONT_HEAD, fontSize: '11.5px', fontWeight: 600, color: trendColor }}>{trend > 0 ? `+ ${trend}%` : `${trend}%`}</span>
           </div>
         )}
       </div>
-      <div style={{ fontFamily: FONT_HEAD, fontSize: '25px', fontWeight: 700, letterSpacing: '-0.75px', color: BRAND.navy, lineHeight: '25px', marginTop: '8px' }}>{value ?? '0'}</div>
-      <div style={{ fontFamily: FONT_HEAD, fontSize: '11.4px', fontWeight: 700, color: BRAND.navySoft, marginTop: '5px' }}>{label}</div>
-      {sub && <div style={{ fontFamily: FONT_BODY, fontSize: '10.2px', color: BRAND.slateSoft, marginTop: '3px' }}>{sub}</div>}
-      {trendLabel && <div style={{ fontFamily: FONT_BODY, fontSize: '10.2px', color: BRAND.slateSoft, marginTop: '2px' }}>{trendLabel}</div>}
+      <div style={{ fontFamily: FONT_HEAD, fontSize: '26px', fontWeight: 700, letterSpacing: '-0.75px', color: BRAND.navy, lineHeight: '28px', marginTop: '10px' }}>{value ?? '0'}</div>
+      <div style={{ fontFamily: FONT_HEAD, fontSize: '13.5px', fontWeight: 700, color: BRAND.navySoft, marginTop: '6px' }}>{label}</div>
+      {sub && <div style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#64748b', marginTop: '3px' }}>{sub}</div>}
+      {trendLabel && <div style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#64748b', marginTop: '3px' }}>{trendLabel}</div>}
     </div>
   )
 }
 
-function RingChart({ pct = 0, color = '#C2071A', size = 60, strokeWidth = 7, trackColor = '#f1f5f9', label, labelSize = '12.6px', labelColor, sublabel }) {
+function RingChart({ pct = 0, color = '#C2071A', size = 60, strokeWidth = 7, trackColor = '#f1f5f9', label, labelSize = '13.5px', labelColor, sublabel }) {
   const r = (size - strokeWidth * 2) / 2
   const circ = 2 * Math.PI * r
   const offset = circ - (pct / 100) * circ
@@ -211,7 +225,7 @@ function RingChart({ pct = 0, color = '#C2071A', size = 60, strokeWidth = 7, tra
       </svg>
       <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         {label && <div style={{ fontFamily: FONT_HEAD, fontSize: labelSize, fontWeight: 700, color: labelColor || color, lineHeight: 1 }}>{label}</div>}
-        {sublabel && <div style={{ fontFamily: FONT_BODY, fontSize: '9px', color: '#64748b', fontWeight: '500' }}>{sublabel}</div>}
+        {sublabel && <div style={{ fontFamily: FONT_BODY, fontSize: '10.5px', color: '#64748b', fontWeight: '600' }}>{sublabel}</div>}
       </div>
     </div>
   )
@@ -230,8 +244,8 @@ function DonutChart({ total = 0, size = 100, strokeWidth = 14 }) {
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#c2410c" strokeWidth={strokeWidth} strokeDasharray="15 150" strokeDashoffset="-135" />
       </svg>
       <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ fontFamily: FONT_HEAD, fontSize: '18px', fontWeight: 800, color: BRAND.navy, lineHeight: 1 }}>{total}</div>
-        <div style={{ fontFamily: FONT_BODY, fontSize: '9px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginTop: '2px' }}>Total</div>
+        <div style={{ fontFamily: FONT_HEAD, fontSize: '20px', fontWeight: 800, color: BRAND.navy, lineHeight: 1 }}>{total}</div>
+        <div style={{ fontFamily: FONT_BODY, fontSize: '10.5px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginTop: '2px' }}>Total</div>
       </div>
     </div>
   )
@@ -239,7 +253,7 @@ function DonutChart({ total = 0, size = 100, strokeWidth = 14 }) {
 
 function SectionLabel({ children }) {
   return (
-    <div style={{ fontFamily: FONT_HEAD, fontSize: '13.4px', fontWeight: 700, letterSpacing: '-0.27px', color: BRAND.navy, marginBottom: '12px' }}>
+    <div style={{ fontFamily: FONT_HEAD, fontSize: '16px', fontWeight: 700, letterSpacing: '-0.27px', color: BRAND.navy, marginBottom: '14px' }}>
       {children}
     </div>
   )
@@ -360,106 +374,223 @@ export default function ClientAdminDashboard() {
         <main style={{ flex: 1, padding: '28px 36px', overflowY: 'auto' }}>
           {/* ── Welcome Banner ── */}
           <div className="welcome-banner-card" style={{
-            background: 'linear-gradient(96.35deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
-            backgroundImage: 'linear-gradient(96.35deg, #fef0f2 0%, #fdf5f6 34%, #fdeff1 62%, #fce9ec 100%)',
-            border: 'none',
-            borderRadius: '16px',
-            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.04)',
-            padding: '24px 20px 32px 16px',
+            width: '100%',
+            height: '250px',
+            borderRadius: '12px',
+            background: 'linear-gradient(91.59deg, #FEF0F2 0%, #FDF5F6 34%, #FDEFF1 62%, #FCE9EC 100%)',
+            paddingTop: '24px',
+            paddingBottom: '32px',
+            paddingLeft: '16px',
+            paddingRight: '16px',
             marginBottom: '28px',
             position: 'relative',
             overflow: 'hidden',
-            height: '206px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
+            boxSizing: 'border-box',
           }}>
-            <div style={{ maxWidth: '540px', zIndex: 3 }}>
-              <h2 style={{ fontFamily: FONT_HEAD, fontSize: '24px', fontWeight: 800, letterSpacing: '-0.6px', color: BRAND.navy, margin: '0 0 6px' }}>
-                Welcome back, Insight Technology Demo!
+            <div style={{ maxWidth: '640px', zIndex: 4, display: 'flex', flexDirection: 'column' }}>
+              <h2 style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 700,
+                fontSize: '28px',
+                lineHeight: '110%',
+                letterSpacing: '-0.8px',
+                color: '#101B3C',
+                margin: 0,
+              }}>
+                Welcome back, {companyName}!
               </h2>
-              <p style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#64748b', margin: '0 0 18px' }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 400,
+                fontSize: '15px',
+                lineHeight: '130%',
+                color: '#42557E',
+                margin: '10px 0 22px 0',
+              }}>
                 Here's your organisation's performance snapshot for today.
               </p>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'nowrap', marginBottom: '16px' }}>
                 {/* Date range pills */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', background: '#ffffff', border: '1px solid #f3dfe3', borderRadius: '25px', padding: '3px 4px' }}>
-                  {DATE_RANGES.map(r => (
-                    <button key={r.value} onClick={() => setDateRange(r.value)} style={{
-                      padding: '6px 16px', borderRadius: '20px', border: 'none', cursor: 'pointer',
-                      fontFamily: dateRange === r.value ? FONT_HEAD : FONT_BODY,
-                      fontSize: '11px', fontWeight: dateRange === r.value ? 700 : 500, transition: 'all 0.2s',
-                      background: dateRange === r.value ? '#C2071A' : 'transparent',
-                      color: dateRange === r.value ? '#ffffff' : '#64748b',
-                    }}>
-                      {r.label}
-                    </button>
-                  ))}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: '#FFFFFF',
+                  border: '1px solid #EEDCE0',
+                  borderRadius: '18px',
+                  padding: '4px 6px',
+                  height: '38px',
+                  boxSizing: 'border-box',
+                  gap: '4px',
+                }}>
+                  {DATE_RANGES.map(r => {
+                    const isActive = dateRange === r.value;
+                    return (
+                      <button
+                        key={r.value}
+                        onClick={() => setDateRange(r.value)}
+                        style={{
+                          padding: isActive ? '5px 16px' : '5px 14px',
+                          borderRadius: '15px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: '13px',
+                          fontWeight: isActive ? 600 : 500,
+                          lineHeight: '100%',
+                          textAlign: 'center',
+                          transition: 'all 0.2s',
+                          background: isActive ? '#C2071A' : 'transparent',
+                          color: isActive ? '#FFFFFF' : '#64748B',
+                        }}
+                      >
+                        {r.label}
+                      </button>
+                    )
+                  })}
                 </div>
 
-                {/* Overall Score */}
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                  <span style={{ fontFamily: FONT_HEAD, fontSize: '24px', fontWeight: 800, color: '#C2071A', lineHeight: 1 }}>0%</span>
-                  <span style={{ fontFamily: FONT_BODY, fontSize: '10.5px', fontWeight: 600, color: '#4a5c81' }}>Overall Score</span>
+                {/* Overall Score Block */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 700,
+                    fontSize: '26px',
+                    lineHeight: '26px',
+                    color: '#E10E1F',
+                    textAlign: 'center',
+                  }}>
+                    0%
+                  </span>
+                  <span style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 600,
+                    fontSize: '13px',
+                    lineHeight: '100%',
+                    color: '#3D4E74',
+                    textAlign: 'center',
+                    marginTop: '4px',
+                  }}>
+                    Overall Score
+                  </span>
                 </div>
               </div>
 
-              {/* Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <button style={{ height: '34px', padding: '0 20px', background: '#C2071A', color: '#ffffff', border: 'none', borderRadius: '10px', fontFamily: FONT_HEAD, fontSize: '11.5px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <button style={{
+                  width: '132px',
+                  height: '40px',
+                  padding: '8px 18px',
+                  borderRadius: '9px',
+                  background: '#C2071A',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  lineHeight: '100%',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxSizing: 'border-box',
+                }}>
                   Needs Focus
                 </button>
-                <button onClick={loadStats} style={{ height: '34px', padding: '0 18px', background: '#ffffff', border: '1px solid #e4eaf3', borderRadius: '10px', cursor: 'pointer', color: '#4a5c81', fontFamily: FONT_BODY, fontSize: '11.5px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FiRefreshCw size={13} /> Refresh
+                <button
+                  onClick={loadStats}
+                  style={{
+                    width: '116px',
+                    height: '40px',
+                    padding: '0 17px',
+                    borderRadius: '9px',
+                    background: '#FFFFFF',
+                    border: '1px solid #EEDCE0',
+                    color: '#42557E',
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    lineHeight: '100%',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '9px',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <FiRefreshCw size={16} color="#42557E" /> Refresh
                 </button>
               </div>
             </div>
 
-            {/* Clouds Background Layer */}
+            {/* Cloud (image 18 — Figma: w238 h115, scaled ~1.35x to match the enlarged card) */}
             <img
               src="/dashboard/image 18.png"
-              alt="Clouds Background"
+              alt=""
               style={{
                 position: 'absolute',
-                right: '0px',
-                bottom: '0px',
-                height: '100%',
-                maxHeight: '206px',
+                right: '96px',
+                top: '18px',
+                width: '321px',
+                height: '155px',
                 objectFit: 'contain',
                 pointerEvents: 'none',
                 zIndex: 1,
+                mixBlendMode: 'lighten',
+              }}
+            />
+
+            {/* Small 2nd cloud (Figma "image 17", 124x60) — real asset not yet available, using the
+                big cloud scaled down as a stand-in until the isolated export is provided */}
+            <img
+              src="/dashboard/image 18.png"
+              alt=""
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '8px',
+                width: '160px',
+                height: '78px',
+                objectFit: 'contain',
+                pointerEvents: 'none',
+                zIndex: 2,
+                mixBlendMode: 'lighten',
                 opacity: 0.9,
               }}
             />
 
-            {/* Building & Trees Foreground Graphic Layer */}
+            {/* Building & Trees (Group 37 — Figma: w278.5 h131, scaled ~1.35x, flush to bottom-right) */}
             <img
               src="/dashboard/Group 37.png"
-              alt="Building & Trees Illustration"
+              alt="Building Illustration"
               style={{
                 position: 'absolute',
                 right: '0px',
                 bottom: '0px',
-                height: '100%',
-                maxHeight: '206px',
+                width: '376px',
+                height: '177px',
                 objectFit: 'contain',
                 pointerEvents: 'none',
-                zIndex: 2,
+                zIndex: 3,
               }}
             />
           </div>
 
           {/* ── Quick Access ── */}
           <div style={{ marginBottom: '28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <div style={{ fontFamily: FONT_HEAD, fontSize: '13.4px', fontWeight: 700, letterSpacing: '-0.27px', color: BRAND.navy }}>Quick Access</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <FiSliders size={13} color="#42557e" />
-                <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>Customize</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+              <div style={{ fontFamily: FONT_HEAD, fontSize: '16px', fontWeight: 700, letterSpacing: '-0.27px', color: BRAND.navy }}>Quick Access</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                <FiSliders size={14} color="#42557e" />
+                <span style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#42557e', fontWeight: 500 }}>Customize</span>
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '12px' }}>
               {QUICK_LINKS.map((link, i) => {
                 const Icon = link.icon
                 const active = i === 0
@@ -471,16 +602,16 @@ export default function ClientAdminDashboard() {
                       background: active ? BRAND.redTint : '#ffffff',
                       border: 'none',
                       boxShadow: active ? '0 4px 12px rgba(194, 7, 26, 0.12)' : '0 2px 8px rgba(0, 0, 0, 0.03)',
-                      borderRadius: '12px', padding: '14px 6px', cursor: 'pointer', textAlign: 'center',
+                      borderRadius: '12px', padding: '14px 8px', cursor: 'pointer', textAlign: 'center',
                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                       transition: 'all 0.2s',
                     }}
                   >
-                    <div style={{ width: '30px', height: '30px', borderRadius: '8px', backgroundImage: solid(active ? 'transparent' : '#f6f6f6'), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon size={17} color={active ? BRAND.red : '#42557e'} />
+                    <div style={{ width: '34px', height: '34px', borderRadius: '9px', backgroundImage: solid(active ? 'transparent' : '#f6f6f6'), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon size={18} color={active ? BRAND.red : '#42557e'} />
                     </div>
-                    <div style={{ fontFamily: FONT_HEAD, fontSize: '10.4px', fontWeight: 700, color: '#16234a' }}>{link.label}</div>
-                    <div style={{ fontFamily: FONT_BODY, fontSize: '9.2px', color: '#7e8ca8' }}>{link.desc}</div>
+                    <div style={{ fontFamily: FONT_HEAD, fontSize: '12.5px', fontWeight: 700, color: '#16234a' }}>{link.label}</div>
+                    <div style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#64748b' }}>{link.desc}</div>
                   </button>
                 )
               })}
@@ -493,14 +624,14 @@ export default function ClientAdminDashboard() {
             <div style={{
               background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
               border: 'none',
-              borderRadius: '16px', boxShadow: '0 8px 24px -4px rgba(194, 7, 26, 0.3)', padding: '0 18px',
-              display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px', position: 'relative', overflow: 'hidden',
+              borderRadius: '16px', boxShadow: '0 8px 24px -4px rgba(194, 7, 26, 0.3)', padding: '14px 20px',
+              display: 'flex', alignItems: 'center', gap: '14px', minHeight: '110px', position: 'relative', overflow: 'hidden',
             }}>
-              <RingChart pct={0} color="#ffffff" trackColor="rgba(255,255,255,0.25)" size={60} strokeWidth={7} label="0%" labelSize="12.6px" labelColor="#fff" />
+              <RingChart pct={0} color="#ffffff" trackColor="rgba(255,255,255,0.25)" size={62} strokeWidth={7} label="0%" labelSize="14px" labelColor="#fff" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#fff', letterSpacing: '0.66px', textTransform: 'uppercase', opacity: 0.92 }}>OVERALL PERFORMANCE</div>
-                <div style={{ fontFamily: FONT_HEAD, fontSize: '17px', fontWeight: 700, letterSpacing: '-0.34px', color: '#fff' }}>Needs Focus</div>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.6px', color: '#fff', opacity: 0.82 }}>Goals + KPI composite score</div>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: 700, color: '#fff', letterSpacing: '0.8px', textTransform: 'uppercase', opacity: 0.95 }}>OVERALL PERFORMANCE</div>
+                <div style={{ fontFamily: FONT_HEAD, fontSize: '18px', fontWeight: 700, letterSpacing: '-0.34px', color: '#fff' }}>Needs Focus</div>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#fff', opacity: 0.9 }}>Goals + KPI composite score</div>
               </div>
               <div style={{ position: 'absolute', right: '15px', bottom: '15px', opacity: 0.6 }}>
                 <FiSliders size={18} color="#fff" />
@@ -508,29 +639,29 @@ export default function ClientAdminDashboard() {
             </div>
 
             {/* Goal Completion */}
-            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '0 18px', display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px' }}>
-              <RingChart pct={0} color={BRAND.redBright} trackColor="#f1f5f9" size={54} strokeWidth={6} label="0%" labelSize="12.6px" labelColor={BRAND.redBright} />
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '14px', minHeight: '110px' }}>
+              <RingChart pct={0} color={BRAND.redBright} trackColor="#f1f5f9" size={62} strokeWidth={7} label="0%" labelSize="14px" labelColor={BRAND.redBright} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>GOAL COMPLETION</div>
-                <div style={{ fontFamily: FONT_HEAD, fontSize: '19px', fontWeight: 700, color: BRAND.navy }}>0</div>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '10.4px', color: '#4a5c81' }}>of 0 goals done</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '1px' }}>
-                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#eb7a83', flexShrink: 0 }} />
-                  <span style={{ fontFamily: FONT_BODY, fontSize: '9.8px', fontWeight: 600, color: '#eb7a83' }}>0 pending approval</span>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: 700, color: '#1e293b', letterSpacing: '0.8px', textTransform: 'uppercase' }}>GOAL COMPLETION</div>
+                <div style={{ fontFamily: FONT_HEAD, fontSize: '22px', fontWeight: 700, color: BRAND.navy }}>0</div>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#475569' }}>of 0 goals done</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#eb7a83', flexShrink: 0 }} />
+                  <span style={{ fontFamily: FONT_BODY, fontSize: '11.5px', fontWeight: 600, color: '#eb7a83' }}>0 pending approval</span>
                 </div>
               </div>
             </div>
 
             {/* KPI Approval */}
-            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '0 18px', display: 'flex', alignItems: 'center', gap: '13px', minHeight: '103px' }}>
-              <RingChart pct={0} color="#16a34a" trackColor="#f1f5f9" size={54} strokeWidth={6} label="0%" labelSize="12.6px" labelColor="#16a34a" />
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '14px', minHeight: '110px' }}>
+              <RingChart pct={0} color="#16a34a" trackColor="#f1f5f9" size={62} strokeWidth={7} label="0%" labelSize="14px" labelColor="#16a34a" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>KPI APPROVAL</div>
-                <div style={{ fontFamily: FONT_HEAD, fontSize: '19px', fontWeight: 700, color: BRAND.navy }}>0</div>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '10.4px', color: '#4a5c81' }}>of 0 assignments</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '1px' }}>
-                  <FiBarChart2 size={11} color="#eb7a83" />
-                  <span style={{ fontFamily: FONT_BODY, fontSize: '9.8px', fontWeight: 600, color: '#eb7a83' }}>0 awaiting review</span>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '11px', fontWeight: 700, color: '#1e293b', letterSpacing: '0.8px', textTransform: 'uppercase' }}>KPI APPROVAL</div>
+                <div style={{ fontFamily: FONT_HEAD, fontSize: '22px', fontWeight: 700, color: BRAND.navy }}>0</div>
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#475569' }}>of 0 assignments</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                  <FiBarChart2 size={12} color="#eb7a83" />
+                  <span style={{ fontFamily: FONT_BODY, fontSize: '11.5px', fontWeight: 600, color: '#eb7a83' }}>0 awaiting review</span>
                 </div>
               </div>
             </div>
@@ -574,43 +705,43 @@ export default function ClientAdminDashboard() {
           </div>
 
           {/* ── Today's Attendance Banner ── */}
-          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 20px', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <div style={{ fontFamily: FONT_HEAD, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', color: BRAND.navy }}>
+          <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '18px 20px', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ fontFamily: FONT_HEAD, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', color: BRAND.navy }}>
                 Today's Attendance
               </div>
-              <button onClick={() => navigate('/client-admin/attendance')} style={{ background: '#edf3fc', border: 'none', borderRadius: '8px', padding: '5px 13px', display: 'flex', alignItems: 'center', gap: '7px', fontFamily: FONT_HEAD, fontSize: '10.2px', fontWeight: 600, color: '#1d4ed8', cursor: 'pointer' }}>
-                View Full Report <FiArrowRight size={11} />
+              <button onClick={() => navigate('/client-admin/attendance')} style={{ background: '#edf3fc', border: 'none', borderRadius: '8px', padding: '6px 14px', display: 'flex', alignItems: 'center', gap: '7px', fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 600, color: '#1d4ed8', cursor: 'pointer' }}>
+                View Full Report <FiArrowRight size={13} />
               </button>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#edf3fc'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FiUsers size={13} color="#2563eb" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: '46px', padding: '0 14px', background: '#f8fafc', border: 'none', borderRadius: '12px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundImage: solid('#edf3fc'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FiUsers size={15} color="#2563eb" />
                 </div>
-                <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: '#2563eb' }}>41</span>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Total Employees</span>
+                <span style={{ fontFamily: FONT_HEAD, fontSize: '17px', fontWeight: 700, color: '#2563eb' }}>41</span>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '12.5px', color: '#334155', fontWeight: 500 }}>Total Employees</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#dcfce7'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FiCheckCircle size={13} color="#16a34a" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: '46px', padding: '0 14px', background: '#f8fafc', border: 'none', borderRadius: '12px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundImage: solid('#dcfce7'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FiCheckCircle size={15} color="#16a34a" />
                 </div>
-                <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: '#16a34a' }}>0</span>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Present Today</span>
+                <span style={{ fontFamily: FONT_HEAD, fontSize: '17px', fontWeight: 700, color: '#16a34a' }}>0</span>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '12.5px', color: '#334155', fontWeight: 500 }}>Present Today</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#fee2e2'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FiAlertCircle size={13} color={BRAND.redBright} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: '46px', padding: '0 14px', background: '#f8fafc', border: 'none', borderRadius: '12px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundImage: solid('#fee2e2'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FiAlertCircle size={15} color={BRAND.redBright} />
                 </div>
-                <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: BRAND.redBright }}>41</span>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Absent Today</span>
+                <span style={{ fontFamily: FONT_HEAD, fontSize: '17px', fontWeight: 700, color: BRAND.redBright }}>41</span>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '12.5px', color: '#334155', fontWeight: 500 }}>Absent Today</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, height: '38px', padding: '0 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '7px', backgroundImage: solid('#edf3fc'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FiBarChart2 size={13} color="#2563eb" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: '46px', padding: '0 14px', background: '#f8fafc', border: 'none', borderRadius: '12px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundImage: solid('#edf3fc'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FiBarChart2 size={15} color="#2563eb" />
                 </div>
-                <span style={{ fontFamily: FONT_HEAD, fontSize: '14.5px', fontWeight: 700, color: '#2563eb' }}>0%</span>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10px', color: '#4a5c81' }}>Attendance Rate</span>
+                <span style={{ fontFamily: FONT_HEAD, fontSize: '17px', fontWeight: 700, color: '#2563eb' }}>0%</span>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '12.5px', color: '#334155', fontWeight: 500 }}>Attendance Rate</span>
               </div>
             </div>
           </div>
@@ -619,12 +750,12 @@ export default function ClientAdminDashboard() {
           <SectionLabel>Advanced Analytics</SectionLabel>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '24px' }}>
             {/* Pending Actions */}
-            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <FiFilter size={14} color="#64748b" />
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>Pending Actions</div>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '18px 20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '16px' }}>
+                <FiFilter size={16} color="#475569" />
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12.5px', fontWeight: 700, color: '#1e293b', letterSpacing: '0.8px', textTransform: 'uppercase' }}>Pending Actions</div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
                   { label: 'Goals to Approve', value: 0, color: '#d97706', bg: '#fef3c7' },
                   { label: 'KPIs to Review', value: 0, color: '#0284c7', bg: '#e0f2fe' },
@@ -634,20 +765,20 @@ export default function ClientAdminDashboard() {
                   { label: 'Inactive Accounts', value: 0, color: '#475569', bg: '#f1f5f9' },
                 ].map(item => (
                   <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>{item.label}</span>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                    <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{item.label}</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: item.color, background: item.bg, padding: '3px 10px', borderRadius: '8px', minWidth: '32px', textAlign: 'center' }}>{item.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Goal Health */}
-            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <FiTarget size={14} color="#64748b" />
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>Goal Health</div>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '18px 20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '16px' }}>
+                <FiTarget size={16} color="#475569" />
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12.5px', fontWeight: 700, color: '#1e293b', letterSpacing: '0.8px', textTransform: 'uppercase' }}>Goal Health</div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
                   { label: 'Active', value: 0, color: '#15803d', bg: '#dcfce7' },
                   { label: 'Completed', value: 0, color: '#6d28d9', bg: '#ede9fe' },
@@ -655,20 +786,20 @@ export default function ClientAdminDashboard() {
                   { label: 'Draft', value: 0, color: '#475569', bg: '#f1f5f9' },
                 ].map(item => (
                   <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>{item.label}</span>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                    <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{item.label}</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: item.color, background: item.bg, padding: '3px 10px', borderRadius: '8px', minWidth: '32px', textAlign: 'center' }}>{item.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Appraisal Status */}
-            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <FiFileText size={14} color="#64748b" />
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>Appraisal Status</div>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '18px 20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '16px' }}>
+                <FiFileText size={16} color="#475569" />
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12.5px', fontWeight: 700, color: '#1e293b', letterSpacing: '0.8px', textTransform: 'uppercase' }}>Appraisal Status</div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
                   { label: 'Active Cycles', value: 0, color: '#15803d', bg: '#dcfce7' },
                   { label: 'Draft Cycles', value: 0, color: '#475569', bg: '#f1f5f9' },
@@ -676,20 +807,20 @@ export default function ClientAdminDashboard() {
                   { label: 'Total Cycles', value: 0, color: '#b45309', bg: '#fef3c7' },
                 ].map(item => (
                   <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>{item.label}</span>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                    <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{item.label}</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: item.color, background: item.bg, padding: '3px 10px', borderRadius: '8px', minWidth: '32px', textAlign: 'center' }}>{item.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* KPI Breakdown */}
-            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                <FiBarChart2 size={14} color="#64748b" />
-                <div style={{ fontFamily: FONT_BODY, fontSize: '9.4px', fontWeight: 700, color: '#33456b', letterSpacing: '0.66px', textTransform: 'uppercase' }}>KPI Breakdown</div>
+            <div style={{ background: '#fff', border: 'none', borderRadius: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', padding: '18px 20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '16px' }}>
+                <FiBarChart2 size={16} color="#475569" />
+                <div style={{ fontFamily: FONT_BODY, fontSize: '12.5px', fontWeight: 700, color: '#1e293b', letterSpacing: '0.8px', textTransform: 'uppercase' }}>KPI Breakdown</div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
                   { label: 'Approved', value: 0, color: '#15803d', bg: '#dcfce7' },
                   { label: 'Submitted', value: 0, color: '#b45309', bg: '#fef3c7' },
@@ -697,8 +828,8 @@ export default function ClientAdminDashboard() {
                   { label: 'Rejected', value: 0, color: '#b91c1c', bg: '#fee2e2' },
                 ].map(item => (
                   <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>{item.label}</span>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: item.color, background: item.bg, padding: '2px 10px', borderRadius: '8px', minWidth: '28px', textAlign: 'center' }}>{item.value}</span>
+                    <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{item.label}</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: item.color, background: item.bg, padding: '3px 10px', borderRadius: '8px', minWidth: '32px', textAlign: 'center' }}>{item.value}</span>
                   </div>
                 ))}
               </div>
@@ -706,15 +837,17 @@ export default function ClientAdminDashboard() {
           </div>
 
           {/* ── Charts Row 1 (3 Columns) ── */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isPmsActive ? 'repeat(3, 1fr)' : '1fr', gap: '24px', marginBottom: '20px' }}>
+            {isPmsActive && (
+            <>
             {/* Goals by Status */}
             <div style={cardBase}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Goals by Status</h3>
+                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Goals by Status</h3>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                 <DonutChart total={0} size={100} strokeWidth={14} />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[
                     { label: 'Active', color: '#2563eb' },
                     { label: 'Completed', color: '#a855f7' },
@@ -724,18 +857,18 @@ export default function ClientAdminDashboard() {
                     { label: 'Overdue', color: '#c2410c' },
                   ].map(it => (
                     <div key={it.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: it.color, display: 'inline-block' }} />
-                        <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>{it.label}</span>
+                        <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{it.label}</span>
                       </div>
-                      <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: BRAND.navy }}>0 <span style={{ color: '#94a3b8', fontSize: '10px' }}>0%</span></span>
+                      <span style={{ fontFamily: FONT_HEAD, fontSize: '13px', fontWeight: 700, color: BRAND.navy }}>0 <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>0%</span></span>
                     </div>
                   ))}
                 </div>
               </div>
               <div style={{ textAlign: 'center', marginTop: '16px', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
-                <button onClick={() => navigate('/client-admin/goals')} style={{ background: 'none', border: 'none', color: '#2563eb', fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  View Details <FiArrowRight size={12} />
+                <button onClick={() => navigate('/client-admin/goals')} style={{ background: 'none', border: 'none', color: '#2563eb', fontFamily: FONT_HEAD, fontSize: '12.5px', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  View Details <FiArrowRight size={13} />
                 </button>
               </div>
             </div>
@@ -743,12 +876,12 @@ export default function ClientAdminDashboard() {
             {/* KPI Status */}
             <div style={cardBase}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>KPI Status</h3>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10.4px', color: '#5c6e90', fontWeight: 600, background: '#eff3f8', padding: '3px 10px', borderRadius: '20px' }}>0 assignments</span>
+                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>KPI Status</h3>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '11.5px', color: '#334155', fontWeight: 600, background: '#eff3f8', padding: '4px 12px', borderRadius: '20px' }}>0 assignments</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <RingChart pct={0} color="#dc2626" size={96} strokeWidth={8} label="0%" sublabel="approved" labelColor="#dc2626" />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <RingChart pct={0} color="#dc2626" size={96} strokeWidth={8} label="0%" labelSize="16px" sublabel="approved" labelColor="#dc2626" />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '9px' }}>
                   {[
                     { label: 'Approved', color: '#16a34a' },
                     { label: 'Submitted', color: '#0284c7' },
@@ -756,31 +889,33 @@ export default function ClientAdminDashboard() {
                     { label: 'Rejected', color: '#dc2626' },
                   ].map(it => (
                     <div key={it.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: it.color, display: 'inline-block' }} />
-                        <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>{it.label}</span>
+                        <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{it.label}</span>
                       </div>
-                      <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: BRAND.navy }}>0</span>
+                      <span style={{ fontFamily: FONT_HEAD, fontSize: '13px', fontWeight: 700, color: BRAND.navy }}>0</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+            </>
+            )}
 
             {/* Employees by Dept */}
             <div style={cardBase}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Employees by Dept</h3>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10.4px', color: '#5c6e90', fontWeight: 600, background: '#eff3f8', padding: '3px 10px', borderRadius: '20px' }}>Top 5</span>
+                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Employees by Dept</h3>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '11.5px', color: '#334155', fontWeight: 600, background: '#eff3f8', padding: '4px 12px', borderRadius: '20px' }}>Top 5</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {deptBreakdown.map(d => (
                   <div key={d.department}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#334155' }}>{d.department}</span>
-                      <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 700, color: BRAND.navy }}>{d.employee_count} <span style={{ color: '#64748b', fontWeight: 500, fontSize: '10px' }}>100%</span></span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                      <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>{d.department}</span>
+                      <span style={{ fontFamily: FONT_HEAD, fontSize: '13px', fontWeight: 700, color: BRAND.navy }}>{d.employee_count} <span style={{ color: '#64748b', fontWeight: 500, fontSize: '11px' }}>100%</span></span>
                     </div>
-                    <div style={{ height: '6px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden' }}>
+                    <div style={{ height: '7px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: '100%', background: '#e10e1f', borderRadius: '99px' }} />
                     </div>
                   </div>
@@ -790,128 +925,140 @@ export default function ClientAdminDashboard() {
           </div>
 
           {/* ── Charts Row 2 (3 Columns) ── */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isPmsActive ? 'repeat(3, 1fr)' : '1fr', gap: '24px', marginBottom: '20px' }}>
+            {isPmsActive && (
+            <>
             {/* Goal Trend */}
             <div style={cardBase}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Goal Trend</h3>
-                <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600', background: '#f1f5f9', padding: '3px 8px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  Last 6 months <FiChevronDown size={12} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Goal Trend</h3>
+                <span style={{ fontSize: '12px', color: '#475569', fontWeight: '600', background: '#f1f5f9', padding: '3px 10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  Last 6 months <FiChevronDown size={13} />
                 </span>
               </div>
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#374151', fontWeight: '500' }}>
+              <div style={{ display: 'flex', gap: '14px', marginBottom: '16px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#1e293b', fontWeight: '500' }}>
                   <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#e10e1f', display: 'inline-block' }} /> Total
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#374151', fontWeight: '500' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#1e293b', fontWeight: '500' }}>
                   <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#f7a6af', display: 'inline-block' }} /> Completed
                 </span>
               </div>
               <div style={{ borderRadius: '8px', height: '110px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#fafbfc', boxShadow: 'inset 0 0 0 1px #f1f5f9' }}>
-                <div style={{ background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.03)', borderRadius: '6px', padding: '6px 12px', fontSize: '10.4px', color: '#64748b' }}>
+                <div style={{ background: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.03)', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', color: '#64748b' }}>
                   No trend data available yet
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', marginTop: '16px', fontSize: '9.6px', color: '#64748b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', marginTop: '16px', fontSize: '11px', color: '#64748b' }}>
                   <span>Ma</span><span>Ap</span><span>Ma</span><span>Ju</span><span>Ju</span><span>Au</span>
                 </div>
               </div>
             </div>
+            </>
+            )}
 
             {/* Latest Alerts */}
             <div style={cardBase}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Latest Alerts</h3>
-                <span style={{ fontFamily: FONT_HEAD, fontSize: '10.4px', background: BRAND.redTint, color: BRAND.red, border: 'none', padding: '3px 10px', borderRadius: '20px', fontWeight: 600 }}>
+                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Latest Alerts</h3>
+                <span style={{ fontFamily: FONT_HEAD, fontSize: '11.5px', background: BRAND.redTint, color: BRAND.red, border: 'none', padding: '3px 12px', borderRadius: '20px', fontWeight: 600 }}>
                   {unreadCount} unread
                 </span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
                 {alertItems.slice(0, 5).map((n, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
-                    <FiClock size={13} color="#64748b" style={{ flexShrink: 0 }} />
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', background: '#f8fafc', border: 'none', borderRadius: '10px' }}>
+                    <FiClock size={14} color="#64748b" style={{ flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '11.4px', color: '#1e293b', fontWeight: 700 }}>{n.title}</div>
-                      <div style={{ fontSize: '9.6px', color: '#64748b' }}>22h ago</div>
+                      <div style={{ fontSize: '13px', color: '#1e293b', fontWeight: 700 }}>{n.title}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>22h ago</div>
                     </div>
                   </div>
                 ))}
               </div>
-              <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 12, width: '100%', padding: '8px', background: BRAND.redTint, border: 'none', borderRadius: '10px', fontFamily: FONT_HEAD, fontSize: '10.4px', color: BRAND.red, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                View all activity <FiArrowRight size={12} />
+              <button onClick={() => navigate('/client-admin/audit')} style={{ marginTop: 12, width: '100%', padding: '9px', background: BRAND.redTint, border: 'none', borderRadius: '10px', fontFamily: FONT_HEAD, fontSize: '12px', color: BRAND.red, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                View all activity <FiArrowRight size={13} />
               </button>
             </div>
 
+            {isPmsActive && (
+            <>
             {/* Performance Overview */}
             <div style={cardBase}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Performance Overview</h3>
-                <span style={{ fontFamily: FONT_BODY, fontSize: '10.4px', color: '#5c6e90', fontWeight: 600, background: '#eff3f8', padding: '3px 10px', borderRadius: '20px' }}>Top 5</span>
+                <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Performance Overview</h3>
+                <span style={{ fontFamily: FONT_BODY, fontSize: '11.5px', color: '#334155', fontWeight: 600, background: '#eff3f8', padding: '4px 12px', borderRadius: '20px' }}>Top 5</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                <RingChart pct={0} color="#ec4899" size={80} strokeWidth={7} label="0%" sublabel="goals" labelColor="#ec4899" />
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <RingChart pct={0} color="#ec4899" size={80} strokeWidth={7} label="0%" labelSize="15px" sublabel="goals" labelColor="#ec4899" />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16a34a' }} />
-                      <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>Active Goals</span>
+                      <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>Active Goals</span>
                     </div>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: '#16a34a', background: '#dcfce7', padding: '1px 8px', borderRadius: '6px' }}>0</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: '#16a34a', background: '#dcfce7', padding: '2px 9px', borderRadius: '6px' }}>0</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#a855f7' }} />
-                      <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>Pending Approval</span>
+                      <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>Pending Approval</span>
                     </div>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: '#b45309', background: '#fef3c7', padding: '1px 8px', borderRadius: '6px' }}>0</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: '#b45309', background: '#fef3c7', padding: '2px 9px', borderRadius: '6px' }}>0</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }} />
-                      <span style={{ fontFamily: FONT_BODY, fontSize: '11px', color: '#42557e' }}>Completed</span>
+                      <span style={{ fontFamily: FONT_BODY, fontSize: '13px', color: '#1e293b', fontWeight: 500 }}>Completed</span>
                     </div>
-                    <span style={{ fontFamily: FONT_HEAD, fontSize: '11px', fontWeight: 600, color: '#6d28d9', background: '#ede9fe', padding: '1px 8px', borderRadius: '6px' }}>0</span>
+                    <span style={{ fontFamily: FONT_HEAD, fontSize: '12px', fontWeight: 700, color: '#6d28d9', background: '#ede9fe', padding: '2px 9px', borderRadius: '6px' }}>0</span>
                   </div>
                 </div>
               </div>
-              <div style={{ background: '#fcf8f8', border: 'none', borderRadius: '12px', padding: '10px 12px' }}>
-                <div style={{ fontSize: '11px', color: BRAND.red, fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <FiUsers size={13} color={BRAND.red} /> Appraisal Cycles
+              <div style={{ background: '#fcf8f8', border: 'none', borderRadius: '12px', padding: '12px 14px' }}>
+                <div style={{ fontSize: '12.5px', color: BRAND.red, fontWeight: 700, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FiUsers size={14} color={BRAND.red} /> Appraisal Cycles
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
                   <div>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#16a34a' }}>0</div>
-                    <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '600' }}>Active</div>
+                    <div style={{ fontSize: '18px', fontWeight: '800', color: '#16a34a' }}>0</div>
+                    <div style={{ fontSize: '11.5px', color: '#64748b', fontWeight: '600' }}>Active</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#2563eb' }}>0</div>
-                    <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '600' }}>Draft</div>
+                    <div style={{ fontSize: '18px', fontWeight: '800', color: '#2563eb' }}>0</div>
+                    <div style={{ fontSize: '11.5px', color: '#64748b', fontWeight: '600' }}>Draft</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#6d28d9' }}>0</div>
-                    <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '600' }}>Closed</div>
+                    <div style={{ fontSize: '18px', fontWeight: '800', color: '#6d28d9' }}>0</div>
+                    <div style={{ fontSize: '11.5px', color: '#64748b', fontWeight: '600' }}>Closed</div>
                   </div>
                 </div>
               </div>
             </div>
+            </>
+            )}
           </div>
 
+          {isPmsActive && (
+          <>
           {/* ── Recent Goals ── */}
           <div style={{ ...cardBase, marginBottom: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: BRAND.redTint, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiFileText size={15} color={BRAND.red} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: BRAND.redTint, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiFileText size={17} color={BRAND.red} />
                 </div>
                 <div>
-                  <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '12.6px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Recent Goals</h3>
-                  <p style={{ fontFamily: FONT_BODY, fontSize: '10.4px', color: '#64748b', margin: 0 }}>No goals created yet</p>
+                  <h3 style={{ fontFamily: FONT_HEAD, color: BRAND.navy, fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.19px', margin: 0 }}>Recent Goals</h3>
+                  <p style={{ fontFamily: FONT_BODY, fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>No goals created yet</p>
                 </div>
               </div>
-              <button onClick={() => navigate('/client-admin/goals')} style={{ background: '#f3e8ff', border: 'none', color: '#7c3aed', fontFamily: FONT_HEAD, fontSize: '10.4px', cursor: 'pointer', fontWeight: 700, padding: '6px 14px', borderRadius: '15px' }}>
+              <button onClick={() => navigate('/client-admin/goals')} style={{ background: '#f3e8ff', border: 'none', color: '#7c3aed', fontFamily: FONT_HEAD, fontSize: '12px', cursor: 'pointer', fontWeight: 700, padding: '7px 16px', borderRadius: '15px' }}>
                 View all →
               </button>
             </div>
           </div>
+          </>
+          )}
 
         </main>
       </div>

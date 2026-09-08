@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import {
-  FiRefreshCw, FiCheckCircle, FiXCircle, FiSearch, FiX,
+  FiRefreshCw, FiCheckCircle, FiCheckSquare, FiXCircle, FiSearch, FiX,
   FiDownload, FiFilter, FiCalendar, FiClock, FiList,
   FiChevronDown, FiChevronUp, FiUser, FiAlertTriangle
 } from 'react-icons/fi'
@@ -172,44 +173,38 @@ export default function ClientAdminLeaveApprovals() {
         <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           {/* Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiList size={18} color="#fff" />
-                </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Leave Approvals</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Review and action all employee leave requests
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {filtered.length > 0 && (
-                <button onClick={() => exportToCSV(filtered)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}>
-                  <FiDownload size={13} /> Export CSV
+          <PageHeader
+            icon={FiCheckSquare}
+            title="Leave Approvals"
+            subtitle="Review and action all employee leave requests"
+            actions={
+              <>
+                {filtered.length > 0 && (
+                  <button onClick={() => exportToCSV(filtered)}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(16,185,129,0.3)' }}>
+                    <FiDownload size={13} /> Export CSV
+                  </button>
+                )}
+                <button onClick={load}
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}>
+                  <FiRefreshCw size={13} /> Refresh
                 </button>
-              )}
-              <button onClick={load}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}>
-                <FiRefreshCw size={13} /> Refresh
-              </button>
-            </div>
-          </div>
+              </>
+            }
+          />
 
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Requests', color: '#C2071A', icon: <FiList size={18} color="#ffffff" /> },
-              { key: 'PENDING',  label: 'Pending',        color: '#d97706', icon: <FiClock size={18} color="#ffffff" /> },
-              { key: 'APPROVED', label: 'Approved',       color: '#15803d', icon: <FiCheckCircle size={18} color="#ffffff" /> },
-              { key: 'REJECTED', label: 'Rejected',       color: '#dc2626', icon: <FiXCircle size={18} color="#ffffff" /> },
+              { key: 'ALL',      label: 'Total Requests', color: '#C2071A', icon: <FiList size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'PENDING',  label: 'Pending',        color: '#d97706', icon: <FiClock size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'APPROVED', label: 'Approved',       color: '#15803d', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'REJECTED', label: 'Rejected',       color: '#dc2626', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
             ].map(({ key, label, color, icon }) => (
               <div key={key}
                 onClick={() => { setStatus(key); setPage(1) }}
                 style={{ background: '#fff', border: `1.5px solid ${statusFilter === key ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: statusFilter === key ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                <div style={{ width: 42, height: 42, borderRadius: '12px', background: `linear-gradient(135deg, ${color} 0%, ${color} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {icon}
                 </div>
                 <div>
@@ -224,11 +219,12 @@ export default function ClientAdminLeaveApprovals() {
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {/* Primary filters row */}
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', minWidth: '200px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
                 <FiSearch size={13} color="#94a3b8" />
                 <input
                   placeholder="Search employee, code or leave type…"
                   value={search}
+                  className="ca-borderless-input"
                   onChange={e => { setSearch(e.target.value); setPage(1) }}
                   style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }}
                 />
@@ -401,7 +397,7 @@ export default function ClientAdminLeaveApprovals() {
                         >
                           <td style={{ padding: '14px 18px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#C2071A,#a855f7)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', flexShrink: 0 }}>
+                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', flexShrink: 0 }}>
                                 {l.employee_name?.[0]}
                               </div>
                               <div>
@@ -525,7 +521,7 @@ export default function ClientAdminLeaveApprovals() {
             {/* Employee + request summary */}
             <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '16px 18px', marginBottom: '18px', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#C2071A,#a855f7)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', flexShrink: 0 }}>
                   {modal.leave.employee_name?.[0]}
                 </div>
                 <div>

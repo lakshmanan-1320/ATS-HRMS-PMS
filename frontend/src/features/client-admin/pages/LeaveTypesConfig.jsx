@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 import {
   FiPlus, FiSearch, FiX, FiFilter, FiChevronDown, FiChevronUp,
   FiList, FiCheckCircle, FiXCircle, FiDollarSign, FiEdit2, FiCalendar,
@@ -177,35 +179,30 @@ export default function LeaveTypesConfig() {
         <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           {/* Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiCalendar size={18} color="#fff" />
-                </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Leave Policies</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Define and customize standard organizational leave types and rules
-              </p>
-            </div>
-            <button
-              onClick={openCreateModal}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <FiPlus size={14} /> Add Leave Type
-            </button>
-          </div>
+          <PageHeader
+            icon={FiCalendar}
+            title="Leave Policies"
+            subtitle="Define and customize standard organizational leave types and rules"
+            actions={
+              <button
+                onClick={openCreateModal}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                <AddIcon size={20} />
+                <span style={{ color: '#ffffff', fontWeight: 700 }}>Add Leave Type</span>
+              </button>
+            }
+          />
 
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#C2071A', icon: <FiList size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
-              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#C2071A', icon: <FiCheckCircle size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
-              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#C2071A', icon: <FiDollarSign size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
-              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#C2071A', icon: <FiXCircle size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} /> },
+              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#C2071A', icon: <FiList size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#C2071A', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#C2071A', icon: <FiDollarSign size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#C2071A', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
             ].map(({ key, label, value, color, icon }) => {
               const active = isStatActive(key)
               return (
@@ -219,7 +216,7 @@ export default function LeaveTypesConfig() {
                     setPage(1)
                   }}
                   style={{ background: '#fff', border: `1.5px solid ${active ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                  <div style={{ width: 42, height: 42, borderRadius: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                  <div style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     {icon}
                   </div>
                   <div>
@@ -234,11 +231,12 @@ export default function LeaveTypesConfig() {
           {/* Filter Bar */}
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', minWidth: '200px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
                 <FiSearch size={13} color="#94a3b8" />
                 <input
                   placeholder="Search leave type, code or description…"
                   value={search}
+                  className="ca-borderless-input"
                   onChange={e => { setSearch(e.target.value); setPage(1) }}
                   style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }}
                 />

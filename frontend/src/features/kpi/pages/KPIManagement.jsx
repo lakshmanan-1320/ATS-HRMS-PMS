@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import { FiBarChart2 } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -1157,22 +1159,11 @@ export default function KPIManagement() {
         <main style={{ flex: 1, padding: '32px 36px', overflowY: 'auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{
-              width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-              background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 20, boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
-            }}>📊</div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#1e293b', lineHeight: 1.2 }}>KPI Management</h1>
-              <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: 13 }}>
-                Define KPI templates, assign them to goals, track actuals and compute performance scores
-              </p>
-            </div>
-          </div>
-        </div>
+        <PageHeader
+          icon={FiBarChart2}
+          title="KPI Management"
+          subtitle="Define KPI templates, assign them to goals, track actuals and compute performance scores"
+        />
 
         {/* Tab Bar */}
         <div style={{ display: 'flex', gap: 4, marginBottom: 24, background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 16, padding: 6, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>

@@ -5,6 +5,7 @@ import {
   FiUsers,
   FiUserCheck,
   FiShare2,
+  FiMap,
   FiFolder,
   FiSearch,
   FiFilter,
@@ -24,6 +25,7 @@ import {
 } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 
 const STATUS_META = {
   active:     { label: 'Active',     color: '#0fa958', bg: '#e8fbf0', dot: '#10b981' },
@@ -398,26 +400,11 @@ export default function OrgChart() {
         <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto', background: '#f3f7fa' }}>
 
         {/* ── Page Header Banner ── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-              background: 'var(--card-active-bg, #FEECEE)',
-              border: 'none',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <FiShare2 size={22} color="var(--primary-color, #C2071A)" />
-            </div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#111827', letterSpacing: '-0.4px', lineHeight: 1.2 }}>
-                Org Chart & Manager Matrix
-              </h1>
-              <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: 13, fontWeight: 500 }}>
-                Visualize reporting hierarchy and cross-functional manager assignments
-              </p>
-            </div>
-          </div>
-        </div>
+        <PageHeader
+          icon={FiMap}
+          title="Org Chart & Manager Matrix"
+          subtitle="Visualize reporting hierarchy and cross-functional manager assignments"
+        />
 
         {/* ── Exact Replica Cards Matching User Image ── */}
         {!loading && !error && (
@@ -450,11 +437,11 @@ export default function OrgChart() {
                   {/* Top Row: Icon + Trend Pill */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                     <div style={{
-                      width: 40, height: 40, borderRadius: 12,
-                      background: '#f4f5f7',
+                      width: 28, height: 28,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: '#C2071A',
                     }}>
-                      <CardIcon size={20} color="#9ca3af" />
+                      <CardIcon size={24} style={{ color: '#C2071A', stroke: '#C2071A' }} strokeWidth={1.75} />
                     </div>
                     <span style={{
                       background: card.badgeBg,

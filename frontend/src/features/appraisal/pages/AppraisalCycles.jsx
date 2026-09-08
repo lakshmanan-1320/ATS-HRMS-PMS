@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import { FiRefreshCw, FiCalendar } from 'react-icons/fi'
 import { getFinancialYears } from '../../performanceConfiguration/financialYears.api.js'
 
 const api = axios.create({ baseURL: '/api' })
@@ -290,32 +292,24 @@ export default function AppraisalCycles({ isSubComponent = false }) {
       )}
       
       <main style={{ flex: 1, padding: isSubComponent ? '0px' : '32px 36px', overflowY: 'auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 14px rgba(99,102,241,0.35)' }}>
-                <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
-                  <rect x="9" y="3" width="6" height="4" rx="1" />
-                  <path d="M9 12h6M9 16h4" />
+          <PageHeader
+            icon={FiCalendar}
+            title="Appraisal Cycles"
+            subtitle="Create and manage performance appraisal periods"
+            actions={
+              <button
+                onClick={() => { setShowForm(true); setEditId(null); setForm(BLANK_FORM); setErr('') }}
+                style={{ padding: '11px 22px', display: 'flex', alignItems: 'center', gap: '7px', background: 'var(--primary-color, #C2071A)', border: 'none', borderRadius: '12px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s ease' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(194,7,26,0.45)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(194,7,26,0.35)' }}
+              >
+                <svg width="14" height="14" fill="none" stroke="#fff" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
                 </svg>
-              </div>
-              <div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#1e293b', letterSpacing: '-0.4px' }}>Appraisal Cycles</h1>
-                <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>Create and manage performance appraisal periods</p>
-              </div>
-            </div>
-            <button
-              onClick={() => { setShowForm(true); setEditId(null); setForm(BLANK_FORM); setErr('') }}
-              style={{ padding: '11px 22px', display: 'flex', alignItems: 'center', gap: '7px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none', borderRadius: '12px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(99,102,241,0.4)', transition: 'all 0.2s ease' }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(99,102,241,0.5)' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(99,102,241,0.4)' }}
-            >
-              <svg width="14" height="14" fill="none" stroke="#fff" strokeWidth="2.5" viewBox="0 0 24 24">
-                <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              New Cycle
-            </button>
-          </div>
+                Create New Cycle
+              </button>
+            }
+          />
 
           {!loading && cycles.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', marginBottom: '28px' }}>

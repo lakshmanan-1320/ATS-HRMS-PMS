@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { FiPlus, FiEdit2, FiTrash2, FiCalendar, FiArrowRight, FiBookOpen, FiX, FiAlertCircle } from 'react-icons/fi'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -112,7 +113,8 @@ export default function LeavePlansList({ onSelectPlan }) {
           onClick={openCreateModal}
           style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s' }}
         >
-          <FiPlus size={14} /> Create Plan
+          <AddIcon size={20} />
+          <span style={{ color: '#ffffff', fontWeight: 700 }}>Create Plan</span>
         </button>
       </div>
 
@@ -128,8 +130,9 @@ export default function LeavePlansList({ onSelectPlan }) {
           </div>
           <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No Leave Plans Configured</div>
           <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#64748b' }}>Create a plan to start associating leave rules with employees.</p>
-          <button onClick={openCreateModal} style={{ padding: '9px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
-            + Create First Leave Plan
+          <button onClick={openCreateModal} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
+            <AddIcon size={20} />
+            <span style={{ color: '#ffffff', fontWeight: 700 }}>Create First Leave Plan</span>
           </button>
         </div>
       ) : (

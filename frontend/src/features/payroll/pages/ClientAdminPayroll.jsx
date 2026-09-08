@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
-import { FiSettings, FiUploadCloud, FiClipboard, FiClock, FiCheckCircle, FiXCircle, FiDownload } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
+import { FiSettings, FiUploadCloud, FiClipboard, FiClock, FiCheckCircle, FiXCircle, FiDownload, FiDollarSign } from 'react-icons/fi'
 
 // Axios configuration will be initialized inside the component function to ensure sa_token is read correctly.
 
@@ -868,22 +870,23 @@ export default function ClientAdminPayroll() {
         <ClientAdminTopBar />
         <main style={s.main}>
         {/* Header */}
-        <div style={s.header}>
-          <div>
-            <h1 style={s.h1}>Payroll & Revisions</h1>
-            <p style={s.sub}>Define dynamic templates, manage versioned salary configs, track app-wide week offs, and record revisions</p>
-          </div>
-          {toast.msg && (
-            <div style={{
-              padding: '10px 20px', borderRadius: '10px',
-              background: toast.type === 'error' ? '#fee2e2' : '#dcfce7',
-              border: `1px solid ${toast.type === 'error' ? '#fca5a5' : '#86efac'}`,
-              color: toast.type === 'error' ? '#b91c1c' : '#15803d', fontSize: '13px', fontWeight: '700'
-            }}>
-              {toast.msg}
-            </div>
-          )}
-        </div>
+        <PageHeader
+          icon={FiDollarSign}
+          title="Payroll & Revisions"
+          subtitle="Define dynamic templates, manage versioned salary configs, track app-wide week offs, and record revisions"
+          actions={
+            toast.msg ? (
+              <div style={{
+                padding: '10px 20px', borderRadius: '10px',
+                background: toast.type === 'error' ? '#fee2e2' : '#dcfce7',
+                border: `1px solid ${toast.type === 'error' ? '#fca5a5' : '#86efac'}`,
+                color: toast.type === 'error' ? '#b91c1c' : '#15803d', fontSize: '13px', fontWeight: '700'
+              }}>
+                {toast.msg}
+              </div>
+            ) : null
+          }
+        />
 
         {/* Navigation Tabs */}
         <div style={s.tabs}>
@@ -989,7 +992,7 @@ export default function ClientAdminPayroll() {
                             onMouseLeave={e => e.currentTarget.style.background = 'rgba(194,7,26,0.06)'}
                             onClick={() => setShowAdjModal(true)}
                           >
-                            + Add Adjustment
+                            <AddIcon size={18} /> Add Adjustment
                           </button>
                           <button style={{ ...s.btn, background: 'rgba(194,7,26,0.06)', border: '1px solid rgba(194,7,26,0.15)', color: '#941018', boxShadow: 'none' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'rgba(194,7,26,0.12)'}
@@ -1175,7 +1178,8 @@ export default function ClientAdminPayroll() {
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                + Define Component
+                <AddIcon size={20} />
+                <span style={{ color: '#ffffff', fontWeight: 700 }}>Define Component</span>
               </button>
             </div>
             <table style={s.table}>
@@ -1324,8 +1328,12 @@ export default function ClientAdminPayroll() {
                   setRevCurrentConfig(null)
                   setRevComponents([])
                   setShowRevisionModal(true)
-                }}>
-                  + Create Salary Revision
+                }}
+                  onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
+                  onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+                >
+                  <AddIcon size={20} />
+                  <span style={{ color: '#ffffff', fontWeight: 700 }}>Create Salary Revision</span>
                 </button>
               </div>
 
@@ -1454,7 +1462,7 @@ export default function ClientAdminPayroll() {
                         type="checkbox"
                         checked={isChecked}
                         onChange={() => {}} // handled by div click
-                        style={{ cursor: 'pointer', width: '16px', height: '16px' }}
+                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--primary-color, #C2071A)' }}
                       />
                       <span style={{ fontSize: '13px', fontWeight: '700' }}>{day}</span>
                     </div>
@@ -1486,7 +1494,7 @@ export default function ClientAdminPayroll() {
                       type="checkbox"
                       checked={otSettings.is_enabled}
                       onChange={e => setOtSettings({ ...otSettings, is_enabled: e.target.checked })}
-                      style={{ width: '18px', height: '18px' }}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color, #C2071A)' }}
                     />
                     Enable Overtime Tracking
                   </label>
@@ -1495,7 +1503,7 @@ export default function ClientAdminPayroll() {
                       type="checkbox"
                       checked={otSettings.requires_approval}
                       onChange={e => setOtSettings({ ...otSettings, requires_approval: e.target.checked })}
-                      style={{ width: '18px', height: '18px' }}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color, #C2071A)' }}
                     />
                     Requires Manager Approval
                   </label>
@@ -2188,7 +2196,7 @@ export default function ClientAdminPayroll() {
                     type="checkbox"
                     checked={compForm.include_gross}
                     onChange={e => setCompForm({ ...compForm, include_gross: e.target.checked })}
-                    style={{ width: '15px', height: '15px' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
                   />
                   Include in Gross Salary
                 </label>
@@ -2197,7 +2205,7 @@ export default function ClientAdminPayroll() {
                     type="checkbox"
                     checked={compForm.include_ctc}
                     onChange={e => setCompForm({ ...compForm, include_ctc: e.target.checked })}
-                    style={{ width: '15px', height: '15px' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
                   />
                   Include in CTC
                 </label>
@@ -2209,7 +2217,7 @@ export default function ClientAdminPayroll() {
                     type="checkbox"
                     checked={compForm.is_taxable}
                     onChange={e => setCompForm({ ...compForm, is_taxable: e.target.checked })}
-                    style={{ width: '15px', height: '15px' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
                   />
                   Is Taxable Component
                 </label>
@@ -2218,7 +2226,7 @@ export default function ClientAdminPayroll() {
                     type="checkbox"
                     checked={compForm.is_mandatory}
                     onChange={e => setCompForm({ ...compForm, is_mandatory: e.target.checked })}
-                    style={{ width: '15px', height: '15px' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
                   />
                   Is Mandatory Component
                 </label>

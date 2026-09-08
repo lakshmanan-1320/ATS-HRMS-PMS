@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar'
-import { FiPlus, FiEdit2, FiTrash2, FiFolder, FiCheck, FiX, FiInfo } from 'react-icons/fi'
+import PageHeader from '../../../components/common/PageHeader'
+import { FiPlus, FiEdit2, FiTrash2, FiFolder, FiCheck, FiX, FiInfo, FiAward } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(cfg => {
@@ -126,28 +127,25 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
       <main style={{ flex: 1, padding: isSubComponent ? '0px' : '28px 36px', overflowY: 'auto' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-            <div>
-              <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>Goal Categories</h1>
-              <p style={{ margin: '4px 0 0 0', fontSize: 13, color: '#64748b', fontWeight: 500 }}>
-                Manage dynamic goal categories for organization performance cycles
-              </p>
-            </div>
-            <button
-              onClick={handleOpenCreate}
-              style={{
-                padding: '10px 20px', borderRadius: 10, border: 'none',
-                background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(99,102,241,0.3)',
-                display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <FiPlus /> Add Category
-            </button>
-          </div>
+          <PageHeader
+            icon={FiAward}
+            title="Goal Categories"
+            subtitle="Manage dynamic goal categories for organization performance cycles"
+            actions={
+              <button
+                onClick={handleOpenCreate}
+                style={{
+                  padding: '10px 20px', borderRadius: 10, border: 'none',
+                  background: 'var(--primary-color, #C2071A)',
+                  color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
+                  display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.15s'
+                }}
+              >
+                <FiPlus size={16} /> Add Category
+              </button>
+            }
+          />
 
           {/* Table Card */}
           <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', overflow: 'hidden' }}>

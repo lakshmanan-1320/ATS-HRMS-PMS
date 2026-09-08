@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import {
   FiRefreshCw, FiSearch, FiUsers, FiCheckCircle, FiXCircle,
   FiClock, FiFilter, FiDownload, FiChevronLeft, FiChevronRight,
@@ -354,81 +355,60 @@ export default function ClientAdminAttendance() {
 
         <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
-          {/* ── Page Header ── */}
-          <div style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
-            marginBottom: 24, flexWrap: 'wrap', gap: 16,
-          }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: 12,
-                  background: 'linear-gradient(135deg,#6366f1,#818cf8)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 4px 12px #6366f140',
-                }}>
-                  <FiCalendar size={20} color="#fff" />
+          <PageHeader
+            icon={FiCalendar}
+            title="Attendance Overview"
+            subtitle={`Daily attendance log for all active employees • ${formatDisplayDate(date)}`}
+            actions={
+              <>
+                <div style={{ position: 'relative' }}>
+                  <FiCalendar size={14} color="#94a3b8" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+                  <input
+                    type="date"
+                    value={date}
+                    max={new Date().toISOString().slice(0, 10)}
+                    onChange={e => setDate(e.target.value)}
+                    style={{
+                      paddingLeft: 32, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
+                      border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 13,
+                      color: '#1e293b', outline: 'none', background: '#fff',
+                      fontFamily: 'inherit', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                    }}
+                  />
                 </div>
-                <h1 style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                  Attendance Overview
-                </h1>
-              </div>
-              <p style={{ fontSize: 13, color: '#64748b', margin: 0, fontWeight: 500, paddingLeft: 50 }}>
-                Daily attendance log for all active employees •&nbsp;
-                <span style={{ color: '#6366f1', fontWeight: 600 }}>{formatDisplayDate(date)}</span>
-              </p>
-            </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <div style={{ position: 'relative' }}>
-                <FiCalendar size={14} color="#94a3b8" style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-                <input
-                  type="date"
-                  value={date}
-                  max={new Date().toISOString().slice(0, 10)}
-                  onChange={e => setDate(e.target.value)}
-                  style={{
-                    paddingLeft: 32, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
-                    border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 13,
-                    color: '#1e293b', outline: 'none', background: '#fff',
-                    fontFamily: 'inherit', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-                  }}
-                />
-              </div>
+                {filtered.length > 0 && (
+                  <button
+                    onClick={() => exportToCSV(filtered, date)}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      padding: '9px 16px', background: '#f8fafc',
+                      border: '1px solid #cbd5e1', borderRadius: 10,
+                      fontSize: 13, fontWeight: 600, color: '#334155',
+                      cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    <FiDownload size={14} /> Export CSV
+                  </button>
+                )}
 
-              {filtered.length > 0 && (
                 <button
-                  onClick={() => exportToCSV(filtered, date)}
+                  onClick={load}
+                  disabled={loading}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '9px 16px', background: 'linear-gradient(135deg,#10b981,#059669)',
-                    color: '#fff', border: 'none', borderRadius: 10,
-                    fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                    boxShadow: '0 2px 8px #10b98140', transition: 'opacity 0.15s',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    padding: '9px 14px', background: '#f8fafc',
+                    border: '1px solid #cbd5e1', borderRadius: 10,
+                    fontSize: 13, fontWeight: 600, color: '#334155',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.opacity = 0.9}
-                  onMouseLeave={e => e.currentTarget.style.opacity = 1}
                 >
-                  <FiDownload size={14} /> Export CSV
+                  <FiRefreshCw size={14} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
                 </button>
-              )}
-
-              <button
-                onClick={load}
-                disabled={loading}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '9px 16px', background: 'linear-gradient(135deg,#6366f1,#818cf8)',
-                  color: '#fff', border: 'none', borderRadius: 10,
-                  fontSize: 13, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 2px 8px #6366f140', opacity: loading ? 0.75 : 1, transition: 'opacity 0.15s',
-                }}
-              >
-                <FiRefreshCw size={14} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
-                Refresh
-              </button>
-            </div>
-          </div>
+              </>
+            }
+          />
 
           {/* ── Stat Cards ── */}
           {data && <StatSummary total={data.total} present={data.present} absent={data.absent} onTime={data.onTime} lateArrivals={data.lateArrivals} earlyExits={data.earlyExits} completedShifts={data.completedShifts} />}

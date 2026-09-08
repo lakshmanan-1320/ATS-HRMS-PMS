@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import { FiTarget } from 'react-icons/fi'
 
 const STATUS_META = {
   draft:       { label: 'Draft',       color: '#475569', bg: '#f1f5f9', border: 'rgba(71,85,105,0.2)' },
@@ -615,17 +617,11 @@ export default function Goals() {
         <main style={{ flex: 1, padding: '32px 36px', overflowY: 'auto' }}>
 
         {/* Header */}
-        <div style={{ marginBottom: 28 }}>
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>Goals</h1>
-          <p style={{ margin: '5px 0 0', fontSize: 13, color: '#64748b', fontWeight: 500 }}>
-            Manage company, department, team and individual goals — Mode:
-            <span style={{
-              color: '#6366f1', fontWeight: 700, marginLeft: 6,
-              background: 'rgba(99,102,241,0.08)', padding: '1px 8px',
-              borderRadius: 5, border: '1px solid rgba(99,102,241,0.15)',
-            }}>{modeLabel}</span>
-          </p>
-        </div>
+        <PageHeader
+          icon={FiTarget}
+          title="Goals Management"
+          subtitle={`Manage company, department, team and individual goals — Mode: ${modeLabel}`}
+        />
 
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 28 }}>

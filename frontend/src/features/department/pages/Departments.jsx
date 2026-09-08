@@ -16,10 +16,13 @@ import {
   FiTrendingUp,
   FiMinus,
   FiLayers,
-  FiUser
+  FiUser,
+  FiArchive
 } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 
 const STATUS_META = {
   active:   { color: '#0fa958', bg: '#e8fbf0', dot: '#10b981', label: 'Active' },
@@ -312,7 +315,7 @@ export default function Departments() {
     {
       label: 'Active Departments',
       value: active,
-      icon: FiFolder,
+      icon: FiCheckCircle,
       badgeText: 'Active',
       badgeType: 'up',
       badgeBg: '#e6f7ed',
@@ -323,7 +326,7 @@ export default function Departments() {
     {
       label: 'Inactive Departments',
       value: inactive,
-      icon: FiFolder,
+      icon: FiArchive,
       badgeText: 'Inactive',
       badgeType: 'neutral',
       badgeBg: '#f1f5f9',
@@ -343,41 +346,30 @@ export default function Departments() {
         <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto', background: '#f3f7fa' }}>
 
         {/* ── Header ── */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-              background: 'var(--card-active-bg, #FEECEE)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <FiFolder size={22} color="var(--primary-color, #C2071A)" />
-            </div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#111827', letterSpacing: '-0.4px', lineHeight: 1.2 }}>
-                Departments
-              </h1>
-              <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: 13, fontWeight: 500 }}>
-                Manage departments and sub-departments in your organisation
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={openCreate}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '10px 20px',
-              background: 'var(--primary-color, #C2071A)',
-              border: 'none', borderRadius: 10, cursor: 'pointer',
-              fontSize: 13, fontWeight: 700, color: '#ffffff', fontFamily: 'inherit',
-              boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(194, 7, 26, 0.35)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(194, 7, 26, 0.25)' }}
-          >
-            <FiPlus size={18} color="#ffffff" stroke="#ffffff" style={{ flexShrink: 0, strokeWidth: 2.5, color: '#ffffff', stroke: '#ffffff' }} /> Add Department
-          </button>
-        </div>
+        <PageHeader
+          icon={FiFolder}
+          title="Departments"
+          subtitle="Manage departments and sub-departments in your organisation"
+          actions={
+            <button
+              onClick={openCreate}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '10px 20px',
+                background: 'var(--primary-color, #C2071A)',
+                border: 'none', borderRadius: 10, cursor: 'pointer',
+                fontSize: 13, fontWeight: 700, color: '#ffffff', fontFamily: 'inherit',
+                boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(194, 7, 26, 0.35)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(194, 7, 26, 0.25)' }}
+            >
+              <AddIcon size={20} />
+              <span style={{ color: '#ffffff', fontWeight: 700 }}>Add Department</span>
+            </button>
+          }
+        />
 
         {/* ── Stats matching Org Chart cards replica ── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
@@ -409,11 +401,9 @@ export default function Departments() {
                 {/* Top Row: Icon Container + Badge */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                   <div style={{
-                    width: 40, height: 40, borderRadius: 12,
-                    background: '#f4f5f7',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
                   }}>
-                    <CardIcon size={20} color="#9ca3af" />
+                    <CardIcon size={24} color="#C2071A" stroke="#C2071A" strokeWidth={2.2} style={{ color: '#C2071A', stroke: '#C2071A' }} />
                   </div>
                   <span style={{
                     background: card.badgeBg,
@@ -499,7 +489,8 @@ export default function Departments() {
                   boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
                   display: 'inline-flex', alignItems: 'center', gap: 8,
                 }}>
-                  <FiPlus size={16} color="#ffffff" stroke="#ffffff" style={{ flexShrink: 0, strokeWidth: 2.5, color: '#ffffff', stroke: '#ffffff' }} /> Add Department
+                  <AddIcon size={20} />
+                  <span style={{ color: '#ffffff', fontWeight: 700 }}>Add Department</span>
                 </button>
               </div>
 

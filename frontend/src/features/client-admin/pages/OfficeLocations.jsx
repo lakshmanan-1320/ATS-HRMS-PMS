@@ -4,6 +4,8 @@ import { toast } from 'react-toastify'
 import { useAttendanceStore } from '../../../store/attendance.store'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 import { FiPlus, FiEdit2, FiTrash2, FiMapPin, FiX, FiSearch, FiCompass, FiInfo } from 'react-icons/fi'
 import { useJsApiLoader, GoogleMap, Marker, Circle, Autocomplete } from '@react-google-maps/api'
 
@@ -376,37 +378,27 @@ export default function OfficeLocations() {
         <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  width: 38, height: 38, borderRadius: 10,
-                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <FiMapPin size={20} color="#C2071A" strokeWidth={2.5} />
-                </div>
-                Office Locations & Geofencing
-              </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
-                Configure office boundaries, GPS coordinates, and geofence verification zones
-              </p>
-            </div>
-
-            <button
-              onClick={handleOpenCreate}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '7px',
-                padding: '9px 18px', borderRadius: '10px', border: 'none',
-                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                color: '#ffffff', fontSize: '13px', fontWeight: 700,
-                cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                fontFamily: "'Inter', sans-serif"
-              }}
-            >
-              <FiPlus size={16} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
-              Add Office Location
-            </button>
-          </div>
+          <PageHeader
+            icon={FiMapPin}
+            title="Office Locations & Geofencing"
+            subtitle="Configure office boundaries, GPS coordinates, and geofence verification zones"
+            actions={
+              <button
+                onClick={handleOpenCreate}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '7px',
+                  padding: '9px 18px', borderRadius: '10px', border: 'none',
+                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                  color: '#ffffff', fontSize: '13px', fontWeight: 700,
+                  cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+              >
+                <AddIcon size={20} />
+                <span style={{ color: '#ffffff', fontWeight: 700 }}>Add Office Location</span>
+              </button>
+            }
+          />
 
           {/* Locations Container Card */}
           <div style={{

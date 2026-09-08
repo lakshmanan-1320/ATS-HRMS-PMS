@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FiSearch, FiMenu, FiMinus, FiLogOut, FiChevronDown, FiChevronRight, FiLock } from 'react-icons/fi'
+import { FiSearch, FiMenu, FiMinus, FiLogOut, FiChevronDown, FiChevronRight, FiLock, FiX } from 'react-icons/fi'
 
 export default function ExpandableSidebar({ roleName, roleLetter, companyName = 'Insight PMS', activeId, sections, onLogout, onChangePassword }) {
   const navigate = useNavigate()
@@ -8,6 +8,7 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
   const [isCollapsed, setIsCollapsed] = useState(false)
   const dropdownRef = useRef(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
 
   // Auto-expand parent items that contain the active child on mount/activeId change
   const [expandedItems, setExpandedItems] = useState(() => {
@@ -145,35 +146,27 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
     searchIcon: {
       position: 'absolute',
       left: '12px',
-      color: 'rgba(255, 255, 255, 0.45)',
+      color: isSearchFocused ? 'var(--primary-color, #C2071A)' : 'rgba(255, 255, 255, 0.75)',
       pointerEvents: 'none',
       width: '16px',
       height: '16px',
+      transition: 'color 0.2s ease',
     },
     searchInput: {
       width: '100%',
-      height: '38px',
-      padding: '0 45px 0 36px',
-      background: '#242426',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
-      borderRadius: '8px',
+      height: '40px',
+      padding: '0 32px 0 38px',
+      background: '#232326',
+      border: '1.5px solid rgba(255, 255, 255, 0.22)',
+      borderRadius: '10px',
       color: '#ffffff',
       fontSize: '13.5px',
+      fontWeight: '500',
       outline: 'none',
       fontFamily: 'inherit',
       boxSizing: 'border-box',
-      transition: 'background 0.2s, border-color 0.2s',
-    },
-    shortcutBadge: {
-      position: 'absolute',
-      right: '10px',
-      background: '#3f3f46',
-      color: 'rgba(255, 255, 255, 0.7)',
-      fontSize: '10px',
-      fontWeight: '600',
-      padding: '2px 5px',
-      borderRadius: '4px',
-      pointerEvents: 'none',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
+      transition: 'all 0.2s ease',
     },
     nav: {
       flex: 1,
@@ -467,20 +460,62 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
           <FiSearch style={styles.searchIcon} />
           <input
             type="text"
+            className="sidebar-search-input"
             placeholder="Search menu..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={styles.searchInput}
             onFocus={(e) => {
-              e.target.style.background = '#2a2a2d'
-              e.target.style.borderColor = 'rgba(208, 16, 33, 0.5)'
+              setIsSearchFocused(true)
+              e.target.style.background = '#28282c'
+              e.target.style.borderColor = 'var(--primary-color, #C2071A)'
+              e.target.style.boxShadow = '0 0 0 3px rgba(194, 7, 26, 0.25)'
             }}
             onBlur={(e) => {
-              e.target.style.background = '#242426'
-              e.target.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+              setIsSearchFocused(false)
+              e.target.style.background = '#232326'
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.22)'
+              e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.25)'
+            }}
+            onMouseEnter={(e) => {
+              if (document.activeElement !== e.target) {
+                e.target.style.background = '#28282c'
+                e.target.style.borderColor = 'rgba(255, 255, 255, 0.38)'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (document.activeElement !== e.target) {
+                e.target.style.background = '#232326'
+                e.target.style.borderColor = 'rgba(255, 255, 255, 0.22)'
+              }
             }}
           />
-          <span style={styles.shortcutBadge}>⌘ K</span>
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                background: 'rgba(255, 255, 255, 0.12)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#e2e8f0',
+                padding: 0,
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)' }}
+              title="Clear search"
+            >
+              <FiX size={12} />
+            </button>
+          )}
         </div>
       </div>
 

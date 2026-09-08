@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import { FiCalendar, FiSliders, FiUsers, FiClock, FiActivity, FiCheck, FiAlertCircle } from 'react-icons/fi'
 import LeavePlansList from './LeavePlansList.jsx'
 import LeavePlanDetails from './LeavePlanDetails.jsx'
@@ -62,17 +63,11 @@ export default function LeavePlansConfig() {
         <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Main Page Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FiSliders size={18} color="#fff" />
-            </div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Leave Administration</h1>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Manage custom plans, assignments, adjustments, and accrual runs.
-              </p>
-            </div>
-          </div>
+          <PageHeader
+            icon={FiSliders}
+            title="Leave Administration"
+            subtitle="Manage custom plans, assignments, adjustments, and accrual runs."
+          />
 
           {/* Master Tabs */}
           <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px' }}>
@@ -118,7 +113,7 @@ export default function LeavePlansConfig() {
             )}
 
             {activeTab === 'accruals' && (
-              <div style={{ maxWidth: '600px' }}>
+              <div style={{ width: '100%' }}>
                 <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Process Leave Accruals</h3>
                   <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#64748b' }}>
@@ -170,7 +165,7 @@ export default function LeavePlansConfig() {
                       type="submit"
                       disabled={runningAccrual}
                       style={{
-                        width: '100%', padding: '12px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff',
+                        padding: '12px 28px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff',
                         cursor: runningAccrual ? 'not-allowed' : 'pointer',
                         background: runningAccrual ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)',
                         boxShadow: runningAccrual ? 'none' : '0 4px 14px rgba(194,7,26,0.35)',

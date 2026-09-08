@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { useAttendanceStore } from '../../../store/attendance.store'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
 import { FiPlus, FiEdit2, FiTrash2, FiClock, FiUsers, FiInfo, FiCheck, FiX, FiSettings, FiCalendar, FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 const PAGE_SIZE = 10
@@ -216,37 +218,27 @@ export default function ShiftsSchedules() {
         <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  width: 38, height: 38, borderRadius: 10,
-                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
-                </div>
-                Shifts & Schedules
-              </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
-                Configure work shifts, grace periods, minimum hours, and assign schedules
-              </p>
-            </div>
-
-            <button
-              onClick={handleOpenCreate}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '7px',
-                padding: '9px 18px', borderRadius: '10px', border: 'none',
-                background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                color: '#ffffff', fontSize: '13px', fontWeight: 700,
-                cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                fontFamily: "'Inter', sans-serif"
-              }}
-            >
-              <FiPlus size={16} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
-              Create Shift
-            </button>
-          </div>
+          <PageHeader
+            icon={FiClock}
+            title="Shifts & Schedules"
+            subtitle="Configure work shifts, grace periods, minimum hours, and assign schedules"
+            actions={
+              <button
+                onClick={handleOpenCreate}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '7px',
+                  padding: '9px 18px', borderRadius: '10px', border: 'none',
+                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                  color: '#ffffff', fontSize: '13px', fontWeight: 700,
+                  cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+              >
+                <AddIcon size={20} />
+                <span style={{ color: '#ffffff', fontWeight: 700 }}>Create Shift</span>
+              </button>
+            }
+          />
 
           {/* Container Card */}
           <div style={{

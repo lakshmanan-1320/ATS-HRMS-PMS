@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import { useAttendanceStore } from '../../../store/attendance.store.js'
 import {
   FiSearch, FiUsers, FiCheckCircle, FiXCircle, FiClock,
@@ -244,51 +245,47 @@ export default function ClientAdminAttendanceTracking() {
         <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
-                Attendance Tracking
-              </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
-                Monitor shift completions, compliance checks, and geofence verification
-              </p>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button
-                id="btn-export-csv"
-                onClick={handleExport}
-                disabled={exporting || records.length === 0}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '7px',
-                  padding: '9px 16px', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
-                  color: '#ffffff', border: 'none', borderRadius: '10px',
-                  fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                  boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)', opacity: (exporting || records.length === 0) ? 0.7 : 1,
-                  fontFamily: "'Inter', sans-serif"
-                }}
-              >
-                <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
-                {exporting ? 'Exporting...' : 'Export Filtered CSV'}
-              </button>
+          <PageHeader
+            icon={FiClock}
+            title="Attendance Tracking"
+            subtitle="Monitor shift completions, compliance checks, and geofence verification"
+            actions={
+              <>
+                <button
+                  id="btn-export-csv"
+                  onClick={handleExport}
+                  disabled={exporting || records.length === 0}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '7px',
+                    padding: '9px 16px', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                    color: '#ffffff', border: 'none', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                    boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)', opacity: (exporting || records.length === 0) ? 0.7 : 1,
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                >
+                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+                  {exporting ? 'Exporting...' : 'Export Filtered CSV'}
+                </button>
 
-              <button
-                id="btn-refresh-tracking"
-                onClick={loadOverview}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '7px',
-                  padding: '9px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                  color: '#ffffff', border: 'none', borderRadius: '10px',
-                  fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                  boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                  fontFamily: "'Inter', sans-serif"
-                }}
-              >
-                <FiRefreshCw size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loadingOverview ? 'spin' : ''} />
-                Refresh
-              </button>
-            </div>
-          </div>
+                <button
+                  id="btn-refresh-tracking"
+                  onClick={loadOverview}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '7px',
+                    padding: '9px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    color: '#ffffff', border: 'none', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                >
+                  <FiRefreshCw size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loadingOverview ? 'spin' : ''} />
+                  Refresh
+                </button>
+              </>
+            }
+          />
 
           {/* Grid Layout: Left Filter Panel, Right Table Log */}
           <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '24px', alignItems: 'start' }}>

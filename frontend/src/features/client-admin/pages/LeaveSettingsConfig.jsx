@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import {
   FiCalendar, FiBriefcase, FiUserPlus, FiStar, FiBarChart2,
-  FiCheck, FiAlertCircle
+  FiCheck, FiAlertCircle, FiSliders
 } from 'react-icons/fi'
 
 const api = axios.create({ baseURL: '/api' })
@@ -43,7 +44,7 @@ const C = {
 const s = {
   page:    { display: 'flex', minHeight: '100vh', background: C.slate50, fontFamily: 'Inter, system-ui, sans-serif' },
   wrapper: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' },
-  main:    { flex: 1, padding: '32px 40px', overflowY: 'auto', maxWidth: '900px' },
+  main:    { flex: 1, padding: '32px 40px', overflowY: 'auto' },
 
   /* Page header */
   pageHeader: { marginBottom: '32px' },
@@ -313,10 +314,11 @@ export default function LeaveSettingsConfig() {
         <main style={s.main}>
 
           {/* ── Page Header ── */}
-          <div style={s.pageHeader}>
-            <h1 style={s.pageTitle}>Leave Settings</h1>
-            <p style={s.pageSub}>Configure leave year boundary, joining policies, and optional holiday eligibility</p>
-          </div>
+          <PageHeader
+            icon={FiSliders}
+            title="Leave Settings"
+            subtitle="Configure leave year boundary, joining policies, and optional holiday eligibility"
+          />
 
           {loading ? (
             <div style={{ padding: '80px', textAlign: 'center', color: C.slate400, fontSize: 14 }}>

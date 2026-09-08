@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FiCalendar, FiPlus, FiXCircle, FiSave, FiEdit, FiPlayCircle, 
-  FiLock, FiArchive, FiAlertTriangle, FiInfo 
+  FiLock, FiArchive, FiAlertTriangle, FiInfo, FiSliders, FiEdit2, FiCheckCircle 
 } from 'react-icons/fi';
+import PageHeader from '../../components/common/PageHeader';
 import * as api from './financialYears.api';
 import GoalRulesCard from './GoalRulesCard';
 
@@ -336,16 +337,17 @@ export default function FinancialYearsPage() {
   return (
     <div style={s.card}>
       {/* Header */}
-      <div style={s.header}>
-        <div>
-          <h2 style={s.title}>Financial Years</h2>
-          <p style={s.desc}>Create, manage, and configure active financial year rules for cycle constraints</p>
-        </div>
-        <button onClick={handleOpenCreate} style={s.createBtn}>
-          <FiPlus size={16} />
-          Create Financial Year
-        </button>
-      </div>
+      <PageHeader
+        icon={FiCalendar}
+        title="Financial Years"
+        subtitle="Create, manage, and configure active financial year rules for cycle constraints"
+        actions={
+          <button onClick={handleOpenCreate} style={s.createBtn}>
+            <FiPlus size={16} />
+            Create Financial Year
+          </button>
+        }
+      />
 
       {/* Loading state */}
       {loading ? (

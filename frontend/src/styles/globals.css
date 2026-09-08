@@ -141,8 +141,12 @@ main div[style*="background:#090d16"] span {
 }
 
 /* Light text color overrides to dark slate inside main content cards (e.g. employee names, labels) */
-body.client-admin-theme main *:not(button):not(a):not(.welcome-banner-card *):not(.welcome-banner-card) {
+body.client-admin-theme main *:not(button):not(button *):not(a):not(a *):not(.welcome-banner-card *):not(.welcome-banner-card) {
   color: #1e293b; /* default fallback for all texts */
+}
+body.client-admin-theme main button,
+body.client-admin-theme main button * {
+  color: inherit;
 }
 
 body.client-admin-theme main span[style*="color: #cbd5e1"],
@@ -203,6 +207,16 @@ body.client-admin-theme div[style*="position:fixed"] option {
   border: 1px solid #cbd5e1 !important;
 }
 
+/* Borderless/transparent inputs (e.g. inline search boxes) that must not get the default input chrome */
+body.client-admin-theme main input.ca-borderless-input,
+body.client-admin-theme main input.ca-borderless-input:focus,
+.reusable-table-card input,
+.reusable-table-card input:focus {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 body.client-admin-theme div[style*="position: fixed"] input:focus,
 body.client-admin-theme div[style*="position: fixed"] select:focus,
 body.client-admin-theme div[style*="position: fixed"] textarea:focus,
@@ -242,6 +256,13 @@ body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div b
 body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button {
   color: #ffffff; /* keep buttons readable */
 }
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button[style*="linear-gradient"] *,
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button[style*="linear-gradient"] *,
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button[style*="#C2071A"] *,
+body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button[style*="#C2071A"] * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
 body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button[style*="background: none"],
 body.client-admin-theme div[style*="position: fixed"][style*="inset: 0px"] > div button[style*="background:none"],
 body.client-admin-theme div[style*="position: fixed"][style*="inset: 0"] > div button[style*="background: rgba(255,255,255,0.05)"],
@@ -268,9 +289,13 @@ body.client-admin-theme div[style*="position: fixed"][style*="zIndex: 2000"] but
 
 
 /* High-visibility placeholder styling for the sidebar searchbox input */
+.sidebar-search-input::placeholder,
+.sidebar-search-input::-webkit-input-placeholder,
 .no-scrollbar input::placeholder {
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: rgba(255, 255, 255, 0.72) !important;
   opacity: 1 !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
 }
 
 /* -------------------------------------------------------------

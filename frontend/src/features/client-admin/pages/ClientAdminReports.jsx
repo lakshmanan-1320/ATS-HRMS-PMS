@@ -293,11 +293,11 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
       <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff' }}>
+            <tr style={{ background: '#f8fafc', color: '#334155' }}>
               {columns.map(c => (
                 <th key={c.key} style={{
                   padding: '14px 16px', textAlign: 'left',
-                  fontSize: 11.5, fontWeight: 700, color: '#f8fafc',
+                  fontSize: 11.5, fontWeight: 700, color: '#334155',
                   textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap',
                 }}>
                   {c.label}

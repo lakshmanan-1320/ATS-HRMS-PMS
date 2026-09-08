@@ -6,6 +6,8 @@ import {
 } from 'react-icons/fi';
 import ClientAdminSidebar from '../../../../components/layout/ClientAdminSidebar';
 import ClientAdminTopBar from '../../../../components/layout/ClientAdminTopBar';
+import PageHeader from '../../../../components/common/PageHeader';
+import { FiTrendingUp } from 'react-icons/fi';
 import { usePipStore } from '../pip.store';
 import axios from 'axios';
 
@@ -1100,10 +1102,11 @@ export default function PipPortal() {
         
         <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
           <div style={{ padding: '24px 24px 8px 24px' }}>
-            <Title level={2} style={{ margin: 0, fontWeight: 800, color: '#0f172a' }}>Performance Improvement Plan (PIP)</Title>
-            <Paragraph type="secondary" style={{ margin: '4px 0 0 0' }}>
-              Manage, review, track, and configure employee development and performance correction cycles.
-            </Paragraph>
+            <PageHeader
+              icon={FiTrendingUp}
+              title="Performance Improvement Plan (PIP)"
+              subtitle="Manage, review, track, and configure employee development and performance correction cycles."
+            />
           </div>
 
           {/* Sub-Tabs Nav */}

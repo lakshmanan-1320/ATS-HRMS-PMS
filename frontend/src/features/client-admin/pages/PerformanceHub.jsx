@@ -4,6 +4,7 @@ import { Card, Typography, Row, Col, Statistic, Progress, Empty, Space } from 'a
 import { FiTarget, FiCheckCircle, FiClock, FiSettings, FiBriefcase, FiAlertCircle, FiMessageSquare, FiCalendar, FiFolder, FiZap, FiClipboard } from 'react-icons/fi';
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar';
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar';
+import PageHeader from '../../../components/common/PageHeader';
 import GoalPage from '../../goal/pages/GoalPage';
 import KpiReviewsPage from '../../kpi/pages/KpiReviewsPage';
 import AppraisalCycles from '../../appraisal/pages/AppraisalCycles';
@@ -370,10 +371,11 @@ export default function PerformanceHub() {
         
         <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
           <div style={{ padding: '24px 24px 8px 24px' }}>
-            <Title level={2} style={{ margin: 0, fontWeight: 800, color: '#0f172a' }}>Performance Management</Title>
-            <Paragraph type="secondary" style={{ margin: '4px 0 0 0' }}>
-              Consolidated administration panel for Goal setting, KPIs, reviews and appraisal cycles.
-            </Paragraph>
+            <PageHeader
+              icon={FiTarget}
+              title="Performance Management Hub"
+              subtitle="Consolidated administration panel for Goal setting, KPIs, reviews and appraisal cycles."
+            />
           </div>
 
           {renderSubTabs()}

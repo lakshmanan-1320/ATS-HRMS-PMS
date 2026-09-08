@@ -7,28 +7,28 @@ import {
 } from 'react-icons/fi'
 
 const NOTIF_ICONS = {
-  leave_submitted:          { bg: '#ede9fe', color: '#7c3aed', Icon: FiCalendar },
-  leave_applied:            { bg: '#ede9fe', color: '#7c3aed', Icon: FiCalendar },
-  leave_approved:           { bg: '#dcfce7', color: '#16a34a', Icon: FiCheckCircle },
-  leave_rejected:           { bg: '#fee2e2', color: '#dc2626', Icon: FiXCircle },
-  leave_cancelled:          { bg: '#ffedd5', color: '#c2410c', Icon: FiXCircle },
+  leave_submitted:          { Icon: FiCalendar },
+  leave_applied:            { Icon: FiCalendar },
+  leave_approved:           { Icon: FiCheckCircle },
+  leave_rejected:           { Icon: FiXCircle },
+  leave_cancelled:          { Icon: FiXCircle },
 
-  regularization_submitted: { bg: '#fef3c7', color: '#b45309', Icon: FiClock },
-  regularization_approved:  { bg: '#dcfce7', color: '#16a34a', Icon: FiCheckCircle },
-  regularization_rejected:  { bg: '#fee2e2', color: '#dc2626', Icon: FiXCircle },
+  regularization_submitted: { Icon: FiClock },
+  regularization_approved:  { Icon: FiCheckCircle },
+  regularization_rejected:  { Icon: FiXCircle },
 
-  permission_submitted:     { bg: '#fef3c7', color: '#b45309', Icon: FiClock },
-  permission_approved:      { bg: '#dcfce7', color: '#16a34a', Icon: FiCheckCircle },
-  permission_rejected:      { bg: '#fee2e2', color: '#dc2626', Icon: FiXCircle },
+  permission_submitted:     { Icon: FiClock },
+  permission_approved:      { Icon: FiCheckCircle },
+  permission_rejected:      { Icon: FiXCircle },
 
-  payroll_processed:        { bg: '#f0fdf4', color: '#15803d', Icon: FiDollarSign },
-  payslip_published:        { bg: '#f0fdf4', color: '#15803d', Icon: FiDollarSign },
+  payroll_processed:        { Icon: FiDollarSign },
+  payslip_published:        { Icon: FiDollarSign },
 
-  overtime_submitted:       { bg: '#fef3c7', color: '#b45309', Icon: FiClock },
-  overtime_approved:        { bg: '#dcfce7', color: '#16a34a', Icon: FiCheckCircle },
-  overtime_rejected:        { bg: '#fee2e2', color: '#dc2626', Icon: FiXCircle },
+  overtime_submitted:       { Icon: FiClock },
+  overtime_approved:        { Icon: FiCheckCircle },
+  overtime_rejected:        { Icon: FiXCircle },
 
-  policy_published:         { bg: '#e0e7ff', color: '#4f46e5', Icon: FiFileText },
+  policy_published:         { Icon: FiFileText },
 }
 
 function timeAgo(dateString) {
@@ -235,7 +235,7 @@ export default function NotificationDropdown({ role = 'employee' }) {
               </div>
             ) : (
               items.map(n => {
-                const meta = NOTIF_ICONS[n.type] || { bg: '#f1f5f9', color: '#64748b', Icon: FiAlertCircle }
+                const meta = NOTIF_ICONS[n.type] || { Icon: FiAlertCircle }
                 const IconComponent = meta.Icon
                 const isUnread = !n.is_read
 
@@ -246,20 +246,20 @@ export default function NotificationDropdown({ role = 'employee' }) {
                     style={{
                       padding: '14px 18px',
                       borderBottom: '1px solid #f1f5f9',
-                      background: isUnread ? '#f8fafc' : '#ffffff',
+                      background: '#ffffff',
                       display: 'flex', alignItems: 'flex-start', gap: '12px',
-                      cursor: 'pointer', transition: 'background 0.15s',
+                      cursor: 'pointer', transition: 'background 0.15s ease',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
-                    onMouseLeave={e => e.currentTarget.style.background = isUnread ? '#f8fafc' : '#ffffff'}
+                    onMouseEnter={e => e.currentTarget.style.background = '#fef8f8'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#ffffff'}
                   >
                     <div style={{
-                      width: '36px', height: '36px', borderRadius: '10px',
-                      background: meta.bg, color: meta.color,
+                      width: '34px', height: '34px', borderRadius: '10px',
+                      background: 'var(--card-active-bg, #FEECEE)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0, marginTop: '2px',
                     }}>
-                      <IconComponent size={18} />
+                      <IconComponent size={18} color="var(--primary-color, #C2071A)" style={{ color: 'var(--primary-color, #C2071A)' }} />
                     </div>
 
                     <div style={{ flex: 1, minWidth: 0 }}>

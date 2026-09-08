@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import {
   FiSettings, FiSliders, FiList, FiAlertCircle, FiCheck,
   FiMail, FiX, FiCheckCircle, FiXCircle, FiCalendar
@@ -135,17 +136,11 @@ export default function AttendanceRegularizationSettings() {
         <div style={containerStyle}>
           
           {/* Header */}
-          <div style={{ marginBottom: '24px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: 34, height: 34, borderRadius: '10px', background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <FiSettings size={17} color="#ffffff" />
-              </div>
-              Attendance Regularization Settings
-            </h1>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
-              Configure corporate attendance correction limits, validation windows, and approval workflows.
-            </p>
-          </div>
+          <PageHeader
+            icon={FiCheckCircle}
+            title="Attendance Regularization Settings"
+            subtitle="Configure corporate attendance correction limits, validation windows, and approval workflows."
+          />
 
           {/* Tabs */}
           <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '2px' }}>
@@ -192,7 +187,7 @@ export default function AttendanceRegularizationSettings() {
           )}
 
           {activeTab === 'settings' && (
-            <form onSubmit={handleSave} style={{ maxWidth: '640px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+            <form onSubmit={handleSave} style={{ width: '100%', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
               
               {/* Section 1: Allow Employees to Regularize */}
               <div style={{ marginBottom: '24px' }}>

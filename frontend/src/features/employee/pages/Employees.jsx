@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -8,6 +8,9 @@ import {
 } from 'react-icons/fi'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
+import AddIcon from '../../../components/common/AddIcon.jsx'
+import Table from '../../../components/common/Table.jsx'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
@@ -109,9 +112,9 @@ const iStyle = (err) => ({
 })
 
 const selStyle = {
-  padding: '9px 13px', background: '#ffffff',
+  padding: '9px 14px', background: '#ffffff',
   border: '1px solid #e2e8f0',
-  borderRadius: 10, color: '#1e293b', fontSize: 13, outline: 'none',
+  borderRadius: 10, color: '#1e293b', fontSize: 13.5, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit', cursor: 'pointer',
   transition: 'border-color 0.15s ease',
 }
@@ -131,6 +134,10 @@ export default function Employees() {
   const [filterDept, setFilterDept]   = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [filterType, setFilterType]   = useState('')
+
+  // Sorting
+  const [sortColumn, setSortColumn]     = useState('name')
+  const [sortDirection, setSortDirection] = useState('asc')
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -209,28 +216,72 @@ export default function Employees() {
   }, [])
 
   // Reset to page 1 when filters change
-  useEffect(() => { setCurrentPage(1) }, [search, filterDept, filterStatus, filterType])
+  useEffect(() => { setCurrentPage(1) }, [search, filterDept, filterStatus, filterType, sortColumn, sortDirection])
+
+  const handleSort = (colKey) => {
+    if (sortColumn === colKey) {
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortColumn(colKey)
+      setSortDirection('asc')
+    }
+  }
 
   // ── Filter ──
-  const filtered = employees.filter(e => {
-    if (search) {
-      const q = search.toLowerCase()
-      if (
-        !e.first_name?.toLowerCase().includes(q) &&
-        !e.last_name?.toLowerCase().includes(q) &&
-        !e.employee_code?.toLowerCase().includes(q) &&
-        !e.email?.toLowerCase().includes(q)
-      ) return false
-    }
-    if (filterDept && String(e.department_id) !== filterDept) return false
-    if (filterStatus && e.status !== filterStatus) return false
-    if (filterType && e.employment_type !== filterType) return false
-    return true
-  })
+  const filtered = useMemo(() => {
+    return employees.filter(e => {
+      if (search) {
+        const q = search.toLowerCase()
+        if (
+          !e.first_name?.toLowerCase().includes(q) &&
+          !e.last_name?.toLowerCase().includes(q) &&
+          !e.employee_code?.toLowerCase().includes(q) &&
+          !e.email?.toLowerCase().includes(q)
+        ) return false
+      }
+      if (filterDept && String(e.department_id) !== filterDept) return false
+      if (filterStatus && e.status !== filterStatus) return false
+      if (filterType && e.employment_type !== filterType) return false
+      return true
+    })
+  }, [employees, search, filterDept, filterStatus, filterType])
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  // ── Sort ──
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      let valA = ''
+      let valB = ''
+      if (sortColumn === 'name') {
+        valA = `${a.first_name || ''} ${a.last_name || ''}`.trim().toLowerCase()
+        valB = `${b.first_name || ''} ${b.last_name || ''}`.trim().toLowerCase()
+      } else if (sortColumn === 'employee_code') {
+        valA = (a.employee_code || '').toLowerCase()
+        valB = (b.employee_code || '').toLowerCase()
+      } else if (sortColumn === 'department_name') {
+        valA = (a.department_name || '').toLowerCase()
+        valB = (b.department_name || '').toLowerCase()
+      } else if (sortColumn === 'designation') {
+        valA = (a.designation || '').toLowerCase()
+        valB = (b.designation || '').toLowerCase()
+      } else if (sortColumn === 'employment_type') {
+        valA = (a.employment_type || '').toLowerCase()
+        valB = (b.employment_type || '').toLowerCase()
+      } else if (sortColumn === 'date_of_joining') {
+        valA = a.date_of_joining ? new Date(a.date_of_joining).getTime() : 0
+        valB = b.date_of_joining ? new Date(b.date_of_joining).getTime() : 0
+      } else if (sortColumn === 'status') {
+        valA = (a.status || '').toLowerCase()
+        valB = (b.status || '').toLowerCase()
+      }
+      if (valA < valB) return sortDirection === 'asc' ? -1 : 1
+      if (valA > valB) return sortDirection === 'asc' ? 1 : -1
+      return 0
+    })
+  }, [filtered, sortColumn, sortDirection])
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE))
   const safePage = Math.min(currentPage, totalPages)
-  const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
+  const paginated = sorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
 
   // ── Status ──
   function openStatusPop(e, emp) {
@@ -329,8 +380,371 @@ export default function Employees() {
   const isMobile = windowWidth < 640
   const isTablet = windowWidth >= 640 && windowWidth < 1024
 
-  const COLS        = '100px 1fr 160px 160px 105px 100px 115px 80px'
-  const COLS_TABLET = '1fr 150px 110px 115px 76px'
+  const tabs = useMemo(() => [
+    { key: 'all', label: 'All', count: employees.length },
+    { key: 'active', label: 'Active', count: employees.filter(e => e.status === 'active').length },
+    { key: 'inactive', label: 'Inactive', count: employees.filter(e => e.status === 'inactive').length },
+    { key: 'exit', label: 'Exit', count: employees.filter(e => e.status === 'exit').length },
+    { key: 'terminated', label: 'Terminated', count: employees.filter(e => e.status === 'terminated').length },
+  ], [employees])
+
+  const columns = useMemo(() => [
+    {
+      key: 'name',
+      label: 'Employee',
+      sortable: true,
+      render: (_, emp) => {
+        const levelColor = getLevelColor(emp.level_code)
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                background: `${levelColor}14`,
+                border: `2px solid ${levelColor}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 13.5,
+                fontWeight: 700,
+                color: levelColor,
+                flexShrink: 0,
+              }}
+            >
+              {initials(emp.first_name, emp.last_name)}
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#0f172a' }}>
+                  {emp.first_name} {emp.last_name}
+                </span>
+                {emp.level_code && (
+                  <span
+                    style={{
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                      color: levelColor,
+                      background: `${levelColor}15`,
+                      padding: '2px 7px',
+                      borderRadius: 5,
+                    }}
+                  >
+                    {emp.level_code}
+                  </span>
+                )}
+              </div>
+              {emp.email && (
+                <div
+                  style={{
+                    fontSize: 12.5,
+                    color: '#64748b',
+                    marginTop: 2,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {emp.email}
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      key: 'employee_code',
+      label: 'Code',
+      sortable: true,
+      render: (code) => (
+        <span
+          style={{
+            display: 'inline-block',
+            padding: '4px 10px',
+            background: '#f1f5f9',
+            border: '1px solid #e2e8f0',
+            borderRadius: 20,
+            fontSize: 12.5,
+            fontWeight: 700,
+            color: '#334155',
+            letterSpacing: '0.04em',
+            fontFamily: 'monospace',
+          }}
+        >
+          {code || '—'}
+        </span>
+      ),
+    },
+    {
+      key: 'department_name',
+      label: 'Department',
+      sortable: true,
+      render: (dept) => (
+        <span style={{ fontSize: 14, color: '#1e293b', fontWeight: 500 }}>
+          {dept || <span style={{ color: '#cbd5e1' }}>—</span>}
+        </span>
+      ),
+    },
+    {
+      key: 'designation',
+      label: 'Designation',
+      sortable: true,
+      render: (desig) => (
+        <span style={{ fontSize: 14, color: '#334155', fontWeight: 500 }}>
+          {desig || <span style={{ color: '#cbd5e1' }}>—</span>}
+        </span>
+      ),
+    },
+    {
+      key: 'employment_type',
+      label: 'Type & Work Mode',
+      sortable: true,
+      render: (_, emp) => {
+        const tm = TYPE_META[emp.employment_type] || TYPE_META.full_time
+        return (
+          <div>
+            <span
+              style={{
+                display: 'inline-block',
+                padding: '3px 10px',
+                background: tm.bg,
+                borderRadius: 20,
+                fontSize: 12,
+                fontWeight: 700,
+                color: tm.color,
+              }}
+            >
+              {tm.label}
+            </span>
+            <div style={{ marginTop: 4 }}>
+              {emp.attendance_policy_type === 'REMOTE' || emp.office_location_name === 'Remote' ? (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '2px 8px',
+                    borderRadius: 12,
+                    background: 'rgba(15,118,110,0.1)',
+                    color: '#0f766e',
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                  }}
+                >
+                  <FiHome size={11} /> Remote
+                </span>
+              ) : emp.attendance_policy_type === 'HYBRID' ? (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '2px 8px',
+                    borderRadius: 12,
+                    background: '#fef3c7',
+                    color: '#b45309',
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                  }}
+                >
+                  <FiShuffle size={11} /> Hybrid
+                </span>
+              ) : (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '2px 8px',
+                    borderRadius: 12,
+                    background: '#f1f5f9',
+                    color: '#475569',
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                  }}
+                >
+                  <FiBriefcase size={11} /> Office
+                </span>
+              )}
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      key: 'date_of_joining',
+      label: 'Joined',
+      sortable: true,
+      render: (date) => (
+        <span style={{ fontSize: 13.5, color: '#334155', fontWeight: 600 }}>
+          {fmtDate(date)}
+        </span>
+      ),
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      sortable: true,
+      render: (_, emp) => {
+        const sm = STATUS_META[emp.status] || STATUS_META.active
+        return (
+          <button
+            onClick={(e) => openStatusPop(e, emp)}
+            style={{
+              padding: '5px 14px',
+              background: sm.bg,
+              border: `1px solid ${sm.color}30`,
+              borderRadius: 20,
+              fontSize: 12.5,
+              fontWeight: 700,
+              color: sm.color,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4,
+            }}
+          >
+            {sm.label} ▾
+          </button>
+        )
+      },
+    },
+    {
+      key: 'actions',
+      label: 'Actions',
+      align: 'right',
+      render: (_, emp) => (
+        <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end', alignItems: 'center' }}>
+          <button
+            onClick={() => navigate(`/client-admin/employees/${emp.employee_id}`)}
+            title="View Details"
+            style={{
+              width: 34,
+              height: 34,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(15,118,110,0.06)',
+              border: '1px solid rgba(15,118,110,0.2)',
+              borderRadius: 8,
+              cursor: 'pointer',
+              color: '#0f766e',
+              transition: 'all 0.15s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(15,118,110,0.14)'
+              e.currentTarget.style.borderColor = 'rgba(15,118,110,0.4)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(15,118,110,0.06)'
+              e.currentTarget.style.borderColor = 'rgba(15,118,110,0.2)'
+            }}
+          >
+            <FiEye size={16} />
+          </button>
+          <button
+            onClick={() => navigate(`/client-admin/employees/${emp.employee_id}/edit`)}
+            title="Edit Employee"
+            style={{
+              width: 34,
+              height: 34,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--card-active-bg, #FEECEE)',
+              border: '1px solid var(--card-active-border, #F7A6AF)',
+              borderRadius: 8,
+              cursor: 'pointer',
+              color: 'var(--primary-color, #C2071A)',
+              transition: 'all 0.15s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#fddde1'
+              e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'
+              e.currentTarget.style.borderColor = 'var(--card-active-border, #F7A6AF)'
+            }}
+          >
+            <FiEdit2 size={15} />
+          </button>
+        </div>
+      ),
+    },
+  ], [navigate])
+
+  const emptyStateNode = (
+    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+      <FiUsers size={40} color="#94a3b8" style={{ marginBottom: 12 }} />
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>
+        {employees.length === 0 ? 'No employees yet' : 'No results match your filters'}
+      </div>
+      <div style={{ fontSize: 13, color: '#64748b', marginBottom: 20 }}>
+        {employees.length === 0 ? 'Click "Add Employee" or use Bulk Import to get started.' : 'Try adjusting your search or filters.'}
+      </div>
+      {employees.length === 0 && (
+        <button
+          onClick={() => navigate('/client-admin/employees/add')}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 20px',
+            background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))',
+            border: 'none', borderRadius: 10, cursor: 'pointer',
+            fontSize: 13, fontWeight: 700, color: '#ffffff', fontFamily: 'inherit',
+            boxShadow: '0 4px 14px rgba(194, 7, 26, 0.3)'
+          }}
+        >
+          <AddIcon size={20} />
+          <span style={{ color: '#ffffff', fontWeight: 700 }}>Add First Employee</span>
+        </button>
+      )}
+    </div>
+  )
+
+  const extraControlsNode = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', width: '100%' }}>
+      <select
+        value={filterDept}
+        onChange={e => { setFilterDept(e.target.value); setCurrentPage(1) }}
+        style={{ ...selStyle, width: isMobile ? 'calc(50% - 5px)' : 180, flex: isMobile ? '1 1 calc(50% - 5px)' : 'none' }}
+      >
+        <option value="">All Departments</option>
+        {departments.map(d => <option key={d.department_id} value={String(d.department_id)}>{d.name}</option>)}
+      </select>
+      <select
+        value={filterType}
+        onChange={e => { setFilterType(e.target.value); setCurrentPage(1) }}
+        style={{ ...selStyle, width: isMobile ? 'calc(50% - 5px)' : 160, flex: isMobile ? '1 1 calc(50% - 5px)' : 'none' }}
+      >
+        <option value="">All Types</option>
+        {Object.entries(TYPE_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+      </select>
+      {(search || filterDept || filterStatus || filterType) && (
+        <button
+          onClick={() => { setSearch(''); setFilterDept(''); setFilterStatus(''); setFilterType(''); setCurrentPage(1) }}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '8px 12px', background: '#fee2e2', border: '1px solid #fca5a5',
+            borderRadius: 8, cursor: 'pointer', fontSize: 12, color: '#dc2626',
+            fontFamily: 'inherit', fontWeight: 600, transition: 'all 0.15s ease'
+          }}
+        >
+          <FiX size={13} /> Clear filters
+        </button>
+      )}
+      <span style={{
+        marginLeft: 'auto', fontSize: 12, color: '#64748b', fontWeight: 600,
+        background: '#ffffff', padding: '4px 12px', borderRadius: 20, border: '1px solid #e2e8f0'
+      }}>
+        {filtered.length} of {employees.length} employees
+      </span>
+    </div>
+  )
 
   // ── Render ──
   return (
@@ -342,452 +756,82 @@ export default function Employees() {
         <main style={{ flex: 1, padding: isMobile ? '16px 12px' : '24px 32px', overflowY: 'auto', overflowX: 'hidden', background: '#f3f7fa' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: isMobile ? 'stretch' : 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 14 : 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-              background: 'var(--card-active-bg, #FEECEE)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <FiUsers size={22} color="var(--primary-color, #C2071A)" />
-            </div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: isMobile ? 20 : 22, fontWeight: 800, color: '#111827', letterSpacing: '-0.4px', lineHeight: 1.2 }}>Employees</h1>
-              <p style={{ margin: '3px 0 0', color: '#64748b', fontSize: 13, fontWeight: 500 }}>
-                Manage your workforce — add, edit, and control employee status.
-              </p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {!isMobile && (
-              <button onClick={exportPDF} style={{
+        <PageHeader
+          icon={FiUsers}
+          title="Employees"
+          subtitle="Manage your workforce — add, edit, and control employee status."
+          actions={
+            <>
+              {!isMobile && (
+                <button onClick={exportPDF} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '9px 16px', background: '#ffffff',
+                  border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer',
+                  fontSize: 13, fontWeight: 600, color: '#64748b', fontFamily: 'inherit',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.02)', transition: 'all 0.2s ease',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#fef0f2'; e.currentTarget.style.borderColor = '#f7a6af'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b' }}
+                ><FiDownload size={14} /> Export PDF</button>
+              )}
+              <button onClick={() => { setShowImport(true); setImportRows([]); setImportResult(null) }} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 padding: '9px 16px', background: '#ffffff',
                 border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer',
                 fontSize: 13, fontWeight: 600, color: '#64748b', fontFamily: 'inherit',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.02)', transition: 'all 0.2s ease',
+                flex: isMobile ? 1 : 'none', justifyContent: 'center',
               }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#fef0f2'; e.currentTarget.style.borderColor = '#f7a6af'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
                 onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b' }}
-              ><FiDownload size={14} /> Export PDF</button>
-            )}
-            <button onClick={() => { setShowImport(true); setImportRows([]); setImportResult(null) }} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '9px 16px', background: '#ffffff',
-              border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer',
-              fontSize: 13, fontWeight: 600, color: '#64748b', fontFamily: 'inherit',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.02)', transition: 'all 0.2s ease',
-              flex: isMobile ? 1 : 'none', justifyContent: 'center',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#fef0f2'; e.currentTarget.style.borderColor = '#f7a6af'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b' }}
-            ><FiUpload size={14} /> Bulk Import</button>
-            <button onClick={() => navigate('/client-admin/employees/add')} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6, justifyContent: 'center',
-              padding: '9px 18px', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))',
-              border: 'none', borderRadius: 10, cursor: 'pointer',
-              fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
-              boxShadow: '0 4px 14px rgba(194, 7, 26, 0.3)', transition: 'all 0.2s ease',
-              flex: isMobile ? 1 : 'none',
-            }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            ><FiPlus size={14} /> Add Employee</button>
-          </div>
-        </div>
-
-        {/* Main content container */}
-        <div style={{
-          background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 16,
-          boxShadow: '0 2px 6px rgba(0,0,0,0.02)', overflow: 'hidden',
-        }}>
-
-        {/* Filters */}
-        <div style={{
-          display: 'flex', gap: 10, padding: isMobile ? '14px 16px' : '14px 24px',
-          flexWrap: 'wrap', alignItems: 'center',
-          borderBottom: '1px solid #f1f5f9', background: '#f8fafc',
-        }}>
-          <div style={{ position: 'relative', width: isMobile ? '100%' : 240, flex: isMobile ? '1 1 100%' : 'none' }}>
-            <FiSearch size={14} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
-            <input
-              placeholder="Search name, code, email…"
-              value={search} onChange={e => setSearch(e.target.value)}
-              style={{ ...iStyle(false), paddingLeft: 34, width: '100%' }}
-              onFocus={inputFocus} onBlur={inputBlur}
-            />
-          </div>
-          <select value={filterDept} onChange={e => setFilterDept(e.target.value)} style={{ ...selStyle, width: isMobile ? 'calc(50% - 5px)' : 180, flex: isMobile ? '1 1 calc(50% - 5px)' : 'none' }}
-            onFocus={inputFocus} onBlur={inputBlur}>
-            <option value="">All Departments</option>
-            {departments.map(d => <option key={d.department_id} value={String(d.department_id)}>{d.name}</option>)}
-          </select>
-          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ ...selStyle, width: isMobile ? 'calc(50% - 5px)' : 150, flex: isMobile ? '1 1 calc(50% - 5px)' : 'none' }}
-            onFocus={inputFocus} onBlur={inputBlur}>
-            <option value="">All Statuses</option>
-            {Object.entries(STATUS_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-          </select>
-          <select value={filterType} onChange={e => setFilterType(e.target.value)} style={{ ...selStyle, width: isMobile ? 'calc(50% - 5px)' : 150, flex: isMobile ? '1 1 calc(50% - 5px)' : 'none' }}
-            onFocus={inputFocus} onBlur={inputBlur}>
-            <option value="">All Types</option>
-            {Object.entries(TYPE_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-          </select>
-          {(search || filterDept || filterStatus || filterType) && (
-            <button onClick={() => { setSearch(''); setFilterDept(''); setFilterStatus(''); setFilterType('') }}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 4,
-                padding: '9px 14px', background: 'none', border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer', fontSize: 12, color: '#64748b', fontFamily: 'inherit',
-                transition: 'all 0.15s ease', flex: isMobile ? '1 1 calc(50% - 5px)' : 'none', justifyContent: 'center',
+              ><FiUpload size={14} /> Bulk Import</button>
+              <button onClick={() => navigate('/client-admin/employees/add')} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6, justifyContent: 'center',
+                padding: '9px 18px', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))',
+                border: 'none', borderRadius: 10, cursor: 'pointer',
+                fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
+                boxShadow: '0 4px 14px rgba(194, 7, 26, 0.3)', transition: 'all 0.2s ease',
+                flex: isMobile ? 1 : 'none',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#fee2e2'; e.currentTarget.style.borderColor = '#fca5a5'; e.currentTarget.style.color = '#dc2626' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b' }}
-            >
-              <FiX size={13} /> Clear
-            </button>
-          )}
-          <span style={{
-            marginLeft: 'auto', fontSize: 11.5, color: '#4b5563', fontWeight: 600,
-            background: '#ffffff', padding: '5px 12px', borderRadius: 20, border: '1px solid #e2e8f0',
-          }}>
-            {filtered.length} / {employees.length} employee{employees.length !== 1 ? 's' : ''}
-          </span>
-        </div>
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+              ><AddIcon size={20} /><span style={{ color: '#ffffff', fontWeight: 700 }}>Add Employee</span></button>
+            </>
+          }
+        />
 
-        {/* Table content padding wrapper */}
-        <div style={{ padding: isMobile ? '16px' : '24px' }}>
-
-        {/* Table */}
-        {loading ? (
-          <div style={{ color: '#64748b', textAlign: 'center', padding: 60, fontSize: 14 }}>Loading employees…</div>
-        ) : filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 20px', background: '#ffffff', borderRadius: 16, border: '1px dashed #e2e8f0' }}>
-            <FiUsers size={40} color="#94a3b8" style={{ marginBottom: 12 }} />
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>
-              {employees.length === 0 ? 'No employees yet' : 'No results match your filters'}
-            </div>
-            <div style={{ fontSize: 13, color: '#64748b', marginBottom: 20 }}>
-              {employees.length === 0 ? 'Click "Add Employee" or use Bulk Import to get started.' : 'Try adjusting your search or filters.'}
-            </div>
-            {employees.length === 0 && (
-              <button onClick={() => navigate('/client-admin/employees/add')} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'var(--card-active-bg, #FEECEE)', border: '1px solid var(--card-active-border, #F7A6AF)', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: 'var(--primary-color, #C2071A)', fontFamily: 'inherit' }}>
-                <FiPlus size={14} /> Add First Employee
-              </button>
-            )}
-          </div>
-        ) : isMobile ? (
-          /* ── Mobile: card-per-employee layout ── */
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {paginated.map(emp => {
-              const sm = STATUS_META[emp.status] || STATUS_META.active
-              const tm = TYPE_META[emp.employment_type] || TYPE_META.full_time
-              const levelColor = getLevelColor(emp.level_code)
-              return (
-                <div key={emp.employee_id} style={{
-                  background: '#ffffff', border: '1px solid #e2e8f0',
-                  borderLeft: `4px solid ${levelColor}`,
-                  borderRadius: 12, padding: 14,
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                }}>
-                  {/* Top: avatar + name + code */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <div style={{
-                      width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
-                      background: `${levelColor}12`, border: `2px solid ${levelColor}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 12, fontWeight: 700, color: levelColor,
-                    }}>
-                      {initials(emp.first_name, emp.last_name)}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{emp.first_name} {emp.last_name}</span>
-                        {emp.level_code && (
-                          <span style={{ fontSize: 9, fontWeight: 700, color: levelColor, background: `${levelColor}15`, padding: '1px 5px', borderRadius: 5 }}>
-                            {emp.level_code}
-                          </span>
-                        )}
-                      </div>
-                      {emp.email && <div style={{ fontSize: 11, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>{emp.email}</div>}
-                    </div>
-                    <span style={{ display: 'inline-block', padding: '3px 9px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 20, fontSize: 10, fontWeight: 700, color: '#475569', fontFamily: 'monospace', flexShrink: 0 }}>
-                      {emp.employee_code}
-                    </span>
-                  </div>
-
-                  {/* Info grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 12px', marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid #f1f5f9' }}>
-                    <div>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Department</div>
-                      <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{emp.department_name || '—'}</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Designation</div>
-                      <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{emp.designation || '—'}</div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Type & Work Mode</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
-                        <span style={{ display: 'inline-block', padding: '2px 8px', background: tm.bg, borderRadius: 20, fontSize: 10, fontWeight: 700, color: tm.color }}>{tm.label}</span>
-                        {(emp.attendance_policy_type === 'REMOTE' || emp.office_location_name === 'Remote') ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: '1px 7px', borderRadius: 12, background: 'rgba(15,118,110,0.1)', color: '#0f766e', fontSize: 10, fontWeight: 700 }}>
-                            <FiHome size={10} /> Remote
-                          </span>
-                        ) : emp.attendance_policy_type === 'HYBRID' ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: '1px 7px', borderRadius: 12, background: '#fef3c7', color: '#b45309', fontSize: 10, fontWeight: 700 }}>
-                            <FiShuffle size={10} /> Hybrid
-                          </span>
-                        ) : (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: '1px 7px', borderRadius: 12, background: '#f1f5f9', color: '#475569', fontSize: 10, fontWeight: 700 }}>
-                            <FiBriefcase size={10} /> Office
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Joined</div>
-                      <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{fmtDate(emp.date_of_joining)}</div>
-                    </div>
-                  </div>
-
-                  {/* Bottom: status + actions */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <button onClick={e => openStatusPop(e, emp)} style={{
-                      padding: '5px 14px', background: sm.bg, border: `1px solid ${sm.color}30`,
-                      borderRadius: 20, fontSize: 11, fontWeight: 700, color: sm.color,
-                      cursor: 'pointer', fontFamily: 'inherit',
-                    }}>{sm.label} ▾</button>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <button onClick={() => navigate(`/client-admin/employees/${emp.employee_id}`)} title="View Details" style={{
-                        width: 34, height: 34, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        background: 'rgba(15,118,110,0.06)', border: '1px solid rgba(15,118,110,0.2)',
-                        borderRadius: 8, cursor: 'pointer', color: '#0f766e',
-                      }}>
-                        <FiEye size={15} />
-                      </button>
-                      <button onClick={() => navigate(`/client-admin/employees/${emp.employee_id}/edit`)} title="Edit Employee" style={{
-                        width: 34, height: 34, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        background: 'var(--card-active-bg, #FEECEE)', border: '1px solid var(--card-active-border, #F7A6AF)',
-                        borderRadius: 8, cursor: 'pointer', color: 'var(--primary-color, #C2071A)',
-                      }}>
-                        <FiEdit2 size={14} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        ) : (
-          /* ── Tablet / Desktop: grid table layout ── */
-          <div style={{ overflowX: 'auto' }}>
-            <div style={{ minWidth: isTablet ? 700 : 1000 }}>
-
-            {/* Column headers */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isTablet ? COLS_TABLET : COLS,
-              padding: isTablet ? '0 21px 10px 24px' : '0 21px 10px 24px',
-              gap: 12,
-              fontSize: 10, fontWeight: 700, letterSpacing: '0.08em',
-              textTransform: 'uppercase', color: '#64748b',
-              borderBottom: '1px solid #e2e8f0', marginBottom: 12,
-            }}>
-              {isTablet
-                ? <><span>Name</span><span>Department</span><span>Type</span><span>Status</span><span style={{ textAlign: 'right' }}>Actions</span></>
-                : <><span>Code</span><span>Name</span><span>Department</span><span>Designation</span><span>Type</span><span>Joined</span><span>Status</span><span style={{ textAlign: 'right' }}>Actions</span></>
-              }
-            </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {paginated.map(emp => {
-              const sm = STATUS_META[emp.status] || STATUS_META.active
-              const tm = TYPE_META[emp.employment_type] || TYPE_META.full_time
-              const levelColor = getLevelColor(emp.level_code)
-              return (
-                <div key={emp.employee_id} style={{
-                  display: 'grid',
-                  gridTemplateColumns: isTablet ? COLS_TABLET : COLS,
-                  alignItems: 'center', gap: 12, padding: '14px 20px',
-                  background: '#ffffff', border: '1px solid #e2e8f0',
-                  borderLeft: `4px solid ${levelColor}`,
-                  borderRadius: 12, transition: 'all 0.2s ease-in-out',
-                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)',
-                }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = levelColor
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.06), 0 0 0 3px ${levelColor}15`
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = '#e2e8f0'
-                    e.currentTarget.style.borderLeftColor = levelColor
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.02)'
-                  }}
-                >
-                  {/* Code — desktop only */}
-                  {!isTablet && (
-                    <div>
-                      <span style={{ display: 'inline-block', padding: '3px 10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 20, fontSize: 11, fontWeight: 700, color: '#475569', letterSpacing: '0.04em', fontFamily: 'monospace' }}>
-                        {emp.employee_code}
-                      </span>
-                    </div>
-                  )}
-                  {/* Name */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 36, height: 36, borderRadius: '50%',
-                      background: `${levelColor}12`, border: `2px solid ${levelColor}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 12, fontWeight: 700, color: levelColor, flexShrink: 0,
-                    }}>
-                      {initials(emp.first_name, emp.last_name)}
-                    </div>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{emp.first_name} {emp.last_name}</span>
-                        {emp.level_code && (
-                          <span style={{ fontSize: 9, fontWeight: 700, color: levelColor, background: `${levelColor}15`, padding: '1px 5px', borderRadius: 5 }}>
-                            {emp.level_code}
-                          </span>
-                        )}
-                      </div>
-                      {emp.email && <div style={{ fontSize: 11, color: '#64748b', marginTop: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{emp.email}</div>}
-                      {isTablet && emp.employee_code && (
-                        <span style={{ display: 'inline-block', marginTop: 3, padding: '1px 7px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 20, fontSize: 10, fontWeight: 700, color: '#64748b', fontFamily: 'monospace' }}>
-                          {emp.employee_code}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  {/* Department */}
-                  <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{emp.department_name || <span style={{ color: '#e2e8f0' }}>—</span>}</div>
-                  {/* Designation — desktop only */}
-                  {!isTablet && (
-                    <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{emp.designation || <span style={{ color: '#e2e8f0' }}>—</span>}</div>
-                  )}
-                  {/* Type & Location Mode */}
-                  <div>
-                    <span style={{ display: 'inline-block', padding: '2px 9px', background: tm.bg, borderRadius: 20, fontSize: 11, fontWeight: 700, color: tm.color }}>
-                      {tm.label}
-                    </span>
-                    <div style={{ marginTop: 4 }}>
-                      {(emp.attendance_policy_type === 'REMOTE' || emp.office_location_name === 'Remote') ? (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: '1px 7px', borderRadius: 12, background: 'rgba(15,118,110,0.1)', color: '#0f766e', fontSize: 10, fontWeight: 700 }}>
-                          <FiHome size={10} /> Remote
-                        </span>
-                      ) : emp.attendance_policy_type === 'HYBRID' ? (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: '1px 7px', borderRadius: 12, background: '#fef3c7', color: '#b45309', fontSize: 10, fontWeight: 700 }}>
-                          <FiShuffle size={10} /> Hybrid
-                        </span>
-                      ) : (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: '1px 7px', borderRadius: 12, background: '#f1f5f9', color: '#475569', fontSize: 10, fontWeight: 700 }}>
-                          <FiBriefcase size={10} /> Office
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  {/* Joined — desktop only */}
-                  {!isTablet && (
-                    <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{fmtDate(emp.date_of_joining)}</div>
-                  )}
-                  {/* Status */}
-                  <div>
-                    <button onClick={e => openStatusPop(e, emp)} style={{
-                      padding: '4px 12px', background: sm.bg, border: `1px solid ${sm.color}30`,
-                      borderRadius: 20, fontSize: 11, fontWeight: 700, color: sm.color,
-                      cursor: 'pointer', fontFamily: 'inherit',
-                    }}>{sm.label} ▾</button>
-                  </div>
-                  {/* Actions */}
-                  <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <button onClick={() => navigate(`/client-admin/employees/${emp.employee_id}`)} title="View Details" style={{
-                      width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      background: 'rgba(15,118,110,0.06)', border: '1px solid rgba(15,118,110,0.2)',
-                      borderRadius: 8, cursor: 'pointer', color: '#0f766e',
-                      transition: 'all 0.15s', flexShrink: 0,
-                    }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(15,118,110,0.14)'; e.currentTarget.style.borderColor = 'rgba(15,118,110,0.4)' }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(15,118,110,0.06)'; e.currentTarget.style.borderColor = 'rgba(15,118,110,0.2)' }}
-                    >
-                      <FiEye size={15} />
-                    </button>
-                    <button onClick={() => navigate(`/client-admin/employees/${emp.employee_id}/edit`)} title="Edit Employee" style={{
-                      width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      background: 'var(--card-active-bg, #FEECEE)', border: '1px solid var(--card-active-border, #F7A6AF)',
-                      borderRadius: 8, cursor: 'pointer', color: 'var(--primary-color, #C2071A)',
-                      transition: 'all 0.15s', flexShrink: 0,
-                    }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#fddde1'; e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)' }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.borderColor = 'var(--card-active-border, #F7A6AF)' }}
-                    >
-                      <FiEdit2 size={14} />
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-          </div>
-          </div>
-        )}
-
-        {/* Pagination */}
-        {!loading && filtered.length > PAGE_SIZE && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'center' : 'space-between', marginTop: 20, flexWrap: 'wrap', gap: 10, flexDirection: isMobile ? 'column' : 'row' }}>
-            <span style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>
-              Showing {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, filtered.length)} of {filtered.length} employees
-            </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={safePage === 1}
-                style={{
-                  padding: '6px 12px', border: '1px solid #e2e8f0', borderRadius: 8,
-                  background: safePage === 1 ? '#f8fafc' : '#ffffff', cursor: safePage === 1 ? 'default' : 'pointer',
-                  fontSize: 12, fontWeight: 600, color: safePage === 1 ? '#e2e8f0' : '#475569', fontFamily: 'inherit',
-                }}
-              >← Prev</button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter(p => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1)
-                .reduce((acc, p, i, arr) => {
-                  if (i > 0 && p - arr[i - 1] > 1) acc.push('…')
-                  acc.push(p)
-                  return acc
-                }, [])
-                .map((p, i) =>
-                  p === '…' ? (
-                    <span key={`ellipsis-${i}`} style={{ padding: '6px 4px', fontSize: 12, color: '#94a3b8' }}>…</span>
-                  ) : (
-                    <button
-                      key={p}
-                      onClick={() => setCurrentPage(p)}
-                      style={{
-                        width: 32, height: 32, border: '1px solid', borderRadius: 8, cursor: 'pointer',
-                        fontSize: 12, fontWeight: 700, fontFamily: 'inherit',
-                        background: p === safePage ? 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))' : '#ffffff',
-                        borderColor: p === safePage ? 'var(--primary-color, #C2071A)' : '#e2e8f0',
-                        color: p === safePage ? '#ffffff' : '#475569',
-                      }}
-                    >{p}</button>
-                  )
-                )
-              }
-              <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={safePage === totalPages}
-                style={{
-                  padding: '6px 12px', border: '1px solid #e2e8f0', borderRadius: 8,
-                  background: safePage === totalPages ? '#f8fafc' : '#ffffff', cursor: safePage === totalPages ? 'default' : 'pointer',
-                  fontSize: 12, fontWeight: 600, color: safePage === totalPages ? '#e2e8f0' : '#475569', fontFamily: 'inherit',
-                }}
-              >Next →</button>
-            </div>
-          </div>
-        )}
-        </div>
-        </div>
-      </main>
+        <Table
+          columns={columns}
+          data={paginated}
+          rowKey={(emp) => emp.employee_id}
+          tabs={tabs}
+          activeTab={filterStatus || 'all'}
+          onTabChange={(k) => {
+            setFilterStatus(k === 'all' ? '' : k)
+            setCurrentPage(1)
+          }}
+          searchable={true}
+          searchValue={search}
+          onSearchChange={(v) => {
+            setSearch(v)
+            setCurrentPage(1)
+          }}
+          searchPlaceholder="Search name, code, email…"
+          sortColumn={sortColumn}
+          sortDirection={sortDirection}
+          onSort={handleSort}
+          loading={loading}
+          emptyState={emptyStateNode}
+          extraControls={extraControlsNode}
+          pagination={{
+            currentPage: safePage,
+            totalPages,
+            totalItems: sorted.length,
+            pageSize: PAGE_SIZE,
+            onPageChange: setCurrentPage,
+          }}
+        />
+        </main>
       </div>
 
       {/* Status Popup */}

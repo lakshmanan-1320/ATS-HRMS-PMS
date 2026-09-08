@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import {
   FiShield, FiSearch, FiX, FiCheckCircle, FiXCircle,
   FiClock, FiUsers, FiList, FiCheck, FiInfo, FiSettings, FiSave
@@ -258,33 +259,11 @@ export default function PermissionManagement() {
         <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           {/* Page Header */}
-          <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiShield size={18} color="#fff" />
-                </div>
-                <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Permission Management</h1>
-              </div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                Configure monthly permission policy, review requests, and monitor employee balances
-              </p>
-            </div>
-
-            {settings && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#feecee', border: '1px solid #f7a6af', borderRadius: '12px', padding: '10px 16px' }}>
-                <div style={{ width: 26, height: 26, borderRadius: '8px', background: '#C2071A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FiInfo size={13} color="#ffffff" />
-                </div>
-                <div>
-                  <div style={{ fontSize: '12px', fontWeight: '800', color: '#941018' }}>Active Policy</div>
-                  <div style={{ fontSize: '11px', color: '#C2071A' }}>
-                    {settings.monthly_count} permission{settings.monthly_count !== 1 ? 's' : ''} × {settings.hours_per_permission}h each · credited 1st of every month
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <PageHeader
+            icon={FiShield}
+            title="Permission Management"
+            subtitle="Configure monthly permission policy, review requests, and monitor employee balances"
+          />
 
           {/* Tab bar */}
           <div style={{ display: 'flex', gap: 4, marginBottom: '20px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: 4, width: 'fit-content', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
@@ -306,16 +285,16 @@ export default function PermissionManagement() {
               {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '20px' }}>
                 {[
-                  { key: 'ALL',      label: 'Total',    value: stats.total,    color: '#C2071A', icon: <FiList size={18} color="#ffffff" /> },
-                  { key: 'PENDING',  label: 'Pending',  value: stats.pending,  color: '#b45309', icon: <FiClock size={18} color="#ffffff" /> },
-                  { key: 'APPROVED', label: 'Approved', value: stats.approved, color: '#15803d', icon: <FiCheckCircle size={18} color="#ffffff" /> },
-                  { key: 'REJECTED', label: 'Rejected', value: stats.rejected, color: '#b91c1c', icon: <FiXCircle size={18} color="#ffffff" /> },
+                  { key: 'ALL',      label: 'Total',    value: stats.total,    color: '#C2071A', icon: <FiList size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+                  { key: 'PENDING',  label: 'Pending',  value: stats.pending,  color: '#b45309', icon: <FiClock size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+                  { key: 'APPROVED', label: 'Approved', value: stats.approved, color: '#15803d', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+                  { key: 'REJECTED', label: 'Rejected', value: stats.rejected, color: '#b91c1c', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
                 ].map(({ key, label, value, color, icon }) => {
                   const active = statusFilter === key
                   return (
                     <div key={key} onClick={() => { setStatusFilter(key); setReqPage(1) }}
-                      style={{ background: '#fff', border: `1.5px solid ${active ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
-                      <div style={{ width: 42, height: 42, borderRadius: '12px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      style={{ background: '#fff', border: 'none', borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}33` : '0 2px 10px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
+                      <div style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         {icon}
                       </div>
                       <div>
@@ -330,9 +309,9 @@ export default function PermissionManagement() {
               {/* Filter Bar */}
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', minWidth: '200px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
                     <FiSearch size={13} color="#94a3b8" />
-                    <input placeholder="Search name, code, reason…" value={search}
+                    <input placeholder="Search name, code, reason…" value={search} className="ca-borderless-input"
                       onChange={e => { setSearch(e.target.value); setReqPage(1) }}
                       style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }} />
                     {search && <button onClick={() => { setSearch(''); setReqPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}><FiX size={12} /></button>}
@@ -356,7 +335,7 @@ export default function PermissionManagement() {
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {reqLoading ? <Spinner label="Loading permission requests…" /> : filteredReq.length === 0 ? (
                   <div style={{ padding: '60px', textAlign: 'center' }}>
-                    <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiShield size={22} color="#ffffff" /></div>
+                    <div style={{ width: 52, height: 52, borderRadius: '14px', backgroundImage: 'linear-gradient(#94a3b8, #94a3b8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiShield size={22} color="#ffffff" /></div>
                     <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700' }}>No permission requests for {MONTHS[monthFilter - 1]} {yearFilter}</div>
                   </div>
                 ) : (
@@ -429,9 +408,9 @@ export default function PermissionManagement() {
           {activeTab === 'balances' && (
             <>
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', minWidth: '200px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
                   <FiSearch size={13} color="#94a3b8" />
-                  <input placeholder="Search employee name or code…" value={balSearch}
+                  <input placeholder="Search employee name or code…" value={balSearch} className="ca-borderless-input"
                     onChange={e => { setBalSearch(e.target.value); setBalPage(1) }}
                     style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }} />
                   {balSearch && <button onClick={() => { setBalSearch(''); setBalPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}><FiX size={12} /></button>}
@@ -443,7 +422,7 @@ export default function PermissionManagement() {
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {balLoading ? <Spinner label="Loading balances…" /> : filteredBal.length === 0 ? (
                   <div style={{ padding: '60px', textAlign: 'center' }}>
-                    <div style={{ width: 52, height: 52, borderRadius: '14px', background: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiUsers size={22} color="#ffffff" /></div>
+                    <div style={{ width: 52, height: 52, borderRadius: '14px', backgroundImage: 'linear-gradient(#94a3b8, #94a3b8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiUsers size={22} color="#ffffff" /></div>
                     <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No balance records for {MONTHS[balMonth - 1]} {balYear}</div>
                     <div style={{ color: '#64748b', fontSize: '13px' }}>Balances are credited on the 1st of each month</div>
                   </div>
@@ -503,12 +482,12 @@ export default function PermissionManagement() {
 
           {/* ══ SETTINGS TAB ══ */}
           {activeTab === 'settings' && (
-            <div style={{ maxWidth: 600 }}>
+            <div style={{ width: '100%' }}>
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {/* Card header */}
                 <div style={{ padding: '24px 28px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ width: 38, height: 38, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <FiSettings size={18} color="#fff" />
+                    <FiSettings size={18} style={{ color: '#ffffff', stroke: '#ffffff' }} strokeWidth={2} />
                   </div>
                   <div>
                     <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Monthly Permission Policy</div>
@@ -581,9 +560,9 @@ export default function PermissionManagement() {
                     </div>
 
                     {/* Policy Preview */}
-                    <div style={{ background: '#feecee', border: '1px solid #f7a6af', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#C2071A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                        <FiInfo size={13} color="#ffffff" />
+                    <div style={{ backgroundImage: 'linear-gradient(#feecee, #feecee)', border: '1px solid #f7a6af', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundImage: 'linear-gradient(#C2071A, #C2071A)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                        <FiInfo size={13} style={{ color: '#ffffff', stroke: '#ffffff' }} strokeWidth={2} />
                       </div>
                       <div style={{ fontSize: '12px', color: '#7c0a1a', lineHeight: 1.6 }}>
                         <strong>Effective policy:</strong> Each employee will receive <strong>{monthlyCount || '?'} permission{parseInt(monthlyCount) !== 1 ? 's' : ''}</strong> of <strong>{hoursPerPerm || '?'} hour{parseFloat(hoursPerPerm) !== 1 ? 's' : ''} each</strong> on the <strong>1st of every month at midnight</strong>.
@@ -599,10 +578,10 @@ export default function PermissionManagement() {
                         border:     `1px solid ${settingsMsg.type === 'success' ? '#bbf7d0' : '#fecaca'}` }}>
                         <div style={{
                           width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                          background: settingsMsg.type === 'success' ? '#15803d' : '#b91c1c',
+                          backgroundImage: settingsMsg.type === 'success' ? 'linear-gradient(#15803d, #15803d)' : 'linear-gradient(#b91c1c, #b91c1c)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
-                          {settingsMsg.type === 'success' ? <FiCheck size={12} color="#ffffff" /> : <FiX size={12} color="#ffffff" />}
+                          {settingsMsg.type === 'success' ? <FiCheck size={12} style={{ color: '#ffffff', stroke: '#ffffff' }} strokeWidth={2.5} /> : <FiX size={12} style={{ color: '#ffffff', stroke: '#ffffff' }} strokeWidth={2.5} />}
                         </div>
                         {settingsMsg.text}
                       </div>

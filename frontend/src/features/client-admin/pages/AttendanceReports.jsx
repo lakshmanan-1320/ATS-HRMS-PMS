@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
+import PageHeader from '../../../components/common/PageHeader.jsx'
 import { useAttendanceStore } from '../../../store/attendance.store.js'
 import {
   FiClipboard, FiCalendar, FiUsers, FiClock, FiMapPin,
@@ -183,79 +184,70 @@ export default function AttendanceReports() {
         <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  width: 38, height: 38, borderRadius: 10,
-                  background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <FiClipboard size={20} color="#C2071A" strokeWidth={2.5} />
-                </div>
-                Attendance Reports
-              </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>
-                Generate, inspect, and export comprehensive attendance compliance logs & analytics
-              </p>
-            </div>
+          <PageHeader
+            icon={FiClipboard}
+            title="Attendance Reports"
+            subtitle="Generate, inspect, and export comprehensive attendance compliance logs & analytics"
+            actions={
+              activeReport ? (
+                <>
+                  <button
+                    onClick={() => handleExport('csv')}
+                    disabled={exporting !== null}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '8px 16px', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                      color: '#ffffff', border: 'none', borderRadius: '10px',
+                      fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                      boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
+                  >
+                    <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+                    Export CSV
+                  </button>
 
-            {activeReport && (
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                  onClick={() => handleExport('csv')}
-                  disabled={exporting !== null}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    padding: '8px 16px', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
-                    color: '#ffffff', border: 'none', borderRadius: '10px',
-                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                    boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)',
-                    fontFamily: "'Inter', sans-serif"
-                  }}
-                >
-                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
-                  Export CSV
-                </button>
+                  <button
+                    onClick={() => handleExport('pdf')}
+                    disabled={exporting !== null}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                      color: '#ffffff', border: 'none', borderRadius: '10px',
+                      fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
+                  >
+                    <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
+                    Export PDF
+                  </button>
 
-                <button
-                  onClick={() => handleExport('pdf')}
-                  disabled={exporting !== null}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                    color: '#ffffff', border: 'none', borderRadius: '10px',
-                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                    fontFamily: "'Inter', sans-serif"
-                  }}
-                >
-                  <FiDownload size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
-                  Export PDF
-                </button>
+                  <button
+                    onClick={loadReport}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                      color: '#ffffff', border: 'none', borderRadius: '10px',
+                      fontSize: '13px', fontWeight: 700, cursor: 'pointer',
+                      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
+                  >
+                    <FiRefreshCw size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin' : ''} />
+                    Refresh
+                  </button>
+                </>
+              ) : null
+            }
+          />
 
-                <button
-                  onClick={loadReport}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                    color: '#ffffff', border: 'none', borderRadius: '10px',
-                    fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                    fontFamily: "'Inter', sans-serif"
-                  }}
-                >
-                  <FiRefreshCw size={14} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin' : ''} />
-                  Refresh
-                </button>
-              </div>
-            )}
-          </div>
 
           {/* Report Selection Grid */}
           {!activeReport ? (
             <div>
               <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>Select Report Type</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '24px' }}>
                 {REPORT_TYPES.map(r => {
                   const Icon = r.icon
                   return (
@@ -263,23 +255,24 @@ export default function AttendanceReports() {
                       key={r.id}
                       onClick={() => setActiveReport(r.id)}
                       style={{
-                        background: '#ffffff', border: 'none', borderRadius: '16px',
-                        padding: '20px', cursor: 'pointer', boxShadow: cardShadow,
-                        transition: 'all 0.18s ease', display: 'flex', gap: '14px', alignItems: 'flex-start'
+                        background: '#ffffff', border: 'none', borderRadius: '18px',
+                        padding: '28px', cursor: 'pointer', boxShadow: cardShadow,
+                        transition: 'all 0.18s ease', display: 'flex', gap: '18px', alignItems: 'flex-start',
+                        minHeight: '150px'
                       }}
                       onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
                       onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
                     >
                       <div style={{
-                        width: 44, height: 44, borderRadius: 12,
-                        background: '#FEECEE', color: '#C2071A',
+                        width: 56, height: 56, borderRadius: 14,
+                        backgroundImage: 'linear-gradient(#FEECEE, #FEECEE)', color: '#C2071A',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                       }}>
-                        <Icon size={20} color="#C2071A" strokeWidth={2.5} />
+                        <Icon size={26} style={{ color: '#C2071A', stroke: '#C2071A' }} strokeWidth={2.25} />
                       </div>
                       <div>
-                        <h3 style={{ margin: '0 0 4px', fontSize: '15px', fontWeight: 800, color: '#0f172a' }}>{r.title}</h3>
-                        <p style={{ margin: 0, fontSize: '12px', color: '#64748b', lineHeight: 1.4 }}>{r.desc}</p>
+                        <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 800, color: '#0f172a' }}>{r.title}</h3>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#64748b', lineHeight: 1.5 }}>{r.desc}</p>
                       </div>
                     </div>
                   )
