@@ -483,7 +483,8 @@ async function saveLeavePolicySettings(data) {
 // Leave Balance Provisioning (called on new employee creation)
 // -------------------------------------------------------------
 
-async function provisionLeaveBalancesForNewEmployee(employeeId, joiningDate, txClient) {
+async function provisionLeaveBalancesForNewEmployee(employeeId, joiningDate, txClient = null) {
+  const run = txClient || { query };
   const settings = await getLeaveSettings();
   if (!settings.auto_credit_on_join) return;
 
@@ -494,25 +495,25 @@ async function provisionLeaveBalancesForNewEmployee(employeeId, joiningDate, txC
   const leaveYear = computeLeaveYear(new Date(joiningDateStr + 'T00:00:00Z'), settings);
 
   // Resolve employee's organization
-  const empRes = await txClient.query('SELECT organization_id, leave_plan_id FROM employees WHERE employee_id = $1', [employeeId]);
+  const empRes = await run.query('SELECT organization_id, leave_plan_id FROM employees WHERE employee_id = $1', [employeeId]);
   const emp = empRes.rows[0];
   if (!emp) return;
 
   let leavePlanId = emp.leave_plan_id;
   if (!leavePlanId) {
-    const defaultPlanRes = await txClient.query(
+    const defaultPlanRes = await run.query(
       'SELECT leave_plan_id FROM leave_plans WHERE organization_id = $1 AND is_active = true ORDER BY created_at ASC LIMIT 1',
       [emp.organization_id]
     );
     leavePlanId = defaultPlanRes.rows[0]?.leave_plan_id;
     if (leavePlanId) {
-      await txClient.query('UPDATE employees SET leave_plan_id = $1 WHERE employee_id = $2', [leavePlanId, employeeId]);
+      await run.query('UPDATE employees SET leave_plan_id = $1 WHERE employee_id = $2', [leavePlanId, employeeId]);
     }
   }
 
   if (!leavePlanId) return;
 
-  const planTypesRes = await txClient.query(
+  const planTypesRes = await run.query(
     'SELECT * FROM leave_plan_types WHERE leave_plan_id = $1',
     [leavePlanId]
   );
@@ -530,9 +531,9 @@ async function provisionLeaveBalancesForNewEmployee(employeeId, joiningDate, txC
       transaction_type: 'AWARDED',
       days: allocatedDays,
       remarks: 'Initial plan quota allocation on join'
-    }, txClient);
+    }, run);
 
-    await syncBalanceCache(employeeId, pt.leave_type_id, leaveYear, txClient);
+    await syncBalanceCache(employeeId, pt.leave_type_id, leaveYear, run);
   }
 
   // Provision optional holiday balance
@@ -546,7 +547,7 @@ async function provisionLeaveBalancesForNewEmployee(employeeId, joiningDate, txC
     leave_year: leaveYear,
     allocated_days: ohAllocated,
     used_days: 0,
-  }, txClient);
+  }, run);
 }
 
 // -------------------------------------------------------------

@@ -174,25 +174,25 @@ async function addEmployee(organizationId, data) {
       }, client);
     }
 
-    // 4. Auto-provision leave balances (pro-rata if joining mid-year)
-    try {
-      await provisionLeaveBalancesForNewEmployee(newEmp.employee_id, date_of_joining, client);
-    } catch (leaveErr) {
-      console.warn('[Leave] Balance provisioning skipped for new employee:', leaveErr.message);
-    }
-
-    // 5. Auto-provision permission balance (pro-rata for joining month)
-    try {
-      const { provisionPermissionsForNewEmployee } = require('../permission/permission.service');
-      await provisionPermissionsForNewEmployee(newEmp.employee_id, date_of_joining, client);
-    } catch (permErr) {
-      console.warn('[Permission] Balance provisioning skipped for new employee:', permErr.message);
-    }
-
     return newEmp;
   });
 
-  // 3. Send temporary password email after transaction commit
+  // 4. Auto-provision leave balances (runs AFTER employee is committed)
+  try {
+    await provisionLeaveBalancesForNewEmployee(row.employee_id, date_of_joining);
+  } catch (leaveErr) {
+    console.warn('[Leave] Balance provisioning skipped for new employee:', leaveErr.message);
+  }
+
+  // 5. Auto-provision permission balance (runs AFTER employee is committed)
+  try {
+    const { provisionPermissionsForNewEmployee } = require('../permission/permission.service');
+    await provisionPermissionsForNewEmployee(row.employee_id, date_of_joining);
+  } catch (permErr) {
+    console.warn('[Permission] Balance provisioning skipped for new employee:', permErr.message);
+  }
+
+  // 6. Send temporary password email after transaction commit
   if (email?.trim()) {
     try {
       const { emailService } = require('../notification');

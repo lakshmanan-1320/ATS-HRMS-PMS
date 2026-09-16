@@ -242,8 +242,11 @@ async function getOptionalHolidayBalance(employeeId, leaveYear) {
 async function upsertOptionalHolidayBalance(data, txClient = null) {
   const run = txClient || { query };
   const result = await run.query(
-    `INSERT INTO employee_optional_holiday_balances (employee_id, leave_year, allocated_days, used_days)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO employee_optional_holiday_balances (id, employee_id, leave_year, allocated_days, used_days)
+     VALUES (
+       (SELECT COALESCE(MAX(id), 0) + 1 FROM employee_optional_holiday_balances),
+       $1, $2, $3, $4
+     )
      ON CONFLICT (employee_id, leave_year)
      DO UPDATE SET allocated_days = EXCLUDED.allocated_days, updated_at = NOW()
      RETURNING *`,
