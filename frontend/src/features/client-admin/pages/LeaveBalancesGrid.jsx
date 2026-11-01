@@ -77,40 +77,40 @@ export default function LeaveBalancesGrid() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#0f172a' }}>Employee Balances</h2>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>View current allocations and adjust ledger entries</p>
+          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#001233' }}>Employee Balances</h2>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#7D8597' }}>View current allocations and adjust ledger entries</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0 12px', width: '280px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #E3E7EE', borderRadius: '10px', padding: '0 12px', width: '280px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
           <FiSearch size={13} color="#94a3b8" />
           <input
             placeholder="Search employee name or code…"
             value={search}
             onChange={e => { setSearch(e.target.value); setPage(1) }}
-            style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', width: '100%' }}
+            style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#001233', outline: 'none', width: '100%' }}
           />
         </div>
       </div>
 
       {loading ? (
         <div style={{ padding: '60px', textAlign: 'center' }}>
-          <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-          <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading employee directory…</div>
+          <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>Loading employee directory…</div>
         </div>
       ) : filtered.length === 0 ? (
-        <div style={{ padding: '40px', textAlign: 'center', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px' }}>
-          <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>No employees found matching filter.</div>
+        <div style={{ padding: '40px', textAlign: 'center', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px' }}>
+          <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>No employees found matching filter.</div>
         </div>
       ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.02)' }}>
+        <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.02)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+              <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
                 <th style={{ padding: '12px 18px', width: '30px' }}></th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Employee</th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Code</th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Designation</th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Email</th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'center' }}>Actions</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Employee</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Code</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Designation</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Email</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'center' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -121,29 +121,29 @@ export default function LeaveBalancesGrid() {
                   <React.Fragment key={emp.employee_id}>
                     <tr
                       onClick={() => handleRowClick(emp.employee_id)}
-                      style={{ borderBottom: isExpanded ? 'none' : '1px solid #f1f5f9', cursor: 'pointer', transition: 'background 0.15s' }}
+                      style={{ borderBottom: isExpanded ? 'none' : '1px solid #F1F4F8', cursor: 'pointer', transition: 'background 0.15s' }}
                       onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
                       <td style={{ padding: '12px 18px', textAlign: 'center' }}>
-                        {isExpanded ? <FiChevronUp size={14} color="#64748b" /> : <FiChevronDown size={14} color="#64748b" />}
+                        {isExpanded ? <FiChevronUp size={14} color="#7D8597" /> : <FiChevronDown size={14} color="#7D8597" />}
                       </td>
-                      <td style={{ padding: '12px 18px', fontWeight: '700', color: '#0f172a' }}>
+                      <td style={{ padding: '12px 18px', fontWeight: '700', color: '#001233' }}>
                         {emp.first_name} {emp.last_name}
                       </td>
-                      <td style={{ padding: '12px 18px', fontFamily: 'monospace', color: '#475569' }}>
+                      <td style={{ padding: '12px 18px', fontFamily: 'monospace', color: '#33415C' }}>
                         {emp.employee_code}
                       </td>
-                      <td style={{ padding: '12px 18px', color: '#64748b' }}>
+                      <td style={{ padding: '12px 18px', color: '#7D8597' }}>
                         {emp.designation || 'Staff'}
                       </td>
-                      <td style={{ padding: '12px 18px', color: '#64748b' }}>
+                      <td style={{ padding: '12px 18px', color: '#7D8597' }}>
                         {emp.email}
                       </td>
                       <td style={{ padding: '12px 18px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                         <button
                           onClick={() => setSelectedAdjustEmployee(emp)}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f5f7ff', border: '1px solid #f7a6af', borderRadius: '8px', color: '#941018', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f5f7ff', border: '1px solid #C9DDF3', borderRadius: '8px', color: '#023E7D', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
                         >
                           <FiSliders size={12} /> Adjust Balance
                         </button>
@@ -152,33 +152,33 @@ export default function LeaveBalancesGrid() {
 
                     {/* Expanded Balances Row */}
                     {isExpanded && (
-                      <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                      <tr style={{ background: '#f8fafc', borderBottom: '1px solid #F1F4F8' }}>
                         <td colSpan="6" style={{ padding: '16px 24px' }}>
-                          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
-                            <div style={{ fontSize: '11px', fontWeight: '800', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                            <div style={{ fontSize: '11px', fontWeight: '800', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: 6 }}>
                               <FiList size={12} /> Live Balances Summary
                             </div>
 
                             {loadingBalances && balances.length === 0 ? (
-                              <div style={{ fontSize: '12px', color: '#64748b' }}>Loading balances...</div>
+                              <div style={{ fontSize: '12px', color: '#7D8597' }}>Loading balances...</div>
                             ) : balances.length === 0 ? (
-                              <div style={{ fontSize: '12px', color: '#64748b' }}>No active leave plan balances found. Make sure employee is assigned to a leave plan.</div>
+                              <div style={{ fontSize: '12px', color: '#7D8597' }}>No active leave plan balances found. Make sure employee is assigned to a leave plan.</div>
                             ) : (
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px' }}>
                                 {balances.map(bal => (
-                                  <div key={bal.leave_type_id} style={{ border: '1px solid #f1f5f9', background: '#fcfdfe', borderRadius: '10px', padding: '12px' }}>
-                                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#334155', marginBottom: 6 }}>{bal.leave_type_name}</div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b', marginBottom: 2 }}>
+                                  <div key={bal.leave_type_id} style={{ border: '1px solid #F1F4F8', background: '#fcfdfe', borderRadius: '10px', padding: '12px' }}>
+                                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#33415C', marginBottom: 6 }}>{bal.leave_type_name}</div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#7D8597', marginBottom: 2 }}>
                                       <span>Allocated:</span>
                                       <span style={{ fontWeight: '600' }}>{parseFloat(bal.allocated_days)}</span>
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b', marginBottom: 4 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#7D8597', marginBottom: 4 }}>
                                       <span>Used:</span>
                                       <span style={{ fontWeight: '600' }}>{parseFloat(bal.used_days)}</span>
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', borderTop: '1px solid #f1f5f9', paddingTop: 4, marginTop: 4 }}>
-                                      <span style={{ color: '#0f172a' }}>Available:</span>
-                                      <span style={{ color: '#C2071A' }}>{parseFloat(bal.available_days)}</span>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700', borderTop: '1px solid #F1F4F8', paddingTop: 4, marginTop: 4 }}>
+                                      <span style={{ color: '#001233' }}>Available:</span>
+                                      <span style={{ color: '#0466C8' }}>{parseFloat(bal.available_days)}</span>
                                     </div>
                                   </div>
                                 ))}
@@ -196,22 +196,22 @@ export default function LeaveBalancesGrid() {
           
           {/* Pagination */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderTop: '1px solid #e2e8f0', background: '#f8fafc' }}>
-              <span style={{ fontSize: '12px', color: '#64748b' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderTop: '1px solid #E3E7EE', background: '#f8fafc' }}>
+              <span style={{ fontSize: '12px', color: '#7D8597' }}>
                 Showing Page {page} of {totalPages} ({filtered.length} employees)
               </span>
               <div style={{ display: 'flex', gap: 6 }}>
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: page === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === 1 ? '#e2e8f0' : '#374151' }}
+                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '8px', cursor: page === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === 1 ? '#E3E7EE' : '#374151' }}
                 >
                   Prev
                 </button>
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: page === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === totalPages ? '#e2e8f0' : '#374151' }}
+                  style={{ padding: '6px 12px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '8px', cursor: page === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', color: page === totalPages ? '#E3E7EE' : '#374151' }}
                 >
                   Next
                 </button>

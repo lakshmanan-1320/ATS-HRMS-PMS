@@ -22,22 +22,22 @@ const MONTH_NAMES = [
 
 /* ─── Design tokens ─────────────────────────────────────────── */
 const C = {
-  brand:   '#C2071A',
-  brandDk: '#941018',
-  brandLt: '#feecee',
+  brand:   '#0466C8',
+  brandDk: '#023E7D',
+  brandLt: '#EEF8FF',
   green:   '#10b981',
   greenLt: '#d1fae5',
   amber:   '#f59e0b',
   amberLt: '#fef3c7',
   red:     '#ef4444',
   slate50: '#f8fafc',
-  slate100:'#f1f5f9',
-  slate200:'#e2e8f0',
+  slate100:'#F1F4F8',
+  slate200:'#E3E7EE',
   slate400:'#94a3b8',
-  slate500:'#64748b',
-  slate600:'#475569',
-  slate700:'#334155',
-  slate900:'#0f172a',
+  slate500:'#7D8597',
+  slate600:'#33415C',
+  slate700:'#33415C',
+  slate900:'#001233',
   white:   '#ffffff',
 }
 
@@ -160,7 +160,7 @@ const s = {
     background: `linear-gradient(135deg, ${C.brand} 0%, ${C.brandDk} 100%)`,
     border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700',
     color: C.white, cursor: 'pointer',
-    boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s',
+    boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)', transition: 'all 0.2s',
   },
   msg: (ok) => ({
     fontSize: '13px', fontWeight: '600',
@@ -178,9 +178,9 @@ function SectionIcon({ icon: Icon }) {
   return (
     <div style={{
       ...s.cardIcon,
-      background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+      background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
       color: '#ffffff',
-      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)'
+      boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)'
     }}>
       <Icon size={18} color="#ffffff" stroke="#ffffff" style={{ color: '#ffffff', stroke: '#ffffff' }} />
     </div>
@@ -307,7 +307,7 @@ export default function LeaveSettingsConfig() {
   const endLabel   = leaveYearType === 'calendar_year' ? 'December' : MONTH_NAMES[((leaveYearStartMonth - 2 + 12) % 12) + 1]
 
   return (
-    <div style={s.page}>
+    <div className="pms-page" style={s.page}>
       <ClientAdminSidebar active="leave-settings" />
       <div style={s.wrapper}>
         <ClientAdminTopBar />
@@ -330,7 +330,7 @@ export default function LeaveSettingsConfig() {
               {/* ── Card 1: Leave Year Type ── */}
               <div style={s.card}>
                 <div style={s.cardHeader}>
-                  <SectionIcon icon={FiCalendar} bg="#C2071A" />
+                  <SectionIcon icon={FiCalendar} bg="#0466C8" />
                   <div>
                     <div style={s.cardTitle}>Leave Year Boundary</div>
                     <div style={s.cardSubtitle}>Define the start and end of the annual leave cycle</div>
@@ -497,9 +497,9 @@ export default function LeaveSettingsConfig() {
                 )}
 
                 {/* How it works info */}
-                <div style={{ ...s.infoBox(C.brandLt, '#f7a6af', C.brand, '#7c0a1a'), marginTop: '16px' }}>
+                <div style={{ ...s.infoBox(C.brandLt, '#C9DDF3', C.brand, '#001233'), marginTop: '16px' }}>
                   <div style={s.infoTitle(C.brand)}>How Optional Holidays Work</div>
-                  <div style={s.infoText('#7c0a1a')}>
+                  <div style={s.infoText('#001233')}>
                     Optional holidays are specific calendar holidays employees can <em>choose</em> to avail.
                     Each employee is allocated a quota (with pro-rata for new joiners). They can select
                     which optional holidays to avail from their Leave Dashboard, and the system tracks
@@ -578,8 +578,8 @@ export default function LeaveSettingsConfig() {
                   type="submit"
                   style={s.saveBtn}
                   disabled={saving}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(194,7,26,0.4)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(194,7,26,0.35)' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(4, 102, 200,0.4)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(4, 102, 200,0.35)' }}
                 >
                   {saving ? 'Saving…' : 'Save Settings'}
                 </button>

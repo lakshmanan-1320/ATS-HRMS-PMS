@@ -38,9 +38,9 @@ function CodeBadge({ code }) {
   if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
   return (
     <span style={{
-      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      background: '#F1F4F8', color: '#33415C', padding: '3px 8px',
       borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
-      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+      border: '1px solid #E3E7EE', letterSpacing: '0.03em', display: 'inline-block'
     }}>
       {code}
     </span>
@@ -175,13 +175,13 @@ export default function AttendanceReports() {
   }, [reportData])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="attendance-reports" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+        <div className="pms-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
           <PageHeader
@@ -212,10 +212,10 @@ export default function AttendanceReports() {
                     disabled={exporting !== null}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '6px',
-                      padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                      padding: '8px 16px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                       color: '#ffffff', border: 'none', borderRadius: '10px',
                       fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                      boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   >
@@ -227,10 +227,10 @@ export default function AttendanceReports() {
                     onClick={loadReport}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '6px',
-                      padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                      padding: '8px 16px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                       color: '#ffffff', border: 'none', borderRadius: '10px',
                       fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                      boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   >
@@ -246,7 +246,7 @@ export default function AttendanceReports() {
           {/* Report Selection Grid */}
           {!activeReport ? (
             <div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a', marginBottom: '16px' }}>Select Report Type</div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#001233', marginBottom: '16px' }}>Select Report Type</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '24px' }}>
                 {REPORT_TYPES.map(r => {
                   const Icon = r.icon
@@ -265,14 +265,14 @@ export default function AttendanceReports() {
                     >
                       <div style={{
                         width: 56, height: 56, borderRadius: 14,
-                        backgroundImage: 'linear-gradient(#FEECEE, #FEECEE)', color: '#C2071A',
+                        backgroundImage: 'linear-gradient(#EEF8FF, #EEF8FF)', color: '#0466C8',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                       }}>
-                        <Icon size={26} style={{ color: '#C2071A', stroke: '#C2071A' }} strokeWidth={2.25} />
+                        <Icon size={26} style={{ color: '#0466C8', stroke: '#0466C8' }} strokeWidth={2.25} />
                       </div>
                       <div>
-                        <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 800, color: '#0f172a' }}>{r.title}</h3>
-                        <p style={{ margin: 0, fontSize: '13px', color: '#64748b', lineHeight: 1.5 }}>{r.desc}</p>
+                        <h3 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 800, color: '#001233' }}>{r.title}</h3>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#7D8597', lineHeight: 1.5 }}>{r.desc}</p>
                       </div>
                     </div>
                   )
@@ -288,34 +288,34 @@ export default function AttendanceReports() {
                     <button
                       onClick={() => setActiveReport(null)}
                       style={{
-                        background: '#f1f5f9', border: 'none', borderRadius: '8px',
+                        background: '#F1F4F8', border: 'none', borderRadius: '8px',
                         padding: '6px 12px', fontSize: '12px', fontWeight: 700,
-                        color: '#475569', cursor: 'pointer', display: 'flex',
+                        color: '#33415C', cursor: 'pointer', display: 'flex',
                         alignItems: 'center', gap: '6px', transition: 'all 0.15s ease'
                       }}
                     >
                       <FiChevronLeft size={16} strokeWidth={2.5} />
                       Back to All Reports
                     </button>
-                    <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{selectedReportInfo?.title}</h2>
+                    <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#001233' }}>{selectedReportInfo?.title}</h2>
                   </div>
                 </div>
 
                 {/* Filter Controls */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'flex-end' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Start Date</label>
-                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase' }}>Start Date</label>
+                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px' }} />
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>End Date</label>
-                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase' }}>End Date</label>
+                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px' }} />
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Department</label>
-                    <select value={selectedDept} onChange={e => setSelectedDept(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase' }}>Department</label>
+                    <select value={selectedDept} onChange={e => setSelectedDept(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
                       <option value="">All Departments</option>
                       {departments.map(d => <option key={d.department_id || d.id} value={d.department_id || d.id}>{d.name}</option>)}
                     </select>
@@ -323,8 +323,8 @@ export default function AttendanceReports() {
 
                   {activeReport === 'employee' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Employee *</label>
-                      <select value={selectedEmployeeId} onChange={e => setSelectedEmployeeId(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase' }}>Employee *</label>
+                      <select value={selectedEmployeeId} onChange={e => setSelectedEmployeeId(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
                         <option value="">Select Employee</option>
                         {employees.map(e => <option key={e.employee_id} value={e.employee_id}>{e.first_name} {e.last_name} ({e.employee_code})</option>)}
                       </select>
@@ -332,17 +332,17 @@ export default function AttendanceReports() {
                   )}
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Search</label>
-                    <input type="text" placeholder="Search keywords..." value={search} onChange={e => setSearch(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px' }} />
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase' }}>Search</label>
+                    <input type="text" placeholder="Search keywords..." value={search} onChange={e => setSearch(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px' }} />
                   </div>
                 </div>
 
                 {/* Summary Stat Cards for Attendance Summary */}
                 {activeReport === 'summary' && reportData && !Array.isArray(reportData) && (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #F1F4F8' }}>
                     <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Total Employees</div>
-                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', marginTop: '2px' }}>{reportData.totalEmployees ?? 0}</div>
+                      <div style={{ fontSize: '11px', color: '#7D8597', fontWeight: 600 }}>Total Employees</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#001233', marginTop: '2px' }}>{reportData.totalEmployees ?? 0}</div>
                     </div>
                     <div style={{ background: '#dcfce7', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
                       <div style={{ fontSize: '11px', color: '#166534', fontWeight: 600 }}>Present</div>
@@ -369,7 +369,7 @@ export default function AttendanceReports() {
 
                 {/* Summary Stat Cards for Geofence Compliance */}
                 {activeReport === 'geofence' && reportData?.summary && (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #f1f5f9' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #F1F4F8' }}>
                     <div style={{ background: '#dcfce7', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
                       <div style={{ fontSize: '11px', color: '#166534', fontWeight: 600 }}>Inside Geofence</div>
                       <div style={{ fontSize: '20px', fontWeight: 800, color: '#15803d', marginTop: '2px' }}>{reportData.summary.insideFenceCount ?? 0}</div>
@@ -378,9 +378,9 @@ export default function AttendanceReports() {
                       <div style={{ fontSize: '11px', color: '#991b1b', fontWeight: 600 }}>Outside Geofence</div>
                       <div style={{ fontSize: '20px', fontWeight: 800, color: '#dc2626', marginTop: '2px' }}>{reportData.summary.outsideFenceCount ?? 0}</div>
                     </div>
-                    <div style={{ background: '#f1f5f9', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>Location Not Verified</div>
-                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#334155', marginTop: '2px' }}>{reportData.summary.locationNotVerifiedCount ?? 0}</div>
+                    <div style={{ background: '#F1F4F8', padding: '12px 14px', borderRadius: '12px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#33415C', fontWeight: 600 }}>Location Not Verified</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#33415C', marginTop: '2px' }}>{reportData.summary.locationNotVerifiedCount ?? 0}</div>
                     </div>
                   </div>
                 )}
@@ -389,18 +389,18 @@ export default function AttendanceReports() {
               {/* Data Table */}
               <div style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '24px', boxShadow: cardShadow }}>
                 {loading ? (
-                  <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading report data...</div>
+                  <div style={{ padding: '40px', textAlign: 'center', color: '#7D8597' }}>Loading report data...</div>
                 ) : error ? (
-                  <div style={{ padding: '20px', background: '#feecee', color: '#dc2626', borderRadius: '10px', fontSize: '13px', fontWeight: 600 }}>{error}</div>
+                  <div style={{ padding: '20px', background: '#EEF8FF', color: '#dc2626', borderRadius: '10px', fontSize: '13px', fontWeight: 600 }}>{error}</div>
                 ) : activeReport === 'employee' && !selectedEmployeeId ? (
-                  <div style={{ padding: '40px', textAlign: 'center', color: '#64748b', fontWeight: 500 }}>Please select an employee from the filter dropdown above to view their attendance history.</div>
+                  <div style={{ padding: '40px', textAlign: 'center', color: '#7D8597', fontWeight: 500 }}>Please select an employee from the filter dropdown above to view their attendance history.</div>
                 ) : !records || records.length === 0 ? (
                   <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No records found for the selected parameters.</div>
                 ) : (
-                  <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+                  <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
-                        <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                        <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', textAlign: 'left' }}>
                           {Object.keys(records[0] || {}).map(key => (
                             <th key={key} style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                               {key.replace(/_/g, ' ')}
@@ -412,7 +412,7 @@ export default function AttendanceReports() {
                         {records.map((row, idx) => (
                           <tr key={idx} style={{ borderBottom: '1px solid #edf2f7', background: idx % 2 === 0 ? '#ffffff' : '#fafafa' }}>
                             {Object.entries(row).map(([k, val], i) => (
-                              <td key={i} style={{ padding: '14px 16px', color: '#1e293b' }}>
+                              <td key={i} style={{ padding: '14px 16px', color: '#001233' }}>
                                 {k.includes('code') ? <CodeBadge code={String(val)} /> : String(val ?? '—')}
                               </td>
                             ))}

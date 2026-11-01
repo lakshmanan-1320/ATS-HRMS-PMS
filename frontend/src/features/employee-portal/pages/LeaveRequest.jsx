@@ -21,23 +21,23 @@ function fmt(dateStr) {
 const s = {
   page:      { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
   main:      { flex: 1, padding: '28px 32px', overflowY: 'auto', maxWidth: '900px' },
-  backBtn:   { display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', background: '#fff', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer', marginBottom: '22px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
-  tabBar:    { display: 'flex', gap: '6px', background: '#e2e8f0', borderRadius: '12px', padding: '4px', marginBottom: '24px', width: 'fit-content' },
-  tab: (a)  => ({ padding: '10px 22px', borderRadius: '8px', border: 'none', fontSize: '13px', fontWeight: a ? '700' : '600', cursor: 'pointer', transition: 'all 0.2s', background: a ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent', color: a ? '#fff' : '#64748b', boxShadow: a ? '0 2px 8px rgba(194,7,26,0.25)' : 'none' }),
+  backBtn:   { display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', background: '#fff', fontSize: '12px', fontWeight: '600', color: '#374151', cursor: 'pointer', marginBottom: '22px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
+  tabBar:    { display: 'flex', gap: '6px', background: '#E3E7EE', borderRadius: '12px', padding: '4px', marginBottom: '24px', width: 'fit-content' },
+  tab: (a)  => ({ padding: '10px 22px', borderRadius: '8px', border: 'none', fontSize: '13px', fontWeight: a ? '700' : '600', cursor: 'pointer', transition: 'all 0.2s', background: a ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent', color: a ? '#fff' : '#7D8597', boxShadow: a ? '0 2px 8px rgba(4, 102, 200,0.25)' : 'none' }),
   card:      { background: '#fff', border: 'none', borderRadius: '16px', padding: '28px 32px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', marginBottom: '20px' },
-  cardTitle: { fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 6px' },
-  cardSub:   { fontSize: '13px', color: '#64748b', margin: '0 0 24px' },
+  cardTitle: { fontSize: '18px', fontWeight: '800', color: '#001233', margin: '0 0 6px' },
+  cardSub:   { fontSize: '13px', color: '#7D8597', margin: '0 0 24px' },
   grid2:     { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' },
   fGroup:    { marginBottom: '16px' },
-  fLabel:    { display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' },
-  fInput:    { width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', colorScheme: 'light', background: '#fff' },
-  fSelect:   { width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer', boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff' },
-  submitBtn: { width: '100%', padding: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
-  permBtn:   { width: '100%', padding: '12px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+  fLabel:    { display: 'block', fontSize: '11px', fontWeight: '700', color: '#7D8597', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  fInput:    { width: '100%', padding: '10px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', colorScheme: 'light', background: '#fff' },
+  fSelect:   { width: '100%', padding: '10px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', cursor: 'pointer', boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff' },
+  submitBtn: { width: '100%', padding: '12px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' },
+  permBtn:   { width: '100%', padding: '12px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', color: '#fff', cursor: 'pointer', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' },
   msgError:  { color: '#ef4444', fontSize: '12px', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 14px' },
   msgSuccess:{ color: '#059669', fontSize: '12px', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px', padding: '10px 14px' },
-  policyBox: { background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px 18px', marginTop: '16px' },
-  policyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #f1f5f9', fontSize: '12px' },
+  policyBox: { background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '16px 18px', marginTop: '16px' },
+  policyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #F1F4F8', fontSize: '12px' },
   balGrid:   { display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginBottom: '24px' },
   balCell:   (col) => ({ background: '#f8fafc', border: `1px solid ${col}22`, borderRadius: '12px', padding: '14px', textAlign: 'center' }),
   balVal:    (col) => ({ fontSize: '28px', fontWeight: '800', color: col, lineHeight: 1, marginBottom: '2px' }),
@@ -121,10 +121,10 @@ function LeaveTab({ balances, onSuccess }) {
       {/* Balance summary */}
       {balances.length > 0 && (
         <div>
-          <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Your Leave Balances</div>
+          <div style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Your Leave Balances</div>
           <div style={s.smallBalGrid}>
             {balances.map(b => {
-              const accent = b.is_paid_leave ? '#C2071A' : '#10b981'
+              const accent = b.is_paid_leave ? '#0466C8' : '#10b981'
               const avail  = parseFloat(b.available_days)
               return (
                 <div key={b.leave_type_id}
@@ -132,7 +132,7 @@ function LeaveTab({ balances, onSuccess }) {
                   onClick={() => setLeaveTypeId(b.leave_type_id)}
                 >
                   <div style={{ fontSize: '10px', fontWeight: '700', color: accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>{b.leave_type_name}</div>
-                  <div style={{ fontSize: '22px', fontWeight: '800', color: avail > 0 ? '#0f172a' : '#ef4444', lineHeight: 1 }}>{avail}</div>
+                  <div style={{ fontSize: '22px', fontWeight: '800', color: avail > 0 ? '#001233' : '#ef4444', lineHeight: 1 }}>{avail}</div>
                   <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>days available</div>
                 </div>
               )
@@ -176,7 +176,7 @@ function LeaveTab({ balances, onSuccess }) {
               End Date{isHalfDay && <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0, color: '#94a3b8' }}> (same as start)</span>}
             </label>
             <input
-              style={{ ...s.fInput, background: isHalfDay ? '#f8fafc' : '#fff', color: isHalfDay ? '#94a3b8' : '#1e293b' }}
+              style={{ ...s.fInput, background: isHalfDay ? '#f8fafc' : '#fff', color: isHalfDay ? '#94a3b8' : '#001233' }}
               type="date" value={endDate}
               onChange={e => setEndDate(e.target.value)}
               min={startDate}
@@ -188,13 +188,13 @@ function LeaveTab({ balances, onSuccess }) {
         {/* Leave days summary — driven by backend preview */}
         {preview && preview.total_days > 0 && (
           <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: '90px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', lineHeight: 1 }}>{preview.total_days}</div>
+            <div style={{ flex: 1, minWidth: '90px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: '#001233', lineHeight: 1 }}>{preview.total_days}</div>
               <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>Total Days</div>
             </div>
-            <div style={{ flex: 1, minWidth: '90px', background: 'rgba(194,7,26,0.05)', border: '1px solid rgba(194,7,26,0.2)', borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
-              <div style={{ fontSize: '22px', fontWeight: '800', color: '#C2071A', lineHeight: 1 }}>{preview.paid_days}</div>
-              <div style={{ fontSize: '10px', color: '#C2071A', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>Paid Leave</div>
+            <div style={{ flex: 1, minWidth: '90px', background: 'rgba(4, 102, 200,0.05)', border: '1px solid rgba(4, 102, 200,0.2)', borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: '#0466C8', lineHeight: 1 }}>{preview.paid_days}</div>
+              <div style={{ fontSize: '10px', color: '#0466C8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>Paid Leave</div>
             </div>
             <div style={{ flex: 1, minWidth: '90px', background: preview.lop_days > 0 ? 'rgba(239,68,68,0.05)' : 'rgba(16,185,129,0.05)', border: `1px solid ${preview.lop_days > 0 ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)'}`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
               <div style={{ fontSize: '22px', fontWeight: '800', color: preview.lop_days > 0 ? '#ef4444' : '#059669', lineHeight: 1 }}>{preview.lop_days}</div>
@@ -290,11 +290,11 @@ function PermissionTab({ onSuccess }) {
       {/* Balance summary */}
       {balance && (
         <div>
-          <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
+          <div style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
             Your Permission Balance — {monthName} {now.getFullYear()}
           </div>
           <div style={s.balGrid}>
-            {[['Allocated', balance.allocated_count, '#C2071A'], ['Used', balance.used_count, '#d97706'], ['Remaining', remaining, remaining > 0 ? '#059669' : '#ef4444']].map(([lbl, val, col]) => (
+            {[['Allocated', balance.allocated_count, '#0466C8'], ['Used', balance.used_count, '#d97706'], ['Remaining', remaining, remaining > 0 ? '#059669' : '#ef4444']].map(([lbl, val, col]) => (
               <div key={lbl} style={s.balCell(col)}>
                 <div style={s.balVal(col)}>{val}</div>
                 <div style={s.balLbl}>{lbl}</div>
@@ -304,12 +304,12 @@ function PermissionTab({ onSuccess }) {
 
           {/* Progress bar */}
           <div style={{ marginBottom: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '12px', color: '#64748b' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '12px', color: '#7D8597' }}>
               <span>Monthly usage ({balance.used_count} of {balance.allocated_count} used)</span>
               <span>{Math.round(usedPct)}%</span>
             </div>
-            <div style={{ height: '6px', borderRadius: '4px', background: '#f1f5f9', overflow: 'hidden' }}>
-              <div style={{ height: '100%', borderRadius: '4px', width: `${Math.min(100, usedPct)}%`, background: usedPct >= 100 ? '#ef4444' : 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', transition: 'width 0.4s' }} />
+            <div style={{ height: '6px', borderRadius: '4px', background: '#F1F4F8', overflow: 'hidden' }}>
+              <div style={{ height: '100%', borderRadius: '4px', width: `${Math.min(100, usedPct)}%`, background: usedPct >= 100 ? '#ef4444' : 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', transition: 'width 0.4s' }} />
             </div>
           </div>
         </div>
@@ -320,15 +320,15 @@ function PermissionTab({ onSuccess }) {
         <div style={{ ...s.policyBox, marginBottom: '24px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
           <div>
             <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', marginBottom: '2px' }}>Monthly Allowance</div>
-            <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>{settings.monthly_count} permission{settings.monthly_count !== 1 ? 's' : ''}</div>
+            <div style={{ fontSize: '20px', fontWeight: '800', color: '#001233' }}>{settings.monthly_count} permission{settings.monthly_count !== 1 ? 's' : ''}</div>
           </div>
           <div>
             <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', marginBottom: '2px' }}>Duration Per Permission</div>
-            <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>{settings.hours_per_permission} hour{settings.hours_per_permission !== 1 ? 's' : ''}</div>
+            <div style={{ fontSize: '20px', fontWeight: '800', color: '#001233' }}>{settings.hours_per_permission} hour{settings.hours_per_permission !== 1 ? 's' : ''}</div>
           </div>
           <div>
             <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', marginBottom: '2px' }}>Pro-Rata on Join</div>
-            <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>{settings.pro_rata_on_join ? 'Yes' : 'No'}</div>
+            <div style={{ fontSize: '20px', fontWeight: '800', color: '#001233' }}>{settings.pro_rata_on_join ? 'Yes' : 'No'}</div>
           </div>
         </div>
       )}
@@ -358,7 +358,7 @@ function PermissionTab({ onSuccess }) {
         </div>
 
         {startTime && endTime && endTime > startTime && (
-          <div style={{ background: 'rgba(194,7,26,0.05)', border: '1px solid rgba(194,7,26,0.15)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontSize: '12px', color: '#C2071A', fontWeight: '600' }}>
+          <div style={{ background: 'rgba(4, 102, 200,0.05)', border: '1px solid rgba(4, 102, 200,0.15)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontSize: '12px', color: '#0466C8', fontWeight: '600' }}>
             Duration: {(() => {
               const [sh, sm] = startTime.split(':').map(Number)
               const [eh, em] = endTime.split(':').map(Number)
@@ -401,11 +401,11 @@ export default function LeaveRequest() {
   }, [])
 
   return (
-    <div style={s.page}>
+    <div className="pms-page" style={s.page}>
       <EmployeeSidebar active="leave-request" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Apply Leave / Permission" />
-        <div style={{ flex: 1, overflowY: 'auto', padding: '28px 32px' }}>
+        <div className="pms-content" style={{ flex: 1, overflowY: 'auto', padding: '28px 32px' }}>
           <div style={{ maxWidth: '860px' }}>
 
             {/* Back button */}
@@ -415,13 +415,13 @@ export default function LeaveRequest() {
 
             {/* Page title */}
             <div style={{ marginBottom: '24px' }}>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiCalendar size={20} color="#0466C8" strokeWidth={2.5} />
                 </div>
                 Apply Leave / Permission
               </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Submit a leave request based on your leave balance or request a short permission to be away.</p>
+              <p style={{ fontSize: '13px', color: '#7D8597', margin: 0, fontWeight: 500 }}>Submit a leave request based on your leave balance or request a short permission to be away.</p>
             </div>
 
             {/* Tab switcher */}

@@ -44,13 +44,13 @@ const STATUS_COLORS = {
   PENDING:   { bg: '#fffbeb', color: '#b45309', border: '#fde68a', label: 'Pending' },
   APPROVED:  { bg: '#f0fdf4', color: '#15803d', border: '#bbf7d0', label: 'Approved' },
   REJECTED:  { bg: '#fef2f2', color: '#b91c1c', border: '#fecaca', label: 'Rejected' },
-  CANCELLED: { bg: '#f8fafc', color: '#64748b', border: '#e2e8f0', label: 'Cancelled' },
+  CANCELLED: { bg: '#f8fafc', color: '#7D8597', border: '#E3E7EE', label: 'Cancelled' },
 }
 
 const inp = {
   width: '100%', padding: '10px 14px', background: '#f8fafc',
-  border: '1px solid #e2e8f0', borderRadius: '10px',
-  fontSize: '13px', color: '#1e293b', outline: 'none',
+  border: '1px solid #E3E7EE', borderRadius: '10px',
+  fontSize: '13px', color: '#001233', outline: 'none',
   boxSizing: 'border-box', fontFamily: 'inherit', transition: 'border-color 0.15s',
 }
 
@@ -202,38 +202,38 @@ export default function PermissionManagement() {
   // ── shared UI pieces ───────────────────────────────────────────
   const Spinner = ({ label }) => (
     <div style={{ padding: '60px', textAlign: 'center' }}>
-      <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-      <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>{label}</div>
+      <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+      <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>{label}</div>
     </div>
   )
 
   const PaginationBar = ({ page, setPage, total, totalPages, label }) => (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
-      <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
+      <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: '500' }}>
         Showing <strong>{((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, total)}</strong> of <strong>{total}</strong> {label}
       </span>
       <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
         <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-          style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151' }}>
+          style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #E3E7EE', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151' }}>
           ‹ Prev
         </button>
         {getPageNumbers(page, totalPages).map((p, i) =>
           p === '...' ? <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8' }}>…</span> : (
             <button key={p} onClick={() => setPage(p)}
-              style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #E3E7EE', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#0466C8,#023E7D)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {p}
             </button>
           )
         )}
         <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-          style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151' }}>
+          style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #E3E7EE', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151' }}>
           Next ›
         </button>
       </div>
     </div>
   )
 
-  const selStyle = { padding: '8px 11px', border: '1px solid #e2e8f0', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600' }
+  const selStyle = { padding: '8px 11px', border: '1px solid #E3E7EE', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600' }
   const MonthYearPicker = ({ month, setMonth, year, setYear, onChangePage }) => (
     <>
       <select value={month} onChange={e => { setMonth(parseInt(e.target.value, 10)); onChangePage() }} style={selStyle}>
@@ -252,7 +252,7 @@ export default function PermissionManagement() {
   ]
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#F1F4F8', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <ClientAdminSidebar active="permissions" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
@@ -266,13 +266,13 @@ export default function PermissionManagement() {
           />
 
           {/* Tab bar */}
-          <div style={{ display: 'flex', gap: 4, marginBottom: '20px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: 4, width: 'fit-content', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: '20px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '12px', padding: 4, width: 'fit-content', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {TABS.map(t => (
               <button key={t.key} onClick={() => setActiveTab(t.key)}
                 style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', borderRadius: '9px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '700', transition: 'all 0.15s',
-                  background: activeTab === t.key ? 'linear-gradient(135deg,#C2071A,#941018)' : 'transparent',
-                  color:      activeTab === t.key ? '#fff' : '#64748b',
-                  boxShadow:  activeTab === t.key ? '0 2px 8px rgba(194,7,26,0.3)' : 'none',
+                  background: activeTab === t.key ? 'linear-gradient(135deg,#0466C8,#023E7D)' : 'transparent',
+                  color:      activeTab === t.key ? '#fff' : '#7D8597',
+                  boxShadow:  activeTab === t.key ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none',
                 }}>
                 {t.icon} {t.label}
               </button>
@@ -285,10 +285,10 @@ export default function PermissionManagement() {
               {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '20px' }}>
                 {[
-                  { key: 'ALL',      label: 'Total',    value: stats.total,    color: '#C2071A', icon: <FiList size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-                  { key: 'PENDING',  label: 'Pending',  value: stats.pending,  color: '#b45309', icon: <FiClock size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-                  { key: 'APPROVED', label: 'Approved', value: stats.approved, color: '#15803d', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-                  { key: 'REJECTED', label: 'Rejected', value: stats.rejected, color: '#b91c1c', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+                  { key: 'ALL',      label: 'Total',    value: stats.total,    color: '#0466C8', icon: <FiList size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+                  { key: 'PENDING',  label: 'Pending',  value: stats.pending,  color: '#b45309', icon: <FiClock size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+                  { key: 'APPROVED', label: 'Approved', value: stats.approved, color: '#15803d', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+                  { key: 'REJECTED', label: 'Rejected', value: stats.rejected, color: '#b91c1c', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
                 ].map(({ key, label, value, color, icon }) => {
                   const active = statusFilter === key
                   return (
@@ -298,8 +298,8 @@ export default function PermissionManagement() {
                         {icon}
                       </div>
                       <div>
-                        <div style={{ fontSize: '26px', fontWeight: '800', color: active ? color : '#0f172a', lineHeight: 1 }}>{value}</div>
-                        <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginTop: 3 }}>{label}</div>
+                        <div style={{ fontSize: '26px', fontWeight: '800', color: active ? color : '#001233', lineHeight: 1 }}>{value}</div>
+                        <div style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600', marginTop: 3 }}>{label}</div>
                       </div>
                     </div>
                   )
@@ -307,32 +307,32 @@ export default function PermissionManagement() {
               </div>
 
               {/* Filter Bar */}
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+              <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '9px', padding: '0 11px' }}>
                     <FiSearch size={13} color="#94a3b8" />
                     <input placeholder="Search name, code, reason…" value={search} className="ca-borderless-input"
                       onChange={e => { setSearch(e.target.value); setReqPage(1) }}
-                      style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }} />
+                      style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#001233', outline: 'none', fontFamily: 'inherit', width: '100%' }} />
                     {search && <button onClick={() => { setSearch(''); setReqPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}><FiX size={12} /></button>}
                   </div>
                   <MonthYearPicker month={monthFilter} setMonth={setMonthFilter} year={yearFilter} setYear={setYearFilter} onChangePage={() => setReqPage(1)} />
-                  <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#64748b', fontWeight: '600' }}>{filteredReq.length} request{filteredReq.length !== 1 ? 's' : ''}</div>
+                  <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#7D8597', fontWeight: '600' }}>{filteredReq.length} request{filteredReq.length !== 1 ? 's' : ''}</div>
                 </div>
               </div>
 
               {/* Status Pills */}
               <div style={{ display: 'flex', gap: 8, marginBottom: '16px' }}>
-                {[{ val: 'ALL', label: 'All', count: requests.length, color: '#C2071A' }, { val: 'PENDING', label: 'Pending', count: stats.pending, color: '#b45309' }, { val: 'APPROVED', label: 'Approved', count: stats.approved, color: '#15803d' }, { val: 'REJECTED', label: 'Rejected', count: stats.rejected, color: '#b91c1c' }].map(o => (
-                  <button key={o.val} onClick={() => { setStatusFilter(o.val); setReqPage(1) }} style={{ padding: '7px 16px', borderRadius: '20px', border: `1.5px solid ${statusFilter === o.val ? o.color : '#e2e8f0'}`, background: statusFilter === o.val ? o.color : '#fff', color: statusFilter === o.val ? '#fff' : '#475569', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
+                {[{ val: 'ALL', label: 'All', count: requests.length, color: '#0466C8' }, { val: 'PENDING', label: 'Pending', count: stats.pending, color: '#b45309' }, { val: 'APPROVED', label: 'Approved', count: stats.approved, color: '#15803d' }, { val: 'REJECTED', label: 'Rejected', count: stats.rejected, color: '#b91c1c' }].map(o => (
+                  <button key={o.val} onClick={() => { setStatusFilter(o.val); setReqPage(1) }} style={{ padding: '7px 16px', borderRadius: '20px', border: `1.5px solid ${statusFilter === o.val ? o.color : '#E3E7EE'}`, background: statusFilter === o.val ? o.color : '#fff', color: statusFilter === o.val ? '#fff' : '#33415C', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
                     {o.label}
-                    <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#f1f5f9', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>{o.count}</span>
+                    <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#F1F4F8', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>{o.count}</span>
                   </button>
                 ))}
               </div>
 
               {/* Requests Table */}
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+              <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {reqLoading ? <Spinner label="Loading permission requests…" /> : filteredReq.length === 0 ? (
                   <div style={{ padding: '60px', textAlign: 'center' }}>
                     <div style={{ width: 52, height: 52, borderRadius: '14px', backgroundImage: 'linear-gradient(#94a3b8, #94a3b8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiShield size={22} color="#ffffff" /></div>
@@ -342,9 +342,9 @@ export default function PermissionManagement() {
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
-                        <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                        <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
                           {['Employee', 'Date', 'Time', 'Duration', 'Reason', 'Status', 'Actions'].map(h => (
-                            <th key={h} style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
+                            <th key={h} style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -353,20 +353,20 @@ export default function PermissionManagement() {
                           const sc = STATUS_COLORS[r.status] || STATUS_COLORS.PENDING
                           return (
                             <tr key={r.permission_request_id}
-                              style={{ borderBottom: idx < reqPaginated.length - 1 ? '1px solid #f1f5f9' : 'none', transition: 'background 0.15s' }}
+                              style={{ borderBottom: idx < reqPaginated.length - 1 ? '1px solid #F1F4F8' : 'none', transition: 'background 0.15s' }}
                               onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
                               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                               <td style={{ padding: '14px 18px' }}>
-                                <div style={{ fontWeight: '700', color: '#0f172a' }}>{r.employee_name}</div>
-                                <div style={{ fontSize: '11px', color: '#64748b', marginTop: 2 }}>{r.employee_code}</div>
+                                <div style={{ fontWeight: '700', color: '#001233' }}>{r.employee_name}</div>
+                                <div style={{ fontSize: '11px', color: '#7D8597', marginTop: 2 }}>{r.employee_code}</div>
                               </td>
                               <td style={{ padding: '14px 18px', whiteSpace: 'nowrap', color: '#374151', fontWeight: '600' }}>{fmtDate(r.permission_date)}</td>
                               <td style={{ padding: '14px 18px', whiteSpace: 'nowrap' }}>
-                                <span style={{ fontFamily: 'monospace', background: '#f1f5f9', padding: '3px 8px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>{fmtTime(r.start_time)} – {fmtTime(r.end_time)}</span>
+                                <span style={{ fontFamily: 'monospace', background: '#F1F4F8', padding: '3px 8px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>{fmtTime(r.start_time)} – {fmtTime(r.end_time)}</span>
                               </td>
                               <td style={{ padding: '14px 18px', fontWeight: '700', color: '#374151' }}>{r.duration_hours}h</td>
                               <td style={{ padding: '14px 18px', maxWidth: 180 }}>
-                                <div style={{ color: '#475569', fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.reason || <span style={{ color: '#94a3b8' }}>—</span>}</div>
+                                <div style={{ color: '#33415C', fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.reason || <span style={{ color: '#94a3b8' }}>—</span>}</div>
                               </td>
                               <td style={{ padding: '14px 18px' }}>
                                 <span style={{ display: 'inline-flex', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{sc.label}</span>
@@ -407,32 +407,32 @@ export default function PermissionManagement() {
           {/* ══ BALANCES TAB ══ */}
           {activeTab === 'balances' && (
             <>
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+              <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '9px', padding: '0 11px' }}>
                   <FiSearch size={13} color="#94a3b8" />
                   <input placeholder="Search employee name or code…" value={balSearch} className="ca-borderless-input"
                     onChange={e => { setBalSearch(e.target.value); setBalPage(1) }}
-                    style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }} />
+                    style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#001233', outline: 'none', fontFamily: 'inherit', width: '100%' }} />
                   {balSearch && <button onClick={() => { setBalSearch(''); setBalPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}><FiX size={12} /></button>}
                 </div>
                 <MonthYearPicker month={balMonth} setMonth={setBalMonth} year={balYear} setYear={setBalYear} onChangePage={() => setBalPage(1)} />
-                <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#64748b', fontWeight: '600' }}>{filteredBal.length} employee{filteredBal.length !== 1 ? 's' : ''}</div>
+                <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#7D8597', fontWeight: '600' }}>{filteredBal.length} employee{filteredBal.length !== 1 ? 's' : ''}</div>
               </div>
 
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+              <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {balLoading ? <Spinner label="Loading balances…" /> : filteredBal.length === 0 ? (
                   <div style={{ padding: '60px', textAlign: 'center' }}>
                     <div style={{ width: 52, height: 52, borderRadius: '14px', backgroundImage: 'linear-gradient(#94a3b8, #94a3b8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}><FiUsers size={22} color="#ffffff" /></div>
                     <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No balance records for {MONTHS[balMonth - 1]} {balYear}</div>
-                    <div style={{ color: '#64748b', fontSize: '13px' }}>Balances are credited on the 1st of each month</div>
+                    <div style={{ color: '#7D8597', fontSize: '13px' }}>Balances are credited on the 1st of each month</div>
                   </div>
                 ) : (
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
-                        <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                        <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
                           {['Employee', 'Month / Year', 'Allocated', 'Used', 'Remaining', 'Usage'].map(h => (
-                            <th key={h} style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
+                            <th key={h} style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -443,26 +443,26 @@ export default function PermissionManagement() {
                           const barColor = usePct >= 100 ? '#b91c1c' : usePct >= 50 ? '#b45309' : '#15803d'
                           return (
                             <tr key={b.balance_id}
-                              style={{ borderBottom: idx < balPaginated.length - 1 ? '1px solid #f1f5f9' : 'none', transition: 'background 0.15s' }}
+                              style={{ borderBottom: idx < balPaginated.length - 1 ? '1px solid #F1F4F8' : 'none', transition: 'background 0.15s' }}
                               onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
                               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                               <td style={{ padding: '14px 18px' }}>
-                                <div style={{ fontWeight: '700', color: '#0f172a' }}>{b.employee_name}</div>
-                                <div style={{ fontSize: '11px', color: '#64748b', marginTop: 2 }}>{b.employee_code}</div>
+                                <div style={{ fontWeight: '700', color: '#001233' }}>{b.employee_name}</div>
+                                <div style={{ fontSize: '11px', color: '#7D8597', marginTop: 2 }}>{b.employee_code}</div>
                               </td>
                               <td style={{ padding: '14px 18px', fontWeight: '700', color: '#374151' }}>{MONTHS[b.month - 1]} {b.year}</td>
                               <td style={{ padding: '14px 18px' }}>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#374151', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.allocated_count}</div>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: '#f8fafc', border: '1px solid #E3E7EE', color: '#374151', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.allocated_count}</div>
                               </td>
                               <td style={{ padding: '14px 18px' }}>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: b.used_count > 0 ? '#feecee' : '#f8fafc', border: `1px solid ${b.used_count > 0 ? '#f7a6af' : '#e2e8f0'}`, color: b.used_count > 0 ? '#941018' : '#94a3b8', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.used_count}</div>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: b.used_count > 0 ? '#EEF8FF' : '#f8fafc', border: `1px solid ${b.used_count > 0 ? '#C9DDF3' : '#E3E7EE'}`, color: b.used_count > 0 ? '#023E7D' : '#94a3b8', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{b.used_count}</div>
                               </td>
                               <td style={{ padding: '14px 18px' }}>
                                 <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 36, height: 30, borderRadius: '8px', background: remaining <= 0 ? '#fef2f2' : '#f0fdf4', border: `1px solid ${remaining <= 0 ? '#fecaca' : '#bbf7d0'}`, color: remaining <= 0 ? '#b91c1c' : '#15803d', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>{remaining}</span>
                               </td>
                               <td style={{ padding: '14px 18px', minWidth: 120 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                  <div style={{ flex: 1, height: 6, background: '#f1f5f9', borderRadius: 3, overflow: 'hidden' }}>
+                                  <div style={{ flex: 1, height: 6, background: '#F1F4F8', borderRadius: 3, overflow: 'hidden' }}>
                                     <div style={{ width: `${usePct}%`, height: '100%', background: barColor, borderRadius: 3 }} />
                                   </div>
                                   <span style={{ fontSize: '11px', fontWeight: '700', color: barColor, minWidth: 30 }}>{usePct}%</span>
@@ -483,15 +483,15 @@ export default function PermissionManagement() {
           {/* ══ SETTINGS TAB ══ */}
           {activeTab === 'settings' && (
             <div style={{ width: '100%' }}>
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+              <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                 {/* Card header */}
-                <div style={{ padding: '24px 28px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ padding: '24px 28px', borderBottom: '1px solid #F1F4F8', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '10px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <FiSettings size={18} style={{ color: '#ffffff', stroke: '#ffffff' }} strokeWidth={2} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Monthly Permission Policy</div>
-                    <div style={{ fontSize: '12px', color: '#64748b', marginTop: 2 }}>Configure how many permissions employees receive each month and their duration</div>
+                    <div style={{ fontSize: '15px', fontWeight: '800', color: '#001233' }}>Monthly Permission Policy</div>
+                    <div style={{ fontSize: '12px', color: '#7D8597', marginTop: 2 }}>Configure how many permissions employees receive each month and their duration</div>
                   </div>
                 </div>
 
@@ -500,7 +500,7 @@ export default function PermissionManagement() {
 
                     {/* Monthly Count */}
                     <div style={{ marginBottom: '22px' }}>
-                      <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                         Permissions Per Month *
                       </label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -511,18 +511,18 @@ export default function PermissionManagement() {
                           style={{ ...inp, width: 100 }}
                           required
                         />
-                        <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>
+                        <span style={{ fontSize: '13px', color: '#7D8597', fontWeight: '500' }}>
                           permissions credited to each employee every month
                         </span>
                       </div>
                       <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: 6 }}>
-                        Current: <strong style={{ color: '#941018' }}>{settings?.monthly_count ?? '—'}</strong> permissions/month
+                        Current: <strong style={{ color: '#023E7D' }}>{settings?.monthly_count ?? '—'}</strong> permissions/month
                       </div>
                     </div>
 
                     {/* Hours Per Permission */}
                     <div style={{ marginBottom: '22px' }}>
-                      <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                         Hours Per Permission *
                       </label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -533,25 +533,25 @@ export default function PermissionManagement() {
                           style={{ ...inp, width: 100 }}
                           required
                         />
-                        <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>hours per permission request</span>
+                        <span style={{ fontSize: '13px', color: '#7D8597', fontWeight: '500' }}>hours per permission request</span>
                       </div>
                       <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: 6 }}>
-                        Current: <strong style={{ color: '#941018' }}>{settings?.hours_per_permission ?? '—'}</strong> hours per permission
+                        Current: <strong style={{ color: '#023E7D' }}>{settings?.hours_per_permission ?? '—'}</strong> hours per permission
                       </div>
                     </div>
 
                     {/* Pro-rata on Join */}
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px 20px', marginBottom: '24px' }}>
+                    <div style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '16px 20px', marginBottom: '24px' }}>
                       <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer' }}>
                         <input
                           type="checkbox"
                           checked={proRata}
                           onChange={e => setProRata(e.target.checked)}
-                          style={{ marginTop: 2, width: 16, height: 16, accentColor: '#C2071A', cursor: 'pointer', flexShrink: 0 }}
+                          style={{ marginTop: 2, width: 16, height: 16, accentColor: '#0466C8', cursor: 'pointer', flexShrink: 0 }}
                         />
                         <div>
-                          <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: 4 }}>Pro-rata credit on joining</div>
-                          <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.5 }}>
+                          <div style={{ fontSize: '13px', fontWeight: '700', color: '#001233', marginBottom: 4 }}>Pro-rata credit on joining</div>
+                          <div style={{ fontSize: '12px', color: '#7D8597', lineHeight: 1.5 }}>
                             When enabled, new employees joining mid-month receive a proportional number of permissions for their first month based on their joining date.
                             For example, joining on the 15th of a 30-day month gives <strong>ceil(monthly_count × 16/30)</strong> permissions.
                           </div>
@@ -560,11 +560,11 @@ export default function PermissionManagement() {
                     </div>
 
                     {/* Policy Preview */}
-                    <div style={{ backgroundImage: 'linear-gradient(#feecee, #feecee)', border: '1px solid #f7a6af', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                      <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundImage: 'linear-gradient(#C2071A, #C2071A)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                    <div style={{ backgroundImage: 'linear-gradient(#EEF8FF, #EEF8FF)', border: '1px solid #C9DDF3', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundImage: 'linear-gradient(#0466C8, #0466C8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
                         <FiInfo size={13} style={{ color: '#ffffff', stroke: '#ffffff' }} strokeWidth={2} />
                       </div>
-                      <div style={{ fontSize: '12px', color: '#7c0a1a', lineHeight: 1.6 }}>
+                      <div style={{ fontSize: '12px', color: '#001233', lineHeight: 1.6 }}>
                         <strong>Effective policy:</strong> Each employee will receive <strong>{monthlyCount || '?'} permission{parseInt(monthlyCount) !== 1 ? 's' : ''}</strong> of <strong>{hoursPerPerm || '?'} hour{parseFloat(hoursPerPerm) !== 1 ? 's' : ''} each</strong> on the <strong>1st of every month at midnight</strong>.
                         {proRata && ' New joiners receive a pro-rata allocation for their first month.'}
                       </div>
@@ -588,7 +588,7 @@ export default function PermissionManagement() {
                     )}
 
                     <button type="submit" disabled={settingsSaving}
-                      style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '11px 24px', background: settingsSaving ? 'rgba(194,7,26,0.5)' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: settingsSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '11px 24px', background: settingsSaving ? 'rgba(4, 102, 200,0.5)' : 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: settingsSaving ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)' }}
                       onMouseEnter={e => { if (!settingsSaving) e.currentTarget.style.transform = 'translateY(-1px)' }}
                       onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                       <FiSave size={14} />
@@ -615,24 +615,24 @@ export default function PermissionManagement() {
                 <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiXCircle size={18} color="#ffffff" />
                 </div>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>Reject Permission</h3>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#001233' }}>Reject Permission</h3>
               </div>
-              <button onClick={() => setRejectModal(null)} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}>
+              <button onClick={() => setRejectModal(null)} style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}>
                 <FiX size={14} />
               </button>
             </div>
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#475569' }}>
-              Rejecting <strong style={{ color: '#0f172a' }}>{rejectModal.name}</strong>'s permission request.
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#33415C' }}>
+              Rejecting <strong style={{ color: '#001233' }}>{rejectModal.name}</strong>'s permission request.
             </p>
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reason (optional)</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reason (optional)</label>
               <textarea rows={3} placeholder="Briefly explain why the request is being rejected…"
                 value={rejectReason} onChange={e => setRejectReason(e.target.value)}
                 style={{ ...inp, resize: 'vertical' }} />
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button type="button" onClick={() => setRejectModal(null)}
-                style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>
+                style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>
                 Cancel
               </button>
               <button onClick={handleReject}

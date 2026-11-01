@@ -39,18 +39,18 @@ const FONT_HEAD = "'Poppins', sans-serif";
 const FONT_BODY = "'Inter', sans-serif";
 
 const BRAND = {
-  red: '#C2071A',
-  redDark: '#900513',
-  redTint: '#FEECEE',
-  navy: '#0f1b3d',
-  navySoft: '#1e293b',
-  slate: '#42557e',
-  slateSoft: '#64748b',
-  border: '#e2e8f0',
+  red: '#0466C8',
+  redDark: '#023E7D',
+  redTint: '#EEF8FF',
+  navy: '#001233',
+  navySoft: '#001233',
+  slate: '#33415C',
+  slateSoft: '#7D8597',
+  border: '#E3E7EE',
   bg: '#f8fafc',
 };
 
-/* High Quality Vector Icons with Red (#C2071A) as requested */
+/* High Quality Vector Icons with Red (#0466C8) as requested */
 const BarChartIcon = ({ size = 22, color = BRAND.red, style }) => (
   <svg
     width={size}
@@ -173,8 +173,8 @@ const STATUS_CONFIG = {
   },
   retired: {
     label: 'Retired',
-    color: '#64748b',
-    bg: '#f1f5f9',
+    color: '#7D8597',
+    bg: '#F1F4F8',
     border: '#cbd5e1',
     dot: '#94a3b8'
   }
@@ -455,7 +455,7 @@ export default function ClientAdminPolicies() {
   }, [policies, search, selectedCategory, statusFilter]);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#111827', fontFamily: FONT_BODY }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#111827', fontFamily: FONT_BODY }}>
       <ClientAdminSidebar active="policies" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -479,9 +479,9 @@ export default function ClientAdminPolicies() {
                     gap: 6,
                     padding: '9px 14px',
                     borderRadius: 10,
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     background: '#ffffff',
-                    color: '#475569',
+                    color: '#33415C',
                     fontSize: 13,
                     fontWeight: 600,
                     cursor: refreshing ? 'not-allowed' : 'pointer',
@@ -502,12 +502,12 @@ export default function ClientAdminPolicies() {
                     padding: '9px 18px',
                     borderRadius: 10,
                     border: 'none',
-                    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                     color: '#ffffff',
                     fontSize: 13,
                     fontWeight: 700,
                     cursor: 'pointer',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                     fontFamily: FONT_BODY
                   }}
                 >
@@ -546,7 +546,7 @@ export default function ClientAdminPolicies() {
                 <div style={{ fontSize: 13.5, fontWeight: 650, color: BRAND.navy, marginTop: 3 }}>
                   Total Policies
                 </div>
-                <div style={{ fontSize: 11.5, color: '#64748b', fontWeight: 500, marginTop: 2 }}>
+                <div style={{ fontSize: 11.5, color: '#7D8597', fontWeight: 500, marginTop: 2 }}>
                   All catalog records
                 </div>
               </div>
@@ -578,7 +578,7 @@ export default function ClientAdminPolicies() {
                 <div style={{ fontSize: 13.5, fontWeight: 650, color: BRAND.navy, marginTop: 3 }}>
                   Published & Active
                 </div>
-                <div style={{ fontSize: 11.5, color: '#64748b', fontWeight: 500, marginTop: 2 }}>
+                <div style={{ fontSize: 11.5, color: '#7D8597', fontWeight: 500, marginTop: 2 }}>
                   Live in Portal & AI
                 </div>
               </div>
@@ -610,7 +610,7 @@ export default function ClientAdminPolicies() {
                 <div style={{ fontSize: 13.5, fontWeight: 650, color: BRAND.navy, marginTop: 3 }}>
                   Draft Policies
                 </div>
-                <div style={{ fontSize: 11.5, color: '#64748b', fontWeight: 500, marginTop: 2 }}>
+                <div style={{ fontSize: 11.5, color: '#7D8597', fontWeight: 500, marginTop: 2 }}>
                   In progress / review
                 </div>
               </div>
@@ -642,7 +642,7 @@ export default function ClientAdminPolicies() {
                 <div style={{ fontSize: 13.5, fontWeight: 650, color: BRAND.navy, marginTop: 3 }}>
                   Retired Policies
                 </div>
-                <div style={{ fontSize: 11.5, color: '#64748b', fontWeight: 500, marginTop: 2 }}>
+                <div style={{ fontSize: 11.5, color: '#7D8597', fontWeight: 500, marginTop: 2 }}>
                   Archived versions
                 </div>
               </div>
@@ -674,12 +674,12 @@ export default function ClientAdminPolicies() {
                       width: '100%',
                       padding: '8px 30px 8px 34px',
                       borderRadius: 9,
-                      border: '1.5px solid #e2e8f0',
+                      border: '1.5px solid #E3E7EE',
                       background: '#f8fafc',
                       fontSize: 13,
                       boxSizing: 'border-box',
                       outline: 'none',
-                      color: '#0f172a',
+                      color: '#001233',
                       fontFamily: FONT_BODY
                     }}
                   />
@@ -711,11 +711,11 @@ export default function ClientAdminPolicies() {
                   style={{
                     padding: '8px 12px',
                     borderRadius: 9,
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     background: '#f8fafc',
                     fontSize: 13,
                     fontWeight: 600,
-                    color: '#1e293b',
+                    color: '#001233',
                     cursor: 'pointer',
                     outline: 'none',
                     fontFamily: FONT_BODY
@@ -734,11 +734,11 @@ export default function ClientAdminPolicies() {
                   style={{
                     padding: '8px 12px',
                     borderRadius: 9,
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     background: '#f8fafc',
                     fontSize: 13,
                     fontWeight: 600,
-                    color: '#1e293b',
+                    color: '#001233',
                     cursor: 'pointer',
                     outline: 'none',
                     fontFamily: FONT_BODY
@@ -774,10 +774,10 @@ export default function ClientAdminPolicies() {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    background: '#f1f5f9',
+                    background: '#F1F4F8',
                     borderRadius: 8,
                     padding: 2.5,
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #E3E7EE'
                   }}
                 >
                   <button
@@ -791,7 +791,7 @@ export default function ClientAdminPolicies() {
                       borderRadius: 6,
                       border: 'none',
                       background: viewMode === 'table' ? '#ffffff' : 'transparent',
-                      color: viewMode === 'table' ? BRAND.red : '#64748b',
+                      color: viewMode === 'table' ? BRAND.red : '#7D8597',
                       fontSize: 12.5,
                       fontWeight: viewMode === 'table' ? 650 : 500,
                       cursor: 'pointer',
@@ -813,7 +813,7 @@ export default function ClientAdminPolicies() {
                       borderRadius: 6,
                       border: 'none',
                       background: viewMode === 'grid' ? '#ffffff' : 'transparent',
-                      color: viewMode === 'grid' ? BRAND.red : '#64748b',
+                      color: viewMode === 'grid' ? BRAND.red : '#7D8597',
                       fontSize: 12.5,
                       fontWeight: viewMode === 'grid' ? 650 : 500,
                       cursor: 'pointer',
@@ -830,14 +830,14 @@ export default function ClientAdminPolicies() {
             {/* Table or Grid Rendering */}
             {loading ? (
               <div style={{ padding: 60, textAlign: 'center' }}>
-                <div style={{ width: 36, height: 36, border: '3px solid #e2e8f0', borderTopColor: BRAND.red, borderRadius: '50%', margin: '0 auto 12px', animation: 'spin 0.8s linear infinite' }} />
-                <div style={{ color: '#64748b', fontSize: 13, fontWeight: 600 }}>Loading policy records...</div>
+                <div style={{ width: 36, height: 36, border: '3px solid #E3E7EE', borderTopColor: BRAND.red, borderRadius: '50%', margin: '0 auto 12px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ color: '#7D8597', fontSize: 13, fontWeight: 600 }}>Loading policy records...</div>
               </div>
             ) : filteredPolicies.length === 0 ? (
               <div style={{ padding: '60px 20px', textAlign: 'center' }}>
                 <FiFileText size={38} color={BRAND.red} style={{ color: BRAND.red, marginBottom: 12 }} />
                 <div style={{ fontSize: 15, fontWeight: 700, color: BRAND.navy, marginBottom: 4 }}>No Policies Found</div>
-                <div style={{ fontSize: 13, color: '#64748b', maxWidth: 360, margin: '0 auto 16px' }}>
+                <div style={{ fontSize: 13, color: '#7D8597', maxWidth: 360, margin: '0 auto 16px' }}>
                   No HR policies match your current query or category filter.
                 </div>
                 {(search || selectedCategory !== 'All' || statusFilter !== 'all') ? (
@@ -864,14 +864,14 @@ export default function ClientAdminPolicies() {
                       alignItems: 'center',
                       gap: 6,
                       padding: '9px 18px',
-                      background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                      background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                       border: 'none',
                       borderRadius: 10,
                       fontSize: 13,
                       fontWeight: 700,
                       color: '#ffffff',
                       cursor: 'pointer',
-                      boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)'
+                      boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)'
                     }}
                   >
                     <FiPlus size={15} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} style={{ color: '#ffffff', stroke: '#ffffff' }} />
@@ -884,14 +884,14 @@ export default function ClientAdminPolicies() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
                   <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-                      <th style={{ padding: '12px 16px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Policy Details</th>
-                      <th style={{ padding: '12px 14px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Category</th>
-                      <th style={{ padding: '12px 14px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Version & Date</th>
-                      <th style={{ padding: '12px 14px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>AI Status</th>
-                      <th style={{ padding: '12px 14px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Document</th>
-                      <th style={{ padding: '12px 14px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</th>
-                      <th style={{ padding: '12px 16px', color: '#475569', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>Actions</th>
+                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
+                      <th style={{ padding: '12px 16px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Policy Details</th>
+                      <th style={{ padding: '12px 14px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Category</th>
+                      <th style={{ padding: '12px 14px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Version & Date</th>
+                      <th style={{ padding: '12px 14px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>AI Status</th>
+                      <th style={{ padding: '12px 14px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Document</th>
+                      <th style={{ padding: '12px 14px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</th>
+                      <th style={{ padding: '12px 16px', color: '#33415C', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -906,7 +906,7 @@ export default function ClientAdminPolicies() {
                         <tr
                           key={policy.policy_id}
                           style={{
-                            borderBottom: idx < filteredPolicies.length - 1 ? '1px solid #f1f5f9' : 'none',
+                            borderBottom: idx < filteredPolicies.length - 1 ? '1px solid #F1F4F8' : 'none',
                             transition: 'background 0.15s'
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.background = '#fafbff')}
@@ -923,13 +923,13 @@ export default function ClientAdminPolicies() {
                               <span>{policy.title}</span>
                               <FiChevronRight size={13.5} color={BRAND.red} style={{ color: BRAND.red }} />
                             </div>
-                            <div style={{ fontSize: 12.5, color: '#475569', marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.45 }}>
+                            <div style={{ fontSize: 12.5, color: '#33415C', marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.45 }}>
                               {policy.summary || 'No overview provided.'}
                             </div>
                             {Array.isArray(policy.keywords) && policy.keywords.length > 0 && (
                               <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 6 }}>
                                 {policy.keywords.slice(0, 3).map((kw, i) => (
-                                  <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 3.5, fontSize: 11, padding: '2px 8px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 5, color: '#475569', fontWeight: 600 }}>
+                                  <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 3.5, fontSize: 11, padding: '2px 8px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 5, color: '#33415C', fontWeight: 600 }}>
                                     <FiTag size={10} color={BRAND.red} style={{ color: BRAND.red }} /> {kw}
                                   </span>
                                 ))}
@@ -947,7 +947,7 @@ export default function ClientAdminPolicies() {
                           {/* Version & Date */}
                           <td style={{ padding: '13px 14px', whiteSpace: 'nowrap' }}>
                             <div style={{ fontWeight: 650, color: BRAND.navy, fontSize: 13.5 }}>v{policy.version_number || '1.0'}</div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11.5, color: '#64748b', marginTop: 3 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11.5, color: '#7D8597', marginTop: 3 }}>
                               <FiCalendar size={12} color={BRAND.red} /> {formatDate(policy.effective_date)}
                             </div>
                           </td>
@@ -955,11 +955,11 @@ export default function ClientAdminPolicies() {
                           {/* AI RAG Status */}
                           <td style={{ padding: '13px 14px', whiteSpace: 'nowrap' }}>
                             {policy.ai_status === 'indexed' ? (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: 14, fontSize: 11.5, fontWeight: 650, color: '#4338ca' }}>
+                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#EEF8FF', border: '1px solid #c7d2fe', borderRadius: 14, fontSize: 11.5, fontWeight: 650, color: '#023E7D' }}>
                                 <FiCpu size={13} color={BRAND.red} /> AI Synced
                               </span>
                             ) : (
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, fontSize: 11.5, fontWeight: 600, color: '#64748b' }}>
+                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 14, fontSize: 11.5, fontWeight: 600, color: '#7D8597' }}>
                                 AI Ready
                               </span>
                             )}
@@ -976,24 +976,24 @@ export default function ClientAdminPolicies() {
                                 gap: 6,
                                 padding: '6px 12px',
                                 background: '#ffffff',
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid #E3E7EE',
                                 borderRadius: 7,
                                 cursor: 'pointer',
                                 fontSize: 12.5,
                                 fontWeight: 600,
-                                color: '#1e293b',
+                                color: '#001233',
                                 fontFamily: FONT_BODY,
                                 transition: 'all 0.15s'
                               }}
                               onMouseEnter={(e) => { e.currentTarget.style.borderColor = BRAND.red; e.currentTarget.style.color = BRAND.red; }}
-                              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#1e293b'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = '#001233'; }}
                             >
                               <FiDownload size={13.5} color={BRAND.red} />
                               <span style={{ maxWidth: 125, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {policy.document_name || 'Download PDF'}
                               </span>
                               {policy.document_size > 0 && (
-                                <span style={{ fontSize: 11, color: '#64748b' }}>({formatFileSize(policy.document_size)})</span>
+                                <span style={{ fontSize: 11, color: '#7D8597' }}>({formatFileSize(policy.document_size)})</span>
                               )}
                             </button>
                           </td>
@@ -1012,8 +1012,8 @@ export default function ClientAdminPolicies() {
                               <button
                                 onClick={() => setViewingPolicy(policy)}
                                 title="Read Policy"
-                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5.5px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 7, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#374151', transition: 'all 0.15s' }}
-                                onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; }}
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5.5px 10px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 7, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#374151', transition: 'all 0.15s' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.background = '#E3E7EE'; }}
                                 onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
                               >
                                 <FiEye size={13} color={BRAND.red} /> Read
@@ -1022,8 +1022,8 @@ export default function ClientAdminPolicies() {
                               <button
                                 onClick={() => handleOpenEditModal(policy)}
                                 title="Edit Policy"
-                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5.5px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 7, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#374151', transition: 'all 0.15s' }}
-                                onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; }}
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '5.5px 10px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 7, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#374151', transition: 'all 0.15s' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.background = '#E3E7EE'; }}
                                 onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
                               >
                                 <FiEdit2 size={12} color={BRAND.red} /> Edit
@@ -1052,9 +1052,9 @@ export default function ClientAdminPolicies() {
                               <button
                                 onClick={() => handleDelete(policy.policy_id)}
                                 title="Delete Policy"
-                                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '5.5px 8px', background: '#feecee', border: '1px solid #fecaca', borderRadius: 7, cursor: 'pointer', color: BRAND.red, transition: 'all 0.15s' }}
+                                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '5.5px 8px', background: '#EEF8FF', border: '1px solid #fecaca', borderRadius: 7, cursor: 'pointer', color: BRAND.red, transition: 'all 0.15s' }}
                                 onMouseEnter={(e) => { e.currentTarget.style.background = '#fca5a5'; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.background = '#feecee'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.background = '#EEF8FF'; }}
                               >
                                 <FiTrash2 size={13} color={BRAND.red} />
                               </button>
@@ -1081,7 +1081,7 @@ export default function ClientAdminPolicies() {
                       key={policy.policy_id}
                       style={{
                         background: '#ffffff',
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid #E3E7EE',
                         borderRadius: 14,
                         padding: 18,
                         display: 'flex',
@@ -1095,7 +1095,7 @@ export default function ClientAdminPolicies() {
                         e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = '#e2e8f0';
+                        e.currentTarget.style.borderColor = '#E3E7EE';
                         e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.03)';
                       }}
                     >
@@ -1129,7 +1129,7 @@ export default function ClientAdminPolicies() {
                         </h4>
 
                         {/* Version & Date */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b', marginBottom: 10 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#7D8597', marginBottom: 10 }}>
                           <span style={{ fontWeight: 650, color: BRAND.navy, fontSize: 13 }}>v{policy.version_number || '1.0'}</span>
                           <span>•</span>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
@@ -1138,7 +1138,7 @@ export default function ClientAdminPolicies() {
                         </div>
 
                         {/* Summary */}
-                        <p style={{ margin: '0 0 12px', fontSize: 12.5, color: '#475569', lineHeight: 1.45, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        <p style={{ margin: '0 0 12px', fontSize: 12.5, color: '#33415C', lineHeight: 1.45, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                           {policy.summary || 'No overview summary provided.'}
                         </p>
                       </div>
@@ -1146,10 +1146,10 @@ export default function ClientAdminPolicies() {
                       {/* Footer Actions */}
                       <div>
                         {policy.document_url && (
-                          <div style={{ padding: '7px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                          <div style={{ padding: '7px 10px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
                               <FiPaperclip size={13} color={BRAND.red} />
-                              <span style={{ fontSize: 12, fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              <span style={{ fontSize: 12, fontWeight: 600, color: '#001233', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {policy.document_name || 'Official_Policy.pdf'}
                               </span>
                             </div>
@@ -1163,23 +1163,23 @@ export default function ClientAdminPolicies() {
                           </div>
                         )}
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, borderTop: '1px solid #f1f5f9', paddingTop: 10 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, borderTop: '1px solid #F1F4F8', paddingTop: 10 }}>
                           <button
                             onClick={() => setViewingPolicy(policy)}
-                            style={{ flex: 1, padding: '6px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 7, fontSize: 12, fontWeight: 600, color: '#374151', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
+                            style={{ flex: 1, padding: '6px 10px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 7, fontSize: 12, fontWeight: 600, color: '#374151', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
                           >
                             <FiEye size={12} color={BRAND.red} /> Read
                           </button>
                           <button
                             onClick={() => handleOpenEditModal(policy)}
-                            style={{ padding: '6px 9px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 7, fontSize: 12, fontWeight: 600, color: '#374151', cursor: 'pointer' }}
+                            style={{ padding: '6px 9px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 7, fontSize: 12, fontWeight: 600, color: '#374151', cursor: 'pointer' }}
                             title="Edit"
                           >
                             <FiEdit2 size={12} color={BRAND.red} />
                           </button>
                           <button
                             onClick={() => handleDelete(policy.policy_id)}
-                            style={{ padding: '6px 9px', background: '#feecee', border: '1px solid #fecaca', borderRadius: 7, fontSize: 12, color: BRAND.red, cursor: 'pointer' }}
+                            style={{ padding: '6px 9px', background: '#EEF8FF', border: '1px solid #fecaca', borderRadius: 7, fontSize: 12, color: BRAND.red, cursor: 'pointer' }}
                             title="Delete"
                           >
                             <FiTrash2 size={12} color={BRAND.red} />
@@ -1227,7 +1227,7 @@ export default function ClientAdminPolicies() {
             }}
           >
             {/* Modal Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #f1f5f9', paddingBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #F1F4F8', paddingBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: BRAND.redTint, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiFileText size={18} color={BRAND.red} stroke={BRAND.red} style={{ stroke: BRAND.red, color: BRAND.red }} />
@@ -1236,7 +1236,7 @@ export default function ClientAdminPolicies() {
                   <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: BRAND.navy }}>
                     {editingPolicy ? 'Edit HR Policy' : 'Create New HR Policy'}
                   </h3>
-                  <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>
+                  <div style={{ fontSize: 12, color: '#7D8597', marginTop: 2 }}>
                     Official policy document configuration and organizational distribution
                   </div>
                 </div>
@@ -1266,7 +1266,7 @@ export default function ClientAdminPolicies() {
                     width: '100%',
                     padding: '9px 13px',
                     background: '#f8fafc',
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     borderRadius: 10,
                     fontSize: 13,
                     color: '#111827',
@@ -1290,7 +1290,7 @@ export default function ClientAdminPolicies() {
                       width: '100%',
                       padding: '9px 13px',
                       background: '#f8fafc',
-                      border: '1.5px solid #e2e8f0',
+                      border: '1.5px solid #E3E7EE',
                       borderRadius: 10,
                       fontSize: 13,
                       color: '#111827',
@@ -1319,7 +1319,7 @@ export default function ClientAdminPolicies() {
                       width: '100%',
                       padding: '9px 13px',
                       background: '#f8fafc',
-                      border: '1.5px solid #e2e8f0',
+                      border: '1.5px solid #E3E7EE',
                       borderRadius: 10,
                       fontSize: 13,
                       color: '#111827',
@@ -1345,7 +1345,7 @@ export default function ClientAdminPolicies() {
                       width: '100%',
                       padding: '9px 13px',
                       background: '#f8fafc',
-                      border: '1.5px solid #e2e8f0',
+                      border: '1.5px solid #E3E7EE',
                       borderRadius: 10,
                       fontSize: 13,
                       color: '#111827',
@@ -1369,7 +1369,7 @@ export default function ClientAdminPolicies() {
                       width: '100%',
                       padding: '9px 13px',
                       background: '#f8fafc',
-                      border: '1.5px solid #e2e8f0',
+                      border: '1.5px solid #E3E7EE',
                       borderRadius: 10,
                       fontSize: 13,
                       color: '#111827',
@@ -1395,7 +1395,7 @@ export default function ClientAdminPolicies() {
                     width: '100%',
                     padding: '9px 13px',
                     background: '#f8fafc',
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     borderRadius: 10,
                     fontSize: 13,
                     color: '#111827',
@@ -1436,7 +1436,7 @@ export default function ClientAdminPolicies() {
                     <span style={{ fontSize: 13, fontWeight: 700, color: BRAND.navy }}>
                       {selectedFile ? selectedFile.name : editingPolicy ? `Current: ${editingPolicy.document_name} (Click to replace)` : 'Click to upload official PDF or DOCX file'}
                     </span>
-                    <span style={{ fontSize: 11, color: '#64748b' }}>Maximum file size: 15MB</span>
+                    <span style={{ fontSize: 11, color: '#7D8597' }}>Maximum file size: 15MB</span>
                   </div>
                 </div>
               </div>
@@ -1455,7 +1455,7 @@ export default function ClientAdminPolicies() {
                     width: '100%',
                     padding: '9px 13px',
                     background: '#f8fafc',
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     borderRadius: 10,
                     fontSize: 13,
                     color: '#111827',
@@ -1491,7 +1491,7 @@ export default function ClientAdminPolicies() {
                   style={{
                     padding: '9px 18px',
                     background: '#ffffff',
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     borderRadius: 10,
                     cursor: 'pointer',
                     fontSize: 13,
@@ -1507,14 +1507,14 @@ export default function ClientAdminPolicies() {
                   disabled={submitting}
                   style={{
                     padding: '9px 22px',
-                    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                     border: 'none',
                     borderRadius: 10,
                     cursor: submitting ? 'not-allowed' : 'pointer',
                     fontSize: 13,
                     fontWeight: 700,
                     color: '#ffffff',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                     fontFamily: FONT_BODY
                   }}
                 >
@@ -1561,13 +1561,13 @@ export default function ClientAdminPolicies() {
               fontFamily: FONT_BODY
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 18, borderBottom: '1px solid #f1f5f9', paddingBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 18, borderBottom: '1px solid #F1F4F8', paddingBottom: 14 }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                   <span style={{ fontSize: 12, fontWeight: 700, color: BRAND.red, background: BRAND.redTint, padding: '3px 9px', borderRadius: 6, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     {viewingPolicy.category}
                   </span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: BRAND.navy, background: '#f1f5f9', padding: '3px 9px', borderRadius: 6 }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: BRAND.navy, background: '#F1F4F8', padding: '3px 9px', borderRadius: 6 }}>
                     v{viewingPolicy.version_number || '1.0'}
                   </span>
                 </div>
@@ -1598,14 +1598,14 @@ export default function ClientAdminPolicies() {
                   dangerouslySetInnerHTML={{ __html: viewingPolicy.content_html }}
                 />
               ) : (
-                <div style={{ padding: 20, textAlign: 'center', color: '#64748b', fontSize: 13.5, background: '#f8fafc', borderRadius: 8 }}>
+                <div style={{ padding: 20, textAlign: 'center', color: '#7D8597', fontSize: 13.5, background: '#f8fafc', borderRadius: 8 }}>
                   This policy content is maintained in the attached official document file. Click below to download.
                 </div>
               )}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 22, paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#64748b' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 22, paddingTop: 16, borderTop: '1px solid #F1F4F8' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#7D8597' }}>
                 <FiCalendar size={14} color={BRAND.red} stroke={BRAND.red} style={{ stroke: BRAND.red, color: BRAND.red }} /> Effective: {formatDate(viewingPolicy.effective_date)}
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
@@ -1617,7 +1617,7 @@ export default function ClientAdminPolicies() {
                     gap: 6,
                     padding: '9px 16px',
                     background: '#ffffff',
-                    border: '1.5px solid #e2e8f0',
+                    border: '1.5px solid #E3E7EE',
                     borderRadius: 10,
                     cursor: 'pointer',
                     fontSize: 13.5,
@@ -1635,14 +1635,14 @@ export default function ClientAdminPolicies() {
                     alignItems: 'center',
                     gap: 8,
                     padding: '9px 20px',
-                    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                     border: 'none',
                     borderRadius: 10,
                     cursor: 'pointer',
                     fontSize: 13.5,
                     fontWeight: 700,
                     color: '#ffffff',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                     fontFamily: FONT_BODY
                   }}
                 >

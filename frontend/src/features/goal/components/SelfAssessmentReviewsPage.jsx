@@ -69,8 +69,8 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
       key: 'employee',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#1e293b' }}>{r.employee_name}</div>
-          <div style={{ fontSize: 11, color: '#64748b' }}>Dept: {r.department_name || '—'}</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#001233' }}>{r.employee_name}</div>
+          <div style={{ fontSize: 11, color: '#7D8597' }}>Dept: {r.department_name || '—'}</div>
         </div>
       )
     },
@@ -79,8 +79,8 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
       key: 'goal',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#4f46e5' }}>{r.title}</div>
-          <div style={{ fontSize: 11, color: '#64748b' }}>Cycle: {r.cycle_name || '—'}</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#0353A4' }}>{r.title}</div>
+          <div style={{ fontSize: 11, color: '#7D8597' }}>Cycle: {r.cycle_name || '—'}</div>
         </div>
       )
     },
@@ -88,13 +88,13 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
       title: 'Self rating',
       dataIndex: 'overall_employee_score',
       key: 'empScore',
-      render: (val) => <span style={{ fontSize: 13, color: '#475569', fontWeight: 600 }}>{val !== null ? `${parseFloat(val).toFixed(1)}%` : '—'}</span>
+      render: (val) => <span style={{ fontSize: 13, color: '#33415C', fontWeight: 600 }}>{val !== null ? `${parseFloat(val).toFixed(1)}%` : '—'}</span>
     },
     {
       title: 'Manager rating',
       dataIndex: 'overall_manager_score',
       key: 'mgrScore',
-      render: (val) => <span style={{ fontSize: 13, color: '#475569', fontWeight: 600 }}>{val !== null ? `${parseFloat(val).toFixed(1)}%` : '—'}</span>
+      render: (val) => <span style={{ fontSize: 13, color: '#33415C', fontWeight: 600 }}>{val !== null ? `${parseFloat(val).toFixed(1)}%` : '—'}</span>
     },
     {
       title: 'Final score',
@@ -113,7 +113,7 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
             {r.employee_acknowledged ? (
               <span style={{ fontSize: 10, color: '#16a34a', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 3 }}><CheckCircleOutlined /> Acknowledged</span>
             ) : r.status === 'APPROVED' ? (
-              <span style={{ fontSize: 10, color: '#64748b' }}>Pending Ack</span>
+              <span style={{ fontSize: 10, color: '#7D8597' }}>Pending Ack</span>
             ) : null}
           </Space>
         );
@@ -153,7 +153,7 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
       {/* Configuration & Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <Title level={4} style={{ margin: 0, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 8 }}><FiUsers style={{ color: '#6366f1' }} /> Employee Self Assessment Hub</Title>
+          <Title level={4} style={{ margin: 0, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 8 }}><FiUsers style={{ color: '#0466C8' }} /> Employee Self Assessment Hub</Title>
           <Text type="secondary">Review submitted questionnaire responses and final score appraisal outcomes.</Text>
         </div>
         <Space>
@@ -167,9 +167,9 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
       {/* Cards Statistics */}
       <Row gutter={[16, 16]}>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Completion Rate</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Completion Rate</span>}
               value={`${completionRate}%`}
               prefix={<TrophyOutlined style={{ color: '#10b981', marginRight: 8 }} />}
             />
@@ -177,9 +177,9 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Pending Reviews</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Pending Reviews</span>}
               value={pendingCount}
               prefix={<ClockCircleOutlined style={{ color: '#ea580c', marginRight: 8 }} />}
             />
@@ -187,9 +187,9 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Avg. Self Score</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Avg. Self Score</span>}
               value={`${avgEmpRating}%`}
               prefix={<BarChartOutlined style={{ color: '#3b82f6', marginRight: 8 }} />}
             />
@@ -197,9 +197,9 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Avg. Manager Score</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Avg. Manager Score</span>}
               value={`${avgMgrRating}%`}
               prefix={<CheckCircleOutlined style={{ color: '#8b5cf6', marginRight: 8 }} />}
             />
@@ -209,7 +209,7 @@ export default function SelfAssessmentReviewsPage({ onSelectGoal }) {
       </Row>
 
       {/* Main Submissions Table */}
-      <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+      <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #E3E7EE' }}>
         <Table
           columns={columns}
           dataSource={submissions}

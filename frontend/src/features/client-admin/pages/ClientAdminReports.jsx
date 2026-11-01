@@ -124,9 +124,9 @@ function CodeBadge({ code }) {
   if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
   return (
     <span style={{
-      background: '#f1f5f9', color: '#334155', padding: '3px 9px',
+      background: '#F1F4F8', color: '#33415C', padding: '3px 9px',
       borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
-      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+      border: '1px solid #E3E7EE', letterSpacing: '0.03em', display: 'inline-block'
     }}>
       {code}
     </span>
@@ -135,16 +135,16 @@ function CodeBadge({ code }) {
 
 /* ─── Status badge ─── */
 const STATUS_META = {
-  draft:            { bg: '#f1f5f9', text: '#475569', dot: '#94a3b8' },
+  draft:            { bg: '#F1F4F8', text: '#33415C', dot: '#94a3b8' },
   active:           { bg: '#e8fbf0', text: '#0fa958', dot: '#10b981' },
   submitted:        { bg: '#fef3c7', text: '#d97706', dot: '#f59e0b' },
   completed:        { bg: '#f3e8ff', text: '#7c3aed', dot: '#8b5cf6' },
-  rejected:         { bg: '#feecee', text: '#dc2626', dot: '#ef4444' },
+  rejected:         { bg: '#EEF8FF', text: '#dc2626', dot: '#ef4444' },
   pending_approval: { bg: '#fef3c7', text: '#d97706', dot: '#f59e0b' },
   approved:         { bg: '#e8fbf0', text: '#0fa958', dot: '#10b981' },
-  pending:          { bg: '#f1f5f9', text: '#475569', dot: '#94a3b8' },
+  pending:          { bg: '#F1F4F8', text: '#33415C', dot: '#94a3b8' },
   in_progress:      { bg: '#e0f2fe', text: '#0284c7', dot: '#0284c7' },
-  DRAFT:            { bg: '#f1f5f9', text: '#475569', dot: '#94a3b8' },
+  DRAFT:            { bg: '#F1F4F8', text: '#33415C', dot: '#94a3b8' },
   APPROVED:         { bg: '#e8fbf0', text: '#0fa958', dot: '#10b981' },
   LOCKED:           { bg: '#f3e8ff', text: '#7c3aed', dot: '#8b5cf6' },
 }
@@ -152,7 +152,7 @@ const STATUS_META = {
 function Badge({ value }) {
   if (!value) return <span style={{ color: '#94a3b8', fontSize: 12, fontFamily: "'Inter', sans-serif" }}>—</span>
   const key = String(value).toLowerCase()
-  const c = STATUS_META[value] || STATUS_META[key] || (key.includes('progress') ? { bg: '#e0f2fe', text: '#0284c7', dot: '#0284c7' } : { bg: '#f1f5f9', text: '#475569', dot: '#94a3b8' })
+  const c = STATUS_META[value] || STATUS_META[key] || (key.includes('progress') ? { bg: '#e0f2fe', text: '#0284c7', dot: '#0284c7' } : { bg: '#F1F4F8', text: '#33415C', dot: '#94a3b8' })
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -170,17 +170,17 @@ function Badge({ value }) {
 function FilterSelect({ label, value, onChange, options, placeholder = 'All' }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 160, fontFamily: "'Inter', sans-serif" }}>
-      <label style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
+      <label style={{ fontSize: 11, fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
         style={{
-          border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '8px 12px', fontSize: 13,
-          color: '#0f172a', background: '#f8fafc', cursor: 'pointer', outline: 'none',
+          border: '1.5px solid #E3E7EE', borderRadius: 10, padding: '8px 12px', fontSize: 13,
+          color: '#001233', background: '#f8fafc', cursor: 'pointer', outline: 'none',
           fontFamily: 'inherit', transition: 'all 0.15s ease',
         }}
-        onFocus={e => { e.target.style.borderColor = 'var(--primary-color, #C2071A)'; e.target.style.background = '#fff' }}
-        onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
+        onFocus={e => { e.target.style.borderColor = 'var(--primary-color, #0466C8)'; e.target.style.background = '#fff' }}
+        onBlur={e => { e.target.style.borderColor = '#E3E7EE'; e.target.style.background = '#f8fafc' }}
       >
         <option value="">{placeholder}</option>
         {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -192,15 +192,15 @@ function FilterSelect({ label, value, onChange, options, placeholder = 'All' }) 
 function FilterInput({ label, value, onChange, type = 'text', placeholder = '' }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 140, fontFamily: "'Inter', sans-serif" }}>
-      <label style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
+      <label style={{ fontSize: 11, fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
       <input
         type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
         style={{
-          border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '8px 12px', fontSize: 13,
-          color: '#0f172a', background: '#f8fafc', outline: 'none', fontFamily: 'inherit', transition: 'all 0.15s ease',
+          border: '1.5px solid #E3E7EE', borderRadius: 10, padding: '8px 12px', fontSize: 13,
+          color: '#001233', background: '#f8fafc', outline: 'none', fontFamily: 'inherit', transition: 'all 0.15s ease',
         }}
-        onFocus={e => { e.target.style.borderColor = 'var(--primary-color, #C2071A)'; e.target.style.background = '#fff' }}
-        onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
+        onFocus={e => { e.target.style.borderColor = 'var(--primary-color, #0466C8)'; e.target.style.background = '#fff' }}
+        onBlur={e => { e.target.style.borderColor = '#E3E7EE'; e.target.style.background = '#f8fafc' }}
       />
     </div>
   )
@@ -219,8 +219,8 @@ function SummaryPills({ items }) {
           display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 110,
           fontFamily: "'Inter', sans-serif",
         }}>
-          <span style={{ fontSize: 22, fontWeight: 800, color: it.color || '#0f172a', lineHeight: 1 }}>{it.value}</span>
-          <span style={{ fontSize: 11, color: '#64748b', fontWeight: 700, marginTop: 4, letterSpacing: '0.03em', textTransform: 'uppercase' }}>{it.label}</span>
+          <span style={{ fontSize: 22, fontWeight: 800, color: it.color || '#001233', lineHeight: 1 }}>{it.value}</span>
+          <span style={{ fontSize: 11, color: '#7D8597', fontWeight: 700, marginTop: 4, letterSpacing: '0.03em', textTransform: 'uppercase' }}>{it.label}</span>
         </div>
       ))}
     </div>
@@ -257,8 +257,8 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
   const btnBase = {
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     width: 34, height: 34, borderRadius: 8, border: 'none',
-    fontSize: 13, fontWeight: 600, cursor: 'pointer', background: '#f1f5f9',
-    color: '#475569', transition: 'all 0.15s', fontFamily: "'Inter', sans-serif",
+    fontSize: 13, fontWeight: 600, cursor: 'pointer', background: '#F1F4F8',
+    color: '#33415C', transition: 'all 0.15s', fontFamily: "'Inter', sans-serif",
   }
 
   return (
@@ -273,16 +273,16 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
             onChange={e => setSearch(e.target.value)}
             style={{
               width: '100%', paddingLeft: 34, padding: '8px 12px 8px 34px',
-              border: '1.5px solid #e2e8f0', borderRadius: 10, fontSize: 13,
+              border: '1.5px solid #E3E7EE', borderRadius: 10, fontSize: 13,
               background: '#f8fafc', outline: 'none', fontFamily: 'inherit',
               boxSizing: 'border-box', transition: 'all 0.15s ease',
             }}
-            onFocus={e => { e.target.style.borderColor = 'var(--primary-color, #C2071A)'; e.target.style.background = '#fff' }}
-            onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
+            onFocus={e => { e.target.style.borderColor = 'var(--primary-color, #0466C8)'; e.target.style.background = '#fff' }}
+            onBlur={e => { e.target.style.borderColor = '#E3E7EE'; e.target.style.background = '#f8fafc' }}
           />
         </div>
         <span style={{
-          background: '#FEECEE', color: '#C2071A', padding: '5px 14px',
+          background: '#EEF8FF', color: '#0466C8', padding: '5px 14px',
           borderRadius: 20, fontWeight: 700, fontSize: 11.5, letterSpacing: '0.02em',
         }}>
           {filtered.length === 0 ? '0 rows' : `${from}–${to} of ${filtered.length} rows`}
@@ -290,14 +290,14 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+      <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
-            <tr style={{ background: '#f8fafc', color: '#334155' }}>
+            <tr style={{ background: '#f8fafc', color: '#33415C' }}>
               {columns.map(c => (
                 <th key={c.key} style={{
                   padding: '14px 16px', textAlign: 'left',
-                  fontSize: 11.5, fontWeight: 700, color: '#334155',
+                  fontSize: 11.5, fontWeight: 700, color: '#33415C',
                   textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap',
                 }}>
                   {c.label}
@@ -320,11 +320,11 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
                   background: i % 2 === 0 ? '#ffffff' : '#fafafa',
                   transition: 'background 0.15s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                onMouseEnter={e => e.currentTarget.style.background = '#F1F4F8'}
                 onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : '#fafafa'}
               >
                 {columns.map(c => (
-                  <td key={c.key} style={{ padding: '14px 16px', color: '#1e293b', whiteSpace: c.wrap ? 'normal' : 'nowrap' }}>
+                  <td key={c.key} style={{ padding: '14px 16px', color: '#001233', whiteSpace: c.wrap ? 'normal' : 'nowrap' }}>
                     {c.render ? c.render(row) : fmt(c.value(row))}
                   </td>
                 ))}
@@ -337,7 +337,7 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
       {/* Pagination */}
       {totalPages > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 16 }}>
-          <span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>
+          <span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>
             Page {safePage} of {totalPages}
           </span>
           <div style={{ display: 'flex', gap: 6 }}>
@@ -358,9 +358,9 @@ function DataTable({ columns, rows, emptyMsg = 'No data found.' }) {
                   onClick={() => setPage(n)}
                   style={{
                     ...btnBase,
-                    background: safePage === n ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#f1f5f9',
-                    color: safePage === n ? '#ffffff' : '#475569',
-                    boxShadow: safePage === n ? '0 3px 10px rgba(194, 7, 26, 0.25)' : 'none',
+                    background: safePage === n ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#F1F4F8',
+                    color: safePage === n ? '#ffffff' : '#33415C',
+                    boxShadow: safePage === n ? '0 3px 10px rgba(4, 102, 200, 0.25)' : 'none',
                     fontWeight: safePage === n ? 700 : 600,
                   }}
                 >
@@ -393,9 +393,9 @@ function ExportButtons({ onCSV, onPDF, onRefresh, loading }) {
         style={{
           display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px',
           border: 'none', borderRadius: 10, fontSize: 13,
-          background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+          background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
           cursor: loading ? 'not-allowed' : 'pointer', color: '#ffffff', fontWeight: 700,
-          fontFamily: "'Inter', sans-serif", boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+          fontFamily: "'Inter', sans-serif", boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
           transition: 'all 0.15s ease', opacity: loading ? 0.7 : 1,
         }}
       >
@@ -421,9 +421,9 @@ function ExportButtons({ onCSV, onPDF, onRefresh, loading }) {
         style={{
           display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px',
           border: 'none', borderRadius: 10, fontSize: 13,
-          background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+          background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
           cursor: 'pointer', color: '#ffffff', fontWeight: 700,
-          fontFamily: "'Inter', sans-serif", boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+          fontFamily: "'Inter', sans-serif", boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
           transition: 'all 0.15s ease',
         }}
       >
@@ -473,23 +473,23 @@ function GoalReport({ filters: filterData }) {
   ]
 
   const columns = [
-    { key: 'employee', label: 'Employee',   value: r => r.employee_name || '—', render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.employee_name || '—'}</span> },
+    { key: 'employee', label: 'Employee',   value: r => r.employee_name || '—', render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.employee_name || '—'}</span> },
     { key: 'code',     label: 'Code',       value: r => r.employee_code || '—', render: r => <CodeBadge code={r.employee_code} /> },
     { key: 'dept',     label: 'Department', value: r => r.department_name || '—' },
     { key: 'manager',  label: 'Manager',    value: r => r.manager_name || '—' },
-    { key: 'title',    label: 'Goal',       value: r => r.title, wrap: true, render: r => <span style={{ fontWeight: 600, color: '#1e293b' }}>{r.title}</span> },
+    { key: 'title',    label: 'Goal',       value: r => r.title, wrap: true, render: r => <span style={{ fontWeight: 600, color: '#001233' }}>{r.title}</span> },
     { key: 'type',     label: 'Type',       value: r => r.goal_type,  render: r => <Badge value={r.goal_type} /> },
     { key: 'status',   label: 'Status',     value: r => r.status,     render: r => <Badge value={r.status} /> },
     { key: 'priority', label: 'Priority',   value: r => r.priority,   render: r => <Badge value={r.priority} /> },
     { key: 'progress', label: 'Progress',   value: r => r.progress,   render: r => (
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 60, height: 7, background: '#e2e8f0', borderRadius: 99, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${Math.min(100, r.progress || 0)}%`, background: 'linear-gradient(90deg, #C2071A 0%, #900513 100%)', borderRadius: 99 }} />
+        <div style={{ width: 60, height: 7, background: '#E3E7EE', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${Math.min(100, r.progress || 0)}%`, background: 'linear-gradient(90deg, #0466C8 0%, #023E7D 100%)', borderRadius: 99 }} />
         </div>
-        <span style={{ fontSize: 12, color: '#0f172a', fontWeight: 700 }}>{r.progress || 0}%</span>
+        <span style={{ fontSize: 12, color: '#001233', fontWeight: 700 }}>{r.progress || 0}%</span>
       </div>
     )},
-    { key: 'weight', label: 'Weight',     value: r => `${r.weight || 0}%`, render: r => <span style={{ fontWeight: 600, color: '#475569' }}>{r.weight || 0}%</span> },
+    { key: 'weight', label: 'Weight',     value: r => `${r.weight || 0}%`, render: r => <span style={{ fontWeight: 600, color: '#33415C' }}>{r.weight || 0}%</span> },
     { key: 'start',  label: 'Start Date', value: r => fmtDate(r.start_date) },
     { key: 'due',    label: 'Due Date',   value: r => fmtDate(r.due_date) },
   ]
@@ -528,7 +528,7 @@ function GoalReport({ filters: filterData }) {
             onClick={() => setF({ department_id: '', employee_id: '', status: '', goal_type: '', date_from: '', date_to: '' })}
             style={{
               padding: '8px 16px', border: 'none', borderRadius: 10, fontSize: 13,
-              background: '#f1f5f9', cursor: 'pointer', color: '#475569', fontWeight: 600,
+              background: '#F1F4F8', cursor: 'pointer', color: '#33415C', fontWeight: 600,
               fontFamily: "'Inter', sans-serif", transition: 'all 0.15s ease',
             }}
           >Clear</button>
@@ -537,7 +537,7 @@ function GoalReport({ filters: filterData }) {
 
       <div style={card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>Goal Report</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#001233' }}>Goal Report</div>
           <ExportButtons
             loading={loading}
             onRefresh={load}
@@ -547,7 +547,7 @@ function GoalReport({ filters: filterData }) {
         </div>
         <SummaryPills items={summaryPills} />
         {loading
-          ? <div style={{ textAlign: 'center', padding: 40, color: '#64748b' }}>Loading...</div>
+          ? <div style={{ textAlign: 'center', padding: 40, color: '#7D8597' }}>Loading...</div>
           : <DataTable columns={columns} rows={rows} emptyMsg="No goals found for the selected filters." />
         }
       </div>
@@ -593,12 +593,12 @@ function AppraisalReport({ filters: filterData }) {
     { label: 'Self Submitted',  value: selfDone,                                                  bg: '#e8fbf0', color: '#0fa958' },
     { label: 'Manager Done',    value: mgrDone,                                                   bg: '#e0f2fe', color: '#0284c7' },
     { label: 'Self Completion', value: total ? `${Math.round((selfDone / total) * 100)}%` : '—', bg: '#fef3c7', color: '#d97706' },
-    { label: 'Avg Rating',      value: avgRating,                                                 bg: '#FEECEE', color: '#C2071A' },
+    { label: 'Avg Rating',      value: avgRating,                                                 bg: '#EEF8FF', color: '#0466C8' },
   ]
 
   const columns = [
     { key: 'code',       label: 'Code',            value: r => r.employee_code, render: r => <CodeBadge code={r.employee_code} /> },
-    { key: 'name',       label: 'Employee',         value: r => r.employee_name, render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.employee_name}</span> },
+    { key: 'name',       label: 'Employee',         value: r => r.employee_name, render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.employee_name}</span> },
     { key: 'dept',       label: 'Department',       value: r => r.department_name || '—' },
     { key: 'desig',      label: 'Designation',      value: r => r.designation || '—' },
     { key: 'manager',    label: 'Manager',          value: r => r.manager_name || '—' },
@@ -607,7 +607,7 @@ function AppraisalReport({ filters: filterData }) {
     { key: 'mgr_status', label: 'Manager Review',   value: r => r.manager_status || 'not started', render: r => <Badge value={r.manager_status || 'not started'} /> },
     { key: 'mgr_at',     label: 'Review Submitted', value: r => fmtDate(r.manager_submitted_at) },
     { key: 'rating',     label: 'Final Rating',     value: r => r.final_rating,                    render: r => r.final_rating != null
-        ? <span style={{ background: '#FEECEE', color: '#C2071A', padding: '3px 9px', borderRadius: 6, fontWeight: 800, fontSize: 12 }}>{Number(r.final_rating).toFixed(2)} ★</span>
+        ? <span style={{ background: '#EEF8FF', color: '#0466C8', padding: '3px 9px', borderRadius: 6, fontWeight: 800, fontSize: 12 }}>{Number(r.final_rating).toFixed(2)} ★</span>
         : <span style={{ color: '#9ca3af' }}>—</span>
     },
   ]
@@ -639,7 +639,7 @@ function AppraisalReport({ filters: filterData }) {
           <FilterSelect label="Appraisal Cycle" value={cycleId} onChange={setCycleId} options={cycleOptions} placeholder="Select cycle" />
           {selectedCycle && (
             <div style={{ display: 'flex', gap: 16, padding: '8px 14px', background: '#f8fafc', borderRadius: 10, border: 'none', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', alignItems: 'center' }}>
-              <span style={{ fontSize: 12, color: '#64748b' }}>Period: <b style={{ color: '#0f172a' }}>{fmtDate(selectedCycle.period_start)} – {fmtDate(selectedCycle.period_end)}</b></span>
+              <span style={{ fontSize: 12, color: '#7D8597' }}>Period: <b style={{ color: '#001233' }}>{fmtDate(selectedCycle.period_start)} – {fmtDate(selectedCycle.period_end)}</b></span>
               <Badge value={selectedCycle.status} />
             </div>
           )}
@@ -648,7 +648,7 @@ function AppraisalReport({ filters: filterData }) {
 
       <div style={card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>Appraisal Cycle Report</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#001233' }}>Appraisal Cycle Report</div>
           <ExportButtons
             loading={loading}
             onRefresh={load}
@@ -659,7 +659,7 @@ function AppraisalReport({ filters: filterData }) {
         {!cycleId
           ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>Select an appraisal cycle to view the report.</div>
           : loading
-            ? <div style={{ textAlign: 'center', padding: 40, color: '#64748b' }}>Loading...</div>
+            ? <div style={{ textAlign: 'center', padding: 40, color: '#7D8597' }}>Loading...</div>
             : <>
                 <SummaryPills items={summaryPills} />
                 <DataTable columns={columns} rows={rows} emptyMsg="No appraisal data found for this cycle." />
@@ -699,16 +699,16 @@ function KpiReport({ filters: filterData }) {
   const summaryPills = [
     { label: 'Total KPIs',       value: total,                                     bg: '#f3e8ff', color: '#7c3aed' },
     { label: 'Approved',         value: approved,                                  bg: '#e8fbf0', color: '#0fa958' },
-    { label: 'Pending',          value: rows.filter(r => ['pending', 'draft'].includes(String(r.status || '').toLowerCase())).length, bg: '#f1f5f9', color: '#475569' },
+    { label: 'Pending',          value: rows.filter(r => ['pending', 'draft'].includes(String(r.status || '').toLowerCase())).length, bg: '#F1F4F8', color: '#33415C' },
     { label: 'Avg Achievement',  value: `${avgAchievement}%`,                      bg: '#e0f2fe', color: '#0284c7' },
     { label: 'Over-achievers',   value: overAchievers,                             bg: '#fef3c7', color: '#d97706' },
   ]
 
   const columns = [
-    { key: 'emp',        label: 'Employee',    value: r => r.employee_name || '—', render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.employee_name || '—'}</span> },
+    { key: 'emp',        label: 'Employee',    value: r => r.employee_name || '—', render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.employee_name || '—'}</span> },
     { key: 'code',       label: 'Code',        value: r => r.employee_code || '—', render: r => <CodeBadge code={r.employee_code} /> },
     { key: 'dept',       label: 'Department',  value: r => r.department_name || '—' },
-    { key: 'kpi',        label: 'KPI Name',    value: r => r.kpi_name, wrap: true, render: r => <span style={{ fontWeight: 600, color: '#1e293b' }}>{r.kpi_name}</span> },
+    { key: 'kpi',        label: 'KPI Name',    value: r => r.kpi_name, wrap: true, render: r => <span style={{ fontWeight: 600, color: '#001233' }}>{r.kpi_name}</span> },
     { key: 'kpicode',    label: 'KPI Code',    value: r => r.code || '—', render: r => <CodeBadge code={r.code} /> },
     { key: 'cat',        label: 'Category',    value: r => r.category || '—' },
     { key: 'unit',       label: 'Unit',        value: r => r.measurement_unit || '—' },
@@ -721,14 +721,14 @@ function KpiReport({ filters: filterData }) {
       const color = pct >= 100 ? '#0fa958' : pct >= 75 ? '#d97706' : '#dc2626'
       return (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 60, height: 7, background: '#e2e8f0', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{ width: 60, height: 7, background: '#E3E7EE', borderRadius: 99, overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${Math.min(100, pct)}%`, background: color, borderRadius: 99 }} />
           </div>
           <span style={{ fontSize: 12, fontWeight: 700, color }}>{pct}%</span>
         </div>
       )
     }},
-    { key: 'weight',      label: 'Weight',      value: r => `${r.weight || 0}%`, render: r => <span style={{ fontWeight: 600, color: '#475569' }}>{r.weight || 0}%</span> },
+    { key: 'weight',      label: 'Weight',      value: r => `${r.weight || 0}%`, render: r => <span style={{ fontWeight: 600, color: '#33415C' }}>{r.weight || 0}%</span> },
     { key: 'status',      label: 'Status',      value: r => r.status,             render: r => <Badge value={r.status} /> },
     { key: 'approved_at', label: 'Approved At', value: r => fmtDate(r.approved_at) },
   ]
@@ -765,7 +765,7 @@ function KpiReport({ filters: filterData }) {
             onClick={() => setF({ status: '', category: '', employee_id: '' })}
             style={{
               padding: '8px 16px', border: 'none', borderRadius: 10, fontSize: 13,
-              background: '#f1f5f9', cursor: 'pointer', color: '#475569', fontWeight: 600,
+              background: '#F1F4F8', cursor: 'pointer', color: '#33415C', fontWeight: 600,
               fontFamily: "'Inter', sans-serif", transition: 'all 0.15s ease',
             }}
           >Clear</button>
@@ -774,7 +774,7 @@ function KpiReport({ filters: filterData }) {
 
       <div style={card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>KPI Report</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#001233' }}>KPI Report</div>
           <ExportButtons
             loading={loading}
             onRefresh={load}
@@ -784,7 +784,7 @@ function KpiReport({ filters: filterData }) {
         </div>
         <SummaryPills items={summaryPills} />
         {loading
-          ? <div style={{ textAlign: 'center', padding: 40, color: '#64748b' }}>Loading...</div>
+          ? <div style={{ textAlign: 'center', padding: 40, color: '#7D8597' }}>Loading...</div>
           : <DataTable columns={columns} rows={rows} emptyMsg="No KPI assignments found for the selected filters." />
         }
       </div>
@@ -827,31 +827,31 @@ function PayrollReport({ filters: filterData }) {
   const summaryPills = [
     { label: 'Employees',         value: rows.length,              bg: '#f3e8ff', color: '#7c3aed' },
     { label: 'Total Gross',       value: fmtCurrency(totalGross),       bg: '#e8fbf0', color: '#0fa958' },
-    { label: 'Total Deductions',  value: fmtCurrency(totalDeductions),  bg: '#feecee', color: '#dc2626' },
+    { label: 'Total Deductions',  value: fmtCurrency(totalDeductions),  bg: '#EEF8FF', color: '#dc2626' },
     { label: 'Total Net Salary',  value: fmtCurrency(totalNet),         bg: '#e0f2fe', color: '#0284c7' },
     { label: 'Total LOP Days',    value: totalLop,                 bg: '#ffedd5', color: '#c2410c' },
   ]
 
   const columns = [
     { key: 'code',       label: 'Code',             value: r => r.employee_code, render: r => <CodeBadge code={r.employee_code} /> },
-    { key: 'name',       label: 'Employee',          value: r => r.employee_name, render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.employee_name}</span> },
+    { key: 'name',       label: 'Employee',          value: r => r.employee_name, render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.employee_name}</span> },
     { key: 'dept',       label: 'Department',        value: r => r.department_name || '—' },
     { key: 'desig',      label: 'Designation',       value: r => r.designation || '—' },
     { key: 'struct',     label: 'Salary Structure',  value: r => r.structure_name || '—' },
-    { key: 'working',    label: 'Working Days',      value: r => r.working_days ?? '—', render: r => <span style={{ fontWeight: 600, color: '#475569' }}>{r.working_days ?? '—'}</span> },
-    { key: 'present',    label: 'Present Days',      value: r => r.present_days ?? '—', render: r => <span style={{ fontWeight: 600, color: '#475569' }}>{r.present_days ?? '—'}</span> },
+    { key: 'working',    label: 'Working Days',      value: r => r.working_days ?? '—', render: r => <span style={{ fontWeight: 600, color: '#33415C' }}>{r.working_days ?? '—'}</span> },
+    { key: 'present',    label: 'Present Days',      value: r => r.present_days ?? '—', render: r => <span style={{ fontWeight: 600, color: '#33415C' }}>{r.present_days ?? '—'}</span> },
     { key: 'paid_leave', label: 'Paid Leave',        value: r => r.paid_leave_days ?? '—' },
     { key: 'holiday',    label: 'Holidays',          value: r => r.holiday_days ?? '—' },
     { key: 'weekoff',    label: 'Week Off',          value: r => r.week_off_days ?? '—' },
     { key: 'lop',        label: 'LOP Days',          value: r => r.lop_days ?? '—',   render: r => {
       const lop = Number(r.lop_days || 0)
       return lop > 0 ? (
-        <span style={{ fontWeight: 800, color: '#dc2626', background: '#feecee', padding: '3px 8px', borderRadius: 6, fontSize: 12 }}>{lop.toFixed(2)}</span>
+        <span style={{ fontWeight: 800, color: '#dc2626', background: '#EEF8FF', padding: '3px 8px', borderRadius: 6, fontSize: 12 }}>{lop.toFixed(2)}</span>
       ) : (
-        <span style={{ color: '#64748b', fontWeight: 600 }}>0.00</span>
+        <span style={{ color: '#7D8597', fontWeight: 600 }}>0.00</span>
       )
     }},
-    { key: 'gross',      label: 'Gross Salary',      value: r => fmtCurrency(r.gross_salary), render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{fmtCurrency(r.gross_salary)}</span> },
+    { key: 'gross',      label: 'Gross Salary',      value: r => fmtCurrency(r.gross_salary), render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{fmtCurrency(r.gross_salary)}</span> },
     { key: 'additions',  label: 'Additions',         value: r => fmtCurrency(r.total_additions) },
     { key: 'deductions', label: 'Deductions',        value: r => fmtCurrency(r.total_deductions) },
     { key: 'net',        label: 'Net Salary',        value: r => fmtCurrency(r.net_salary), render: r => (
@@ -897,8 +897,8 @@ function PayrollReport({ filters: filterData }) {
           <FilterSelect label="Payroll Run" value={runId} onChange={setRunId} options={runOptions} placeholder="Select payroll run" />
           {selectedRun && (
             <div style={{ display: 'flex', gap: 16, padding: '8px 14px', background: '#f8fafc', borderRadius: 10, border: 'none', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', alignItems: 'center' }}>
-              <span style={{ fontSize: 12, color: '#64748b' }}>
-                Period: <b style={{ color: '#0f172a' }}>{fmtDate(selectedRun.payroll_start_date)} – {fmtDate(selectedRun.payroll_end_date)}</b>
+              <span style={{ fontSize: 12, color: '#7D8597' }}>
+                Period: <b style={{ color: '#001233' }}>{fmtDate(selectedRun.payroll_start_date)} – {fmtDate(selectedRun.payroll_end_date)}</b>
               </span>
               <Badge value={selectedRun.current_status} />
             </div>
@@ -908,7 +908,7 @@ function PayrollReport({ filters: filterData }) {
 
       <div style={card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>Payroll Summary</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#001233' }}>Payroll Summary</div>
           <ExportButtons
             loading={loading}
             onRefresh={load}
@@ -919,7 +919,7 @@ function PayrollReport({ filters: filterData }) {
         {!runId
           ? <div style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>Select a payroll run to view the summary.</div>
           : loading
-            ? <div style={{ textAlign: 'center', padding: 40, color: '#64748b' }}>Loading...</div>
+            ? <div style={{ textAlign: 'center', padding: 40, color: '#7D8597' }}>Loading...</div>
             : <>
                 <SummaryPills items={summaryPills} />
                 <DataTable columns={columns} rows={rows} emptyMsg="No payroll data found for this run." />
@@ -966,7 +966,7 @@ function CompetencyReport({ filters: filterData }) {
     reportTitle = 'Competency Gap Report'
     filename = 'competency_gap_report.pdf'
     columns = [
-      { key: 'employee', label: 'Employee Name', value: r => r.employee_name || '—', render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.employee_name || '—'}</span> },
+      { key: 'employee', label: 'Employee Name', value: r => r.employee_name || '—', render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.employee_name || '—'}</span> },
       { key: 'code', label: 'Employee Code', value: r => r.employee_code || '—', render: r => <CodeBadge code={r.employee_code} /> },
       { key: 'dept', label: 'Department', value: r => r.department_name || '—' },
       { key: 'competency', label: 'Competency', value: r => r.competency_name || '—' },
@@ -976,7 +976,7 @@ function CompetencyReport({ filters: filterData }) {
         const val = parseFloat(r.gap_score || 0);
         return (
           <span style={{
-            background: val < 0 ? '#feecee' : '#e8fbf0',
+            background: val < 0 ? '#EEF8FF' : '#e8fbf0',
             color: val < 0 ? '#dc2626' : '#0fa958',
             padding: '3px 8px', borderRadius: 6, fontWeight: 800, fontSize: 12
           }}>
@@ -998,13 +998,13 @@ function CompetencyReport({ filters: filterData }) {
     reportTitle = 'Competency Rating Distribution Report'
     filename = 'competency_rating_distribution.pdf'
     columns = [
-      { key: 'competency', label: 'Competency', value: r => r.competency_name || '—', render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.competency_name || '—'}</span> },
+      { key: 'competency', label: 'Competency', value: r => r.competency_name || '—', render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.competency_name || '—'}</span> },
       { key: 'level_1', label: '1 Rating', value: r => r.level_1_count || 0 },
       { key: 'level_2', label: '2 Rating', value: r => r.level_2_count || 0 },
       { key: 'level_3', label: '3 Rating', value: r => r.level_3_count || 0 },
       { key: 'level_4', label: '4 Rating', value: r => r.level_4_count || 0 },
       { key: 'level_5', label: '5 Rating', value: r => r.level_5_count || 0 },
-      { key: 'total', label: 'Total Ratings', value: r => r.total_ratings || 0, render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.total_ratings || 0}</span> }
+      { key: 'total', label: 'Total Ratings', value: r => r.total_ratings || 0, render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.total_ratings || 0}</span> }
     ]
     exportCols = [
       { label: 'Competency', value: r => r.competency_name || '' },
@@ -1019,12 +1019,12 @@ function CompetencyReport({ filters: filterData }) {
     reportTitle = 'Competency Average Rating Report'
     filename = 'competency_average_rating.pdf'
     columns = [
-      { key: 'competency', label: 'Competency', value: r => r.competency_name || '—', render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.competency_name || '—'}</span> },
+      { key: 'competency', label: 'Competency', value: r => r.competency_name || '—', render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.competency_name || '—'}</span> },
       { key: 'avg_rating', label: 'Average Rating', value: r => r.avg_rating !== null ? parseFloat(r.avg_rating).toFixed(2) : '—', render: r => {
         const val = parseFloat(r.avg_rating || 0);
-        return <span style={{ background: '#FEECEE', color: '#C2071A', padding: '3px 9px', borderRadius: 6, fontWeight: 800, fontSize: 12 }}>{val.toFixed(2)} ★</span>;
+        return <span style={{ background: '#EEF8FF', color: '#0466C8', padding: '3px 9px', borderRadius: 6, fontWeight: 800, fontSize: 12 }}>{val.toFixed(2)} ★</span>;
       }},
-      { key: 'total', label: 'Total Ratings Count', value: r => r.total_ratings || 0, render: r => <span style={{ fontWeight: 700, color: '#0f172a' }}>{r.total_ratings || 0}</span> }
+      { key: 'total', label: 'Total Ratings Count', value: r => r.total_ratings || 0, render: r => <span style={{ fontWeight: 700, color: '#001233' }}>{r.total_ratings || 0}</span> }
     ]
     exportCols = [
       { label: 'Competency', value: r => r.competency_name || '' },
@@ -1039,15 +1039,15 @@ function CompetencyReport({ filters: filterData }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 38, height: 38, borderRadius: 10,
-            background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}>
-            <FiAward size={20} color="#C2071A" strokeWidth={2.5} />
+            <FiAward size={20} color="#0466C8" strokeWidth={2.5} />
           </div>
           <div>
-            <h2 style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: 0, fontFamily: "'Inter', sans-serif" }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: '#001233', margin: 0, fontFamily: "'Inter', sans-serif" }}>
               Competency Assessment Reports
             </h2>
-            <p style={{ fontSize: 12, color: '#64748b', margin: '2px 0 0 0', fontFamily: "'Inter', sans-serif" }}>
+            <p style={{ fontSize: 12, color: '#7D8597', margin: '2px 0 0 0', fontFamily: "'Inter', sans-serif" }}>
               Analyze organizational competencies, gaps, and distributions.
             </p>
           </div>
@@ -1074,10 +1074,10 @@ function CompetencyReport({ filters: filterData }) {
               onClick={() => setReportType(type)}
               style={{
                 padding: '7px 16px', borderRadius: 8, border: 'none',
-                background: isActive ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                color: isActive ? '#ffffff' : '#64748b',
+                background: isActive ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent',
+                color: isActive ? '#ffffff' : '#7D8597',
                 fontWeight: isActive ? 700 : 600, fontSize: 12, cursor: 'pointer',
-                boxShadow: isActive ? '0 2px 8px rgba(194, 7, 26, 0.2)' : 'none',
+                boxShadow: isActive ? '0 2px 8px rgba(4, 102, 200, 0.2)' : 'none',
                 transition: 'all 0.15s ease',
                 fontFamily: "'Inter', sans-serif",
               }}
@@ -1105,7 +1105,7 @@ function CompetencyReport({ filters: filterData }) {
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: 40, color: '#64748b' }}>Loading report data...</div>
+        <div style={{ textAlign: 'center', padding: 40, color: '#7D8597' }}>Loading report data...</div>
       ) : (
         <DataTable columns={columns} rows={rows} emptyMsg="No competency report data found." />
       )}
@@ -1156,7 +1156,7 @@ export default function ClientAdminReports() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <style>{`
         @keyframes spin { to { transform: rotate(360deg) } }
         .spin { animation: spin 1s linear infinite }
@@ -1183,14 +1183,14 @@ export default function ClientAdminReports() {
                     display: 'flex', alignItems: 'center', gap: 8,
                     padding: '9px 20px', borderRadius: 10, border: 'none', cursor: 'pointer',
                     fontSize: 13, fontWeight: active ? 700 : 600,
-                    background: active ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                    color: active ? '#ffffff' : '#64748b',
-                    boxShadow: active ? '0 4px 12px rgba(194, 7, 26, 0.25)' : 'none',
+                    background: active ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent',
+                    color: active ? '#ffffff' : '#7D8597',
+                    boxShadow: active ? '0 4px 12px rgba(4, 102, 200, 0.25)' : 'none',
                     transition: 'all 0.18s ease',
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  <Icon size={15} color={active ? '#ffffff' : '#64748b'} strokeWidth={active ? 2.5 : 2} />
+                  <Icon size={15} color={active ? '#ffffff' : '#7D8597'} strokeWidth={active ? 2.5 : 2} />
                   {tab.label}
                 </button>
               )
@@ -1198,7 +1198,7 @@ export default function ClientAdminReports() {
           </div>
 
           {filtersLoading
-            ? <div style={{ textAlign: 'center', padding: 60, color: '#64748b' }}>Loading report filters...</div>
+            ? <div style={{ textAlign: 'center', padding: 60, color: '#7D8597' }}>Loading report filters...</div>
             : <>
                 {activeTab === 'goals'      && isPmsActive && <GoalReport      filters={filterData} />}
                 {activeTab === 'appraisal'  && isPmsActive && <AppraisalReport  filters={filterData} />}

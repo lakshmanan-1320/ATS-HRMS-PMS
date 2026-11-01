@@ -27,9 +27,9 @@ import AddIcon from '../../../components/common/AddIcon.jsx'
 
 const STATUS_META = {
   active:     { label: 'Active',   color: '#0fa958', bg: '#e8fbf0', dot: '#10b981' },
-  inactive:   { label: 'Inactive', color: '#64748b', bg: '#f1f5f9', dot: '#94a3b8' },
+  inactive:   { label: 'Inactive', color: '#7D8597', bg: '#F1F4F8', dot: '#94a3b8' },
   on_leave:   { label: 'On Leave', color: '#d97706', bg: '#fef3c7', dot: '#f59e0b' },
-  terminated: { label: 'Terminated', color: '#dc2626', bg: '#feecee', dot: '#ef4444' },
+  terminated: { label: 'Terminated', color: '#dc2626', bg: '#EEF8FF', dot: '#ef4444' },
 }
 
 const LEVELS_PER_PAGE = 5
@@ -43,8 +43,8 @@ function Toast({ toasts }) {
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '12px 16px', borderRadius: 12, fontSize: 13, fontWeight: 600,
           minWidth: 280, maxWidth: 360,
-          background: t.type === 'error' ? '#feecee' : '#e8fbf0',
-          border: `1.5px solid ${t.type === 'error' ? '#f7a6af' : '#a7f3d0'}`,
+          background: t.type === 'error' ? '#EEF8FF' : '#e8fbf0',
+          border: `1.5px solid ${t.type === 'error' ? '#C9DDF3' : '#a7f3d0'}`,
           color: t.type === 'error' ? '#dc2626' : '#0fa958',
           boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
           fontFamily: "'Inter', sans-serif",
@@ -61,7 +61,7 @@ function Field({ label, name, placeholder, required, value, error, onChange }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontFamily: "'Inter', sans-serif" }}>
       <label style={{ fontSize: 12, fontWeight: 700, color: '#4b5563', letterSpacing: '0.02em' }}>
-        {label}{required && <span style={{ color: 'var(--primary-color, #C2071A)', marginLeft: 2 }}>*</span>}
+        {label}{required && <span style={{ color: 'var(--primary-color, #0466C8)', marginLeft: 2 }}>*</span>}
       </label>
       <input
         type="text"
@@ -70,13 +70,13 @@ function Field({ label, name, placeholder, required, value, error, onChange }) {
         onChange={e => onChange(name, e.target.value)}
         style={{
           padding: '10px 14px', background: '#ffffff',
-          border: `1.5px solid ${error ? '#ef4444' : '#e2e8f0'}`,
+          border: `1.5px solid ${error ? '#ef4444' : '#E3E7EE'}`,
           borderRadius: 10, color: '#111827', fontSize: 13,
           outline: 'none', width: '100%', boxSizing: 'border-box', fontFamily: 'inherit',
           transition: 'border-color 0.15s ease',
         }}
-        onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
-        onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#e2e8f0'}
+        onFocus={e => e.target.style.borderColor = 'var(--primary-color, #0466C8)'}
+        onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#E3E7EE'}
       />
       {error && <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 600 }}>{error}</span>}
     </div>
@@ -96,14 +96,14 @@ function TextareaField({ label, name, placeholder, value, error, onChange }) {
         onChange={e => onChange(name, e.target.value)}
         style={{
           padding: '10px 14px', background: '#ffffff',
-          border: `1.5px solid ${error ? '#ef4444' : '#e2e8f0'}`,
+          border: `1.5px solid ${error ? '#ef4444' : '#E3E7EE'}`,
           borderRadius: 10, color: '#111827', fontSize: 13,
           outline: 'none', width: '100%', boxSizing: 'border-box',
           fontFamily: 'inherit', resize: 'vertical', minHeight: 80,
           transition: 'border-color 0.15s ease',
         }}
-        onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
-        onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#e2e8f0'}
+        onFocus={e => e.target.style.borderColor = 'var(--primary-color, #0466C8)'}
+        onBlur={e => e.target.style.borderColor = error ? '#ef4444' : '#E3E7EE'}
       />
       {error && <span style={{ color: '#ef4444', fontSize: 11, fontWeight: 600 }}>{error}</span>}
     </div>
@@ -120,14 +120,14 @@ function Pagination({ page, total, perPage, onChange }) {
         onClick={() => onChange(page - 1)}
         disabled={page === 1}
         style={{
-          width: 34, height: 34, borderRadius: 9, border: '1.5px solid #e2e8f0',
+          width: 34, height: 34, borderRadius: 9, border: '1.5px solid #E3E7EE',
           background: page === 1 ? '#f8fafc' : '#ffffff', cursor: page === 1 ? 'default' : 'pointer',
-          color: page === 1 ? '#cbd5e1' : '#475569', fontSize: 13, fontWeight: 700,
+          color: page === 1 ? '#cbd5e1' : '#33415C', fontSize: 13, fontWeight: 700,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'all 0.15s ease',
         }}
-        onMouseEnter={e => { if (page !== 1) { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' } }}
-        onMouseLeave={e => { e.currentTarget.style.background = page === 1 ? '#f8fafc' : '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = page === 1 ? '#cbd5e1' : '#475569' }}
+        onMouseEnter={e => { if (page !== 1) { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' } }}
+        onMouseLeave={e => { e.currentTarget.style.background = page === 1 ? '#f8fafc' : '#ffffff'; e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = page === 1 ? '#cbd5e1' : '#33415C' }}
       >
         <FiChevronLeft size={16} />
       </button>
@@ -137,16 +137,16 @@ function Pagination({ page, total, perPage, onChange }) {
           onClick={() => onChange(p)}
           style={{
             width: 34, height: 34, borderRadius: 9,
-            border: `1.5px solid ${page === p ? 'var(--primary-color, #C2071A)' : '#e2e8f0'}`,
-            background: page === p ? 'var(--primary-color, #C2071A)' : '#ffffff',
-            color: page === p ? '#ffffff' : '#475569',
+            border: `1.5px solid ${page === p ? 'var(--primary-color, #0466C8)' : '#E3E7EE'}`,
+            background: page === p ? 'var(--primary-color, #0466C8)' : '#ffffff',
+            color: page === p ? '#ffffff' : '#33415C',
             cursor: 'pointer', fontSize: 13, fontWeight: 700,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.15s ease',
-            boxShadow: page === p ? '0 4px 12px rgba(194,7,26,0.25)' : 'none',
+            boxShadow: page === p ? '0 4px 12px rgba(4, 102, 200,0.25)' : 'none',
           }}
-          onMouseEnter={e => { if (page !== p) { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' } }}
-          onMouseLeave={e => { if (page !== p) { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#475569' } }}
+          onMouseEnter={e => { if (page !== p) { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' } }}
+          onMouseLeave={e => { if (page !== p) { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = '#33415C' } }}
         >
           {p}
         </button>
@@ -155,14 +155,14 @@ function Pagination({ page, total, perPage, onChange }) {
         onClick={() => onChange(page + 1)}
         disabled={page === totalPages}
         style={{
-          width: 34, height: 34, borderRadius: 9, border: '1.5px solid #e2e8f0',
+          width: 34, height: 34, borderRadius: 9, border: '1.5px solid #E3E7EE',
           background: page === totalPages ? '#f8fafc' : '#ffffff', cursor: page === totalPages ? 'default' : 'pointer',
-          color: page === totalPages ? '#cbd5e1' : '#475569', fontSize: 13, fontWeight: 700,
+          color: page === totalPages ? '#cbd5e1' : '#33415C', fontSize: 13, fontWeight: 700,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'all 0.15s ease',
         }}
-        onMouseEnter={e => { if (page !== totalPages) { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' } }}
-        onMouseLeave={e => { e.currentTarget.style.background = page === totalPages ? '#f8fafc' : '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = page === totalPages ? '#cbd5e1' : '#475569' }}
+        onMouseEnter={e => { if (page !== totalPages) { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' } }}
+        onMouseLeave={e => { e.currentTarget.style.background = page === totalPages ? '#f8fafc' : '#ffffff'; e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = page === totalPages ? '#cbd5e1' : '#33415C' }}
       >
         <FiChevronRight size={16} />
       </button>
@@ -195,10 +195,10 @@ function EmployeeAvatar({ first, last, size = 34 }) {
   return (
     <div style={{
       width: size, height: size, borderRadius: '50%',
-      background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
+      background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontSize: size * 0.35, fontWeight: 700, color: '#ffffff', flexShrink: 0,
-      boxShadow: '0 2px 6px rgba(194, 7, 26, 0.25)',
+      boxShadow: '0 2px 6px rgba(4, 102, 200, 0.25)',
       fontFamily: "'Inter', sans-serif"
     }}>
       {initials}
@@ -360,7 +360,7 @@ export default function HierarchyLevels() {
   const pagedEmps = filteredEmps.slice((empPage - 1) * EMP_PER_PAGE, empPage * EMP_PER_PAGE)
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f3f7fa', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
       <style>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse  { 0%,100%{opacity:1} 50%{opacity:0.5} }
@@ -381,10 +381,10 @@ export default function HierarchyLevels() {
               onClick={openAdd}
               style={{
                 display: 'flex', alignItems: 'center', gap: 8,
-                padding: '10px 18px', background: 'var(--primary-color, #C2071A)',
+                padding: '10px 18px', background: 'var(--primary-color, #0466C8)',
                 color: '#ffffff', border: 'none', borderRadius: 8,
                 fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
+                boxShadow: '0 2px 8px rgba(4, 102, 200, 0.25)',
                 transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
               }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
@@ -400,10 +400,10 @@ export default function HierarchyLevels() {
         {!loading && levels.length > 0 && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 24 }}>
             {[
-              { label: 'Total Levels', value: levels.length, icon: <FiLayers size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { label: 'Top Authority', value: levels[0]?.designation || '—', icon: <FiAward size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { label: 'Entry Level', value: levels[levels.length - 1]?.designation || '—', icon: <FiShield size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { label: 'Total Employees', value: levels.reduce((a, l) => a + (l.employee_count || 0), 0), icon: <FiUsers size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Total Levels', value: levels.length, icon: <FiLayers size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { label: 'Top Authority', value: levels[0]?.designation || '—', icon: <FiAward size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { label: 'Entry Level', value: levels[levels.length - 1]?.designation || '—', icon: <FiShield size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { label: 'Total Employees', value: levels.reduce((a, l) => a + (l.employee_count || 0), 0), icon: <FiUsers size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
             ].map((s, idx) => (
               <div key={idx} style={{
                 background: '#ffffff',
@@ -441,16 +441,16 @@ export default function HierarchyLevels() {
           display: 'flex', alignItems: 'center', gap: 12,
           padding: '12px 18px', marginBottom: 24,
           background: '#ffffff',
-          border: '1px solid #e2e8f0', borderRadius: 12,
+          border: '1px solid #E3E7EE', borderRadius: 12,
           fontSize: 13, color: '#4b5563', fontWeight: 500,
           fontFamily: "'Inter', sans-serif"
         }}>
           <div style={{
             width: 30, height: 30, borderRadius: 8,
-            background: 'var(--card-active-bg, #FEECEE)',
+            background: 'var(--card-active-bg, #EEF8FF)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
           }}>
-            <FiInfo size={16} color="var(--primary-color, #C2071A)" />
+            <FiInfo size={16} color="var(--primary-color, #0466C8)" />
           </div>
           <span>
             Levels are fully customizable. Use the arrows to set authority order.&nbsp;
@@ -469,14 +469,14 @@ export default function HierarchyLevels() {
           <div style={{
             textAlign: 'center', padding: '64px 20px',
             background: '#ffffff', borderRadius: 16,
-            border: '2px dashed #e2e8f0',
+            border: '2px dashed #E3E7EE',
             fontFamily: "'Inter', sans-serif"
           }}>
             <div style={{
-              width: 64, height: 64, borderRadius: '50%', background: 'var(--card-active-bg, #FEECEE)',
+              width: 64, height: 64, borderRadius: '50%', background: 'var(--card-active-bg, #EEF8FF)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'
             }}>
-              <FiLayers size={32} color="var(--primary-color, #C2071A)" />
+              <FiLayers size={32} color="var(--primary-color, #0466C8)" />
             </div>
             <div style={{ fontSize: 18, fontWeight: 700, color: '#111827', marginBottom: 6 }}>No levels defined yet</div>
             <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 24, maxWidth: 360, margin: '0 auto 24px' }}>
@@ -486,10 +486,10 @@ export default function HierarchyLevels() {
               onClick={openAdd}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '10px 20px', background: 'var(--primary-color, #C2071A)',
+                padding: '10px 20px', background: 'var(--primary-color, #0466C8)',
                 border: 'none', borderRadius: 8, cursor: 'pointer',
                 fontSize: 13, fontWeight: 600, color: '#ffffff', fontFamily: 'inherit',
-                boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
+                boxShadow: '0 2px 8px rgba(4, 102, 200, 0.25)',
               }}
             >
               <AddIcon size={20} />
@@ -507,16 +507,16 @@ export default function HierarchyLevels() {
                   <div key={level.hierarchy_level_id} style={{ display: 'flex', alignItems: 'stretch', gap: 0, animation: 'fadeIn 0.2s ease' }}>
                     {/* Timeline Node */}
                     <div style={{ width: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                      {!isFirst && <div style={{ width: 2, height: 16, background: '#e2e8f0' }} />}
+                      {!isFirst && <div style={{ width: 2, height: 16, background: '#E3E7EE' }} />}
                       {isFirst && <div style={{ height: 16 }} />}
                       <div style={{
                         width: 32, height: 32, borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
+                        background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         color: '#ffffff', fontSize: 12, fontWeight: 700, flexShrink: 0,
-                        boxShadow: '0 2px 6px rgba(194, 7, 26, 0.25)',
+                        boxShadow: '0 2px 6px rgba(4, 102, 200, 0.25)',
                       }}>{globalIdx + 1}</div>
-                      {!isLast && <div style={{ width: 2, flex: 1, minHeight: 16, background: '#e2e8f0' }} />}
+                      {!isLast && <div style={{ width: 2, flex: 1, minHeight: 16, background: '#E3E7EE' }} />}
                     </div>
 
                     {/* Level Card */}
@@ -524,8 +524,8 @@ export default function HierarchyLevels() {
                       <div
                         style={{
                           background: '#ffffff',
-                          border: '1px solid #e2e8f0',
-                          borderLeft: '4px solid var(--primary-color, #C2071A)',
+                          border: '1px solid #E3E7EE',
+                          borderLeft: '4px solid var(--primary-color, #0466C8)',
                           borderRadius: 14,
                           padding: '16px 20px',
                           display: 'grid',
@@ -542,10 +542,10 @@ export default function HierarchyLevels() {
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
                           <span style={{
                             display: 'inline-block', padding: '5px 12px',
-                            background: 'var(--card-active-bg, #FEECEE)',
-                            border: '1px solid var(--card-active-border, #F7A6AF)',
+                            background: 'var(--card-active-bg, #EEF8FF)',
+                            border: '1px solid var(--card-active-border, #C9DDF3)',
                             borderRadius: 20, fontSize: 12, fontWeight: 700,
-                            color: 'var(--primary-color, #C2071A)', letterSpacing: '0.04em', textAlign: 'center',
+                            color: 'var(--primary-color, #0466C8)', letterSpacing: '0.04em', textAlign: 'center',
                           }}>
                             {level.level_code}
                           </span>
@@ -556,13 +556,13 @@ export default function HierarchyLevels() {
                               title="Move up"
                               style={{
                                 width: 26, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                background: isFirst ? '#f8fafc' : '#f1f5f9', border: '1px solid #e2e8f0',
+                                background: isFirst ? '#f8fafc' : '#F1F4F8', border: '1px solid #E3E7EE',
                                 borderRadius: 6, cursor: isFirst ? 'default' : 'pointer',
-                                color: isFirst ? '#cbd5e1' : '#475569', padding: 0,
+                                color: isFirst ? '#cbd5e1' : '#33415C', padding: 0,
                                 transition: 'all 0.15s ease',
                               }}
-                              onMouseEnter={e => { if (!isFirst) { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' } }}
-                              onMouseLeave={e => { if (!isFirst) { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#475569' } }}
+                              onMouseEnter={e => { if (!isFirst) { e.currentTarget.style.background = 'var(--card-active-bg, #EEF8FF)'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' } }}
+                              onMouseLeave={e => { if (!isFirst) { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.color = '#33415C' } }}
                             >
                               <FiChevronUp size={14} />
                             </button>
@@ -572,13 +572,13 @@ export default function HierarchyLevels() {
                               title="Move down"
                               style={{
                                 width: 26, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                background: isLast ? '#f8fafc' : '#f1f5f9', border: '1px solid #e2e8f0',
+                                background: isLast ? '#f8fafc' : '#F1F4F8', border: '1px solid #E3E7EE',
                                 borderRadius: 6, cursor: isLast ? 'default' : 'pointer',
-                                color: isLast ? '#cbd5e1' : '#475569', padding: 0,
+                                color: isLast ? '#cbd5e1' : '#33415C', padding: 0,
                                 transition: 'all 0.15s ease',
                               }}
-                              onMouseEnter={e => { if (!isLast) { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' } }}
-                              onMouseLeave={e => { if (!isLast) { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#475569' } }}
+                              onMouseEnter={e => { if (!isLast) { e.currentTarget.style.background = 'var(--card-active-bg, #EEF8FF)'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' } }}
+                              onMouseLeave={e => { if (!isLast) { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.color = '#33415C' } }}
                             >
                               <FiChevronDown size={14} />
                             </button>
@@ -591,11 +591,11 @@ export default function HierarchyLevels() {
                             <div style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>{level.designation}</div>
                             <span style={{
                               display: 'inline-flex', alignItems: 'center', gap: 5,
-                              fontSize: 11, fontWeight: 600, color: 'var(--primary-color, #C2071A)',
-                              background: 'var(--card-active-bg, #FEECEE)',
-                              padding: '3px 10px', borderRadius: 20, border: '1px solid var(--card-active-border, #F7A6AF)',
+                              fontSize: 11, fontWeight: 600, color: 'var(--primary-color, #0466C8)',
+                              background: 'var(--card-active-bg, #EEF8FF)',
+                              padding: '3px 10px', borderRadius: 20, border: '1px solid var(--card-active-border, #C9DDF3)',
                             }}>
-                              <FiUsers size={12} color="var(--primary-color, #C2071A)" />
+                              <FiUsers size={12} color="var(--primary-color, #0466C8)" />
                               {level.employee_count ?? 0} employees
                             </span>
                           </div>
@@ -611,18 +611,18 @@ export default function HierarchyLevels() {
                             title="View employees"
                             style={{
                               height: 36, padding: '0 14px', display: 'flex', alignItems: 'center', gap: 6,
-                              background: '#ffffff', border: '1.5px solid #e2e8f0',
+                              background: '#ffffff', border: '1.5px solid #E3E7EE',
                               borderRadius: 8, cursor: 'pointer', color: '#374151',
                               fontSize: 12, fontWeight: 600, fontFamily: 'inherit',
                               transition: 'all 0.15s ease', flexShrink: 0,
                             }}
                             onMouseEnter={e => {
-                              e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'
-                              e.currentTarget.style.color = 'var(--primary-color, #C2071A)'
-                              e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'
+                              e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'
+                              e.currentTarget.style.color = 'var(--primary-color, #0466C8)'
+                              e.currentTarget.style.background = 'var(--card-active-bg, #EEF8FF)'
                             }}
                             onMouseLeave={e => {
-                              e.currentTarget.style.borderColor = '#e2e8f0'
+                              e.currentTarget.style.borderColor = '#E3E7EE'
                               e.currentTarget.style.color = '#374151'
                               e.currentTarget.style.background = '#ffffff'
                             }}
@@ -635,18 +635,18 @@ export default function HierarchyLevels() {
                             title="Edit level"
                             style={{
                               width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              background: '#ffffff', border: '1.5px solid #e2e8f0',
-                              borderRadius: 8, cursor: 'pointer', color: '#64748b',
+                              background: '#ffffff', border: '1.5px solid #E3E7EE',
+                              borderRadius: 8, cursor: 'pointer', color: '#7D8597',
                               transition: 'all 0.15s ease', flexShrink: 0,
                             }}
                             onMouseEnter={e => {
-                              e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'
-                              e.currentTarget.style.color = 'var(--primary-color, #C2071A)'
-                              e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'
+                              e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'
+                              e.currentTarget.style.color = 'var(--primary-color, #0466C8)'
+                              e.currentTarget.style.background = 'var(--card-active-bg, #EEF8FF)'
                             }}
                             onMouseLeave={e => {
-                              e.currentTarget.style.borderColor = '#e2e8f0'
-                              e.currentTarget.style.color = '#64748b'
+                              e.currentTarget.style.borderColor = '#E3E7EE'
+                              e.currentTarget.style.color = '#7D8597'
                               e.currentTarget.style.background = '#ffffff'
                             }}
                           >
@@ -657,16 +657,16 @@ export default function HierarchyLevels() {
                             title="Delete level"
                             style={{
                               width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              background: '#ffffff', border: '1.5px solid #e2e8f0',
+                              background: '#ffffff', border: '1.5px solid #E3E7EE',
                               borderRadius: 8, cursor: 'pointer', color: '#dc2626',
                               transition: 'all 0.15s ease', flexShrink: 0,
                             }}
                             onMouseEnter={e => {
                               e.currentTarget.style.borderColor = '#dc2626'
-                              e.currentTarget.style.background = '#feecee'
+                              e.currentTarget.style.background = '#EEF8FF'
                             }}
                             onMouseLeave={e => {
-                              e.currentTarget.style.borderColor = '#e2e8f0'
+                              e.currentTarget.style.borderColor = '#E3E7EE'
                               e.currentTarget.style.background = '#ffffff'
                             }}
                           >
@@ -708,7 +708,7 @@ export default function HierarchyLevels() {
           >
             {/* Header */}
             <div style={{
-              background: 'var(--primary-color, #C2071A)', padding: '20px 24px', borderRadius: '16px 16px 0 0',
+              background: 'var(--primary-color, #0466C8)', padding: '20px 24px', borderRadius: '16px 16px 0 0',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -743,7 +743,7 @@ export default function HierarchyLevels() {
             </div>
 
             {/* Search */}
-            <div style={{ padding: '14px 24px', borderBottom: '1px solid #f1f5f9', flexShrink: 0 }}>
+            <div style={{ padding: '14px 24px', borderBottom: '1px solid #F1F4F8', flexShrink: 0 }}>
               <div style={{ position: 'relative' }}>
                 <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>
                   <FiSearch size={15} color="#94a3b8" />
@@ -754,12 +754,12 @@ export default function HierarchyLevels() {
                   onChange={e => { setEmpSearch(e.target.value); setEmpPage(1) }}
                   style={{
                     paddingLeft: 36, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
-                    background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: 10,
+                    background: '#f8fafc', border: '1.5px solid #E3E7EE', borderRadius: 10,
                     color: '#111827', fontSize: 13, outline: 'none', width: '100%',
                     boxSizing: 'border-box', fontFamily: 'inherit', transition: 'border-color 0.15s ease',
                   }}
-                  onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
-                  onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                  onFocus={e => e.target.style.borderColor = 'var(--primary-color, #0466C8)'}
+                  onBlur={e => e.target.style.borderColor = '#E3E7EE'}
                 />
               </div>
             </div>
@@ -768,12 +768,12 @@ export default function HierarchyLevels() {
             <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
               {empLoading ? (
                 <div style={{ textAlign: 'center', padding: '48px 0' }}>
-                  <div style={{ fontSize: 13, color: '#64748b' }}>Loading employees…</div>
+                  <div style={{ fontSize: 13, color: '#7D8597' }}>Loading employees…</div>
                 </div>
               ) : filteredEmps.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '48px 20px' }}>
                   <div style={{
-                    width: 56, height: 56, borderRadius: '50%', background: '#f1f5f9',
+                    width: 56, height: 56, borderRadius: '50%', background: '#F1F4F8',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'
                   }}>
                     <FiUsers size={28} color="#94a3b8" />
@@ -781,7 +781,7 @@ export default function HierarchyLevels() {
                   <div style={{ fontSize: 15, fontWeight: 700, color: '#111827', marginBottom: 4 }}>
                     {empSearch ? 'No results found' : 'No employees at this level'}
                   </div>
-                  <div style={{ fontSize: 13, color: '#64748b' }}>
+                  <div style={{ fontSize: 13, color: '#7D8597' }}>
                     {empSearch ? 'Try a different search term.' : 'Assign employees to this hierarchy level to see them here.'}
                   </div>
                 </div>
@@ -793,7 +793,7 @@ export default function HierarchyLevels() {
                     gap: 12, padding: '8px 14px 10px',
                     fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
                     textTransform: 'uppercase', color: '#94a3b8',
-                    borderBottom: '2px solid #f1f5f9', marginBottom: 8,
+                    borderBottom: '2px solid #F1F4F8', marginBottom: 8,
                   }}>
                     <span>#</span>
                     <span>Employee</span>
@@ -810,7 +810,7 @@ export default function HierarchyLevels() {
                         display: 'grid', gridTemplateColumns: '40px 1.4fr 110px 130px 110px 90px',
                         gap: 12, padding: '10px 14px', alignItems: 'center',
                         background: i % 2 === 0 ? '#ffffff' : '#f8fafc',
-                        border: '1px solid #f1f5f9',
+                        border: '1px solid #F1F4F8',
                         borderRadius: 10, marginBottom: 6,
                         transition: 'all 0.15s ease',
                       }}
@@ -829,7 +829,7 @@ export default function HierarchyLevels() {
                           </div>
                         </div>
                       </div>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: '#64748b', fontFamily: 'monospace' }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: '#7D8597', fontFamily: 'monospace' }}>
                         {emp.employee_code}
                       </span>
                       <span style={{ fontSize: 12, color: '#4b5563', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -859,18 +859,18 @@ export default function HierarchyLevels() {
 
             {/* Footer */}
             <div style={{
-              padding: '14px 24px', borderTop: '1px solid #f1f5f9',
+              padding: '14px 24px', borderTop: '1px solid #F1F4F8',
               display: 'flex', justifyContent: 'flex-end', flexShrink: 0,
             }}>
               <button
                 onClick={() => setViewLevel(null)}
                 style={{
                   padding: '9px 20px', background: '#f8fafc',
-                  border: '1.5px solid #e2e8f0', borderRadius: 8,
+                  border: '1.5px solid #E3E7EE', borderRadius: 8,
                   cursor: 'pointer', fontSize: 13, color: '#374151',
                   fontFamily: 'inherit', fontWeight: 600, transition: 'all 0.15s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                onMouseEnter={e => e.currentTarget.style.background = '#F1F4F8'}
                 onMouseLeave={e => e.currentTarget.style.background = '#f8fafc'}
               >Close</button>
             </div>
@@ -893,7 +893,7 @@ export default function HierarchyLevels() {
           >
             {/* Modal header */}
             <div style={{
-              background: 'var(--primary-color, #C2071A)',
+              background: 'var(--primary-color, #0466C8)',
               padding: '20px 24px', borderRadius: '16px 16px 0 0',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
@@ -925,12 +925,12 @@ export default function HierarchyLevels() {
               {editLevel && (
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px',
-                  background: 'var(--card-active-bg, #FEECEE)', border: '1px solid var(--card-active-border, #F7A6AF)',
+                  background: 'var(--card-active-bg, #EEF8FF)', border: '1px solid var(--card-active-border, #C9DDF3)',
                   borderRadius: 10, marginBottom: 20,
                 }}>
-                  <FiEdit2 size={16} color="var(--primary-color, #C2071A)" />
+                  <FiEdit2 size={16} color="var(--primary-color, #0466C8)" />
                   <div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary-color, #C2071A)' }}>Editing Level</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary-color, #0466C8)' }}>Editing Level</div>
                     <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>
                       {editLevel.level_code} — {editLevel.designation} · {editLevel.employee_count ?? 0} employees
                     </div>
@@ -947,11 +947,11 @@ export default function HierarchyLevels() {
                   onClick={() => setShowModal(false)}
                   style={{
                     padding: '9px 18px', background: '#f8fafc',
-                    border: '1.5px solid #e2e8f0', borderRadius: 8,
+                    border: '1.5px solid #E3E7EE', borderRadius: 8,
                     cursor: 'pointer', fontSize: 13, color: '#374151',
                     fontFamily: 'inherit', fontWeight: 600, transition: 'all 0.15s ease',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                  onMouseEnter={e => e.currentTarget.style.background = '#F1F4F8'}
                   onMouseLeave={e => e.currentTarget.style.background = '#f8fafc'}
                 >Cancel</button>
                 <button
@@ -959,10 +959,10 @@ export default function HierarchyLevels() {
                   disabled={saving}
                   style={{
                     padding: '9px 22px',
-                    background: 'var(--primary-color, #C2071A)',
+                    background: 'var(--primary-color, #0466C8)',
                     border: 'none', borderRadius: 8, cursor: saving ? 'default' : 'pointer',
                     fontSize: 13, fontWeight: 600, color: '#ffffff', fontFamily: 'inherit',
-                    boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
+                    boxShadow: '0 2px 8px rgba(4, 102, 200, 0.25)',
                     opacity: saving ? 0.7 : 1,
                     transition: 'all 0.15s ease', display: 'flex', alignItems: 'center', gap: 8,
                   }}
@@ -988,7 +988,7 @@ export default function HierarchyLevels() {
             }}
             onClick={e => e.stopPropagation()}
           >
-            <div style={{ background: '#feecee', padding: '24px', textAlign: 'center', borderBottom: '1px solid #f7a6af' }}>
+            <div style={{ background: '#EEF8FF', padding: '24px', textAlign: 'center', borderBottom: '1px solid #C9DDF3' }}>
               <div style={{
                 width: 52, height: 52, borderRadius: '50%', background: '#ffffff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px',
@@ -1017,7 +1017,7 @@ export default function HierarchyLevels() {
                 onClick={() => setDeleteConfirm(null)}
                 style={{
                   flex: 1, padding: '10px', background: '#f8fafc',
-                  border: '1.5px solid #e2e8f0', borderRadius: 8,
+                  border: '1.5px solid #E3E7EE', borderRadius: 8,
                   cursor: 'pointer', fontSize: 13, color: '#374151',
                   fontFamily: 'inherit', fontWeight: 600,
                 }}
@@ -1026,11 +1026,11 @@ export default function HierarchyLevels() {
                 onClick={() => handleDelete(deleteConfirm)}
                 style={{
                   flex: 1, padding: '10px',
-                  background: 'var(--primary-color, #C2071A)',
+                  background: 'var(--primary-color, #0466C8)',
                   border: 'none', borderRadius: 8,
                   cursor: 'pointer', fontSize: 13,
                   fontWeight: 600, color: '#ffffff', fontFamily: 'inherit',
-                  boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)',
+                  boxShadow: '0 2px 8px rgba(4, 102, 200, 0.25)',
                 }}
               >Delete Level</button>
             </div>

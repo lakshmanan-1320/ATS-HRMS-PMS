@@ -87,7 +87,7 @@ function renderLocationStatusBadge(row) {
   }
   if (status === 'REMOTE' || isRemote) {
     return (
-      <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#e0e7ff', color: '#4338ca', border: '1px solid rgba(67,56,202,0.2)', fontSize: '11px', fontWeight: '700' }}>
+      <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#E3EEFA', color: '#023E7D', border: '1px solid rgba(67,56,202,0.2)', fontSize: '11px', fontWeight: '700' }}>
         Remote Check-in
       </span>
     )
@@ -100,7 +100,7 @@ function renderLocationStatusBadge(row) {
     )
   }
   return (
-    <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#f1f5f9', color: '#64748b', border: '1px solid #cbd5e1', fontSize: '11px', fontWeight: '700' }}>
+    <span style={{ display: 'inline-flex', padding: '2px 8px', borderRadius: '6px', background: '#F1F4F8', color: '#7D8597', border: '1px solid #cbd5e1', fontSize: '11px', fontWeight: '700' }}>
       Location Not Verified
     </span>
   )
@@ -205,7 +205,7 @@ export default function TeamAttendance() {
     background: '#ffffff',
     border: '1px solid #cbd5e1',
     borderRadius: '10px',
-    color: '#1e293b',
+    color: '#001233',
     fontSize: '13px',
     outline: 'none',
     width: '200px',
@@ -218,7 +218,7 @@ export default function TeamAttendance() {
     background: '#ffffff',
     border: '1px solid #cbd5e1',
     borderRadius: '10px',
-    color: '#1e293b',
+    color: '#001233',
     fontSize: '13px',
     outline: 'none',
     width: '140px',
@@ -235,24 +235,24 @@ export default function TeamAttendance() {
     color: '#ffffff',
     padding: '14px 16px',
     borderBottom: 'none',
-    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)'
+    background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)'
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
       <EmployeeSidebar active="team-attendance" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Team Attendance" />
         <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '28px' }}>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FiUsers size={20} color="#C2071A" strokeWidth={2.5} />
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '800', color: '#001233', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FiUsers size={20} color="#0466C8" strokeWidth={2.5} />
             </div>
             Team Attendance History
           </h1>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#7D8597', fontWeight: 500 }}>
             View and monitor attendance logs for your direct and indirect reports
           </p>
         </div>
@@ -264,7 +264,7 @@ export default function TeamAttendance() {
             borderRadius: '16px',
             padding: '48px',
             textAlign: 'center',
-            color: '#64748b',
+            color: '#7D8597',
             fontSize: '14px',
             fontWeight: '600',
             boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)'
@@ -282,7 +282,7 @@ export default function TeamAttendance() {
               flexWrap: 'wrap'
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Employee</span>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Employee</span>
                 <select 
                   value={selectedMember} 
                   onChange={e => setSelectedMember(e.target.value)} 
@@ -298,7 +298,7 @@ export default function TeamAttendance() {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Start Date</span>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Start Date</span>
                 <input 
                   type="date" 
                   value={startDate} 
@@ -308,7 +308,7 @@ export default function TeamAttendance() {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em' }}>End Date</span>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.06em' }}>End Date</span>
                 <input 
                   type="date" 
                   value={endDate} 
@@ -326,7 +326,7 @@ export default function TeamAttendance() {
                     background: '#ffffff',
                     border: '1px solid #cbd5e1',
                     borderRadius: '10px',
-                    color: '#64748b',
+                    color: '#7D8597',
                     fontSize: '13px',
                     fontWeight: '700',
                     cursor: 'pointer',
@@ -335,11 +335,11 @@ export default function TeamAttendance() {
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.background = '#f8fafc'
-                    e.currentTarget.style.color = '#1e293b'
+                    e.currentTarget.style.color = '#001233'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.background = '#ffffff'
-                    e.currentTarget.style.color = '#64748b'
+                    e.currentTarget.style.color = '#7D8597'
                   }}
                 >
                   Clear Filters
@@ -358,7 +358,7 @@ export default function TeamAttendance() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' }}>
+                    <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' }}>
                       <th style={thStyle}>Date</th>
                       <th style={thStyle}>Employee</th>
                       <th style={thStyle}>Check In</th>
@@ -376,13 +376,13 @@ export default function TeamAttendance() {
                   <tbody>
                     {loading ? (
                       <tr>
-                        <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
+                        <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#7D8597', fontSize: '14px', fontWeight: 600 }}>
                           Loading team records...
                         </td>
                       </tr>
                     ) : history.length === 0 ? (
                       <tr>
-                        <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#64748b', fontSize: '14px', fontWeight: 600 }}>
+                        <td colSpan="12" style={{ padding: '48px', textAlign: 'center', color: '#7D8597', fontSize: '14px', fontWeight: 600 }}>
                           No attendance punch logs found matching the filters.
                         </td>
                       </tr>
@@ -399,15 +399,15 @@ export default function TeamAttendance() {
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                           >
                             {/* Date */}
-                            <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
+                            <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#001233' }}>
                               {fmtDate(row.attendance_date)}
                             </td>
                             {/* Employee */}
                             <td style={{ padding: '14px 16px' }}>
-                              <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>
+                              <div style={{ fontSize: '13px', fontWeight: '700', color: '#001233' }}>
                                 {row.first_name} {row.last_name}
                               </div>
-                              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', fontWeight: 500 }}>
+                              <div style={{ fontSize: '11px', color: '#7D8597', marginTop: '2px', fontWeight: 500 }}>
                                 {row.employee_code} · {row.designation}
                               </div>
                             </td>
@@ -424,18 +424,18 @@ export default function TeamAttendance() {
                                   {fmtTime(row.check_out_time)}
                                 </span>
                               ) : (
-                                <span style={{ color: '#64748b', fontWeight: '600' }}>—</span>
+                                <span style={{ color: '#7D8597', fontWeight: '600' }}>—</span>
                               )}
                             </td>
                             {/* Work Duration */}
-                            <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '700', color: row.check_out_time ? '#1e293b' : '#C2071A' }}>
+                            <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '700', color: row.check_out_time ? '#001233' : '#0466C8' }}>
                               {formatDuration(row.work_duration_minutes)}
                             </td>
                             {/* Shift */}
                             <td style={{ padding: '14px 16px' }}>
                               {row.shift_name ? (
                                 <span style={{
-                                  background: row.shift_color_code || '#C2071A', color: '#fff',
+                                  background: row.shift_color_code || '#0466C8', color: '#fff',
                                   padding: '4px 8px', borderRadius: 8, fontSize: 11, fontWeight: 700,
                                   textShadow: '0 1px 2px rgba(0,0,0,0.15)', whiteSpace: 'nowrap'
                                 }}>
@@ -470,19 +470,19 @@ export default function TeamAttendance() {
                               {renderLocationStatusBadge(row)}
                             </td>
                             {/* Office Location */}
-                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#1e293b', fontWeight: '600' }}>
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#001233', fontWeight: '600' }}>
                               {row.matched_office_name || row.zone_name || <span style={{ color: '#94a3b8' }}>—</span>}
                             </td>
                             {/* Distance */}
-                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#475569', fontFamily: 'monospace' }}>
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#33415C', fontFamily: 'monospace' }}>
                               {row.distance_from_office != null ? `${Number(row.distance_from_office).toFixed(1)}m` : <span style={{ color: '#94a3b8' }}>—</span>}
                             </td>
                             {/* GPS Accuracy */}
-                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#64748b' }}>
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#7D8597' }}>
                               {row.gps_accuracy != null ? `±${Number(row.gps_accuracy).toFixed(0)}m` : <span style={{ color: '#94a3b8' }}>—</span>}
                             </td>
                             {/* Device & Platform */}
-                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+                            <td style={{ padding: '14px 16px', fontSize: '12px', color: '#7D8597', fontWeight: '500' }}>
                               {platform} ({browser})
                             </td>
                           </tr>
@@ -506,17 +506,17 @@ export default function TeamAttendance() {
                   background: '#ffffff'
                 }}>
                   {/* Left: Summary */}
-                  <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>
-                    Showing <strong style={{ color: '#0f172a', fontWeight: '700' }}>{totalItems === 0 ? 0 : startIndex + 1}</strong> to{' '}
-                    <strong style={{ color: '#0f172a', fontWeight: '700' }}>{endIndex}</strong> of{' '}
-                    <strong style={{ color: '#0f172a', fontWeight: '700' }}>{totalItems}</strong> entries
+                  <div style={{ fontSize: '13px', color: '#7D8597', fontWeight: '500' }}>
+                    Showing <strong style={{ color: '#001233', fontWeight: '700' }}>{totalItems === 0 ? 0 : startIndex + 1}</strong> to{' '}
+                    <strong style={{ color: '#001233', fontWeight: '700' }}>{endIndex}</strong> of{' '}
+                    <strong style={{ color: '#001233', fontWeight: '700' }}>{totalItems}</strong> entries
                   </div>
 
                   {/* Right: Items per page selector + Controls */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                     {/* Rows per page dropdown */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>Rows per page:</span>
+                      <span style={{ fontSize: '13px', color: '#7D8597', fontWeight: '500' }}>Rows per page:</span>
                       <select
                         value={itemsPerPage}
                         onChange={e => setItemsPerPage(Number(e.target.value))}
@@ -526,7 +526,7 @@ export default function TeamAttendance() {
                           border: '1px solid #cbd5e1',
                           fontSize: '13px',
                           fontWeight: '600',
-                          color: '#1e293b',
+                          color: '#001233',
                           background: '#ffffff',
                           cursor: 'pointer',
                           outline: 'none'
@@ -550,9 +550,9 @@ export default function TeamAttendance() {
                           width: 32,
                           height: 32,
                           borderRadius: 8,
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid #E3E7EE',
                           background: safePage === 1 ? '#f8fafc' : '#ffffff',
-                          color: safePage === 1 ? '#cbd5e1' : '#475569',
+                          color: safePage === 1 ? '#cbd5e1' : '#33415C',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -560,7 +560,7 @@ export default function TeamAttendance() {
                           transition: 'all 0.15s ease'
                         }}
                       >
-                        <FiChevronsLeft size={16} color={safePage === 1 ? '#cbd5e1' : '#475569'} />
+                        <FiChevronsLeft size={16} color={safePage === 1 ? '#cbd5e1' : '#33415C'} />
                       </button>
 
                       {/* Prev Page */}
@@ -572,9 +572,9 @@ export default function TeamAttendance() {
                           width: 32,
                           height: 32,
                           borderRadius: 8,
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid #E3E7EE',
                           background: safePage === 1 ? '#f8fafc' : '#ffffff',
-                          color: safePage === 1 ? '#cbd5e1' : '#475569',
+                          color: safePage === 1 ? '#cbd5e1' : '#33415C',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -582,7 +582,7 @@ export default function TeamAttendance() {
                           transition: 'all 0.15s ease'
                         }}
                       >
-                        <FiChevronLeft size={16} color={safePage === 1 ? '#cbd5e1' : '#475569'} />
+                        <FiChevronLeft size={16} color={safePage === 1 ? '#cbd5e1' : '#33415C'} />
                       </button>
 
                       {/* Page Numbers */}
@@ -597,16 +597,16 @@ export default function TeamAttendance() {
                               height: 32,
                               padding: '0 8px',
                               borderRadius: 8,
-                              border: isActive ? 'none' : '1px solid #e2e8f0',
-                              background: isActive ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#ffffff',
-                              color: isActive ? '#ffffff' : '#475569',
+                              border: isActive ? 'none' : '1px solid #E3E7EE',
+                              background: isActive ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#ffffff',
+                              color: isActive ? '#ffffff' : '#33415C',
                               fontWeight: isActive ? '700' : '600',
                               fontSize: '13px',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               cursor: 'pointer',
-                              boxShadow: isActive ? '0 2px 8px rgba(194,7,26,0.3)' : 'none',
+                              boxShadow: isActive ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none',
                               transition: 'all 0.15s ease'
                             }}
                           >
@@ -624,9 +624,9 @@ export default function TeamAttendance() {
                           width: 32,
                           height: 32,
                           borderRadius: 8,
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid #E3E7EE',
                           background: safePage === totalPages ? '#f8fafc' : '#ffffff',
-                          color: safePage === totalPages ? '#cbd5e1' : '#475569',
+                          color: safePage === totalPages ? '#cbd5e1' : '#33415C',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -634,7 +634,7 @@ export default function TeamAttendance() {
                           transition: 'all 0.15s ease'
                         }}
                       >
-                        <FiChevronRight size={16} color={safePage === totalPages ? '#cbd5e1' : '#475569'} />
+                        <FiChevronRight size={16} color={safePage === totalPages ? '#cbd5e1' : '#33415C'} />
                       </button>
 
                       {/* Last Page */}
@@ -646,9 +646,9 @@ export default function TeamAttendance() {
                           width: 32,
                           height: 32,
                           borderRadius: 8,
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid #E3E7EE',
                           background: safePage === totalPages ? '#f8fafc' : '#ffffff',
-                          color: safePage === totalPages ? '#cbd5e1' : '#475569',
+                          color: safePage === totalPages ? '#cbd5e1' : '#33415C',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -656,7 +656,7 @@ export default function TeamAttendance() {
                           transition: 'all 0.15s ease'
                         }}
                       >
-                        <FiChevronsRight size={16} color={safePage === totalPages ? '#cbd5e1' : '#475569'} />
+                        <FiChevronsRight size={16} color={safePage === totalPages ? '#cbd5e1' : '#33415C'} />
                       </button>
                     </div>
                   </div>

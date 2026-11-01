@@ -1,65 +1,42 @@
 import React from 'react'
 import { FiPieChart } from 'react-icons/fi'
-import { DonutChart } from '../shared/Charts'
-import { WidgetCard, ViewAllLink } from '../shared/UI'
-import { COLORS } from '../../theme'
+import { PMS } from '../../theme'
+import { PmsCard, CardHeader, HeaderChip, BigStat, T } from '../shared/PmsUI'
 
-const BANDS = [
-  { key: 'notStarted', label: 'Not Started', range: [0, 0],     color: COLORS.slate  },
-  { key: 'inProgress', label: 'In Progress', range: [1, 99],    color: COLORS.amber  },
-  { key: 'completed',  label: 'Completed',   range: [100, 100], color: COLORS.green  },
-]
+const TICKS = 20
 
-export default function GoalDistributionCard({ goals, completionPct, onViewAll }) {
-  const segments = BANDS.map(band => ({
-    ...band,
-    count: goals.filter(g => {
-      const p = Number(g.progress) || 0
-      return p >= band.range[0] && p <= band.range[1]
-    }).length,
-  }))
+/** "Progress Distribution" card: average goal progress plus completion-rate ticks. */
+export default function GoalDistributionCard({ goals, avgProgress, completionPct, onViewAll }) {
+  const total = goals.length
+  const notStarted = goals.filter(g => ['draft', 'not_started'].includes(g.status) || (Number(g.progress) || 0) === 0).length
+  const inProgress = goals.filter(g => ['active', 'in_progress'].includes(g.status) && (Number(g.progress) || 0) > 0).length
+  const filled = Math.round(completionPct / (100 / TICKS))
 
   return (
-    <WidgetCard
-      icon={<FiPieChart size={14} />}
-      iconBg="rgba(194,7,26,0.1)"
-      iconColor={COLORS.primary}
-      title="Progress Distribution"
-      subtitle="Goals by completion level"
-      action={onViewAll && <ViewAllLink onClick={onViewAll} />}
-    >
-      {goals.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '18px 0 4px' }}>
-          <div style={{ width: 110, height: 110, borderRadius: '50%', border: `10px solid #f1f5f9`, margin: '0 auto 14px' }} />
-          <div style={{ fontSize: '12px', color: COLORS.textMuted, fontWeight: '600' }}>No goals yet</div>
-          <div style={{ fontSize: '11px', color: COLORS.textMuted, marginTop: '2px' }}>Set your goals to see progress here</div>
+    <PmsCard>
+      <CardHeader
+        title="Progress Distribution"
+        chip={<HeaderChip icon={<FiPieChart size={14} />} onClick={onViewAll} title="Open performance hub" />}
+      />
+      <BigStat
+        value={`${avgProgress}%`}
+        pill={total === 0 ? 'No goals yet' : `${total} goal${total === 1 ? '' : 's'}`}
+        caption={total === 0 ? 'Set your goals to see progress here.' : `${inProgress} in progress · ${notStarted} not started`}
+      />
+      <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', ...T.small }}>
+          <span>Completion rate</span>
+          <strong style={{ color: PMS.blue, fontWeight: 700 }}>{completionPct}% of target</strong>
         </div>
-      ) : (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-          <div style={{ position: 'relative', width: 110, height: 110, flexShrink: 0 }}>
-            <DonutChart
-              size={110}
-              strokeWidth={13}
-              segments={segments.map(s => ({ value: s.count, color: s.color }))}
-            />
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ fontSize: '20px', fontWeight: '800', color: COLORS.text, lineHeight: 1 }}>{completionPct}%</div>
-              <div style={{ fontSize: '9px', color: COLORS.textMuted, marginTop: '3px', textAlign: 'center' }}>Completion<br />Rate</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, minWidth: 0 }}>
-            {segments.map(s => (
-              <div key={s.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', minWidth: 0 }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: '11px', color: COLORS.textSub, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.label}</span>
-                </div>
-                <span style={{ fontSize: '11px', fontWeight: '700', color: s.color, flexShrink: 0 }}>{s.count}</span>
-              </div>
-            ))}
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '3px', marginTop: '9px' }} aria-label={`Completion ${completionPct}%`}>
+          {Array.from({ length: TICKS }).map((_, i) => (
+            <span key={i} style={{ flex: 1, maxWidth: '10.65px', height: '22px', borderRadius: '4px', background: i < filled ? PMS.gradBlueVert : PMS.border }} />
+          ))}
         </div>
-      )}
-    </WidgetCard>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '9px', ...T.small }}>
+          <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+        </div>
+      </div>
+    </PmsCard>
   )
 }

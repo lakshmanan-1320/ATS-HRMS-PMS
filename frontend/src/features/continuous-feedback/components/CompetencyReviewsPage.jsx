@@ -50,8 +50,8 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
       key: 'employee',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#1e293b' }}>{r.employee_name}</div>
-          <div style={{ fontSize: 11, color: '#64748b' }}>Code: {r.employee_code || '—'}</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#001233' }}>{r.employee_name}</div>
+          <div style={{ fontSize: 11, color: '#7D8597' }}>Code: {r.employee_code || '—'}</div>
         </div>
       )
     },
@@ -59,21 +59,21 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
       title: 'Department',
       dataIndex: 'department_name',
       key: 'department',
-      render: (val) => <span style={{ fontSize: 13, color: '#334155', fontWeight: 600 }}>{val || '—'}</span>
+      render: (val) => <span style={{ fontSize: 13, color: '#33415C', fontWeight: 600 }}>{val || '—'}</span>
     },
     {
       title: 'Designation',
       dataIndex: 'employee_designation',
       key: 'designation',
-      render: (val) => <span style={{ fontSize: 13, color: '#475569' }}>{val || '—'}</span>
+      render: (val) => <span style={{ fontSize: 13, color: '#33415C' }}>{val || '—'}</span>
     },
     {
       title: 'Assessment Goal Plan',
       key: 'goal',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#4f46e5' }}>{r.title}</div>
-          {r.description && <div style={{ fontSize: 11, color: '#64748b', maxLines: 1 }}>{r.description}</div>}
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#0353A4' }}>{r.title}</div>
+          {r.description && <div style={{ fontSize: 11, color: '#7D8597', maxLines: 1 }}>{r.description}</div>}
         </div>
       )
     },
@@ -85,9 +85,9 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
         return (
           <div style={{ width: 130 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#475569' }}>{val}% Rated</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: '#33415C' }}>{val}% Rated</span>
             </div>
-            <Progress percent={val} showInfo={false} size="small" strokeColor="#4f46e5" />
+            <Progress percent={val} showInfo={false} size="small" strokeColor="#0353A4" />
           </div>
         );
       }
@@ -115,7 +115,7 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
               {r.employee_acknowledged ? (
                 <span style={{ fontSize: 10, color: '#16a34a', fontWeight: 600 }}>✓ Acknowledged</span>
               ) : (
-                <span style={{ fontSize: 10, color: '#64748b' }}>Pending Ack</span>
+                <span style={{ fontSize: 10, color: '#7D8597' }}>Pending Ack</span>
               )}
             </Space>
           );
@@ -136,7 +136,7 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
           size="small"
           icon={<RightOutlined />}
           onClick={() => onSelectGoal && onSelectGoal(r)}
-          style={{ background: '#4f46e5', borderColor: '#4f46e5', borderRadius: 6, fontWeight: 700 }}
+          style={{ background: '#0353A4', borderColor: '#0353A4', borderRadius: 6, fontWeight: 700 }}
         >
           {r.status === 'COMPLETED' ? 'View Review' : 'Evaluate'}
         </Button>
@@ -147,8 +147,8 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
   return (
     <div>
       {/* 1. Competency Method Lifecycle Guide */}
-      <Card size="small" style={{ borderRadius: 14, border: '1px solid #e0e7ff', background: '#f5f3ff', marginBottom: 20 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
+      <Card size="small" style={{ borderRadius: 14, border: '1px solid #E3EEFA', background: '#f5f3ff', marginBottom: 20 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: '#0353A4', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
           Competency Assessment Review Workflow
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, flexWrap: 'wrap' }}>
@@ -168,7 +168,7 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
                 boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
               }}>
                 <span style={{ fontSize: 14 }}>{item.icon}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#4f46e5' }}>{item.title}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#0353A4' }}>{item.title}</span>
               </div>
             </React.Fragment>
           ))}
@@ -178,19 +178,19 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
       {/* 2. Quick stats row */}
       <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Assigned Assessments</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Assigned Assessments</span>}
               value={totalCount}
-              valueStyle={{ color: '#4f46e5', fontWeight: 800, fontSize: 22 }}
+              valueStyle={{ color: '#0353A4', fontWeight: 800, fontSize: 22 }}
               prefix={<TrophyOutlined style={{ marginRight: 6 }} />}
             />
           </Card>
         </Col>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Completed Reviews</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Completed Reviews</span>}
               value={completedCount}
               valueStyle={{ color: '#16a34a', fontWeight: 800, fontSize: 22 }}
               prefix={<CheckCircleOutlined style={{ marginRight: 6 }} />}
@@ -198,9 +198,9 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Pending Evaluations</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Pending Evaluations</span>}
               value={pendingCount}
               valueStyle={{ color: '#d97706', fontWeight: 800, fontSize: 22 }}
               prefix={<ClockCircleOutlined style={{ marginRight: 6 }} />}
@@ -208,9 +208,9 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Average Score</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Average Score</span>}
               value={`${avgScore}%`}
               valueStyle={{ color: '#0ea5e9', fontWeight: 800, fontSize: 22 }}
               prefix={<BarChartOutlined style={{ marginRight: 6 }} />}
@@ -223,13 +223,13 @@ export default function CompetencyReviewsPage({ onSelectGoal }) {
       <Card
         title={
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 800, fontSize: 15, color: '#1e293b' }}>
+            <span style={{ fontWeight: 800, fontSize: 15, color: '#001233' }}>
               📋 Competency Assessment ({assessments.length})
             </span>
             <Button size="small" onClick={loadData}>Refresh</Button>
           </div>
         }
-        style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}
+        style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}
       >
         <Table
           dataSource={assessments}

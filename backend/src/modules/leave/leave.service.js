@@ -1037,7 +1037,15 @@ async function getAdminLeaves(filters = {}) {
   return await leaveRepository.getAdminLeaveRequests(filters);
 }
 
-async function getAdminEmployeeBalances(employeeId) {
+// Client-admin actions must only touch employees of the admin's own organization
+async function assertEmployeeInOrg(employeeId, organizationId) {
+  if (!organizationId) return;
+  const ok = await leaveRepository.isEmployeeInOrganization(employeeId, organizationId);
+  if (!ok) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Leave request not found.');
+}
+
+async function getAdminEmployeeBalances(employeeId, organizationId) {
+  await assertEmployeeInOrg(employeeId, organizationId);
   return await getEmployeeBalances(employeeId, new Date());
 }
 
@@ -1216,9 +1224,10 @@ async function cancelApprovedLeaveOverride(actorEmployeeId, role, leaveRequestId
   });
 }
 
-async function adminApproveLeave(leaveRequestId, remarks) {
+async function adminApproveLeave(leaveRequestId, remarks, organizationId) {
   const req = await leaveRepository.getLeaveRequestById(leaveRequestId);
   if (!req) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Leave request not found.');
+  await assertEmployeeInOrg(req.employee_id, organizationId);
   if (req.current_status !== 'PENDING') throw new ApiError(STATUS_CODES.BAD_REQUEST, `Leave request is already ${req.current_status}.`);
 
   const settings = await getLeaveSettings();
@@ -1278,9 +1287,10 @@ async function adminApproveLeave(leaveRequestId, remarks) {
   return result;
 }
 
-async function adminRejectLeave(leaveRequestId, remarks) {
+async function adminRejectLeave(leaveRequestId, remarks, organizationId) {
   const req = await leaveRepository.getLeaveRequestById(leaveRequestId);
   if (!req) throw new ApiError(STATUS_CODES.NOT_FOUND, 'Leave request not found.');
+  await assertEmployeeInOrg(req.employee_id, organizationId);
   if (req.current_status !== 'PENDING') throw new ApiError(STATUS_CODES.BAD_REQUEST, `Leave request is already ${req.current_status}.`);
 
   const result = await withTransaction(async (client) => {

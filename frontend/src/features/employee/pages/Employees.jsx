@@ -18,13 +18,13 @@ import autoTable from 'jspdf-autotable'
 
 const STATUS_META = {
   active:     { label: 'Active',      color: '#15803d', bg: '#dcfce7', border: 'rgba(21,128,61,0.2)' },
-  inactive:   { label: 'Inactive',    color: '#475569', bg: '#f1f5f9', border: 'rgba(71,85,105,0.2)' },
+  inactive:   { label: 'Inactive',    color: '#33415C', bg: '#F1F4F8', border: 'rgba(71,85,105,0.2)' },
   exit:       { label: 'Exit',        color: '#7c3aed', bg: '#ede9fe', border: 'rgba(124,58,237,0.2)' },
   terminated: { label: 'Terminated',  color: '#b91c1c', bg: '#fee2e2', border: 'rgba(185,28,28,0.2)' },
 }
 
 const TYPE_META = {
-  full_time: { label: 'Full-time', color: '#C2071A', bg: 'rgba(194,7,26,0.08)' },
+  full_time: { label: 'Full-time', color: '#0466C8', bg: 'rgba(4, 102, 200,0.08)' },
   part_time: { label: 'Part-time', color: '#0891b2', bg: 'rgba(8,145,178,0.08)' },
   contract:  { label: 'Contract',  color: '#d97706', bg: 'rgba(217,119,6,0.08)' },
   intern:    { label: 'Intern',    color: '#7c3aed', bg: 'rgba(124,58,237,0.08)' },
@@ -32,11 +32,11 @@ const TYPE_META = {
 
 // Same level palette used on the Org Chart page — L1 uses the brand red.
 const LEVEL_META = {
-  L1: '#C2071A',
+  L1: '#0466C8',
   L2: '#7c3aed',
   L3: '#059669',
   L4: '#d97706',
-  L5: '#475569',
+  L5: '#33415C',
 }
 
 const getLevelColor = (level) => {
@@ -105,16 +105,16 @@ function Toast({ toasts }) {
 
 const iStyle = (err) => ({
   padding: '9px 13px', background: '#ffffff',
-  border: `1px solid ${err ? '#ef4444' : '#e2e8f0'}`,
-  borderRadius: 10, color: '#1e293b', fontSize: 13, outline: 'none',
+  border: `1px solid ${err ? '#ef4444' : '#E3E7EE'}`,
+  borderRadius: 10, color: '#001233', fontSize: 13, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit',
   transition: 'border-color 0.15s ease',
 })
 
 const selStyle = {
   padding: '9px 14px', background: '#ffffff',
-  border: '1px solid #e2e8f0',
-  borderRadius: 10, color: '#1e293b', fontSize: 13.5, outline: 'none',
+  border: '1px solid #E3E7EE',
+  borderRadius: 10, color: '#001233', fontSize: 13.5, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit', cursor: 'pointer',
   transition: 'border-color 0.15s ease',
 }
@@ -371,8 +371,8 @@ export default function Employees() {
 
   // ── Styles ──
   const BD = { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }
-  const inputFocus = e => { e.target.style.borderColor = 'var(--primary-color, #C2071A)' }
-  const inputBlur  = e => { e.target.style.borderColor = '#e2e8f0' }
+  const inputFocus = e => { e.target.style.borderColor = 'var(--primary-color, #0466C8)' }
+  const inputBlur  = e => { e.target.style.borderColor = '#E3E7EE' }
   const credentialText = generatedCredentials?.credentials?.map(c =>
     `${c.name || 'Employee'} (${c.employeeCode || 'No code'})\nEmail: ${c.email}\nTemporary password: ${c.tempPassword}`
   ).join('\n\n') || ''
@@ -417,7 +417,7 @@ export default function Employees() {
             </div>
             <div style={{ minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#0f172a' }}>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#001233' }}>
                   {emp.first_name} {emp.last_name}
                 </span>
                 {emp.level_code && (
@@ -439,7 +439,7 @@ export default function Employees() {
                 <div
                   style={{
                     fontSize: 12.5,
-                    color: '#64748b',
+                    color: '#7D8597',
                     marginTop: 2,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -463,12 +463,12 @@ export default function Employees() {
           style={{
             display: 'inline-block',
             padding: '4px 10px',
-            background: '#f1f5f9',
-            border: '1px solid #e2e8f0',
+            background: '#F1F4F8',
+            border: '1px solid #E3E7EE',
             borderRadius: 20,
             fontSize: 12.5,
             fontWeight: 700,
-            color: '#334155',
+            color: '#33415C',
             letterSpacing: '0.04em',
             fontFamily: 'monospace',
           }}
@@ -482,7 +482,7 @@ export default function Employees() {
       label: 'Department',
       sortable: true,
       render: (dept) => (
-        <span style={{ fontSize: 14, color: '#1e293b', fontWeight: 500 }}>
+        <span style={{ fontSize: 14, color: '#001233', fontWeight: 500 }}>
           {dept || <span style={{ color: '#cbd5e1' }}>—</span>}
         </span>
       ),
@@ -492,7 +492,7 @@ export default function Employees() {
       label: 'Designation',
       sortable: true,
       render: (desig) => (
-        <span style={{ fontSize: 14, color: '#334155', fontWeight: 500 }}>
+        <span style={{ fontSize: 14, color: '#33415C', fontWeight: 500 }}>
           {desig || <span style={{ color: '#cbd5e1' }}>—</span>}
         </span>
       ),
@@ -559,8 +559,8 @@ export default function Employees() {
                     gap: 4,
                     padding: '2px 8px',
                     borderRadius: 12,
-                    background: '#f1f5f9',
-                    color: '#475569',
+                    background: '#F1F4F8',
+                    color: '#33415C',
                     fontSize: 11.5,
                     fontWeight: 700,
                   }}
@@ -578,7 +578,7 @@ export default function Employees() {
       label: 'Joined',
       sortable: true,
       render: (date) => (
-        <span style={{ fontSize: 13.5, color: '#334155', fontWeight: 600 }}>
+        <span style={{ fontSize: 13.5, color: '#33415C', fontWeight: 600 }}>
           {fmtDate(date)}
         </span>
       ),
@@ -655,21 +655,21 @@ export default function Employees() {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'var(--card-active-bg, #FEECEE)',
-              border: '1px solid var(--card-active-border, #F7A6AF)',
+              background: 'var(--card-active-bg, #EEF8FF)',
+              border: '1px solid var(--card-active-border, #C9DDF3)',
               borderRadius: 8,
               cursor: 'pointer',
-              color: 'var(--primary-color, #C2071A)',
+              color: 'var(--primary-color, #0466C8)',
               transition: 'all 0.15s',
               flexShrink: 0,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#fddde1'
-              e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'
+              e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'
-              e.currentTarget.style.borderColor = 'var(--card-active-border, #F7A6AF)'
+              e.currentTarget.style.background = 'var(--card-active-bg, #EEF8FF)'
+              e.currentTarget.style.borderColor = 'var(--card-active-border, #C9DDF3)'
             }}
           >
             <FiEdit2 size={15} />
@@ -682,10 +682,10 @@ export default function Employees() {
   const emptyStateNode = (
     <div style={{ textAlign: 'center', padding: '60px 20px' }}>
       <FiUsers size={40} color="#94a3b8" style={{ marginBottom: 12 }} />
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#001233', marginBottom: 6 }}>
         {employees.length === 0 ? 'No employees yet' : 'No results match your filters'}
       </div>
-      <div style={{ fontSize: 13, color: '#64748b', marginBottom: 20 }}>
+      <div style={{ fontSize: 13, color: '#7D8597', marginBottom: 20 }}>
         {employees.length === 0 ? 'Click "Add Employee" or use Bulk Import to get started.' : 'Try adjusting your search or filters.'}
       </div>
       {employees.length === 0 && (
@@ -693,10 +693,10 @@ export default function Employees() {
           onClick={() => navigate('/client-admin/employees/add')}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 20px',
-            background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))',
+            background: 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))',
             border: 'none', borderRadius: 10, cursor: 'pointer',
             fontSize: 13, fontWeight: 700, color: '#ffffff', fontFamily: 'inherit',
-            boxShadow: '0 4px 14px rgba(194, 7, 26, 0.3)'
+            boxShadow: '0 4px 14px rgba(4, 102, 200, 0.3)'
           }}
         >
           <AddIcon size={20} />
@@ -738,8 +738,8 @@ export default function Employees() {
         </button>
       )}
       <span style={{
-        marginLeft: 'auto', fontSize: 12, color: '#64748b', fontWeight: 600,
-        background: '#ffffff', padding: '4px 12px', borderRadius: 20, border: '1px solid #e2e8f0'
+        marginLeft: 'auto', fontSize: 12, color: '#7D8597', fontWeight: 600,
+        background: '#ffffff', padding: '4px 12px', borderRadius: 20, border: '1px solid #E3E7EE'
       }}>
         {filtered.length} of {employees.length} employees
       </span>
@@ -748,12 +748,12 @@ export default function Employees() {
 
   // ── Render ──
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f3f7fa', color: '#1e293b', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#FFFFFF', color: '#001233', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="employees" />
       <Toast toasts={toasts} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <ClientAdminTopBar />
-        <main style={{ flex: 1, padding: isMobile ? '16px 12px' : '24px 32px', overflowY: 'auto', overflowX: 'hidden', background: '#f3f7fa' }}>
+        <main style={{ flex: 1, padding: isMobile ? '16px 12px' : '24px 32px', overflowY: 'auto', overflowX: 'hidden', background: '#FFFFFF' }}>
 
         {/* Header */}
         <PageHeader
@@ -766,31 +766,31 @@ export default function Employees() {
                 <button onClick={exportPDF} style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   padding: '9px 16px', background: '#ffffff',
-                  border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer',
-                  fontSize: 13, fontWeight: 600, color: '#64748b', fontFamily: 'inherit',
+                  border: '1px solid #E3E7EE', borderRadius: 10, cursor: 'pointer',
+                  fontSize: 13, fontWeight: 600, color: '#7D8597', fontFamily: 'inherit',
                   boxShadow: '0 2px 4px rgba(0,0,0,0.02)', transition: 'all 0.2s ease',
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#fef0f2'; e.currentTarget.style.borderColor = '#f7a6af'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#EEF8FF'; e.currentTarget.style.borderColor = '#C9DDF3'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = '#7D8597' }}
                 ><FiDownload size={14} /> Export PDF</button>
               )}
               <button onClick={() => { setShowImport(true); setImportRows([]); setImportResult(null) }} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 padding: '9px 16px', background: '#ffffff',
-                border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer',
-                fontSize: 13, fontWeight: 600, color: '#64748b', fontFamily: 'inherit',
+                border: '1px solid #E3E7EE', borderRadius: 10, cursor: 'pointer',
+                fontSize: 13, fontWeight: 600, color: '#7D8597', fontFamily: 'inherit',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.02)', transition: 'all 0.2s ease',
                 flex: isMobile ? 1 : 'none', justifyContent: 'center',
               }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#fef0f2'; e.currentTarget.style.borderColor = '#f7a6af'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#EEF8FF'; e.currentTarget.style.borderColor = '#C9DDF3'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = '#7D8597' }}
               ><FiUpload size={14} /> Bulk Import</button>
               <button onClick={() => navigate('/client-admin/employees/add')} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6, justifyContent: 'center',
-                padding: '9px 18px', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))',
+                padding: '9px 18px', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))',
                 border: 'none', borderRadius: 10, cursor: 'pointer',
                 fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
-                boxShadow: '0 4px 14px rgba(194, 7, 26, 0.3)', transition: 'all 0.2s ease',
+                boxShadow: '0 4px 14px rgba(4, 102, 200, 0.3)', transition: 'all 0.2s ease',
                 flex: isMobile ? 1 : 'none',
               }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
@@ -838,7 +838,7 @@ export default function Employees() {
       {statusPop && (
         <div ref={statusRef} style={{
           position: 'fixed', left: statusPop.x, top: statusPop.y, zIndex: 2000,
-          background: '#ffffff', border: '1px solid #e2e8f0',
+          background: '#ffffff', border: '1px solid #E3E7EE',
           borderRadius: 12, padding: 6, boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
           minWidth: 150,
         }}>
@@ -846,9 +846,9 @@ export default function Employees() {
             <button key={k} onClick={() => changeStatus(statusPop.empId, k)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 8,
-                width: '100%', padding: '7px 12px', background: k === statusPop.current ? 'var(--card-active-bg, #FEECEE)' : 'none',
+                width: '100%', padding: '7px 12px', background: k === statusPop.current ? 'var(--card-active-bg, #EEF8FF)' : 'none',
                 border: 'none', borderRadius: 8, cursor: 'pointer',
-                fontSize: 12, fontWeight: 700, color: k === statusPop.current ? 'var(--primary-color, #C2071A)' : v.color,
+                fontSize: 12, fontWeight: 700, color: k === statusPop.current ? 'var(--primary-color, #0466C8)' : v.color,
                 fontFamily: 'inherit', textAlign: 'left',
               }}
             >
@@ -863,14 +863,14 @@ export default function Employees() {
       {generatedCredentials && (
         <div style={{ ...BD, zIndex: 1100 }} onClick={() => setGeneratedCredentials(null)}>
           <div style={{
-            background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 16,
+            background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: 16,
             padding: 24, width: 620, maxWidth: '95vw', maxHeight: '85vh',
             overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
           }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, marginBottom: 18 }}>
               <div>
-                <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: '#1e293b' }}>{generatedCredentials.title}</h2>
-                <p style={{ margin: '5px 0 0', fontSize: 12, color: '#64748b' }}>
+                <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: '#001233' }}>{generatedCredentials.title}</h2>
+                <p style={{ margin: '5px 0 0', fontSize: 12, color: '#7D8597' }}>
                   Share these temporary passwords with employees for their first sign-in. They will be asked to change the password after OTP verification.
                 </p>
               </div>
@@ -878,28 +878,28 @@ export default function Employees() {
                 width: '32px', height: '32px', display: 'flex', alignItems: 'center',
                 justifyContent: 'center', background: 'rgba(0,0,0,0.05)',
                 border: 'none', borderRadius: '8px', cursor: 'pointer',
-                color: '#64748b', fontSize: '16px',
+                color: '#7D8597', fontSize: '16px',
               }}><FiX size={16} /></button>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
               {generatedCredentials.credentials.map((c, i) => (
-                <div key={`${c.email}-${i}`} style={{ padding: 14, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10 }}>
+                <div key={`${c.email}-${i}`} style={{ padding: 14, background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 10 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', marginBottom: 8 }}>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{c.name || 'Employee'}</div>
-                      <div style={{ fontSize: 11, color: '#64748b' }}>{c.employeeCode || 'No code'} · {c.email}</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#001233' }}>{c.name || 'Employee'}</div>
+                      <div style={{ fontSize: 11, color: '#7D8597' }}>{c.employeeCode || 'No code'} · {c.email}</div>
                     </div>
                     <div style={{ fontSize: 11, color: c.emailSent === false ? '#b91c1c' : '#15803d', whiteSpace: 'nowrap', fontWeight: 600 }}>
                       {c.emailSent === false ? 'Email failed' : c.emailSent === true ? 'Email sent' : 'Password generated'}
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 12px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 8 }}>
-                    <code style={{ color: 'var(--primary-color, #C2071A)', fontSize: 15, fontWeight: 700, letterSpacing: '0.04em' }}>{c.tempPassword}</code>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 12px', background: '#F1F4F8', border: '1px solid #E3E7EE', borderRadius: 8 }}>
+                    <code style={{ color: 'var(--primary-color, #0466C8)', fontSize: 15, fontWeight: 700, letterSpacing: '0.04em' }}>{c.tempPassword}</code>
                     <button
                       type="button"
                       onClick={() => navigator.clipboard?.writeText(c.tempPassword)}
-                      style={{ padding: '6px 10px', background: 'var(--card-active-bg, #FEECEE)', border: '1px solid var(--card-active-border, #F7A6AF)', borderRadius: 8, color: 'var(--primary-color, #C2071A)', cursor: 'pointer', fontSize: 11, fontWeight: 700 }}
+                      style={{ padding: '6px 10px', background: 'var(--card-active-bg, #EEF8FF)', border: '1px solid var(--card-active-border, #C9DDF3)', borderRadius: 8, color: 'var(--primary-color, #0466C8)', cursor: 'pointer', fontSize: 11, fontWeight: 700 }}
                     >
                       Copy
                     </button>
@@ -913,11 +913,11 @@ export default function Employees() {
               <button
                 type="button"
                 onClick={() => navigator.clipboard?.writeText(credentialText)}
-                style={{ padding: '9px 16px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, color: '#64748b', cursor: 'pointer', fontSize: 13, fontFamily: 'inherit', fontWeight: '600' }}
+                style={{ padding: '9px 16px', background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: 10, color: '#7D8597', cursor: 'pointer', fontSize: 13, fontFamily: 'inherit', fontWeight: '600' }}
               >
                 Copy All
               </button>
-              <button onClick={() => setGeneratedCredentials(null)} style={{ padding: '9px 18px', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit' }}>Done</button>
+              <button onClick={() => setGeneratedCredentials(null)} style={{ padding: '9px 18px', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit' }}>Done</button>
             </div>
           </div>
         </div>
@@ -927,47 +927,47 @@ export default function Employees() {
       {showImport && (
         <div style={BD} onClick={() => setShowImport(false)}>
           <div style={{
-            background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 20,
+            background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: 20,
             padding: 32, width: 700, maxWidth: '95vw', maxHeight: '88vh',
             overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
           }} onClick={e => e.stopPropagation()}>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
               <div>
-                <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: '#1e293b' }}>Bulk Import Employees</h2>
-                <p style={{ margin: '4px 0 0', fontSize: 12, color: '#64748b' }}>Upload a CSV to add multiple employees at once.</p>
+                <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: '#001233' }}>Bulk Import Employees</h2>
+                <p style={{ margin: '4px 0 0', fontSize: 12, color: '#7D8597' }}>Upload a CSV to add multiple employees at once.</p>
               </div>
               <button onClick={() => setShowImport(false)} style={{
                 width: '32px', height: '32px', display: 'flex', alignItems: 'center',
                 justifyContent: 'center', background: 'rgba(0,0,0,0.05)',
                 border: 'none', borderRadius: '8px', cursor: 'pointer',
-                color: '#64748b', fontSize: '16px',
+                color: '#7D8597', fontSize: '16px',
               }}><FiX size={16} /></button>
             </div>
 
-            <div style={{ padding: 16, background: 'var(--card-active-bg, #FEECEE)', border: '1px solid var(--card-active-border, #F7A6AF)', borderRadius: 12, marginBottom: 20 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary-color, #C2071A)', marginBottom: 6 }}>Step 1 — Download the CSV template</div>
-              <div style={{ fontSize: 12, color: '#64748b', marginBottom: 12 }}>
+            <div style={{ padding: 16, background: 'var(--card-active-bg, #EEF8FF)', border: '1px solid var(--card-active-border, #C9DDF3)', borderRadius: 12, marginBottom: 20 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary-color, #0466C8)', marginBottom: 6 }}>Step 1 — Download the CSV template</div>
+              <div style={{ fontSize: 12, color: '#7D8597', marginBottom: 12 }}>
                 The template has the exact column names required. Fill it with your employee data and save as CSV.
               </div>
-              <div style={{ fontSize: 11, color: '#475569', marginBottom: 10, fontFamily: 'monospace', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '8px 12px', borderRadius: 8 }}>
+              <div style={{ fontSize: 11, color: '#33415C', marginBottom: 10, fontFamily: 'monospace', background: '#f8fafc', border: '1px solid #E3E7EE', padding: '8px 12px', borderRadius: 8 }}>
                 {CSV_HEADERS.join(', ')}
               </div>
-              <button onClick={downloadTemplate} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#ffffff', border: '1px solid var(--card-active-border, #F7A6AF)', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: 'var(--primary-color, #C2071A)', fontFamily: 'inherit' }}>
+              <button onClick={downloadTemplate} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#ffffff', border: '1px solid var(--card-active-border, #C9DDF3)', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: 'var(--primary-color, #0466C8)', fontFamily: 'inherit' }}>
                 <FiDownload size={13} /> Download Template
               </button>
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#64748b', marginBottom: 12 }}>Step 2 — Upload your CSV file</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#7D8597', marginBottom: 12 }}>Step 2 — Upload your CSV file</div>
               <div
-                style={{ border: '2px dashed var(--card-active-border, #F7A6AF)', borderRadius: 12, padding: '24px', textAlign: 'center', cursor: 'pointer', background: 'var(--card-active-bg, #FEECEE)' }}
+                style={{ border: '2px dashed var(--card-active-border, #C9DDF3)', borderRadius: 12, padding: '24px', textAlign: 'center', cursor: 'pointer', background: 'var(--card-active-bg, #EEF8FF)' }}
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={e => e.preventDefault()}
                 onDrop={e => { e.preventDefault(); handleCSVSelect(e.dataTransfer.files[0]) }}
               >
-                <FiUploadCloud size={28} color="var(--primary-color, #C2071A)" style={{ marginBottom: 8 }} />
-                <div style={{ fontSize: 13, color: '#64748b' }}>
+                <FiUploadCloud size={28} color="var(--primary-color, #0466C8)" style={{ marginBottom: 8 }} />
+                <div style={{ fontSize: 13, color: '#7D8597' }}>
                   {importRows.length > 0
                     ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#15803d', fontWeight: 600 }}><FiCheckCircle size={14} /> {importRows.length} row{importRows.length !== 1 ? 's' : ''} loaded</span>
                     : 'Click or drag & drop your CSV file here'}
@@ -978,13 +978,13 @@ export default function Employees() {
 
             {importRows.length > 0 && !importResult && (
               <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 8 }}>Preview (first 5 rows)</div>
-                <div style={{ overflowX: 'auto', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#7D8597', marginBottom: 8 }}>Preview (first 5 rows)</div>
+                <div style={{ overflowX: 'auto', borderRadius: 10, border: '1px solid #E3E7EE' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
                     <thead>
                       <tr style={{ background: '#f8fafc' }}>
                         {Object.keys(importRows[0]).map(h => (
-                          <th key={h} style={{ padding: '8px 12px', textAlign: 'left', color: '#64748b', fontWeight: 700, whiteSpace: 'nowrap', borderBottom: '1px solid #e2e8f0' }}>
+                          <th key={h} style={{ padding: '8px 12px', textAlign: 'left', color: '#7D8597', fontWeight: 700, whiteSpace: 'nowrap', borderBottom: '1px solid #E3E7EE' }}>
                             {h}
                           </th>
                         ))}
@@ -992,9 +992,9 @@ export default function Employees() {
                     </thead>
                     <tbody>
                       {importRows.slice(0, 5).map((row, i) => (
-                        <tr key={i} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                        <tr key={i} style={{ borderBottom: '1px solid #E3E7EE' }}>
                           {Object.values(row).map((v, j) => (
-                            <td key={j} style={{ padding: '7px 12px', color: '#475569', whiteSpace: 'nowrap' }}>{v || '—'}</td>
+                            <td key={j} style={{ padding: '7px 12px', color: '#33415C', whiteSpace: 'nowrap' }}>{v || '—'}</td>
                           ))}
                         </tr>
                       ))}
@@ -1020,13 +1020,13 @@ export default function Employees() {
             )}
 
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-              <button onClick={() => setShowImport(false)} style={{ padding: '9px 18px', background: 'rgba(0,0,0,0.04)', border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#64748b', fontFamily: 'inherit', fontWeight: '600' }}>Close</button>
+              <button onClick={() => setShowImport(false)} style={{ padding: '9px 18px', background: 'rgba(0,0,0,0.04)', border: '1px solid #E3E7EE', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#7D8597', fontFamily: 'inherit', fontWeight: '600' }}>Close</button>
               {importRows.length > 0 && !importResult && (
                 <button onClick={handleImport} disabled={importing} style={{
-                  padding: '9px 22px', background: importing ? 'rgba(194, 7, 26, 0.5)' : 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))',
+                  padding: '9px 22px', background: importing ? 'rgba(4, 102, 200, 0.5)' : 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))',
                   border: 'none', borderRadius: 10, cursor: importing ? 'default' : 'pointer',
                   fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit',
-                  boxShadow: importing ? 'none' : '0 4px 14px rgba(194, 7, 26, 0.3)',
+                  boxShadow: importing ? 'none' : '0 4px 14px rgba(4, 102, 200, 0.3)',
                 }}>
                   {importing ? 'Importing…' : `Import ${importRows.length} Employee${importRows.length !== 1 ? 's' : ''}`}
                 </button>

@@ -98,22 +98,22 @@ export default function ManagerOvertimeApprovals() {
   const s = {
     layout: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' },
     main: { flex: 1, padding: '32px 40px', overflowY: 'auto' },
-    h1: { fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0' },
-    subtitle: { fontSize: '13px', color: '#64748b', margin: '0 0 28px 0', fontWeight: '500' },
-    tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '8px' },
+    h1: { fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px 0' },
+    subtitle: { fontSize: '13px', color: '#7D8597', margin: '0 0 28px 0', fontWeight: '500' },
+    tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #E3E7EE', marginBottom: '24px', paddingBottom: '8px' },
     tabBtn: (active) => ({
-      padding: '8px 16px', background: active ? 'rgba(194, 7, 26, 0.08)' : 'transparent',
-      border: 'none', color: active ? '#C2071A' : '#64748b', fontSize: '13px', fontWeight: '700',
-      cursor: 'pointer', transition: 'all 0.2s', borderBottom: active ? '2px solid #C2071A' : 'none',
+      padding: '8px 16px', background: active ? 'rgba(4, 102, 200, 0.08)' : 'transparent',
+      border: 'none', color: active ? '#0466C8' : '#7D8597', fontSize: '13px', fontWeight: '700',
+      cursor: 'pointer', transition: 'all 0.2s', borderBottom: active ? '2px solid #0466C8' : 'none',
       borderRadius: active ? '8px 8px 0 0' : '8px', fontFamily: 'inherit'
     }),
     card: { background: '#ffffff', border: 'none', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' },
     table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
-    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' },
+    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' },
     tr: { borderBottom: '1px solid #edf2f7', transition: 'background 0.2s' },
-    td: { padding: '12px 16px', color: '#1e293b', fontWeight: '500' },
+    td: { padding: '12px 16px', color: '#001233', fontWeight: '500' },
     badge: (status) => {
-      let bg = '#f1f5f9'; let color = '#475569'; let border = 'rgba(71,85,105,0.2)';
+      let bg = '#F1F4F8'; let color = '#33415C'; let border = 'rgba(71,85,105,0.2)';
       if (status === 'APPROVED') { bg = '#dcfce7'; color = '#15803d'; border = 'rgba(21,128,61,0.2)'; }
       else if (status === 'REJECTED' || status === 'CANCELLED') { bg = '#fee2e2'; color = '#b91c1c'; border = 'rgba(185,28,28,0.2)'; }
       else if (status === 'PENDING') { bg = '#fef3c7'; color = '#b45309'; border = 'rgba(180,83,9,0.2)'; }
@@ -124,23 +124,23 @@ export default function ManagerOvertimeApprovals() {
     modalBackdrop: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 },
     modalContent: { background: '#ffffff', border: 'none', borderRadius: '16px', width: '90%', maxWidth: '480px', padding: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' },
     formGroup: { display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' },
-    label: { fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' },
-    input: { padding: '10px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', fontFamily: 'inherit' },
-    btn: { padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit' },
-    btnSec: { padding: '10px 20px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#64748b', cursor: 'pointer', fontFamily: 'inherit' },
+    label: { fontSize: '11px', fontWeight: '700', color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    input: { padding: '10px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', fontFamily: 'inherit' },
+    btn: { padding: '10px 20px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit' },
+    btnSec: { padding: '10px 20px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#7D8597', cursor: 'pointer', fontFamily: 'inherit' },
     alert: (isError) => ({ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', borderRadius: '10px', border: `1px solid ${isError ? '#fca5a5' : '#86efac'}`, background: isError ? '#fee2e2' : '#dcfce7', color: isError ? '#b91c1c' : '#15803d', fontSize: '13px', fontWeight: '600', marginBottom: '16px' })
   }
 
   return (
-    <div style={s.layout}>
+    <div className="pms-page" style={s.layout}>
       <EmployeeSidebar active="overtime-approvals" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar />
         <main style={s.main}>
           <div style={{ marginBottom: '28px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiClock size={20} color="#0466C8" strokeWidth={2.5} />
               </div>
               Overtime Approvals Panel
             </h1>
@@ -160,7 +160,7 @@ export default function ManagerOvertimeApprovals() {
           {success && <div style={s.alert(false)}><FiCheckCircle /> {success}</div>}
 
           {loading ? (
-            <div style={{ padding: '40px 0', textAlign: 'center', color: '#64748b', fontWeight: '600' }}>Loading requests...</div>
+            <div style={{ padding: '40px 0', textAlign: 'center', color: '#7D8597', fontWeight: '600' }}>Loading requests...</div>
           ) : (
             <div style={s.card}>
               <div style={{ overflowX: 'auto' }}>
@@ -180,7 +180,7 @@ export default function ManagerOvertimeApprovals() {
                   <tbody>
                     {requests.length === 0 ? (
                       <tr>
-                        <td colSpan={activeTab === 'pending' ? 7 : 8} style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#64748b', fontWeight: 600 }}>
+                        <td colSpan={activeTab === 'pending' ? 7 : 8} style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#7D8597', fontWeight: 600 }}>
                           No overtime requests matching standard filters.
                         </td>
                       </tr>
@@ -201,13 +201,13 @@ export default function ManagerOvertimeApprovals() {
                               <div>{req.attendance_date.split('T')[0]}</div>
                               <span style={{
                                 fontSize: '9px', fontWeight: '700', padding: '1px 6px', borderRadius: '4px',
-                                background: req.day_type === 'HOLIDAY' ? '#fef3c7' : req.day_type === 'WEEKEND' ? '#dbeafe' : '#f1f5f9',
-                                color: req.day_type === 'HOLIDAY' ? '#b45309' : req.day_type === 'WEEKEND' ? '#1d4ed8' : '#475569'
+                                background: req.day_type === 'HOLIDAY' ? '#fef3c7' : req.day_type === 'WEEKEND' ? '#dbeafe' : '#F1F4F8',
+                                color: req.day_type === 'HOLIDAY' ? '#b45309' : req.day_type === 'WEEKEND' ? '#1d4ed8' : '#33415C'
                               }}>{req.day_type}</span>
                             </td>
                             <td style={s.td}>{(req.shift_min_hours || 8.0).toFixed(1)} hrs</td>
                             <td style={s.td}>{(req.worked_hours || 0.0).toFixed(1)} hrs</td>
-                            <td style={{ ...s.td, fontWeight: '700', color: '#C2071A' }}>{reqHrs} hrs</td>
+                            <td style={{ ...s.td, fontWeight: '700', color: '#0466C8' }}>{reqHrs} hrs</td>
                             {activeTab === 'history' && (
                               <td style={{ ...s.td, fontWeight: '800', color: '#15803d' }}>{appHrs} hrs</td>
                             )}
@@ -226,7 +226,7 @@ export default function ManagerOvertimeApprovals() {
                                 <div>
                                   <span style={s.badge(req.approval_status)}>{req.approval_status}</span>
                                   {req.remarks && (
-                                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', fontStyle: 'italic' }}>
+                                    <div style={{ fontSize: '11px', color: '#7D8597', marginTop: '4px', fontStyle: 'italic' }}>
                                       {req.remarks}
                                     </div>
                                   )}
@@ -250,17 +250,17 @@ export default function ManagerOvertimeApprovals() {
         <div style={s.modalBackdrop} onClick={() => setSelectedRequest(null)}>
           <div style={s.modalContent} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, color: '#0f172a', fontSize: '16px', fontWeight: '800' }}>
+              <h3 style={{ margin: 0, color: '#001233', fontSize: '16px', fontWeight: '800' }}>
                 {actionType === 'approve' ? 'Approve Overtime Request' : 'Reject Overtime Request'}
               </h3>
-              <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '20px', cursor: 'pointer' }} onClick={() => setSelectedRequest(null)}>×</button>
+              <button style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '20px', cursor: 'pointer' }} onClick={() => setSelectedRequest(null)}>×</button>
             </div>
             
             <form onSubmit={handleActionSubmit}>
-              <div style={{ padding: '12px 14px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', marginBottom: '16px' }}>
+              <div style={{ padding: '12px 14px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', marginBottom: '16px' }}>
                 <div style={{ fontWeight: '700', marginBottom: '4px' }}>{selectedRequest.first_name} {selectedRequest.last_name}</div>
-                <div style={{ color: '#64748b' }}>Date: {selectedRequest.attendance_date.split('T')[0]} ({selectedRequest.day_type})</div>
-                <div style={{ color: '#64748b', marginTop: '2px' }}>Requested OT: <strong>{(selectedRequest.requested_ot_minutes / 60).toFixed(1)} hrs</strong></div>
+                <div style={{ color: '#7D8597' }}>Date: {selectedRequest.attendance_date.split('T')[0]} ({selectedRequest.day_type})</div>
+                <div style={{ color: '#7D8597', marginTop: '2px' }}>Requested OT: <strong>{(selectedRequest.requested_ot_minutes / 60).toFixed(1)} hrs</strong></div>
               </div>
 
               {actionType === 'approve' ? (
@@ -275,7 +275,7 @@ export default function ManagerOvertimeApprovals() {
                     min="0"
                     max={selectedRequest.requested_ot_minutes}
                   />
-                  <span style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
+                  <span style={{ fontSize: '11px', color: '#7D8597', marginTop: '4px' }}>
                     Calculates to <strong>{(approvedMinutes / 60).toFixed(1)} hours</strong>. You may decrease hours if required but cannot exceed original request.
                   </span>
                 </div>

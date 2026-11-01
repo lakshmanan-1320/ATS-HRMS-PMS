@@ -32,7 +32,7 @@ const FREQUENCIES = [
 const s = {
   card: {
     background: '#ffffff',
-    border: '1px solid #e2e8f0',
+    border: '1px solid #E3E7EE',
     borderRadius: '16px',
     padding: '24px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
@@ -41,18 +41,18 @@ const s = {
   title: {
     fontSize: '16px',
     fontWeight: '800',
-    color: '#0f172a',
+    color: '#001233',
     margin: '0 0 4px 0'
   },
   desc: {
     fontSize: '12px',
-    color: '#64748b',
+    color: '#7D8597',
     margin: '0 0 20px 0'
   },
   label: {
     fontSize: '12px',
     fontWeight: '700',
-    color: '#475569',
+    color: '#33415C',
     display: 'block',
     marginBottom: '6px'
   },
@@ -63,7 +63,7 @@ const s = {
     border: '1.5px solid #cbd5e1',
     borderRadius: '10px',
     fontSize: '13px',
-    color: '#1e293b',
+    color: '#001233',
     outline: 'none',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
@@ -84,24 +84,24 @@ const s = {
     fontFamily: 'inherit'
   },
   dirCardActive: {
-    borderColor: '#4f46e5',
+    borderColor: '#0353A4',
     background: '#f5f3ff',
-    boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.12)'
+    boxShadow: '0 0 0 4px rgba(4, 102, 200, 0.12)'
   },
   iconWrapper: {
     padding: '10px',
     borderRadius: '10px',
     border: '1px solid #cbd5e1',
     background: '#f8fafc',
-    color: '#64748b',
+    color: '#7D8597',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0
   },
   iconWrapperActive: {
-    background: '#4f46e5',
-    borderColor: '#4f46e5',
+    background: '#0353A4',
+    borderColor: '#0353A4',
     color: '#ffffff'
   },
   toggleRow: {
@@ -110,7 +110,7 @@ const s = {
     justifyContent: 'space-between',
     gap: '16px',
     paddingTop: '16px',
-    borderTop: '1px solid #f1f5f9'
+    borderTop: '1px solid #F1F4F8'
   },
   toggleSwitch: {
     position: 'relative',
@@ -175,8 +175,8 @@ export default function GoalRulesCard({ formData, onChange, errors, readOnly }) 
                   <DirIcon size={18} />
                 </div>
                 <div style={{ flexGrow: 1 }}>
-                  <span style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', display: 'block' }}>{dir.label}</span>
-                  <span style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', display: 'block', lineHeight: 1.4 }}>{dir.desc}</span>
+                  <span style={{ fontSize: '13px', fontWeight: '700', color: '#001233', display: 'block' }}>{dir.label}</span>
+                  <span style={{ fontSize: '11px', color: '#7D8597', marginTop: '2px', display: 'block', lineHeight: 1.4 }}>{dir.desc}</span>
                 </div>
               </button>
             );
@@ -200,7 +200,7 @@ export default function GoalRulesCard({ formData, onChange, errors, readOnly }) 
           style={{
             ...s.input,
             borderColor: errors.max_goals_per_employee ? '#f43f5e' : '#cbd5e1',
-            background: readOnly ? '#f1f5f9' : '#f8fafc',
+            background: readOnly ? '#F1F4F8' : '#f8fafc',
             cursor: readOnly ? 'not-allowed' : 'text'
           }}
         />
@@ -249,7 +249,7 @@ export default function GoalRulesCard({ formData, onChange, errors, readOnly }) 
             <div key={toggle.name} style={s.toggleRow}>
               <div style={{ flexGrow: 1 }}>
                 <span style={{ fontSize: '13px', fontWeight: '700', color: '#374151', display: 'block' }}>{toggle.label}</span>
-                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginTop: '2px', lineHeight: 1.4 }}>{toggle.desc}</span>
+                <span style={{ fontSize: '11px', color: '#7D8597', display: 'block', marginTop: '2px', lineHeight: 1.4 }}>{toggle.desc}</span>
               </div>
               <button
                 type="button"
@@ -257,7 +257,7 @@ export default function GoalRulesCard({ formData, onChange, errors, readOnly }) 
                 onClick={() => toggleRow(toggle.name, val)}
                 style={{
                   ...s.toggleSwitch,
-                  backgroundColor: val ? '#4f46e5' : '#cbd5e1',
+                  backgroundColor: val ? '#0353A4' : '#cbd5e1',
                   opacity: readOnly ? 0.6 : 1,
                   cursor: readOnly ? 'not-allowed' : 'pointer'
                 }}

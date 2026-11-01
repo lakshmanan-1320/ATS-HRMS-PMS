@@ -11,18 +11,18 @@ export default function LeavePlanDetails({ plan, onBack }) {
     <div>
       <button
         onClick={onBack}
-        style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#941018', fontSize: '13px', fontWeight: '700', cursor: 'pointer', marginBottom: '20px', padding: 0 }}
+        style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: '#023E7D', fontSize: '13px', fontWeight: '700', cursor: 'pointer', marginBottom: '20px', padding: 0 }}
       >
         <FiArrowLeft size={14} /> Back to Plans List
       </button>
 
       <div style={{ marginBottom: '24px' }}>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#0f172a' }}>{plan.name} Workspace</h2>
-        {plan.description && <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>{plan.description}</p>}
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#001233' }}>{plan.name} Workspace</h2>
+        {plan.description && <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#7D8597' }}>{plan.description}</p>}
       </div>
 
       {/* Sub tabs */}
-      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '20px', paddingBottom: '1px' }}>
+      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #E3E7EE', marginBottom: '20px', paddingBottom: '1px' }}>
         {[
           { key: 'config', label: 'Configuration', icon: <FiSliders size={13} /> },
           { key: 'employees', label: 'Employee Assignment', icon: <FiUsers size={13} /> },
@@ -35,8 +35,8 @@ export default function LeavePlanDetails({ plan, onBack }) {
               onClick={() => setActiveSubTab(t.key)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'none',
-                border: 'none', borderBottom: `2px solid ${isAct ? '#C2071A' : 'transparent'}`,
-                color: isAct ? '#C2071A' : '#64748b', fontSize: '13px', fontWeight: '700', cursor: 'pointer',
+                border: 'none', borderBottom: `2px solid ${isAct ? '#0466C8' : 'transparent'}`,
+                color: isAct ? '#0466C8' : '#7D8597', fontSize: '13px', fontWeight: '700', cursor: 'pointer',
                 transition: 'all 0.15s'
               }}
             >

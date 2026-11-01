@@ -292,10 +292,17 @@ async function listManagerRequests(managerEmployeeId) {
   return await repository.getManagerRequests(managerEmployeeId);
 }
 
-async function adminApproveRequest(id) {
+// Client admins may only act on requests from their own organization
+async function assertSameOrg(request, organizationId, client) {
+  if (!organizationId || !request) return true;
+  const r = await client.query('SELECT 1 FROM employees WHERE employee_id = $1 AND organization_id = $2', [request.employee_id, organizationId]);
+  return r.rowCount > 0;
+}
+
+async function adminApproveRequest(id, organizationId) {
   return await withTransaction(async (client) => {
     const request = await repository.findById(id, client);
-    if (!request) {
+    if (!request || !(await assertSameOrg(request, organizationId, client))) {
       throw new ApiError(STATUS_CODES.NOT_FOUND, 'Regularization request not found.');
     }
     if (request.current_status !== REGULARIZATION_STATUS.PENDING) {
@@ -342,10 +349,10 @@ async function adminApproveRequest(id) {
   });
 }
 
-async function adminRejectRequest(id, rejectionReason) {
+async function adminRejectRequest(id, rejectionReason, organizationId) {
   return await withTransaction(async (client) => {
     const request = await repository.findById(id, client);
-    if (!request) {
+    if (!request || !(await assertSameOrg(request, organizationId, client))) {
       throw new ApiError(STATUS_CODES.NOT_FOUND, 'Regularization request not found.');
     }
     if (request.current_status !== REGULARIZATION_STATUS.PENDING) {

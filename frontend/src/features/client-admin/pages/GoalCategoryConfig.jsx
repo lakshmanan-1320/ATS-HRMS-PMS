@@ -136,9 +136,9 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                 onClick={handleOpenCreate}
                 style={{
                   padding: '10px 20px', borderRadius: 10, border: 'none',
-                  background: 'var(--primary-color, #C2071A)',
+                  background: 'var(--primary-color, #0466C8)',
                   color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)',
+                  boxShadow: '0 4px 14px rgba(4, 102, 200, 0.25)',
                   display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.15s'
                 }}
               >
@@ -148,13 +148,13 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
           />
 
           {/* Table Card */}
-          <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', overflow: 'hidden' }}>
+          <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E3E7EE', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '16px 24px', fontWeight: 700, color: '#475569' }}>Name</th>
-                  <th style={{ padding: '16px 24px', fontWeight: 700, color: '#475569' }}>Status</th>
-                  <th style={{ padding: '16px 24px', fontWeight: 700, color: '#475569', textAlign: 'right' }}>Actions</th>
+                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #E3E7EE' }}>
+                  <th style={{ padding: '16px 24px', fontWeight: 700, color: '#33415C' }}>Name</th>
+                  <th style={{ padding: '16px 24px', fontWeight: 700, color: '#33415C' }}>Status</th>
+                  <th style={{ padding: '16px 24px', fontWeight: 700, color: '#33415C', textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -168,14 +168,14 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                   <tr>
                     <td colSpan="3" style={{ padding: '60px 20px', textAlign: 'center' }}>
                       <div style={{ fontSize: 40, marginBottom: 12 }}>📂</div>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>No custom categories yet</div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: '#001233' }}>No custom categories yet</div>
                       <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>Create custom categories to align with your organization’s goals.</div>
                     </td>
                   </tr>
                 ) : (
                   categories.map(c => (
-                    <tr key={c.category_id} style={{ borderBottom: '1px solid #f1f5f9', transition: 'all 0.15s' }}>
-                      <td style={{ padding: '16px 24px', fontWeight: 600, color: '#0f172a' }}>
+                    <tr key={c.category_id} style={{ borderBottom: '1px solid #F1F4F8', transition: 'all 0.15s' }}>
+                      <td style={{ padding: '16px 24px', fontWeight: 600, color: '#001233' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                           <span style={{ fontSize: 18, color: '#a5b4fc' }}>📁</span>
                           {c.name}
@@ -184,8 +184,8 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                       <td style={{ padding: '16px 24px' }}>
                         <span style={{
                           fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 6,
-                          color: c.is_active ? '#16a34a' : '#64748b',
-                          background: c.is_active ? '#f0fdf4' : '#f1f5f9',
+                          color: c.is_active ? '#16a34a' : '#7D8597',
+                          background: c.is_active ? '#f0fdf4' : '#F1F4F8',
                           border: `1px solid ${c.is_active ? 'rgba(22,163,74,0.2)' : 'rgba(100,116,139,0.2)'}`,
                         }}>
                           {c.is_active ? 'Active' : 'Inactive'}
@@ -196,26 +196,26 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                           <button
                             onClick={() => handleOpenEdit(c)}
                             style={{
-                              padding: 6, borderRadius: 6, border: '1px solid #e2e8f0',
-                              background: '#fff', color: '#475569', cursor: 'pointer',
+                              padding: 6, borderRadius: 6, border: '1px solid #E3E7EE',
+                              background: '#fff', color: '#33415C', cursor: 'pointer',
                               display: 'inline-flex', transition: 'all 0.15s'
                             }}
                             title="Edit"
-                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.color = '#6366f1' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#475569' }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#0466C8'; e.currentTarget.style.color = '#0466C8' }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.color = '#33415C' }}
                           >
                             <FiEdit2 size={14} />
                           </button>
                           <button
                             onClick={() => setDeletingId(c.category_id)}
                             style={{
-                              padding: 6, borderRadius: 6, border: '1px solid #e2e8f0',
+                              padding: 6, borderRadius: 6, border: '1px solid #E3E7EE',
                               background: '#fff', color: '#ef4444', cursor: 'pointer',
                               display: 'inline-flex', transition: 'all 0.15s'
                             }}
                             title="Delete"
                             onMouseEnter={e => { e.currentTarget.style.borderColor = '#fca5a5'; e.currentTarget.style.background = '#fef2f2' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#fff' }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#E3E7EE'; e.currentTarget.style.background = '#fff' }}
                           >
                             <FiTrash2 size={14} />
                           </button>
@@ -239,10 +239,10 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
           <div style={{
             background: '#fff', borderRadius: 16, width: 440,
             boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
-            border: '1px solid #e2e8f0', overflow: 'hidden'
+            border: '1px solid #E3E7EE', overflow: 'hidden'
           }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#0f172a' }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid #F1F4F8', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#001233' }}>
                 {editCategory ? 'Edit Goal Category' : 'Create Goal Category'}
               </h3>
               <button onClick={() => setShowModal(false)} style={{ border: 'none', background: 'none', fontSize: 20, color: '#94a3b8', cursor: 'pointer' }}>&times;</button>
@@ -250,7 +250,7 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
             
             <div style={{ padding: '20px 24px' }}>
               <div style={{ marginBottom: 16 }}>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category Name</label>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#33415C', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Sales, Marketing, Personal Growth"
@@ -271,16 +271,16 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                   onChange={e => setIsActive(e.target.checked)}
                   style={{ cursor: 'pointer' }}
                 />
-                <label htmlFor="cat-active" style={{ fontSize: 13, color: '#334155', fontWeight: 600, cursor: 'pointer' }}>Active</label>
+                <label htmlFor="cat-active" style={{ fontSize: 13, color: '#33415C', fontWeight: 600, cursor: 'pointer' }}>Active</label>
               </div>
             </div>
 
-            <div style={{ padding: '16px 24px', background: '#f8fafc', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+            <div style={{ padding: '16px 24px', background: '#f8fafc', borderTop: '1px solid #F1F4F8', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <button
                 onClick={() => setShowModal(false)}
                 style={{
                   padding: '8px 16px', borderRadius: 8, border: '1px solid #cbd5e1',
-                  background: '#fff', color: '#475569', fontSize: 12, fontWeight: 600,
+                  background: '#fff', color: '#33415C', fontSize: 12, fontWeight: 600,
                   cursor: 'pointer', fontFamily: 'inherit'
                 }}
               >Cancel</button>
@@ -289,9 +289,9 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                 disabled={saving}
                 style={{
                   padding: '8px 16px', borderRadius: 8, border: 'none',
-                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                  background: 'linear-gradient(135deg, #0466C8, #0353A4)',
                   color: '#fff', fontSize: 12, fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer',
-                  fontFamily: 'inherit', boxShadow: '0 4px 10px rgba(99,102,241,0.2)'
+                  fontFamily: 'inherit', boxShadow: '0 4px 10px rgba(4, 102, 200,0.2)'
                 }}
               >
                 {saving ? 'Saving...' : (editCategory ? 'Save Changes' : 'Create')}
@@ -311,10 +311,10 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
           <div style={{
             background: '#fff', borderRadius: 16, width: 400,
             boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)',
-            border: '1px solid #e2e8f0', padding: '24px'
+            border: '1px solid #E3E7EE', padding: '24px'
           }}>
-            <h3 style={{ margin: '0 0 10px 0', fontSize: 15, fontWeight: 800, color: '#0f172a' }}>Delete Category</h3>
-            <p style={{ margin: '0 0 20px 0', fontSize: 13, color: '#64748b', lineHeight: 1.5 }}>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: 15, fontWeight: 800, color: '#001233' }}>Delete Category</h3>
+            <p style={{ margin: '0 0 20px 0', fontSize: 13, color: '#7D8597', lineHeight: 1.5 }}>
               Are you sure you want to delete this category? This action cannot be undone and will fail if the category is currently mapped to any goals.
             </p>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
@@ -322,7 +322,7 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
                 onClick={() => setDeletingId(null)}
                 style={{
                   padding: '8px 16px', borderRadius: 8, border: '1px solid #cbd5e1',
-                  background: '#fff', color: '#475569', fontSize: 12, fontWeight: 600,
+                  background: '#fff', color: '#33415C', fontSize: 12, fontWeight: 600,
                   cursor: 'pointer', fontFamily: 'inherit'
                 }}
               >Cancel</button>
@@ -350,7 +350,7 @@ export default function GoalCategoryConfig({ isSubComponent = false }) {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
       <ClientAdminSidebar active="goal-categories" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />

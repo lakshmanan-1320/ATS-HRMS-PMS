@@ -53,8 +53,8 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
       key: 'employee',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#1e293b' }}>{r.employee_name}</div>
-          <div style={{ fontSize: 11, color: '#64748b' }}>Dept: {r.department_name || '—'}</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#001233' }}>{r.employee_name}</div>
+          <div style={{ fontSize: 11, color: '#7D8597' }}>Dept: {r.department_name || '—'}</div>
         </div>
       )
     },
@@ -63,8 +63,8 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
       key: 'goal',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#4f46e5' }}>{r.title}</div>
-          <div style={{ fontSize: 11, color: '#64748b' }}>Cycle: {r.cycle_name || '—'}</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#0353A4' }}>{r.title}</div>
+          <div style={{ fontSize: 11, color: '#7D8597' }}>Cycle: {r.cycle_name || '—'}</div>
         </div>
       )
     },
@@ -73,14 +73,14 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
       key: 'reviewers',
       render: (_, r) => (
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: '#0f172a' }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#001233' }}>
             {r.submitted_reviewers || 0}/{r.total_reviewers || 0}
           </div>
-          <div style={{ fontSize: 10, color: '#64748b' }}>Submitted</div>
+          <div style={{ fontSize: 10, color: '#7D8597' }}>Submitted</div>
           <Progress
             percent={r.total_reviewers > 0 ? Math.round(((r.submitted_reviewers || 0) / r.total_reviewers) * 100) : 0}
             size="small" showInfo={false}
-            strokeColor="#6366f1"
+            strokeColor="#0466C8"
             style={{ marginTop: 4, width: 60 }}
           />
         </div>
@@ -169,9 +169,9 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
       {/* Statistics Cards */}
       <Row gutter={[16, 16]}>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Completion Rate</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Completion Rate</span>}
               value={`${completionRate}%`}
               prefix={<TrophyOutlined style={{ color: '#10b981', marginRight: 8 }} />}
             />
@@ -179,19 +179,19 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Reviewer Response Rate</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Reviewer Response Rate</span>}
               value={`${responseRate}%`}
-              prefix={<TeamOutlined style={{ color: '#6366f1', marginRight: 8 }} />}
+              prefix={<TeamOutlined style={{ color: '#0466C8', marginRight: 8 }} />}
             />
             <div style={{ marginTop: 8, fontSize: 11, color: '#94a3b8' }}>{submittedReviewers} of {totalReviewers} reviewers submitted</div>
           </Card>
         </Col>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Pending Finalization</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Pending Finalization</span>}
               value={pendingCount}
               prefix={<ClockCircleOutlined style={{ color: '#ea580c', marginRight: 8 }} />}
             />
@@ -199,9 +199,9 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontWeight: 600, color: '#64748b' }}>Avg. Final Score</span>}
+              title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Avg. Final Score</span>}
               value={`${avgScore}%`}
               prefix={<BarChartOutlined style={{ color: '#8b5cf6', marginRight: 8 }} />}
             />
@@ -211,7 +211,7 @@ export default function Feedback360ReviewsPage({ onSelectGoal }) {
       </Row>
 
       {/* Main Table */}
-      <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+      <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #E3E7EE' }}>
         <Table
           columns={columns}
           dataSource={submissions}

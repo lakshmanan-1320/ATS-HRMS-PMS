@@ -20,9 +20,9 @@ function CodeBadge({ code }) {
   if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
   return (
     <span style={{
-      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      background: '#F1F4F8', color: '#33415C', padding: '3px 8px',
       borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
-      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+      border: '1px solid #E3E7EE', letterSpacing: '0.03em', display: 'inline-block'
     }}>
       {code}
     </span>
@@ -67,13 +67,13 @@ export default function AttendancePolicyDetails() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+      <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
         <ClientAdminSidebar active="attendance-policies" />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <ClientAdminTopBar />
-          <main style={{ flex: 1, padding: '32px 36px', color: '#64748b', fontSize: 14 }}>
-            <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '60px auto 14px', animation: 'spin 0.8s linear infinite' }} />
-            <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>Loading policy details…</div>
+          <main style={{ flex: 1, padding: '32px 36px', color: '#7D8597', fontSize: 14 }}>
+            <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '60px auto 14px', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600', textAlign: 'center' }}>Loading policy details…</div>
           </main>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -85,11 +85,11 @@ export default function AttendancePolicyDetails() {
   const badge = TYPE_BADGE[policy.policy_type] || TYPE_BADGE.OFFICE
 
   const sectionHeaderStyle = {
-    margin: '0 0 12px 0', fontSize: '12px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em'
+    margin: '0 0 12px 0', fontSize: '12px', fontWeight: 800, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em'
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif", color: '#1e293b' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif", color: '#001233' }}>
       <ClientAdminSidebar active="attendance-policies" />
       
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -100,12 +100,12 @@ export default function AttendancePolicyDetails() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, fontSize: 13 }}>
             <button
               onClick={() => navigate('/client-admin/attendance/policies')}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', color: '#C2071A', cursor: 'pointer', fontSize: 13, fontWeight: 700, padding: 0 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', color: '#0466C8', cursor: 'pointer', fontSize: 13, fontWeight: 700, padding: 0 }}
             >
-              <FiArrowLeft size={14} color="#C2071A" strokeWidth={2.5} /> Policies
+              <FiArrowLeft size={14} color="#0466C8" strokeWidth={2.5} /> Policies
             </button>
             <span style={{ color: '#94a3b8' }}>/</span>
-            <span style={{ color: '#0f172a', fontWeight: 700 }}>{policy.name}</span>
+            <span style={{ color: '#001233', fontWeight: 700 }}>{policy.name}</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 24, alignItems: 'start' }}>
@@ -118,22 +118,22 @@ export default function AttendancePolicyDetails() {
                 </span>
                 <span style={{
                   fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '20px',
-                  background: policy.is_active ? '#e8fbf0' : '#feecee',
+                  background: policy.is_active ? '#e8fbf0' : '#EEF8FF',
                   color:      policy.is_active ? '#0fa958'  : '#dc2626',
                 }}>
                   {policy.is_active ? 'Active' : 'Inactive'}
                 </span>
               </div>
 
-              <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 800, color: '#0f172a' }}>{policy.name}</h2>
-              <p style={{ margin: '0 0 20px', fontSize: 13, color: '#64748b', lineHeight: 1.4 }}>{policy.description || 'No description provided.'}</p>
+              <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 800, color: '#001233' }}>{policy.name}</h2>
+              <p style={{ margin: '0 0 20px', fontSize: 13, color: '#7D8597', lineHeight: 1.4 }}>{policy.description || 'No description provided.'}</p>
 
               {/* Validation settings summary */}
-              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 16, marginBottom: 20 }}>
+              <div style={{ borderTop: '1px solid #F1F4F8', paddingTop: 16, marginBottom: 20 }}>
                 <h4 style={sectionHeaderStyle}>Validation Rules</h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#475569', fontWeight: 500 }}>Location Validation</span>
+                    <span style={{ color: '#33415C', fontWeight: 500 }}>Location Validation</span>
                     {policy.enable_location_validation ? (
                       <span style={{ color: '#0fa958', fontWeight: 700 }}>Enabled</span>
                     ) : (
@@ -141,7 +141,7 @@ export default function AttendancePolicyDetails() {
                     )}
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#475569', fontWeight: 500 }}>Shift Validation</span>
+                    <span style={{ color: '#33415C', fontWeight: 500 }}>Shift Validation</span>
                     {policy.enable_shift_validation ? (
                       <span style={{ color: '#0fa958', fontWeight: 700 }}>Enabled</span>
                     ) : (
@@ -152,11 +152,11 @@ export default function AttendancePolicyDetails() {
               </div>
 
               {/* Late Arrival LOP Rule Summary */}
-              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 16, marginBottom: 20 }}>
+              <div style={{ borderTop: '1px solid #F1F4F8', paddingTop: 16, marginBottom: 20 }}>
                 <h4 style={sectionHeaderStyle}>Late Arrival LOP Rules</h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#475569', fontWeight: 500 }}>LOP Rule Status</span>
+                    <span style={{ color: '#33415C', fontWeight: 500 }}>LOP Rule Status</span>
                     {policy.enable_late_arrival_lop ? (
                       <span style={{ color: '#0fa958', fontWeight: 700 }}>Enabled</span>
                     ) : (
@@ -166,11 +166,11 @@ export default function AttendancePolicyDetails() {
                   {policy.enable_late_arrival_lop && (
                     <>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ color: '#475569', fontWeight: 500 }}>Late Threshold</span>
+                        <span style={{ color: '#33415C', fontWeight: 500 }}>Late Threshold</span>
                         <span style={{ color: '#d97706', fontWeight: 700 }}>{policy.late_arrivals_threshold} Late Arrivals</span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ color: '#475569', fontWeight: 500 }}>Deduction Rate</span>
+                        <span style={{ color: '#33415C', fontWeight: 500 }}>Deduction Rate</span>
                         <span style={{ color: '#dc2626', fontWeight: 700 }}>{policy.lop_days_per_threshold} LOP Days</span>
                       </div>
                     </>
@@ -190,14 +190,14 @@ export default function AttendancePolicyDetails() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: 6,
                       padding: '8px 16px', borderRadius: 8, border: 'none',
-                      background: activeTab === 'EMPLOYEES' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                      color: activeTab === 'EMPLOYEES' ? '#ffffff' : '#64748b',
+                      background: activeTab === 'EMPLOYEES' ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent',
+                      color: activeTab === 'EMPLOYEES' ? '#ffffff' : '#7D8597',
                       fontSize: 13, fontWeight: activeTab === 'EMPLOYEES' ? 700 : 600, cursor: 'pointer',
-                      boxShadow: activeTab === 'EMPLOYEES' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
+                      boxShadow: activeTab === 'EMPLOYEES' ? '0 2px 6px rgba(4, 102, 200, 0.2)' : 'none',
                       transition: 'all 0.15s ease'
                     }}
                   >
-                    <FiUsers size={14} color={activeTab === 'EMPLOYEES' ? '#ffffff' : '#64748b'} />
+                    <FiUsers size={14} color={activeTab === 'EMPLOYEES' ? '#ffffff' : '#7D8597'} />
                     Assigned Employees ({members.length})
                   </button>
                   <button
@@ -205,14 +205,14 @@ export default function AttendancePolicyDetails() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: 6,
                       padding: '8px 16px', borderRadius: 8, border: 'none',
-                      background: activeTab === 'DEPARTMENTS' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                      color: activeTab === 'DEPARTMENTS' ? '#ffffff' : '#64748b',
+                      background: activeTab === 'DEPARTMENTS' ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent',
+                      color: activeTab === 'DEPARTMENTS' ? '#ffffff' : '#7D8597',
                       fontSize: 13, fontWeight: activeTab === 'DEPARTMENTS' ? 700 : 600, cursor: 'pointer',
-                      boxShadow: activeTab === 'DEPARTMENTS' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
+                      boxShadow: activeTab === 'DEPARTMENTS' ? '0 2px 6px rgba(4, 102, 200, 0.2)' : 'none',
                       transition: 'all 0.15s ease'
                     }}
                   >
-                    <FiFolder size={14} color={activeTab === 'DEPARTMENTS' ? '#ffffff' : '#64748b'} />
+                    <FiFolder size={14} color={activeTab === 'DEPARTMENTS' ? '#ffffff' : '#7D8597'} />
                     Assigned Departments ({departments.length})
                   </button>
                 </div>
@@ -227,7 +227,7 @@ export default function AttendancePolicyDetails() {
                       onChange={e => setSearchQuery(e.target.value)}
                       style={{
                         width: '100%', paddingLeft: 30, padding: '7px 10px 7px 30px',
-                        border: '1.5px solid #e2e8f0', borderRadius: 8, fontSize: 13,
+                        border: '1.5px solid #E3E7EE', borderRadius: 8, fontSize: 13,
                         background: '#f8fafc', boxSizing: 'border-box'
                       }}
                     />
@@ -237,10 +237,10 @@ export default function AttendancePolicyDetails() {
 
               {/* Tab Content */}
               {activeTab === 'EMPLOYEES' ? (
-                <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+                <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                     <thead>
-                      <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                      <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', textAlign: 'left' }}>
                         <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Employee</th>
                         <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Code</th>
                         <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Designation</th>
@@ -252,20 +252,20 @@ export default function AttendancePolicyDetails() {
                         <tr><td colSpan={4} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No members assigned directly to this policy.</td></tr>
                       ) : filteredMembers.map((m, i) => (
                         <tr key={m.member_id || m.employee_id} style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}>
-                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>{m.first_name} {m.last_name}</td>
+                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#001233' }}>{m.first_name} {m.last_name}</td>
                           <td style={{ padding: '14px 16px' }}><CodeBadge code={m.employee_code} /></td>
-                          <td style={{ padding: '14px 16px', color: '#475569' }}>{m.designation || '—'}</td>
-                          <td style={{ padding: '14px 16px', color: '#64748b' }}>{fmtDate(m.effective_from)}</td>
+                          <td style={{ padding: '14px 16px', color: '#33415C' }}>{m.designation || '—'}</td>
+                          <td style={{ padding: '14px 16px', color: '#7D8597' }}>{fmtDate(m.effective_from)}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               ) : (
-                <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+                <div style={{ overflowX: 'auto', borderRadius: 14, border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                     <thead>
-                      <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                      <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', textAlign: 'left' }}>
                         <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Department Name</th>
                         <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Effective From</th>
                       </tr>
@@ -275,8 +275,8 @@ export default function AttendancePolicyDetails() {
                         <tr><td colSpan={2} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No departments assigned to this policy.</td></tr>
                       ) : departments.map((d, i) => (
                         <tr key={d.assignment_id || d.department_id} style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}>
-                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>{d.name}</td>
-                          <td style={{ padding: '14px 16px', color: '#64748b' }}>{fmtDate(d.effective_from)}</td>
+                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#001233' }}>{d.name}</td>
+                          <td style={{ padding: '14px 16px', color: '#7D8597' }}>{fmtDate(d.effective_from)}</td>
                         </tr>
                       ))}
                     </tbody>

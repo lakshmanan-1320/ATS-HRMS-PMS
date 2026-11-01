@@ -61,15 +61,15 @@ export default function PerformanceHub() {
     ].filter(Boolean);
 
     return (
-      <div style={{ display: 'flex', borderBottom: '2px solid #e2e8f0', marginBottom: 24, gap: 16, background: '#fff', padding: '0 24px' }}>
+      <div style={{ display: 'flex', borderBottom: '2px solid #E3E7EE', marginBottom: 24, gap: 16, background: '#fff', padding: '0 24px' }}>
         {tabs.map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             style={{
               padding: '16px 20px', background: 'none', border: 'none',
-              borderBottom: activeTab === tab.key ? '3px solid #6366f1' : '3px solid transparent',
-              color: activeTab === tab.key ? '#6366f1' : '#64748b', fontSize: 14, fontWeight: 700,
+              borderBottom: activeTab === tab.key ? '3px solid #0466C8' : '3px solid transparent',
+              color: activeTab === tab.key ? '#0466C8' : '#7D8597', fontSize: 14, fontWeight: 700,
               cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s'
             }}
           >
@@ -93,18 +93,18 @@ export default function PerformanceHub() {
           {isEnabled('goals') && (
             <>
               <Col span={isEnabled('kpi') ? 6 : 12}>
-                <Card style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}>
+                <Card style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}>
                   <Statistic
-                    title={<span style={{ fontWeight: 600, color: '#64748b' }}>Total Goal Plans</span>}
+                    title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Total Goal Plans</span>}
                     value={dashboardSummary?.totalGoals ?? dashboardSummary?.total ?? 0}
-                    prefix={<FiTarget style={{ color: '#6366f1', marginRight: 8 }} />}
+                    prefix={<FiTarget style={{ color: '#0466C8', marginRight: 8 }} />}
                   />
                 </Card>
               </Col>
               <Col span={isEnabled('kpi') ? 6 : 12}>
-                <Card style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}>
+                <Card style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}>
                   <Statistic
-                    title={<span style={{ fontWeight: 600, color: '#64748b' }}>Goals Completed</span>}
+                    title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Goals Completed</span>}
                     value={dashboardSummary?.completedGoals ?? dashboardSummary?.completed ?? 0}
                     prefix={<FiCheckCircle style={{ color: '#10b981', marginRight: 8 }} />}
                   />
@@ -115,20 +115,20 @@ export default function PerformanceHub() {
           {isEnabled('kpi') && (
             <>
               <Col span={isEnabled('goals') ? 6 : 12}>
-                <Card style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}>
+                <Card style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}>
                   <Statistic
-                    title={<span style={{ fontWeight: 600, color: '#64748b' }}>Total KPIs Monitored</span>}
+                    title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Total KPIs Monitored</span>}
                     value={dashboard?.total || 0}
                     prefix={<FiBriefcase style={{ color: '#0891b2', marginRight: 8 }} />}
                   />
                 </Card>
               </Col>
               <Col span={isEnabled('goals') ? 6 : 12}>
-                <Card style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}>
+                <Card style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}>
                   <Statistic
-                    title={<span style={{ fontWeight: 600, color: '#64748b' }}>Pending Reviews</span>}
+                    title={<span style={{ fontWeight: 600, color: '#7D8597' }}>Pending Reviews</span>}
                     value={dashboard?.pendingReviews || 0}
-                    valueStyle={{ color: (dashboard?.pendingReviews || 0) > 0 ? '#ea580c' : '#1e293b' }}
+                    valueStyle={{ color: (dashboard?.pendingReviews || 0) > 0 ? '#ea580c' : '#001233' }}
                     prefix={<FiClock style={{ color: '#ea580c', marginRight: 8 }} />}
                   />
                 </Card>
@@ -139,13 +139,13 @@ export default function PerformanceHub() {
           {/* Progress Analytics */}
           {isEnabled('goals') && (
             <Col span={progressSpan}>
-              <Card title={<span style={{ fontWeight: 700 }}>Overall Goal Progress</span>} style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontWeight: 700 }}>Overall Goal Progress</span>} style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
                   <Progress 
                     type="circle" 
                     percent={goalProgress} 
                     format={() => `${parseFloat(dashboardSummary?.averageProgress || 0).toFixed(1)}%`}
-                    strokeColor="#6366f1" 
+                    strokeColor="#0466C8" 
                     width={140} 
                     strokeWidth={10} 
                   />
@@ -159,7 +159,7 @@ export default function PerformanceHub() {
 
           {isEnabled('kpi') && (
             <Col span={progressSpan}>
-              <Card title={<span style={{ fontWeight: 700 }}>KPI Submissions Progress</span>} style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontWeight: 700 }}>KPI Submissions Progress</span>} style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
                   <Progress 
                     type="circle" 
@@ -180,29 +180,29 @@ export default function PerformanceHub() {
           {/* Continuous Feedback Coaching Statistics */}
           {isEnabled('continuous_feedback') && (
             <Col span={24}>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#1e293b', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <FiMessageSquare style={{ color: '#6366f1', flexShrink: 0 }} />
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#001233', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <FiMessageSquare style={{ color: '#0466C8', flexShrink: 0 }} />
                 <span>Continuous Feedback Coaching Statistics</span>
               </div>
               <Row gutter={[16, 16]}>
                 <Col span={6}>
-                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc' }}>
-                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#64748b' }}>Development Goals</span>} value={dashboardStats?.total_development_goals || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#6366f1' }} />
+                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE', background: '#f8fafc' }}>
+                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#7D8597' }}>Development Goals</span>} value={dashboardStats?.total_development_goals || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#0466C8' }} />
                   </Card>
                 </Col>
                 <Col span={6}>
-                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc' }}>
-                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#64748b' }}>Pending Action Items</span>} value={dashboardStats?.pending_action_items || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#b45309' }} />
+                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE', background: '#f8fafc' }}>
+                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#7D8597' }}>Pending Action Items</span>} value={dashboardStats?.pending_action_items || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#b45309' }} />
                   </Card>
                 </Col>
                 <Col span={6}>
-                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc' }}>
-                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#64748b' }}>Praise Badges Sent</span>} value={dashboardStats?.praise_sent || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#166534' }} />
+                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE', background: '#f8fafc' }}>
+                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#7D8597' }}>Praise Badges Sent</span>} value={dashboardStats?.praise_sent || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#166534' }} />
                   </Card>
                 </Col>
                 <Col span={6}>
-                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc' }}>
-                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#64748b' }}>Coaching Notes Added</span>} value={dashboardStats?.feedback_given || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#0f766e' }} />
+                  <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE', background: '#f8fafc' }}>
+                    <Statistic title={<span style={{ fontSize: 12, fontWeight: 600, color: '#7D8597' }}>Coaching Notes Added</span>} value={dashboardStats?.feedback_given || 0} valueStyle={{ fontSize: 20, fontWeight: 700, color: '#0f766e' }} />
                   </Card>
                 </Col>
               </Row>
@@ -216,14 +216,14 @@ export default function PerformanceHub() {
   const renderSettings = () => {
     return (
       <div>
-        <div style={{ display: 'flex', gap: 12, marginBottom: 20, background: '#f8fafc', padding: 8, borderRadius: 8, border: '1px solid #e2e8f0', width: 'fit-content' }}>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 20, background: '#f8fafc', padding: 8, borderRadius: 8, border: '1px solid #E3E7EE', width: 'fit-content' }}>
           {(isEnabled('goals') || isEnabled('performance')) && (
             <button
               onClick={() => setActiveSettingsTab('financial-years')}
               style={{
                 padding: '8px 16px', borderRadius: 6, border: 'none',
                 background: activeSettingsTab === 'financial-years' ? '#fff' : 'transparent',
-                color: activeSettingsTab === 'financial-years' ? '#6366f1' : '#64748b',
+                color: activeSettingsTab === 'financial-years' ? '#0466C8' : '#7D8597',
                 fontWeight: 700, fontSize: 13, cursor: 'pointer', boxShadow: activeSettingsTab === 'financial-years' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 transition: 'all 0.15s'
               }}
@@ -238,7 +238,7 @@ export default function PerformanceHub() {
               style={{
                 padding: '8px 16px', borderRadius: 6, border: 'none',
                 background: activeSettingsTab === 'categories' ? '#fff' : 'transparent',
-                color: activeSettingsTab === 'categories' ? '#6366f1' : '#64748b',
+                color: activeSettingsTab === 'categories' ? '#0466C8' : '#7D8597',
                 fontWeight: 700, fontSize: 13, cursor: 'pointer', boxShadow: activeSettingsTab === 'categories' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 transition: 'all 0.15s'
               }}
@@ -252,7 +252,7 @@ export default function PerformanceHub() {
               style={{
                 padding: '8px 16px', borderRadius: 6, border: 'none',
                 background: activeSettingsTab === 'techniques' ? '#fff' : 'transparent',
-                color: activeSettingsTab === 'techniques' ? '#6366f1' : '#64748b',
+                color: activeSettingsTab === 'techniques' ? '#0466C8' : '#7D8597',
                 fontWeight: 700, fontSize: 13, cursor: 'pointer', boxShadow: activeSettingsTab === 'techniques' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 transition: 'all 0.15s'
               }}
@@ -266,7 +266,7 @@ export default function PerformanceHub() {
               style={{
                 padding: '8px 16px', borderRadius: 6, border: 'none',
                 background: activeSettingsTab === 'competencies' ? '#fff' : 'transparent',
-                color: activeSettingsTab === 'competencies' ? '#6366f1' : '#64748b',
+                color: activeSettingsTab === 'competencies' ? '#0466C8' : '#7D8597',
                 fontWeight: 700, fontSize: 13, cursor: 'pointer', boxShadow: activeSettingsTab === 'competencies' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 transition: 'all 0.15s'
               }}
@@ -363,13 +363,13 @@ export default function PerformanceHub() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
       <ClientAdminSidebar active="performance" />
       
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
         
-        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
+        <div className="pms-content-flush" style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
           <div style={{ padding: '24px 24px 8px 24px' }}>
             <PageHeader
               icon={FiTarget}

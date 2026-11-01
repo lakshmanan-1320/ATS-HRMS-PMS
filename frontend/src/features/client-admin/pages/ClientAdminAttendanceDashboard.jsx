@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
 import ClientAdminSidebar from '../../../components/layout/ClientAdminSidebar.jsx'
 import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
-import PageHeader from '../../../components/common/PageHeader.jsx'
 import { useAttendanceStore } from '../../../store/attendance.store.js'
 import {
-  FiUsers, FiCheckCircle, FiXCircle, FiClock,
-  FiAlertTriangle, FiTrendingUp, FiMapPin, FiCalendar, FiRefreshCw
+  FiUsers, FiClock, FiAlertTriangle, FiMapPin, FiCalendar, FiRefreshCw, FiLogIn, FiLogOut,
+  FiCheckCircle, FiActivity, FiInbox, FiShield, FiTarget,
 } from 'react-icons/fi'
+import { PMS } from '../../employee-portal/theme'
+import { PmsCard, CardHeader, HeaderChip, BigStat, Pill, EmptyBox, T } from '../../employee-portal/components/shared/PmsUI'
+import { Ring, TrendChart } from '../components/dashboard/AdminCharts'
+import { SectionHeading, SegmentTabs } from '../components/dashboard/AdminInsights'
+import { initials } from '../components/dashboard/AdminKpiCards'
 
 /* ─── Helpers ─── */
 function formatDisplayDate(dateStr) {
@@ -15,12 +18,65 @@ function formatDisplayDate(dateStr) {
   const d = new Date(dateStr + 'T00:00:00')
   return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
 }
+const fmtTime = v => (v ? new Date(v).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : '—')
+const fmtShort = d => (d ? new Date(String(d).slice(0, 10) + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '')
 
-const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
+const PERIODS = [
+  { key: 'today', label: 'Today' },
+  { key: 'yesterday', label: 'Yesterday' },
+  { key: '7days', label: 'Last 7 Days' },
+  { key: 'current_month', label: 'Current Month' },
+]
+
+const AVATAR_BGS = ['#0466C8', '#33415C', '#5C677D', '#407BA7']
+
+/* ─── Small presentational pieces (PMS dashboard language) ─── */
+function StatTile({ value, label, highlight }) {
+  return (
+    <div style={{
+      height: highlight ? 112 : 88, alignSelf: 'end', minWidth: 0, borderRadius: 16, padding: '0 12px 12px 14px', boxSizing: 'border-box',
+      background: highlight ? PMS.gradBlue : PMS.surfaceAlt, border: highlight ? 'none' : `1px solid ${PMS.border}`,
+      boxShadow: highlight ? PMS.shadowTile : 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+    }}>
+      <span style={{ fontFamily: PMS.fontHead, fontSize: highlight ? 18.5 : 16.5, fontWeight: highlight ? 700 : 400, color: highlight ? PMS.white : PMS.navy, lineHeight: '28px' }}>{value}</span>
+      <span style={{ fontFamily: PMS.fontHead, fontSize: 9.5, color: highlight ? 'rgba(255,255,255,0.85)' : PMS.muted, lineHeight: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>
+    </div>
+  )
+}
+
+function DarkTabs({ tabs, value, onChange }) {
+  return (
+    <div role="tablist" aria-label="Exception type" className="pms-tabs-scroll" style={{ display: 'flex', alignItems: 'center', gap: 4, height: 46, padding: '0 5px', background: PMS.white, borderRadius: 23, boxSizing: 'border-box', maxWidth: '100%' }}>
+      {tabs.map(t => {
+        const active = t.key === value
+        return (
+          <button key={t.key} type="button" role="tab" aria-selected={active} onClick={() => onChange(t.key)} className="pms-focus" style={{
+            height: 36, padding: '0 15px', borderRadius: 18, border: 'none', background: active ? PMS.gradBlue : 'transparent',
+            color: active ? PMS.white : PMS.navy, display: 'inline-flex', alignItems: 'center', gap: 10,
+            fontFamily: PMS.fontHead, fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap',
+          }}>
+            {t.label}
+            <span style={{ minWidth: 20, height: 20, borderRadius: 10, padding: '0 5px', boxSizing: 'border-box', background: active ? PMS.white : PMS.surfaceAlt, color: active ? PMS.blue : PMS.navy, fontSize: 10.5, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{t.count}</span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function DetailTile({ value, caption, icon }) {
+  return (
+    <div style={{ position: 'relative', minHeight: 99, minWidth: 0, borderRadius: 18, boxSizing: 'border-box', color: PMS.white, padding: '20px 18px 16px', background: 'rgba(255,255,255,0.13)', border: '1px solid rgba(255,255,255,0.22)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
+      <span style={{ position: 'absolute', top: 14, right: 16, color: 'rgba(255,255,255,0.9)', display: 'flex' }}>{icon}</span>
+      <span style={{ fontFamily: PMS.fontHead, fontSize: 19, fontWeight: 700, lineHeight: '28px', paddingRight: 20, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</span>
+      <span style={{ fontFamily: PMS.fontHead, fontSize: 10.5, color: 'rgba(255,255,255,0.8)' }}>{caption}</span>
+    </div>
+  )
+}
+
+const lbl = { fontFamily: PMS.fontHead, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: '17px' }
 
 export default function ClientAdminAttendanceDashboard() {
-  const navigate = useNavigate()
-  
   // Quick Filters: 'today' | 'yesterday' | '7days' | 'current_month'
   const [activeFilter, setActiveFilter] = useState('today')
   const [refreshKey, setRefreshKey] = useState(0)
@@ -68,7 +124,7 @@ export default function ClientAdminAttendanceDashboard() {
   // Aggregate stats depending on current tab
   const stats = useMemo(() => {
     const isPeriodMode = activeFilter === '7days' || activeFilter === 'current_month'
-    
+
     if (isPeriodMode && trends && trends.length > 0) {
       const totalPoints = trends.length
       const sumTotalEmployees = trends.reduce((sum, p) => sum + (p.totalEmployees || 0), 0)
@@ -121,625 +177,326 @@ export default function ClientAdminAttendanceDashboard() {
   }, [adminOverview])
 
   const [activeExceptionTab, setActiveExceptionTab] = useState('late')
+  const [selectedId, setSelectedId] = useState(null)
   const loading = loadingDashboard || loadingTrends || loadingDeptSummary || loadingOverview
 
-  // Inline CSS Styles
-  const pageContainerStyle = {
-    display: 'flex',
-    minHeight: '100vh',
-    background: '#f8fafc',
-    fontFamily: "'Inter', sans-serif",
-    color: '#1e293b'
-  }
+  const isPeriod = activeFilter === '7days' || activeFilter === 'current_month'
+  const periodWord = isPeriod ? 'Daily average' : activeFilter === 'yesterday' ? 'Yesterday' : 'Today'
+  const exceptionTotal = exceptions.lateArrivals.length + exceptions.outsideFence.length + exceptions.earlyExits.length
+  const excList = activeExceptionTab === 'late' ? exceptions.lateArrivals : activeExceptionTab === 'geofence' ? exceptions.outsideFence : exceptions.earlyExits
+  const selected = excList.find(r => r.employee_id === selectedId) || excList[0] || null
+  const rows = excList.slice(0, 5)
 
-  const contentWrapperStyle = {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden'
-  }
+  const trendLabels = trends.map(t => fmtShort(t.date))
+  const rateSeries = trends.map(t => (t.totalEmployees > 0 ? Math.round((t.present / t.totalEmployees) * 100) : 0))
+  const lateMax = Math.max(4, ...trends.map(t => t.lateArrivals || 0))
 
-  const mainContentStyle = {
-    flex: 1,
-    padding: '28px 32px',
-    overflowY: 'auto'
-  }
+  const now = new Date()
+  const dateChip = `${now.toLocaleDateString('en-US', { weekday: 'short' })}, ${now.getDate()} ${now.toLocaleDateString('en-US', { month: 'short' })} ${now.getFullYear()}`
 
-  const headerContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '24px',
-    flexWrap: 'wrap',
-    gap: '16px'
-  }
-
-  const titleStyle = {
-    fontSize: '24px',
-    fontWeight: '800',
-    color: '#0f172a',
-    margin: 0,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px'
-  }
-
-  const dateSubStyle = {
-    fontSize: '13px',
-    color: '#64748b',
-    margin: '4px 0 0 0',
-    fontWeight: 500
-  }
-
-  const filterGroupStyle = {
-    display: 'flex',
-    background: '#ffffff',
-    padding: '5px',
-    borderRadius: '12px',
-    gap: '6px',
-    boxShadow: cardShadow
-  }
-
-  const filterButtonStyle = (active) => ({
-    padding: '8px 16px',
-    borderRadius: '8px',
-    border: 'none',
-    background: active ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-    color: active ? '#ffffff' : '#64748b',
-    fontSize: '13px',
-    fontWeight: active ? 700 : 600,
-    cursor: 'pointer',
-    boxShadow: active ? '0 3px 10px rgba(194, 7, 26, 0.25)' : 'none',
-    transition: 'all 0.15s ease',
-    fontFamily: "'Inter', sans-serif"
-  })
-
-  const statsGridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '16px',
-    marginBottom: '24px'
-  }
-
-  const cardStyle = {
-    background: '#ffffff',
-    border: 'none',
-    borderRadius: '16px',
-    padding: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-    boxShadow: cardShadow,
-    position: 'relative',
-    overflow: 'hidden'
-  }
-
-  const cardIndicatorStyle = (color) => ({
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: '4px',
-    backgroundColor: color
-  })
-
-  const iconContainerStyle = (bg, color) => ({
-    width: '48px',
-    height: '48px',
-    borderRadius: '12px',
-    background: bg,
-    color: color,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0
-  })
-
-  const widgetsGridStyle = {
-    display: 'grid',
-    gridTemplateColumns: '2fr 1.2fr',
-    gap: '24px',
-    marginBottom: '24px'
-  }
-
-  useEffect(() => {
-    const handleResize = () => {
-      const grid = document.getElementById('widgets-grid')
-      if (grid) {
-        if (window.innerWidth < 1024) {
-          grid.style.gridTemplateColumns = '1fr'
-        } else {
-          grid.style.gridTemplateColumns = '2fr 1.2fr'
-        }
-      }
+  // Detail content for the selected exception
+  let detailTiles = []
+  let detailNote = ''
+  if (selected) {
+    if (activeExceptionTab === 'late') {
+      detailTiles = [
+        { value: fmtTime(selected.check_in_time), caption: 'Checked in', icon: <FiLogIn size={13} /> },
+        { value: selected.shift_start_time || '—', caption: 'Shift starts', icon: <FiClock size={13} /> },
+        { value: selected.shift_name || '—', caption: 'Shift', icon: <FiCalendar size={13} /> },
+        { value: selected.policy_name || 'General Policy', caption: 'Attendance policy', icon: <FiShield size={13} /> },
+      ]
+      detailNote = 'Checked in after the shift start time allowed by the attendance policy.'
+    } else if (activeExceptionTab === 'geofence') {
+      detailTiles = [
+        { value: selected.matched_office_name || 'Geofenced area', caption: 'Office zone', icon: <FiMapPin size={13} /> },
+        { value: selected.distance_from_office != null ? `${Number(selected.distance_from_office).toFixed(0)}m` : '—', caption: 'Distance outside fence', icon: <FiTarget size={13} /> },
+        { value: selected.gps_accuracy != null ? `±${Number(selected.gps_accuracy).toFixed(0)}m` : '—', caption: 'GPS accuracy', icon: <FiActivity size={13} /> },
+        { value: fmtTime(selected.check_in_time), caption: 'Checked in', icon: <FiLogIn size={13} /> },
+      ]
+      detailNote = 'The punch location was outside the office geofence.'
+    } else {
+      detailTiles = [
+        { value: fmtTime(selected.check_out_time), caption: 'Checked out', icon: <FiLogOut size={13} /> },
+        { value: selected.work_duration_minutes != null ? `${Math.floor(selected.work_duration_minutes / 60)}h ${selected.work_duration_minutes % 60}m` : '—', caption: 'Worked', icon: <FiClock size={13} /> },
+        { value: `${selected.shift_start_time || '—'} – ${selected.shift_end_time || '—'}`, caption: 'Shift target', icon: <FiCalendar size={13} /> },
+        { value: fmtTime(selected.check_in_time), caption: 'Checked in', icon: <FiLogIn size={13} /> },
+      ]
+      detailNote = 'Checked out before the end of the assigned shift.'
     }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }
 
   return (
-    <div style={pageContainerStyle}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: PMS.white, fontFamily: PMS.fontHead, color: PMS.navy }}>
       <ClientAdminSidebar active="attendance-dashboard" />
 
-      <div style={contentWrapperStyle}>
-        <ClientAdminTopBar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <ClientAdminTopBar title="Attendance" />
 
-        <div style={mainContentStyle}>
-          {/* Header */}
-          <PageHeader
-            icon={FiClock}
-            title="Attendance Dashboard"
-            subtitle={`Real-time tracking, metrics, and compliance logs • ${formatDisplayDate(selectedDate)}`}
-            actions={
-              <>
-                <div style={filterGroupStyle}>
-                  <button
-                    id="filter-today"
-                    style={filterButtonStyle(activeFilter === 'today')}
-                    onClick={() => setActiveFilter('today')}
-                  >
-                    Today
-                  </button>
-                  <button
-                    id="filter-yesterday"
-                    style={filterButtonStyle(activeFilter === 'yesterday')}
-                    onClick={() => setActiveFilter('yesterday')}
-                  >
-                    Yesterday
-                  </button>
-                  <button
-                    id="filter-7days"
-                    style={filterButtonStyle(activeFilter === '7days')}
-                    onClick={() => setActiveFilter('7days')}
-                  >
-                    Last 7 Days
-                  </button>
-                  <button
-                    id="filter-month"
-                    style={filterButtonStyle(activeFilter === 'current_month')}
-                    onClick={() => setActiveFilter('current_month')}
-                  >
-                    Current Month
-                  </button>
-                </div>
+        <div role="main" className="pms-main" style={{ flex: 1, overflowY: 'auto', background: PMS.white }}>
+          <style>{`.spin-anim { animation: spin 1s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-                <button
-                  id="btn-refresh"
-                  onClick={handleRefresh}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 16px',
-                    borderRadius: '10px',
-                    border: 'none',
-                    background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
-                    cursor: 'pointer',
-                    color: '#ffffff',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
-                    fontFamily: "'Inter', sans-serif",
-                  }}
-                >
-                  <FiRefreshCw size={15} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} className={loading ? 'spin-anim' : ''} />
-                  Refresh
-                </button>
-              </>
-            }
-          />
-
-          <style>{`
-            .spin-anim { animation: spin 1s linear infinite; }
-            @keyframes spin { to { transform: rotate(360deg); } }
-            .card-hover:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.08) !important;
-            }
-          `}</style>
-
-          {/* Stats Cards */}
-          <div style={statsGridStyle}>
-            {/* Total Employees */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#C2071A')} />
-              <div style={iconContainerStyle('#FEECEE', '#C2071A')}>
-                <FiUsers size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Total Employees{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.totalEmployees}</div>
+          {/* ── Heading ─────────────────────────────────────────────── */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '20px 24px', flexWrap: 'wrap', paddingTop: 19 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 'clamp(26px, 3.2vw, 36px)', fontWeight: 700, lineHeight: 1.5, color: PMS.navy, letterSpacing: '-0.5px' }}>Attendance Dashboard</div>
+              <div style={{ fontSize: 13, color: PMS.muted, lineHeight: '20px', marginTop: -2 }}>
+                Real-time tracking, metrics and compliance logs · {formatDisplayDate(selectedDate)}
               </div>
             </div>
-
-            {/* Attendance % */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#0fa958')} />
-              <div style={iconContainerStyle('#e8fbf0', '#0fa958')}>
-                <FiTrendingUp size={22} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px 24px', flexWrap: 'wrap' }}>
+              <SegmentTabs tabs={PERIODS} value={activeFilter} onChange={setActiveFilter} label="Attendance period" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 42, padding: '0 18px', background: PMS.white, border: `1px solid ${PMS.border}`, borderRadius: 21, fontSize: 12, color: PMS.navy, whiteSpace: 'nowrap', boxSizing: 'border-box' }}>
+                <FiCalendar size={13} /> {dateChip}
               </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Attendance %{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.attendancePercentage}%</div>
-              </div>
-            </div>
-
-            {/* Present */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#0fa958')} />
-              <div style={iconContainerStyle('#e8fbf0', '#0fa958')}>
-                <FiCheckCircle size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Present{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.present}</div>
-              </div>
-            </div>
-
-            {/* Absent */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#dc2626')} />
-              <div style={iconContainerStyle('#feecee', '#dc2626')}>
-                <FiXCircle size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Absent{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.absent}</div>
-              </div>
-            </div>
-
-            {/* On Time */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#0284c7')} />
-              <div style={iconContainerStyle('#e0f2fe', '#0284c7')}>
-                <FiCheckCircle size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>On Time{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.onTime}</div>
-              </div>
-            </div>
-
-            {/* Late Arrivals */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#d97706')} />
-              <div style={iconContainerStyle('#fef3c7', '#d97706')}>
-                <FiClock size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Late Arrivals{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.lateArrivals}</div>
-              </div>
-            </div>
-
-            {/* Early Exits */}
-            <div className="card-hover" style={{ ...cardStyle, transition: 'all 0.2s ease' }}>
-              <div style={cardIndicatorStyle('#dc2626')} />
-              <div style={iconContainerStyle('#feecee', '#dc2626')}>
-                <FiAlertTriangle size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Early Exits{stats.labelSuffix}</div>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', marginTop: '4px' }}>{stats.earlyExits}</div>
-              </div>
+              <button id="btn-refresh" type="button" onClick={handleRefresh} className="pms-hover-lift pms-focus"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, height: 46, padding: '0 26px', background: PMS.gradBlue, color: PMS.white, border: 'none', borderRadius: 23, fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: PMS.shadowCta, whiteSpace: 'nowrap' }}>
+                <FiRefreshCw size={15} className={loading ? 'spin-anim' : ''} /> Refresh
+              </button>
             </div>
           </div>
 
-          {/* Widgets Layout */}
-          <div id="widgets-grid" style={widgetsGridStyle}>
-            
-            {/* Left Column: Exceptions Widget & Trend Charts */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              
-              {/* Exceptions Widget */}
-              <div style={{
-                background: '#ffffff',
-                border: 'none',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: cardShadow
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>Today's Exceptions</h3>
-                  <div style={{ display: 'flex', gap: '6px', background: '#f8fafc', padding: '4px', borderRadius: '10px' }}>
-                    <button
-                      onClick={() => setActiveExceptionTab('late')}
-                      style={{
-                        padding: '6px 14px', borderRadius: '8px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        background: activeExceptionTab === 'late' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                        color: activeExceptionTab === 'late' ? '#ffffff' : '#64748b',
-                        boxShadow: activeExceptionTab === 'late' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
-                        transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
-                      }}
-                    >
-                      Late Arrivals ({exceptions.lateArrivals.length})
-                    </button>
-                    <button
-                      onClick={() => setActiveExceptionTab('geofence')}
-                      style={{
-                        padding: '6px 14px', borderRadius: '8px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        background: activeExceptionTab === 'geofence' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                        color: activeExceptionTab === 'geofence' ? '#ffffff' : '#64748b',
-                        boxShadow: activeExceptionTab === 'geofence' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
-                        transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
-                      }}
-                    >
-                      Outside Fence ({exceptions.outsideFence.length})
-                    </button>
-                    <button
-                      onClick={() => setActiveExceptionTab('early')}
-                      style={{
-                        padding: '6px 14px', borderRadius: '8px', border: 'none', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-                        background: activeExceptionTab === 'early' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent',
-                        color: activeExceptionTab === 'early' ? '#ffffff' : '#64748b',
-                        boxShadow: activeExceptionTab === 'early' ? '0 2px 6px rgba(194, 7, 26, 0.2)' : 'none',
-                        transition: 'all 0.15s ease', fontFamily: "'Inter', sans-serif"
-                      }}
-                    >
-                      Early Exits ({exceptions.earlyExits.length})
-                    </button>
-                  </div>
+          {error && (
+            <div role="alert" style={{ marginTop: 20, padding: '12px 16px', borderRadius: 14, background: PMS.ice, border: `1px solid ${PMS.barSoft}`, fontSize: 12.5, color: PMS.navy }}>{String(error)}</div>
+          )}
+
+          {/* ── KPI row ─────────────────────────────────────────────── */}
+          <div className="pms-grid-4" style={{ marginTop: 39, opacity: loading ? 0.75 : 1, transition: 'opacity 0.2s' }}>
+            <PmsCard>
+              <CardHeader title="Total Employees" chip={<HeaderChip icon={<FiUsers size={14} />} />} />
+              <BigStat value={stats.totalEmployees} pill={isPeriod ? 'Period avg' : 'Workforce'} caption={`${departmentsSummary.length} departments tracked`} />
+              <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', ...T.small }}>
+                  <span>Present vs absent</span>
+                  <span>{stats.present} · {stats.absent}</span>
                 </div>
-
-                {/* Exception List */}
-                <div style={{ maxHeight: '250px', overflowY: 'auto', borderRadius: '12px', overflow: 'hidden' }}>
-                  {activeExceptionTab === 'late' && (
-                    exceptions.lateArrivals.length === 0 ? (
-                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No late arrivals today.</div>
-                    ) : (
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                        <thead>
-                          <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Check In</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Policy</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {exceptions.lateArrivals.map(r => (
-                            <tr key={r.employee_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0f172a' }}>
-                                {r.first_name} {r.last_name}
-                                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600, fontFamily: 'monospace' }}>{r.employee_code}</span>
-                              </td>
-                              <td style={{ padding: '12px 14px' }}>
-                                <span style={{ background: '#fef3c7', color: '#d97706', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700 }}>
-                                  {r.shift_name}
-                                </span>
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#dc2626', fontWeight: 700 }}>
-                                {r.check_in_time ? new Date(r.check_in_time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#64748b' }}>{r.policy_name || 'General Policy'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )
-                  )}
-
-                  {activeExceptionTab === 'geofence' && (
-                    exceptions.outsideFence.length === 0 ? (
-                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No outside geofence alerts today.</div>
-                    ) : (
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                        <thead>
-                          <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Office Zone</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Check In Distance</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>GPS Accuracy</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {exceptions.outsideFence.map(r => (
-                            <tr key={r.employee_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0f172a' }}>
-                                {r.first_name} {r.last_name}
-                                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600, fontFamily: 'monospace' }}>{r.employee_code}</span>
-                              </td>
-                              <td style={{ padding: '12px 14px' }}>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#dc2626', fontWeight: 700 }}>
-                                  <FiMapPin size={12} /> {r.matched_office_name || 'Geofenced area'}
-                                </span>
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#dc2626', fontWeight: 700 }}>
-                                {r.distance_from_office != null ? `${Number(r.distance_from_office).toFixed(0)}m outside` : '—'}
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#64748b' }}>
-                                {r.gps_accuracy != null ? `±${Number(r.gps_accuracy).toFixed(0)}m` : '—'}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )
-                  )}
-
-                  {activeExceptionTab === 'early' && (
-                    exceptions.earlyExits.length === 0 ? (
-                      <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No early exits today.</div>
-                    ) : (
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                        <thead>
-                          <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift Duration</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Check Out</th>
-                            <th style={{ padding: '12px 14px', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift Target</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {exceptions.earlyExits.map(r => (
-                            <tr key={r.employee_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0f172a' }}>
-                                {r.first_name} {r.last_name}
-                                <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 600, fontFamily: 'monospace' }}>{r.employee_code}</span>
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#475569' }}>
-                                {r.work_duration_minutes != null ? `${Math.floor(r.work_duration_minutes / 60)}h ${r.work_duration_minutes % 60}m` : '—'}
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#dc2626', fontWeight: 700 }}>
-                                {r.check_out_time ? new Date(r.check_out_time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
-                              </td>
-                              <td style={{ padding: '12px 14px', color: '#64748b' }}>
-                                {r.shift_start_time} - {r.shift_end_time}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )
-                  )}
+                <div style={{ display: 'flex', gap: 3, marginTop: 10 }}>
+                  <span style={{ flex: Math.max(stats.present, 0.5), height: 8, borderRadius: 4, background: PMS.gradBlue }} />
+                  <span style={{ flex: Math.max(stats.absent, 0.5), height: 8, borderRadius: 4, background: PMS.navy }} />
+                </div>
+                <div style={{ display: 'flex', gap: 14, marginTop: 10, ...T.small }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: PMS.blue }} />Present <strong style={{ color: PMS.navy }}>{stats.present}</strong></span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: PMS.navy }} />Absent <strong style={{ color: PMS.navy }}>{stats.absent}</strong></span>
                 </div>
               </div>
+            </PmsCard>
 
-              {/* Trend Charts Card */}
-              <div style={{
-                background: '#ffffff',
-                border: 'none',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: cardShadow
-              }}>
-                <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>Attendance Trends</h3>
-                
-                {trends.length === 0 ? (
-                  <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>No trend data found.</div>
-                ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                    {/* SVG Chart 1: Daily Attendance % */}
-                    <div>
-                      <h4 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 700, color: '#475569' }}>Attendance Rate Trend (%)</h4>
-                      <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f8fafc', borderRadius: '10px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', padding: '10px' }}>
-                        <svg viewBox="0 0 300 130" style={{ width: '100%', height: '100%' }}>
-                          {/* Grid Lines */}
-                          <line x1="30" y1="20" x2="290" y2="20" stroke="#e2e8f0" strokeDasharray="3,3" />
-                          <line x1="30" y1="60" x2="290" y2="60" stroke="#e2e8f0" strokeDasharray="3,3" />
-                          <line x1="30" y1="100" x2="290" y2="100" stroke="#e2e8f0" strokeDasharray="3,3" />
-                          
-                          {/* Y-Axis Labels */}
-                          <text x="5" y="24" fontSize="8" fill="#94a3b8" fontWeight="600">100%</text>
-                          <text x="5" y="64" fontSize="8" fill="#94a3b8" fontWeight="600">50%</text>
-                          <text x="5" y="104" fontSize="8" fill="#94a3b8" fontWeight="600">0%</text>
+            <PmsCard>
+              <CardHeader title="Attendance Rate" chip={<HeaderChip icon={<FiActivity size={14} />} />} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                <BigStat value={`${stats.attendancePercentage}%`} pill={stats.attendancePercentage >= 90 ? 'Excellent' : stats.attendancePercentage >= 75 ? 'On track' : 'Needs focus'} pillTone="blue" caption={periodWord} />
+              </div>
+              <div style={{ marginTop: 'auto', paddingTop: 12, display: 'flex', justifyContent: 'center' }}>
+                <Ring pct={stats.attendancePercentage} size={96} stroke={9} label={`${Math.round(stats.attendancePercentage)}%`} sub="present" />
+              </div>
+            </PmsCard>
 
-                          {/* Render Trend Line */}
-                          {(() => {
-                            const paddingLeft = 35
-                            const widthRange = 250
-                            const heightRange = 90
-                            const points = trends.map((t, idx) => {
-                              const rate = t.totalEmployees > 0 ? (t.present / t.totalEmployees) * 100 : 0
-                              const x = paddingLeft + (idx / (trends.length - 1)) * widthRange
-                              const y = 110 - (rate / 100) * heightRange
-                              return { x, y, date: t.date }
-                            })
-                            const pathData = points.map((p, idx) => `${idx === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
-                            const areaData = `${pathData} L ${points[points.length - 1].x} 110 L ${points[0].x} 110 Z`
-                            return (
-                              <>
-                                <path d={areaData} fill="url(#grad1)" opacity="0.15" />
-                                <path d={pathData} fill="none" stroke="#0fa958" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                {points.map((p, idx) => (
-                                  <circle key={idx} cx={p.x} cy={p.y} r="3" fill="#0fa958" stroke="#ffffff" strokeWidth="1" />
-                                ))}
-                                <defs>
-                                  <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stopColor="#0fa958" />
-                                    <stop offset="100%" stopColor="#0fa958" stopOpacity="0" />
-                                  </linearGradient>
-                                </defs>
-                              </>
-                            )
-                          })()}
-                        </svg>
-                      </div>
-                    </div>
+            <PmsCard>
+              <CardHeader title="Punctuality" chip={<HeaderChip icon={<FiCheckCircle size={14} />} />} />
+              <BigStat value={stats.onTime} pill="On time" caption={`${periodWord} · ${stats.present} present`} />
+              <div style={{ marginTop: 'auto', paddingTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0,1fr))', gap: 7, alignItems: 'end' }}>
+                <StatTile value={stats.onTime} label="On time" />
+                <StatTile value={stats.lateArrivals} label="Late" highlight />
+                <StatTile value={stats.earlyExits} label="Early exit" />
+              </div>
+            </PmsCard>
 
-                    {/* SVG Chart 2: Exception Counts */}
-                    <div>
-                      <h4 style={{ margin: '0 0 12px 0', fontSize: '13px', fontWeight: 700, color: '#475569' }}>Late Arrival Exceptions</h4>
-                      <div style={{ position: 'relative', width: '100%', height: '160px', background: '#f8fafc', borderRadius: '10px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', padding: '10px' }}>
-                        <svg viewBox="0 0 300 130" style={{ width: '100%', height: '100%' }}>
-                          {/* Grid Lines */}
-                          <line x1="30" y1="20" x2="290" y2="20" stroke="#e2e8f0" strokeDasharray="3,3" />
-                          <line x1="30" y1="60" x2="290" y2="60" stroke="#e2e8f0" strokeDasharray="3,3" />
-                          <line x1="30" y1="100" x2="290" y2="100" stroke="#e2e8f0" strokeDasharray="3,3" />
+            <PmsCard>
+              <CardHeader title="Exceptions" chip={<HeaderChip onClick={() => document.getElementById('att-exceptions')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} title="Jump to exceptions" />} />
+              <BigStat value={exceptionTotal} pill="Needs review" caption={exceptionTotal ? `${exceptionTotal} records flagged for ${formatDisplayDate(selectedDate)}` : 'No exceptions flagged'} />
+              <div style={{ marginTop: 'auto', paddingTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0,1fr))', gap: 7, alignItems: 'end' }}>
+                <StatTile value={exceptions.lateArrivals.length} label="Late" />
+                <StatTile value={exceptions.outsideFence.length} label="Outside fence" highlight />
+                <StatTile value={exceptions.earlyExits.length} label="Early exit" />
+              </div>
+            </PmsCard>
+          </div>
 
-                          {/* Render Bars */}
-                          {(() => {
-                            const paddingLeft = 35
-                            const widthRange = 250
-                            const maxVal = Math.max(...trends.map(t => t.lateArrivals || 0), 5)
-                            const barWidth = Math.max(5, 120 / trends.length)
-                            return trends.map((t, idx) => {
-                              const val = t.lateArrivals || 0
-                              const x = paddingLeft + (idx / (trends.length - 1)) * widthRange - barWidth / 2
-                              const h = (val / maxVal) * 90
-                              const y = 110 - h
-                              return (
-                                <g key={idx}>
-                                  <rect x={x} y={y} width={barWidth} height={h} rx="2" fill="#d97706" opacity="0.85" />
-                                  <text x={x + barWidth / 2} y={Math.max(10, y - 4)} fontSize="6" fill="#475569" fontWeight="700" textAnchor="middle">{val}</text>
-                                </g>
-                              )
-                            })
-                          })()}
-                        </svg>
-                      </div>
-                    </div>
+          {/* ── Exceptions panel ────────────────────────────────────── */}
+          <section id="att-exceptions" style={{ marginTop: 61, scrollMarginTop: 100, background: PMS.navy, borderRadius: PMS.radiusPanel, padding: '26px 24px 24px', boxSizing: 'border-box', minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: PMS.white, lineHeight: '24px' }}>Attendance Exceptions</div>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>Late arrivals, geofence alerts and early exits · {formatDisplayDate(selectedDate)}</div>
+              </div>
+              <DarkTabs
+                value={activeExceptionTab}
+                onChange={k => { setActiveExceptionTab(k); setSelectedId(null) }}
+                tabs={[
+                  { key: 'late', label: 'Late Arrivals', count: exceptions.lateArrivals.length },
+                  { key: 'geofence', label: 'Outside Fence', count: exceptions.outsideFence.length },
+                  { key: 'early', label: 'Early Exits', count: exceptions.earlyExits.length },
+                ]}
+              />
+            </div>
+
+            <div className="pms-workday-body" style={{ marginTop: 20 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+                {rows.length === 0 ? (
+                  <EmptyBox dark icon={<FiInbox size={14} />}
+                    title={activeExceptionTab === 'late' ? 'No late arrivals' : activeExceptionTab === 'geofence' ? 'No outside geofence alerts' : 'No early exits'}
+                    sub={`Nothing flagged for ${formatDisplayDate(selectedDate)}`} style={{ minHeight: 160, flex: 1 }} />
+                ) : rows.map((r, i) => {
+                  const sel = selected && r.employee_id === selected.employee_id
+                  const name = `${r.first_name || ''} ${r.last_name || ''}`.trim()
+                  const sub = activeExceptionTab === 'geofence' ? (r.matched_office_name || 'Geofenced area') : (r.shift_name || 'Shift')
+                  const right = activeExceptionTab === 'early' ? fmtTime(r.check_out_time) : fmtTime(r.check_in_time)
+                  return (
+                    <button key={r.employee_id} type="button" onClick={() => setSelectedId(r.employee_id)} className="pms-focus" style={{
+                      display: 'flex', alignItems: 'center', gap: 14, width: '100%', minHeight: 62, padding: '0 14px', boxSizing: 'border-box',
+                      borderRadius: PMS.radiusRow, border: 'none', cursor: 'pointer', textAlign: 'left', color: PMS.white,
+                      background: sel ? PMS.gradBlue : PMS.navyRow, boxShadow: sel ? PMS.shadowRow : 'none',
+                    }}>
+                      <span style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: sel ? PMS.white : AVATAR_BGS[i % AVATAR_BGS.length], color: sel ? PMS.navy : PMS.white, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>{initials(name)}</span>
+                      <span style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ display: 'block', fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name || 'Employee'}</span>
+                        <span style={{ display: 'block', fontSize: 10, color: sel ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.5)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.employee_code} · {sub}</span>
+                      </span>
+                      <span style={{ minWidth: 70, textAlign: 'right', flexShrink: 0, fontSize: 12.7, fontWeight: 700, whiteSpace: 'nowrap' }}>{right}</span>
+                    </button>
+                  )
+                })}
+                {excList.length > rows.length && (
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)' }}>Showing 5 of {excList.length}. See Attendance Tracking for the full list.</div>
+                )}
+              </div>
+
+              <div style={{ background: PMS.gradPanel, borderRadius: PMS.radiusInner, padding: '26px 24px 24px', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18)', display: 'flex', flexDirection: 'column', minWidth: 0, color: PMS.white }}>
+                {!selected ? (
+                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 260 }}>
+                    <EmptyBox dark icon={<FiCheckCircle size={14} />} title="All clear" sub="No exception to review in this category" style={{ width: '100%', maxWidth: 360 }} />
                   </div>
+                ) : (
+                  <>
+                    <div className="pms-att-top">
+                      <div style={{ minWidth: 0 }}>
+                        <div style={lbl}>Employee</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
+                          <span style={{ width: 36, height: 36, borderRadius: '50%', background: PMS.white, color: PMS.blue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>{initials(`${selected.first_name || ''} ${selected.last_name || ''}`)}</span>
+                          <span style={{ minWidth: 0 }}>
+                            <span style={{ display: 'block', fontSize: 15, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{selected.first_name} {selected.last_name}</span>
+                            <span style={{ display: 'block', fontSize: 9.5, color: 'rgba(255,255,255,0.7)' }}>{selected.employee_code}</span>
+                          </span>
+                        </div>
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={lbl}>Exception</div>
+                        <div style={{ fontSize: 17, fontWeight: 700, lineHeight: '34px', marginTop: 6, whiteSpace: 'nowrap' }}>
+                          {activeExceptionTab === 'late' ? 'Late arrival' : activeExceptionTab === 'geofence' ? 'Outside geofence' : 'Early exit'}
+                        </div>
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={lbl}>Date</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+                          <span style={{ width: 36, height: 36, borderRadius: '50%', background: PMS.white, color: PMS.blue, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><FiCalendar size={15} /></span>
+                          <span style={{ fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap' }}>{formatDisplayDate(selectedDate)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pms-att-tiles" style={{ marginTop: 22 }}>
+                      {detailTiles.map((t, i) => <DetailTile key={i} {...t} />)}
+                    </div>
+                    <div style={{ marginTop: 26 }}>
+                      <div style={lbl}>Note</div>
+                      <div style={{ fontSize: 13, lineHeight: '20px', marginTop: 6 }}>{detailNote}</div>
+                    </div>
+                    <div style={{ marginTop: 'auto', paddingTop: 24 }}>
+                      <div style={{ background: 'rgba(0,0,0,0.18)', borderRadius: 20, padding: '14px 20px', minHeight: 72, boxSizing: 'border-box', display: 'flex', alignItems: 'center', gap: '16px 40px', flexWrap: 'wrap' }}>
+                        {[['Late arrivals', exceptions.lateArrivals.length], ['Outside fence', exceptions.outsideFence.length], ['Early exits', exceptions.earlyExits.length]].map(([c, v]) => (
+                          <div key={c}>
+                            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)' }}>{c}</div>
+                            <div style={{ fontSize: 15, fontWeight: 700, marginTop: 2 }}>{v}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
+          </section>
 
-            {/* Right Column: Department Summaries Widget */}
-            <div style={{
-              background: '#ffffff',
-              border: 'none',
-              borderRadius: '16px',
-              padding: '24px',
-              boxShadow: cardShadow,
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>Department Statistics</h3>
-              
-              {departmentsSummary.length === 0 ? (
-                <div style={{ padding: '40px 0', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>No department statistics found.</div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1, maxHeight: '420px' }}>
-                  {departmentsSummary.map(d => {
-                    const presentPercent = d.totalEmployees > 0 ? (d.presentCount / d.totalEmployees) * 100 : 0
+          {/* ── Trends & departments ────────────────────────────────── */}
+          <div style={{ marginTop: 40 }}>
+            <SectionHeading title="Attendance Insights" sub="Attendance rate, late arrivals and department presence" />
+            <div className="pms-grid-4">
+              <PmsCard className="pms-span-2" style={{ minHeight: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: PMS.navy }}>Attendance Rate Trend</div>
+                    <div style={{ ...T.small, marginTop: 2 }}>Share of employees present per day</div>
+                  </div>
+                  <Pill tone="blue" style={{ height: 22, fontSize: 10, padding: '0 10px' }}>{activeFilter === 'current_month' ? 'This month' : 'Last 7 days'}</Pill>
+                </div>
+                <div style={{ marginTop: 16 }}>
+                  {trends.length === 0
+                    ? <EmptyBox icon={<FiActivity size={14} />} title="No trend data found" style={{ minHeight: 180 }} />
+                    : <TrendChart series={[{ key: 'rate', label: '% present', color: PMS.blue, values: rateSeries }]} labels={trendLabels} height={200} yMax={100} />}
+                </div>
+              </PmsCard>
+
+              <PmsCard className="pms-span-2" style={{ minHeight: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: PMS.navy }}>Late Arrival Exceptions</div>
+                    <div style={{ ...T.small, marginTop: 2 }}>Late check-ins per day</div>
+                  </div>
+                  <Pill style={{ height: 22, fontSize: 10, padding: '0 10px' }}>{trends.reduce((s, t) => s + (t.lateArrivals || 0), 0)} total</Pill>
+                </div>
+                {trends.length === 0 ? (
+                  <div style={{ marginTop: 16 }}><EmptyBox icon={<FiClock size={14} />} title="No trend data found" style={{ minHeight: 180 }} /></div>
+                ) : (
+                  <div style={{ marginTop: 18 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', gap: 6, height: 180, borderBottom: `1px solid ${PMS.pillGrey}` }}>
+                      {trends.map((t, i) => {
+                        const v = t.lateArrivals || 0
+                        const peak = v === Math.max(...trends.map(x => x.lateArrivals || 0)) && v > 0
+                        return (
+                          <div key={i} title={`${trendLabels[i]}: ${v} late`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: 1, maxWidth: 40 }}>
+                            <span style={{ fontSize: 10, fontWeight: 700, color: PMS.navy }}>{v}</span>
+                            <span style={{ width: '100%', height: Math.max(4, Math.round((v / lateMax) * 150)), borderRadius: 8, background: peak ? PMS.gradBlueVert : PMS.gradBarSoft }} />
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-around', gap: 6, marginTop: 8 }}>
+                      {trendLabels.map((l, i) => <span key={i} style={{ flex: 1, maxWidth: 40, textAlign: 'center', fontSize: 9.5, color: PMS.muted, whiteSpace: 'nowrap' }}>{trends.length > 12 && i % 3 ? '' : l}</span>)}
+                    </div>
+                  </div>
+                )}
+              </PmsCard>
+
+              <PmsCard className="pms-span-full" style={{ minHeight: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: PMS.navy }}>Department Statistics</div>
+                    <div style={{ ...T.small, marginTop: 2 }}>Present headcount by department · {formatDisplayDate(selectedDate)}</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 14, ...T.small }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: PMS.blue }} />Present</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: PMS.barSoft }} />Absent</span>
+                  </div>
+                </div>
+                <div style={{ marginTop: 18, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))', gap: '14px 40px' }}>
+                  {departmentsSummary.length === 0 ? (
+                    <EmptyBox icon={<FiUsers size={14} />} title="No department statistics found" />
+                  ) : departmentsSummary.map(d => {
+                    const filled = d.totalEmployees > 0 ? Math.round((d.presentCount / d.totalEmployees) * 10) : 0
                     return (
-                      <div key={d.departmentId} style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>{d.departmentName}</span>
-                          <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
-                            {d.presentCount}/{d.totalEmployees} Present
-                          </span>
-                        </div>
-                        
-                        {/* Custom visual progress bar */}
-                        <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden', display: 'flex', marginBottom: '6px' }}>
-                          <div style={{ width: `${presentPercent}%`, height: '100%', background: 'linear-gradient(90deg, #C2071A 0%, #900513 100%)' }} />
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700 }}>
-                          <span style={{ color: '#dc2626' }}>{d.absentCount} Absent</span>
-                          {d.lateCount > 0 && (
-                            <span style={{ background: '#fef3c7', color: '#d97706', padding: '1px 6px', borderRadius: '4px' }}>
-                              {d.lateCount} Late
-                            </span>
-                          )}
-                        </div>
+                      <div key={d.departmentId} style={{ display: 'grid', gridTemplateColumns: 'minmax(120px, 1.1fr) minmax(0, 1.6fr) auto', alignItems: 'center', gap: 12 }}>
+                        <span style={{ fontSize: 11.5, color: PMS.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{d.departmentName}</span>
+                        <span style={{ display: 'grid', gridTemplateColumns: 'repeat(10, minmax(0,1fr))', gap: 3 }} aria-label={`${d.presentCount} of ${d.totalEmployees} present`}>
+                          {Array.from({ length: 10 }).map((_, k) => <span key={k} style={{ height: 8, borderRadius: 4, background: k < filled ? PMS.gradBlue : PMS.barSoft }} />)}
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
+                          <strong style={{ fontSize: 11, color: PMS.navy }}>{d.presentCount}/{d.totalEmployees}</strong>
+                          {d.absentCount > 0 && <Pill style={{ height: 20, fontSize: 9.5, padding: '0 8px' }}>{d.absentCount} absent</Pill>}
+                          {d.lateCount > 0 && <Pill tone="blue" style={{ height: 20, fontSize: 9.5, padding: '0 8px' }}>{d.lateCount} late</Pill>}
+                        </span>
                       </div>
                     )
                   })}
                 </div>
-              )}
+              </PmsCard>
             </div>
           </div>
         </div>

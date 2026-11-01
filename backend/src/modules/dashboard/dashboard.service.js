@@ -51,7 +51,7 @@ async function getDashboardStats(orgId, range = 'all') {
   const companyNamePromise = repo.getCompanyName()
 
   const goalsPromise = (isPmsActive && enabled['goals'])
-    ? repo.getGoalStats(clientId, dateFrom, dateTo)
+    ? repo.getGoalStats(orgId, dateFrom, dateTo)
     : Promise.resolve({ by_status: {}, total: 0 })
 
   const kpisPromise = (isPmsActive && (enabled['goals'] || enabled['performance'] || enabled['kpi']))
@@ -63,11 +63,11 @@ async function getDashboardStats(orgId, range = 'all') {
     : Promise.resolve({ active_cycles: 0, closed_cycles: 0, draft_cycles: 0, total_cycles: 0 })
 
   const recentGoalsPromise = (isPmsActive && enabled['goals'])
-    ? repo.getRecentGoals(clientId, dateFrom, dateTo)
+    ? repo.getRecentGoals(orgId, dateFrom, dateTo)
     : Promise.resolve([])
 
   const trendPromise = (isPmsActive && enabled['goals'])
-    ? repo.getGoalCompletionTrend(clientId)
+    ? repo.getGoalCompletionTrend(orgId)
     : Promise.resolve([])
 
   const attendanceTodayPromise = enabled['attendance']

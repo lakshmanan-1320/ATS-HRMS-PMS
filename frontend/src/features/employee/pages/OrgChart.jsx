@@ -29,17 +29,17 @@ import PageHeader from '../../../components/common/PageHeader.jsx'
 
 const STATUS_META = {
   active:     { label: 'Active',     color: '#0fa958', bg: '#e8fbf0', dot: '#10b981' },
-  inactive:   { label: 'Inactive',   color: '#64748b', bg: '#f1f5f9', dot: '#94a3b8' },
+  inactive:   { label: 'Inactive',   color: '#7D8597', bg: '#F1F4F8', dot: '#94a3b8' },
   on_leave:   { label: 'On Leave',   color: '#d97706', bg: '#fef3c7', dot: '#f59e0b' },
-  terminated: { label: 'Terminated', color: '#dc2626', bg: '#feecee', dot: '#ef4444' },
+  terminated: { label: 'Terminated', color: '#dc2626', bg: '#EEF8FF', dot: '#ef4444' },
 }
 
 const LEVEL_META = {
-  L1: { color: '#C2071A', bg: '#FEECEE', gradient: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)' },
+  L1: { color: '#0466C8', bg: '#EEF8FF', gradient: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' },
   L2: { color: '#7c3aed', bg: '#f5f3ff', gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' },
   L3: { color: '#059669', bg: '#ecfdf5', gradient: 'linear-gradient(135deg, #10b981 0%, #047857 100%)' },
   L4: { color: '#d97706', bg: '#fef3c7', gradient: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)' },
-  L5: { color: '#475569', bg: '#f8fafc', gradient: 'linear-gradient(135deg, #64748b 0%, #334155 100%)' },
+  L5: { color: '#33415C', bg: '#f8fafc', gradient: 'linear-gradient(135deg, #7D8597 0%, #33415C 100%)' },
 }
 
 const getLevelMeta = (level) => {
@@ -63,11 +63,11 @@ function Avatar({ first, last, size = 42 }) {
   return (
     <div style={{
       width: size, height: size, borderRadius: '50%',
-      background: 'linear-gradient(135deg, #D01021 0%, #B40619 100%)',
+      background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontSize: size * 0.35, fontWeight: 700, color: '#fff',
       flexShrink: 0, letterSpacing: '0.02em',
-      boxShadow: '0 2px 8px rgba(194, 7, 26, 0.2)',
+      boxShadow: '0 2px 8px rgba(4, 102, 200, 0.2)',
     }}>
       {first?.[0]}{last?.[0]}
     </div>
@@ -115,12 +115,12 @@ function TreeNode({ node, depth = 0, isLast = false }) {
           <div style={{
             position: 'absolute', left: -24, top: 0,
             bottom: isLast ? 24 : 0,
-            width: 2, background: 'linear-gradient(to bottom,#fed7aa,#EFF3F8)', borderRadius: 1,
+            width: 2, background: 'linear-gradient(to bottom,#fed7aa,#EEF1F5)', borderRadius: 1,
           }} />
           <div style={{
             position: 'absolute', left: -24, top: 22,
             width: 20, height: 2,
-            background: 'linear-gradient(to right,#fca5a5,#C2071A)', borderRadius: 1,
+            background: 'linear-gradient(to right,#fca5a5,#0466C8)', borderRadius: 1,
           }} />
           <div style={{
             position: 'absolute', left: -7, top: 18,
@@ -137,7 +137,7 @@ function TreeNode({ node, depth = 0, isLast = false }) {
           padding: '12px 16px',
           marginBottom: hasChildren && !collapsed ? 10 : 6,
           background: '#ffffff',
-          border: '1px solid #e2e8f0',
+          border: '1px solid #E3E7EE',
           borderLeft: `4px solid ${lm.color}`,
           borderRadius: 12,
           cursor: hasChildren ? 'pointer' : 'default',
@@ -152,7 +152,7 @@ function TreeNode({ node, depth = 0, isLast = false }) {
           e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.06), 0 0 0 3px ${lm.color}15`
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.borderColor = '#e2e8f0'
+          e.currentTarget.style.borderColor = '#E3E7EE'
           e.currentTarget.style.borderLeftColor = lm.color
           e.currentTarget.style.transform = 'translateY(0)'
           e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.02)'
@@ -195,7 +195,7 @@ function TreeNode({ node, depth = 0, isLast = false }) {
             </span>
             <div style={{
               width: 24, height: 24, borderRadius: '50%',
-              background: collapsed ? 'var(--primary-color, #C2071A)' : `${lm.color}15`,
+              background: collapsed ? 'var(--primary-color, #0466C8)' : `${lm.color}15`,
               border: `1px solid ${lm.color}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.2s ease',
@@ -215,7 +215,7 @@ function TreeNode({ node, depth = 0, isLast = false }) {
         <div style={{ position: 'relative', marginTop: 2 }}>
           <div style={{
             position: 'absolute', left: 8, top: 0, bottom: 10,
-            width: 2, background: 'linear-gradient(to bottom,#fca5a5,#EFF3F8)', borderRadius: 1,
+            width: 2, background: 'linear-gradient(to bottom,#fca5a5,#EEF1F5)', borderRadius: 1,
           }} />
           {node.children.map((child, idx) => (
             <TreeNode
@@ -241,7 +241,7 @@ function MatrixRow({ emp, index }) {
       gridTemplateColumns: '110px 1fr 130px 58px 150px 160px 160px',
       gap: 12, padding: '12px 18px', alignItems: 'center',
       background: base,
-      border: '1px solid #e2e8f0',
+      border: '1px solid #E3E7EE',
       borderLeft: `4px solid ${lm.color}`,
       borderRadius: 12, marginBottom: 6,
       transition: 'all 0.15s ease',
@@ -249,14 +249,14 @@ function MatrixRow({ emp, index }) {
       boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)',
     }}
       onMouseEnter={e => {
-        e.currentTarget.style.background = '#fef0f2'
-        e.currentTarget.style.borderColor = 'var(--primary-color, #C2071A)'
+        e.currentTarget.style.background = '#EEF8FF'
+        e.currentTarget.style.borderColor = 'var(--primary-color, #0466C8)'
         e.currentTarget.style.transform = 'translateX(2px)'
         e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.04)'
       }}
       onMouseLeave={e => {
         e.currentTarget.style.background = base
-        e.currentTarget.style.borderColor = '#e2e8f0'
+        e.currentTarget.style.borderColor = '#E3E7EE'
         e.currentTarget.style.borderLeftColor = lm.color
         e.currentTarget.style.transform = 'translateX(0)'
         e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.02)'
@@ -276,7 +276,7 @@ function MatrixRow({ emp, index }) {
       <span style={{ fontSize: 12.5, color: '#4b5563' }}>{emp.designation || '—'}</span>
       {emp.manager_name?.trim() ? (
         <div>
-          <div style={{ fontSize: 12.5, fontWeight: 700, color: '#C2071A' }}>{emp.manager_name}</div>
+          <div style={{ fontSize: 12.5, fontWeight: 700, color: '#0466C8' }}>{emp.manager_name}</div>
           <div style={{ fontSize: 10.5, color: '#94a3b8', fontFamily: 'monospace' }}>{emp.manager_code}</div>
         </div>
       ) : <span style={{ fontSize: 12.5, color: '#cbd5e1' }}>— None —</span>}
@@ -363,8 +363,8 @@ export default function OrgChart() {
       icon: FiUser,
       badgeText: '0%',
       badgeType: 'neutral',
-      badgeBg: '#eff3f8',
-      badgeColor: '#64748b',
+      badgeBg: '#EEF1F5',
+      badgeColor: '#7D8597',
       subtext: 'Primary hierarchy leaders',
       subtext2: 'Active managers'
     },
@@ -374,8 +374,8 @@ export default function OrgChart() {
       icon: FiShare2,
       badgeText: '0%',
       badgeType: 'neutral',
-      badgeBg: '#eff3f8',
-      badgeColor: '#64748b',
+      badgeBg: '#EEF1F5',
+      badgeColor: '#7D8597',
       subtext: 'Secondary assignments',
       subtext2: 'Cross-functional teams'
     },
@@ -385,19 +385,19 @@ export default function OrgChart() {
       icon: FiFolder,
       badgeText: '0%',
       badgeType: 'neutral',
-      badgeBg: '#eff3f8',
-      badgeColor: '#64748b',
+      badgeBg: '#EEF1F5',
+      badgeColor: '#7D8597',
       subtext: 'Organizational units',
       subtext2: 'Mapped levels'
     },
   ]
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f3f7fa', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="org-chart" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar title="Org Chart & Hierarchy" />
-        <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto', background: '#f3f7fa' }}>
+        <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto', background: '#FFFFFF' }}>
 
         {/* ── Page Header Banner ── */}
         <PageHeader
@@ -439,9 +439,9 @@ export default function OrgChart() {
                     <div style={{
                       width: 28, height: 28,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#C2071A',
+                      color: '#0466C8',
                     }}>
-                      <CardIcon size={24} style={{ color: '#C2071A', stroke: '#C2071A' }} strokeWidth={1.75} />
+                      <CardIcon size={24} style={{ color: '#0466C8', stroke: '#0466C8' }} strokeWidth={1.75} />
                     </div>
                     <span style={{
                       background: card.badgeBg,
@@ -484,14 +484,14 @@ export default function OrgChart() {
         {/* ── Main Container (Tabs + Filters + Content) ── */}
         <div style={{
           background: '#ffffff',
-          border: '1px solid #e2e8f0',
+          border: '1px solid #E3E7EE',
           borderRadius: 16,
           boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
           overflow: 'hidden',
         }}>
 
           {/* Tabs */}
-          <div style={{ display: 'flex', borderBottom: '1px solid #EFF3F8', padding: '0 24px', background: '#ffffff' }}>
+          <div style={{ display: 'flex', borderBottom: '1px solid #EEF1F5', padding: '0 24px', background: '#ffffff' }}>
             {[
               { id: 'tree',   label: 'Tree View',   icon: FiShare2 },
               { id: 'matrix', label: 'Matrix View', icon: FiGrid },
@@ -504,15 +504,15 @@ export default function OrgChart() {
                   onClick={() => setTab(t.id)}
                   style={{
                     padding: '14px 20px', background: 'none', border: 'none',
-                    borderBottom: isActive ? '3px solid var(--primary-color, #C2071A)' : '3px solid transparent',
+                    borderBottom: isActive ? '3px solid var(--primary-color, #0466C8)' : '3px solid transparent',
                     cursor: 'pointer', fontSize: 13.5, fontWeight: isActive ? 700 : 500,
-                    color: isActive ? 'var(--primary-color, #C2071A)' : '#64748b',
+                    color: isActive ? 'var(--primary-color, #0466C8)' : '#7D8597',
                     fontFamily: 'inherit', marginBottom: -1,
                     transition: 'all 0.15s ease',
                     display: 'flex', alignItems: 'center', gap: 8,
                   }}
                 >
-                  <TabIcon size={15} color={isActive ? 'var(--primary-color, #C2071A)' : '#64748b'} />
+                  <TabIcon size={15} color={isActive ? 'var(--primary-color, #0466C8)' : '#7D8597'} />
                   {t.label}
                 </button>
               )
@@ -523,7 +523,7 @@ export default function OrgChart() {
           <div style={{
             display: 'flex', gap: 12, padding: '14px 24px',
             alignItems: 'center', flexWrap: 'wrap',
-            borderBottom: '1px solid #f1f5f9', background: '#f8fafc'
+            borderBottom: '1px solid #F1F4F8', background: '#f8fafc'
           }}>
             <div style={{ position: 'relative' }}>
               <FiSearch size={14} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
@@ -533,12 +533,12 @@ export default function OrgChart() {
                 onChange={e => setSearch(e.target.value)}
                 style={{
                   paddingLeft: 34, paddingRight: 14, paddingTop: 8, paddingBottom: 8,
-                  background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 9,
+                  background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: 9,
                   color: '#111827', fontSize: 13, outline: 'none', width: 260,
                   fontFamily: 'inherit', transition: 'border-color 0.15s ease',
                 }}
-                onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
-                onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                onFocus={e => e.target.style.borderColor = 'var(--primary-color, #0466C8)'}
+                onBlur={e => e.target.style.borderColor = '#E3E7EE'}
               />
             </div>
             <select
@@ -546,13 +546,13 @@ export default function OrgChart() {
               onChange={e => setFilterDept(e.target.value)}
               style={{
                 padding: '8px 14px', background: '#ffffff',
-                border: '1px solid #e2e8f0', borderRadius: 9,
+                border: '1px solid #E3E7EE', borderRadius: 9,
                 color: '#111827', fontSize: 13, outline: 'none',
                 cursor: 'pointer', fontFamily: 'inherit',
                 transition: 'border-color 0.15s ease',
               }}
-              onFocus={e => e.target.style.borderColor = 'var(--primary-color, #C2071A)'}
-              onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+              onFocus={e => e.target.style.borderColor = 'var(--primary-color, #0466C8)'}
+              onBlur={e => e.target.style.borderColor = '#E3E7EE'}
             >
               <option value="">All Departments</option>
               {departments.map(d => (
@@ -564,8 +564,8 @@ export default function OrgChart() {
                 onClick={() => { setSearch(''); setFilterDept('') }}
                 style={{
                   padding: '8px 14px', background: 'none',
-                  border: '1px solid #e2e8f0', borderRadius: 9,
-                  cursor: 'pointer', fontSize: 12, color: '#64748b',
+                  border: '1px solid #E3E7EE', borderRadius: 9,
+                  cursor: 'pointer', fontSize: 12, color: '#7D8597',
                   fontFamily: 'inherit', transition: 'all 0.15s ease',
                   display: 'flex', alignItems: 'center', gap: 4,
                 }}
@@ -576,8 +576,8 @@ export default function OrgChart() {
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background = 'none'
-                  e.currentTarget.style.borderColor = '#e2e8f0'
-                  e.currentTarget.style.color = '#64748b'
+                  e.currentTarget.style.borderColor = '#E3E7EE'
+                  e.currentTarget.style.color = '#7D8597'
                 }}
               >
                 <FiX size={13} /> Clear
@@ -586,7 +586,7 @@ export default function OrgChart() {
             <span style={{
               marginLeft: 'auto', fontSize: 11.5, color: '#4b5563', fontWeight: 600,
               background: '#ffffff', padding: '5px 12px', borderRadius: 20,
-              border: '1px solid #e2e8f0',
+              border: '1px solid #E3E7EE',
             }}>
               {filtered.length} / {employees.length} employees
             </span>
@@ -600,17 +600,17 @@ export default function OrgChart() {
                 <style>{`@keyframes oc-spin{to{transform:rotate(360deg)}}`}</style>
                 <div style={{
                   width: 40, height: 40, borderRadius: '50%',
-                  border: '3px solid #e2e8f0', borderTopColor: 'var(--primary-color, #C2071A)',
+                  border: '3px solid #E3E7EE', borderTopColor: 'var(--primary-color, #0466C8)',
                   animation: 'oc-spin 0.75s linear infinite',
                   margin: '0 auto 16px',
                 }} />
-                <div style={{ fontSize: 13.5, color: '#64748b', fontWeight: 500 }}>Loading organizational hierarchy…</div>
+                <div style={{ fontSize: 13.5, color: '#7D8597', fontWeight: 500 }}>Loading organizational hierarchy…</div>
               </div>
 
             ) : error ? (
               <div style={{
-                textAlign: 'center', padding: '36px 20px', background: '#feecee',
-                borderRadius: 12, border: '1px solid #f7a6af',
+                textAlign: 'center', padding: '36px 20px', background: '#EEF8FF',
+                borderRadius: 12, border: '1px solid #C9DDF3',
               }}>
                 <FiAlertTriangle size={32} color="#dc2626" style={{ marginBottom: 8 }} />
                 <div style={{ color: '#dc2626', fontSize: 14, fontWeight: 700 }}>{error}</div>
@@ -620,7 +620,7 @@ export default function OrgChart() {
               <div style={{ textAlign: 'center', padding: '60px 20px' }}>
                 <FiUsers size={48} color="#94a3b8" style={{ marginBottom: 12 }} />
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#111827', marginBottom: 6 }}>No employees found</div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>Add employees and assign managers to populate the org chart.</div>
+                <div style={{ fontSize: 13, color: '#7D8597' }}>Add employees and assign managers to populate the org chart.</div>
               </div>
 
             ) : tab === 'tree' ? (
@@ -640,7 +640,7 @@ export default function OrgChart() {
                 )}
 
                 {roots.length === 0 ? (
-                  <div style={{ color: '#64748b', textAlign: 'center', padding: 40, fontSize: 13.5 }}>
+                  <div style={{ color: '#7D8597', textAlign: 'center', padding: 40, fontSize: 13.5 }}>
                     No employees match your search criteria.
                   </div>
                 ) : (
@@ -653,10 +653,10 @@ export default function OrgChart() {
                 <div style={{
                   marginTop: 28, display: 'flex', gap: 20, flexWrap: 'wrap',
                   padding: '12px 16px', background: '#f8fafc', borderRadius: 10,
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #E3E7EE',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: '#4b5563', fontWeight: 600 }}>
-                    <div style={{ width: 16, height: 2.5, background: 'linear-gradient(to right,#fca5a5,#C2071A)', borderRadius: 2 }} />
+                    <div style={{ width: 16, height: 2.5, background: 'linear-gradient(to right,#fca5a5,#0466C8)', borderRadius: 2 }} />
                     Primary reporting line (solid)
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: '#4b5563', fontWeight: 600 }}>
@@ -664,7 +664,7 @@ export default function OrgChart() {
                     Secondary / dotted-line manager
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: '#4b5563', fontWeight: 600 }}>
-                    <FiChevronRight size={14} color="var(--primary-color, #C2071A)" />
+                    <FiChevronRight size={14} color="var(--primary-color, #0466C8)" />
                     Click arrow to expand / collapse direct reports
                   </div>
                 </div>
@@ -681,20 +681,20 @@ export default function OrgChart() {
                     gap: 12, padding: '8px 18px 12px',
                     fontSize: 10.5, fontWeight: 800, letterSpacing: '0.07em',
                     textTransform: 'uppercase', color: '#94a3b8',
-                    borderBottom: '2px solid #e2e8f0', marginBottom: 12,
+                    borderBottom: '2px solid #E3E7EE', marginBottom: 12,
                   }}>
                     <span>Code</span>
                     <span>Employee</span>
                     <span>Department</span>
                     <span>Lvl</span>
                     <span>Designation</span>
-                    <span style={{ color: '#C2071A' }}>Primary Mgr</span>
+                    <span style={{ color: '#0466C8' }}>Primary Mgr</span>
                     <span style={{ color: '#d97706' }}>Secondary (Dotted)</span>
                   </div>
                 )}
 
                 {filtered.length === 0 ? (
-                  <div style={{ color: '#64748b', textAlign: 'center', padding: 40, fontSize: 13.5 }}>
+                  <div style={{ color: '#7D8597', textAlign: 'center', padding: 40, fontSize: 13.5 }}>
                     No employees match your search criteria.
                   </div>
                 ) : (
@@ -704,10 +704,10 @@ export default function OrgChart() {
                 {/* Legend */}
                 <div style={{
                   marginTop: 20, display: 'flex', gap: 20, padding: '12px 16px',
-                  background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0',
+                  background: '#f8fafc', borderRadius: 10, border: '1px solid #E3E7EE',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: '#4b5563', fontWeight: 600 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 3, background: '#FEECEE', border: '1px solid #C2071A' }} />
+                    <div style={{ width: 10, height: 10, borderRadius: 3, background: '#EEF8FF', border: '1px solid #0466C8' }} />
                     Primary / solid-line manager
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: '#4b5563', fontWeight: 600 }}>

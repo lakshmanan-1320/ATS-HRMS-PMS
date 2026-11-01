@@ -123,6 +123,48 @@ async function handleRejectRequest(req, res, next) {
   }
 }
 
+// ── Client-admin (organization-wide) ─────────────────────────────────────────
+async function handleAdminGetPendingRequests(req, res, next) {
+  try {
+    const list = await service.getOrgPendingRequests(req.user.organizationId);
+    res.status(STATUS_CODES.OK).json({ success: true, data: list });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function handleAdminApproveRequest(req, res, next) {
+  const { id } = req.params;
+  const { remarks } = req.body;
+  try {
+    const request = await service.adminApproveRequest(req.user.organizationId, req.user.id, id, remarks);
+    logAudit({
+      actorId: req.user.id, actorEmail: req.user.email, actorRole: req.user.role,
+      action: 'attendance_regularization_approved', target: id, metadata: { remarks, by: 'client_admin' }, ip: req.ip
+    });
+    res.status(STATUS_CODES.OK).json({ success: true, message: 'Regularization request approved successfully.', data: request });
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ success: false, message: err.message });
+    next(err);
+  }
+}
+
+async function handleAdminRejectRequest(req, res, next) {
+  const { id } = req.params;
+  const { remarks } = req.body;
+  try {
+    const request = await service.adminRejectRequest(req.user.organizationId, id, remarks);
+    logAudit({
+      actorId: req.user.id, actorEmail: req.user.email, actorRole: req.user.role,
+      action: 'attendance_regularization_rejected', target: id, metadata: { remarks, by: 'client_admin' }, ip: req.ip
+    });
+    res.status(STATUS_CODES.OK).json({ success: true, message: 'Regularization request rejected successfully.', data: request });
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ success: false, message: err.message });
+    next(err);
+  }
+}
+
 module.exports = {
   handleGetSettings,
   handleUpdateSettings,
@@ -131,5 +173,8 @@ module.exports = {
   handleCancelRequest,
   handleGetPendingRequests,
   handleApproveRequest,
-  handleRejectRequest
+  handleRejectRequest,
+  handleAdminGetPendingRequests,
+  handleAdminApproveRequest,
+  handleAdminRejectRequest
 };

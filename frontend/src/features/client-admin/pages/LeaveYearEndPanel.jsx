@@ -49,20 +49,20 @@ export default function LeaveYearEndPanel({ planId }) {
 
   return (
     <div style={{ maxWidth: '650px' }}>
-      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
-        <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Year-End Processing</h3>
-        <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#64748b' }}>
+      <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+        <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#001233' }}>Year-End Processing</h3>
+        <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#7D8597' }}>
           Transition employee leave balances to the next calendar/financial cycle.
         </p>
 
         {/* Year Selector */}
         <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Processing Year</label>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Processing Year</label>
             <select
               value={selectedYear}
               onChange={e => setSelectedYear(parseInt(e.target.value, 10))}
-              style={{ width: '100%', padding: '10px 14px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', fontWeight: '600' }}
+              style={{ width: '100%', padding: '10px 14px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', fontWeight: '600' }}
             >
               {[currentYear - 2, currentYear - 1, currentYear, currentYear + 1].map(y => (
                 <option key={y} value={y}>{y}</option>
@@ -72,7 +72,7 @@ export default function LeaveYearEndPanel({ planId }) {
           <div style={{ flex: 1, paddingTop: '18px' }}>
             <button
               onClick={loadStatus}
-              style={{ padding: '10px 16px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}
+              style={{ padding: '10px 16px', background: '#F1F4F8', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}
             >
               Check Log Status
             </button>
@@ -80,9 +80,9 @@ export default function LeaveYearEndPanel({ planId }) {
         </div>
 
         {/* Processing Order Details */}
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
-          <div style={{ fontSize: '11px', fontWeight: '800', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>Strict Processing Order</div>
-          <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: '#475569', lineHeight: '20px' }}>
+        <div style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
+          <div style={{ fontSize: '11px', fontWeight: '800', color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>Strict Processing Order</div>
+          <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: '#33415C', lineHeight: '20px' }}>
             <li><strong>Used Deduction</strong>: Compute remaining balance.</li>
             <li><strong>Carry Forward</strong>: Transfer remaining leaves to next year up to CF plan limits.</li>
             <li><strong>Encashment</strong>: Payout cashouts on remaining pool up to Encash plan limits. Daily rate: <code>gross / 30</code>.</li>
@@ -91,15 +91,15 @@ export default function LeaveYearEndPanel({ planId }) {
         </div>
 
         {/* Status Area */}
-        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '20px', marginBottom: '24px' }}>
-          <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>Current Execution Status</div>
+        <div style={{ borderTop: '1px solid #F1F4F8', paddingTop: '20px', marginBottom: '24px' }}>
+          <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>Current Execution Status</div>
           
           {loadingStatus ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b', fontSize: '13px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#7D8597', fontSize: '13px' }}>
               <FiLoader className="spin" size={14} /> Loading status...
             </div>
           ) : !statusLog || statusLog.status === 'NOT_STARTED' ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b', fontSize: '13px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#7D8597', fontSize: '13px' }}>
               <FiInfo size={14} /> Year-end processing has not been executed for this plan in {selectedYear}.
             </div>
           ) : (
@@ -120,12 +120,12 @@ export default function LeaveYearEndPanel({ planId }) {
                     <FiAlertOctagon size={12} /> Failed
                   </span>
                 )}
-                <span style={{ fontSize: '12px', color: '#64748b' }}>
+                <span style={{ fontSize: '12px', color: '#7D8597' }}>
                   Last Checked: {new Date(statusLog.updated_at).toLocaleString()}
                 </span>
               </div>
               {statusLog.remarks && (
-                <div style={{ fontSize: '12px', color: '#475569', background: '#f1f5f9', padding: '8px 12px', borderRadius: '8px', marginTop: 4, fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '12px', color: '#33415C', background: '#F1F4F8', padding: '8px 12px', borderRadius: '8px', marginTop: 4, fontFamily: 'monospace' }}>
                   {statusLog.remarks}
                 </div>
               )}
@@ -162,8 +162,8 @@ export default function LeaveYearEndPanel({ planId }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%',
             padding: '12px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff',
             cursor: executing || (statusLog && statusLog.status === 'COMPLETED') ? 'not-allowed' : 'pointer',
-            background: executing || (statusLog && statusLog.status === 'COMPLETED') ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)',
-            boxShadow: executing || (statusLog && statusLog.status === 'COMPLETED') ? 'none' : '0 4px 14px rgba(194,7,26,0.35)',
+            background: executing || (statusLog && statusLog.status === 'COMPLETED') ? '#E3E7EE' : 'linear-gradient(135deg,#0466C8,#023E7D)',
+            boxShadow: executing || (statusLog && statusLog.status === 'COMPLETED') ? 'none' : '0 4px 14px rgba(4, 102, 200,0.35)',
             transition: 'all 0.2s'
           }}
         >

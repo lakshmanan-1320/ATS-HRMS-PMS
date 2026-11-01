@@ -42,7 +42,7 @@ export default function BellCurveOverrideModal({ visible, result, buckets, targe
     <Modal
       title={
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 16, fontWeight: 800 }}>
-          <FiEdit3 size={18} style={{ color: '#6366f1' }} />
+          <FiEdit3 size={18} style={{ color: '#0466C8' }} />
           <span>Calibrate Employee Rating</span>
         </div>
       }
@@ -56,7 +56,7 @@ export default function BellCurveOverrideModal({ visible, result, buckets, targe
       style={{ borderRadius: 16 }}
     >
       <Spin spinning={loading}>
-        <div style={{ margin: '16px 0', background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #e2e8f0' }}>
+        <div style={{ margin: '16px 0', background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #E3E7EE' }}>
           <Paragraph style={{ margin: 0 }}>
             <strong>Employee:</strong> {result.first_name} {result.last_name} ({result.employee_code || 'N/A'})
           </Paragraph>
@@ -64,17 +64,17 @@ export default function BellCurveOverrideModal({ visible, result, buckets, targe
             <strong>Designation:</strong> {result.designation || 'N/A'}
           </Paragraph>
           <Paragraph style={{ margin: '6px 0 0 0' }}>
-            <strong>Appraisal Final Score:</strong> <span style={{ color: '#6366f1', fontWeight: 800 }}>{result.appraisal_score}</span>
+            <strong>Appraisal Final Score:</strong> <span style={{ color: '#0466C8', fontWeight: 800 }}>{result.appraisal_score}</span>
           </Paragraph>
           <Paragraph style={{ margin: '6px 0 0 0' }}>
-            <strong>Original Calculated Bucket:</strong> <span style={{ color: '#64748b', fontWeight: 700 }}>{result.original_bucket_name || 'N/A'}</span>
+            <strong>Original Calculated Bucket:</strong> <span style={{ color: '#7D8597', fontWeight: 700 }}>{result.original_bucket_name || 'N/A'}</span>
           </Paragraph>
         </div>
 
         <Form form={form} layout="vertical" requiredMark={true}>
           <Form.Item
             name="currentBucketId"
-            label={<Text style={{ fontWeight: 700, color: '#334155' }}>Target Performance Bucket</Text>}
+            label={<Text style={{ fontWeight: 700, color: '#33415C' }}>Target Performance Bucket</Text>}
             rules={[{ required: true, message: 'Please select a performance calibration bucket.' }]}
           >
             <Select
@@ -93,7 +93,7 @@ export default function BellCurveOverrideModal({ visible, result, buckets, targe
 
           <Form.Item
             name="reason"
-            label={<Text style={{ fontWeight: 700, color: '#334155' }}>Calibration Override Reason</Text>}
+            label={<Text style={{ fontWeight: 700, color: '#33415C' }}>Calibration Override Reason</Text>}
             rules={[
               { required: true, message: 'Justification comments are mandatory for performance overrides.' },
               { min: 10, message: 'Justification reason must be at least 10 characters long.' }

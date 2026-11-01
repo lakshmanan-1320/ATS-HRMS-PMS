@@ -97,8 +97,8 @@ export default function LeavePlansList({ onSelectPlan }) {
 
   const inputStyle = {
     width: '100%', padding: '10px 14px', background: '#f8fafc',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box',
     fontFamily: 'inherit', transition: 'border-color 0.15s'
   }
 
@@ -106,12 +106,12 @@ export default function LeavePlansList({ onSelectPlan }) {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#0f172a' }}>Leave Plans</h2>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>Configure custom leave plans, accruals, rules and assignments</p>
+          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#001233' }}>Leave Plans</h2>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#7D8597' }}>Configure custom leave plans, accruals, rules and assignments</p>
         </div>
         <button
           onClick={openCreateModal}
-          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)', transition: 'all 0.2s' }}
         >
           <AddIcon size={20} />
           <span style={{ color: '#ffffff', fontWeight: 700 }}>Create Plan</span>
@@ -120,17 +120,17 @@ export default function LeavePlansList({ onSelectPlan }) {
 
       {loading ? (
         <div style={{ padding: '60px', textAlign: 'center' }}>
-          <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-          <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading plans…</div>
+          <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>Loading plans…</div>
         </div>
       ) : plans.length === 0 ? (
-        <div style={{ padding: '60px', textAlign: 'center', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px' }}>
+        <div style={{ padding: '60px', textAlign: 'center', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px' }}>
           <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'linear-gradient(135deg, #94a3b8 0%, #94a3b8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
             <FiBookOpen size={22} color="#ffffff" />
           </div>
           <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No Leave Plans Configured</div>
-          <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#64748b' }}>Create a plan to start associating leave rules with employees.</p>
-          <button onClick={openCreateModal} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
+          <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#7D8597' }}>Create a plan to start associating leave rules with employees.</p>
+          <button onClick={openCreateModal} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 20px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
             <AddIcon size={20} />
             <span style={{ color: '#ffffff', fontWeight: 700 }}>Create First Leave Plan</span>
           </button>
@@ -142,25 +142,25 @@ export default function LeavePlansList({ onSelectPlan }) {
               key={plan.leave_plan_id}
               onClick={() => onSelectPlan(plan)}
               style={{
-                background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px',
+                background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '24px',
                 cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(194,7,26,0.08)'
-                e.currentTarget.style.borderColor = '#f7a6af'
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(4, 102, 200,0.08)'
+                e.currentTarget.style.borderColor = '#C9DDF3'
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)'
                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.02)'
-                e.currentTarget.style.borderColor = '#e2e8f0'
+                e.currentTarget.style.borderColor = '#E3E7EE'
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                 <div style={{
-                  background: plan.is_active ? '#feecee' : '#f1f5f9',
-                  color: plan.is_active ? '#941018' : '#64748b',
+                  background: plan.is_active ? '#EEF8FF' : '#F1F4F8',
+                  color: plan.is_active ? '#023E7D' : '#7D8597',
                   fontSize: '11px', fontWeight: '700', padding: '4px 8px', borderRadius: '6px',
                   textTransform: 'uppercase', letterSpacing: '0.04em'
                 }}>
@@ -169,7 +169,7 @@ export default function LeavePlansList({ onSelectPlan }) {
                 <div style={{ display: 'flex', gap: 6 }}>
                   <button
                     onClick={(e) => openEditModal(e, plan)}
-                    style={{ background: '#C2071A', border: '1px solid #C2071A', borderRadius: '8px', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ffffff' }}
+                    style={{ background: '#0466C8', border: '1px solid #0466C8', borderRadius: '8px', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ffffff' }}
                   >
                     <FiEdit2 size={12} color="#ffffff" />
                   </button>
@@ -182,19 +182,19 @@ export default function LeavePlansList({ onSelectPlan }) {
                 </div>
               </div>
 
-              <h3 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>{plan.name}</h3>
+              <h3 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: '800', color: '#001233' }}>{plan.name}</h3>
               {plan.description && (
-                <p style={{ margin: '0 0 16px', fontSize: '12px', color: '#64748b', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '36px', lineHeight: '18px' }}>
+                <p style={{ margin: '0 0 16px', fontSize: '12px', color: '#7D8597', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '36px', lineHeight: '18px' }}>
                   {plan.description}
                 </p>
               )}
 
-              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+              <div style={{ borderTop: '1px solid #F1F4F8', paddingTop: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', color: '#7D8597', fontWeight: '500' }}>
                   <FiCalendar size={13} color="#94a3b8" />
                   {plan.leave_year_type === 'calendar_year' ? 'Calendar Year' : 'Financial Year (starts month ' + plan.start_month + ')'}
                 </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '12px', color: '#941018', fontWeight: '700' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '12px', color: '#023E7D', fontWeight: '700' }}>
                   Configure <FiArrowRight size={13} />
                 </span>
               </div>
@@ -213,12 +213,12 @@ export default function LeavePlansList({ onSelectPlan }) {
             onClick={e => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#001233' }}>
                 {editingPlan ? 'Modify Leave Plan' : 'Create Leave Plan'}
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
-                style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}
               >
                 <FiX size={14} />
               </button>
@@ -226,18 +226,18 @@ export default function LeavePlansList({ onSelectPlan }) {
 
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Plan Name *</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Plan Name *</label>
                 <input style={inputStyle} placeholder="e.g. Standard Leave Plan" value={name} onChange={e => setName(e.target.value)} />
               </div>
 
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</label>
                 <textarea style={{ ...inputStyle, height: '70px', resize: 'none' }} placeholder="Brief description of who this plan is for…" value={description} onChange={e => setDescription(e.target.value)} />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Year Type</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Year Type</label>
                   <select style={inputStyle} value={yearType} onChange={e => {
                     setYearType(e.target.value)
                     if (e.target.value === 'calendar_year') setStartMonth('1')
@@ -247,7 +247,7 @@ export default function LeavePlansList({ onSelectPlan }) {
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Start Month</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Start Month</label>
                   <select style={inputStyle} value={startMonth} onChange={e => setStartMonth(e.target.value)} disabled={yearType === 'calendar_year'}>
                     <option value="1">January (1)</option>
                     <option value="4">April (4)</option>
@@ -261,7 +261,7 @@ export default function LeavePlansList({ onSelectPlan }) {
                 <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13px', color: '#374151', cursor: 'pointer', fontWeight: '600' }}>
                   <input
                     type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)}
-                    style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#C2071A' }}
+                    style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#0466C8' }}
                   />
                   Active & Available for Assignment
                 </label>
@@ -277,8 +277,8 @@ export default function LeavePlansList({ onSelectPlan }) {
               )}
 
               <div style={{ display: 'flex', gap: 10 }}>
-                <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}>
+                <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)' }}>
                   {editingPlan ? 'Update Plan' : 'Create Plan'}
                 </button>
               </div>

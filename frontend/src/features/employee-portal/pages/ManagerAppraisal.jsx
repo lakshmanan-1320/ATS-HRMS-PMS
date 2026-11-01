@@ -16,10 +16,10 @@ function PerformanceReferenceContext({ context, technique }) {
       padding: '14px 16px',
       background: '#f8fafc',
       borderRadius: '12px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid #E3E7EE',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-        <span style={{ fontSize: '11px', fontWeight: '800', color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <span style={{ fontSize: '11px', fontWeight: '800', color: '#0466C8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Technique Reference: {technique.replace('_', ' ')}
         </span>
         <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '500' }}>
@@ -32,12 +32,12 @@ function PerformanceReferenceContext({ context, technique }) {
         context.kpis && context.kpis.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {context.kpis.map(kpi => (
-              <div key={kpi.kpi_id} style={{ fontSize: '12px', color: '#334155' }}>
+              <div key={kpi.kpi_id} style={{ fontSize: '12px', color: '#33415C' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '600' }}>
                   <span>🎯 {kpi.title}</span>
-                  <span style={{ color: '#6366f1' }}>{Math.round(Number(kpi.completion_percentage))}%</span>
+                  <span style={{ color: '#0466C8' }}>{Math.round(Number(kpi.completion_percentage))}%</span>
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: '#7D8597', marginTop: '2px' }}>
                   Target: {kpi.target_value} | Current Approved: {kpi.approved_value} {kpi.unit || ''}
                 </div>
               </div>
@@ -53,12 +53,12 @@ function PerformanceReferenceContext({ context, technique }) {
         context.competency && context.competency.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {context.competency.map(comp => (
-              <div key={comp.assessment_id} style={{ fontSize: '12px', color: '#334155' }}>
+              <div key={comp.assessment_id} style={{ fontSize: '12px', color: '#33415C' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '600' }}>
                   <span>📋 {comp.competency_name}</span>
                   <span style={{ color: '#10b981' }}>Rating: {comp.rating}/5</span>
                 </div>
-                {comp.comment && <div style={{ fontSize: '11px', color: '#64748b', fontStyle: 'italic', marginTop: '2px' }}>"{comp.comment}"</div>}
+                {comp.comment && <div style={{ fontSize: '11px', color: '#7D8597', fontStyle: 'italic', marginTop: '2px' }}>"{comp.comment}"</div>}
               </div>
             ))}
           </div>
@@ -71,13 +71,13 @@ function PerformanceReferenceContext({ context, technique }) {
       {technique === 'SELF_ASSESSMENT' && (
         context.selfAssessment ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597' }}>
               Submission Status: <span style={{ color: '#b45309' }}>{context.selfAssessment.status}</span>
             </div>
             {context.selfAssessment.answers && context.selfAssessment.answers.map(ans => (
-              <div key={ans.answer_id} style={{ fontSize: '12px', color: '#334155', borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>
+              <div key={ans.answer_id} style={{ fontSize: '12px', color: '#33415C', borderTop: '1px solid #F1F4F8', paddingTop: '6px' }}>
                 <div style={{ fontWeight: '600' }}>Q: {ans.question}</div>
-                <div style={{ marginTop: '2px', color: '#475569' }}>A: {ans.answer || ans.employee_rating || '-'}</div>
+                <div style={{ marginTop: '2px', color: '#33415C' }}>A: {ans.answer || ans.employee_rating || '-'}</div>
               </div>
             ))}
           </div>
@@ -89,12 +89,12 @@ function PerformanceReferenceContext({ context, technique }) {
       {/* 360 Feedback Reference */}
       {(technique === '360_FEEDBACK' || technique === 'FEEDBACK_360') && (
         context.feedback360 ? (
-          <div style={{ fontSize: '12px', color: '#334155' }}>
+          <div style={{ fontSize: '12px', color: '#33415C' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '600', marginBottom: '8px' }}>
               <span>👥 360° Assessment Score</span>
               <span style={{ color: '#8b5cf6' }}>{Math.round(Number(context.feedback360.overall_score || 0))}%</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '11px', color: '#64748b' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '11px', color: '#7D8597' }}>
               <div>Peer Avg: {context.feedback360.peer_average ? `${Math.round(context.feedback360.peer_average)}%` : '-'}</div>
               <div>Direct Report Avg: {context.feedback360.direct_report_average ? `${Math.round(context.feedback360.direct_report_average)}%` : '-'}</div>
               <div>Manager Avg: {context.feedback360.manager_average ? `${Math.round(context.feedback360.manager_average)}%` : '-'}</div>
@@ -109,15 +109,15 @@ function PerformanceReferenceContext({ context, technique }) {
       {/* Continuous Feedback Reference */}
       {technique === 'CONTINUOUS_FEEDBACK' && (
         context.continuousFeedback ? (
-          <div style={{ fontSize: '12px', color: '#334155' }}>
+          <div style={{ fontSize: '12px', color: '#33415C' }}>
             <div style={{ fontWeight: '600', marginBottom: '6px', color: '#0f766e' }}>
               🏆 Praises Received: {context.continuousFeedback.praisesCount}
             </div>
             {context.continuousFeedback.coachingNotes && context.continuousFeedback.coachingNotes.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '100px', overflowY: 'auto' }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b' }}>Coaching Notes:</div>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597' }}>Coaching Notes:</div>
                 {context.continuousFeedback.coachingNotes.map((note, idx) => (
-                  <div key={idx} style={{ fontSize: '11px', color: '#475569', background: '#fff', padding: '6px 8px', borderRadius: '6px', border: '1px solid #f1f5f9' }}>
+                  <div key={idx} style={{ fontSize: '11px', color: '#33415C', background: '#fff', padding: '6px 8px', borderRadius: '6px', border: '1px solid #F1F4F8' }}>
                     {note.feedback_text}
                   </div>
                 ))}
@@ -192,16 +192,16 @@ api.interceptors.request.use(cfg => {
 
 const CYCLE_STATUS = {
   active: { bg: '#fff', border: '#10b981', color: '#059669', dot: '#10b981', label: 'Active',  grad: 'linear-gradient(135deg,#10b981,#059669)' },
-  closed: { bg: '#fff', border: '#6366f1', color: '#6366f1', dot: '#6366f1', label: 'Closed',  grad: 'linear-gradient(135deg,#6366f1,#8b5cf6)' },
-  draft:  { bg: '#fff', border: '#94a3b8', color: '#64748b', dot: '#94a3b8', label: 'Draft',   grad: 'linear-gradient(135deg,#94a3b8,#64748b)' },
+  closed: { bg: '#fff', border: '#0466C8', color: '#0466C8', dot: '#0466C8', label: 'Closed',  grad: 'linear-gradient(135deg,#0466C8,#8b5cf6)' },
+  draft:  { bg: '#fff', border: '#94a3b8', color: '#7D8597', dot: '#94a3b8', label: 'Draft',   grad: 'linear-gradient(135deg,#94a3b8,#7D8597)' },
 }
 const SELF_STATUS = {
   submitted: { color: '#059669', bg: 'rgba(16,185,129,0.1)',  label: 'Submitted'   },
   draft:     { color: '#d97706', bg: 'rgba(245,158,11,0.1)',  label: 'In Progress' },
 }
 const MGR_STATUS = {
-  submitted: { color: '#6366f1', bg: 'rgba(99,102,241,0.1)', label: 'Submitted'   },
-  draft:     { color: '#64748b', bg: 'rgba(100,116,139,0.1)',label: 'In Progress' },
+  submitted: { color: '#0466C8', bg: 'rgba(4, 102, 200,0.1)', label: 'Submitted'   },
+  draft:     { color: '#7D8597', bg: 'rgba(100,116,139,0.1)',label: 'In Progress' },
 }
 const RATING_META = {
   exceeds_expectations: { label: 'Exceeds Expectations', color: '#059669', bg: 'rgba(16,185,129,0.1)'  },
@@ -214,12 +214,12 @@ const PAGE_SIZES = [5, 10, 20]
 
 const inputSt = {
   width: '100%', boxSizing: 'border-box', padding: '10px 14px',
-  background: '#ffffff', border: '1px solid #e2e8f0',
-  borderRadius: '10px', color: '#1e293b', fontSize: '13px', fontFamily: 'inherit',
+  background: '#ffffff', border: '1px solid #E3E7EE',
+  borderRadius: '10px', color: '#001233', fontSize: '13px', fontFamily: 'inherit',
   colorScheme: 'light', outline: 'none',
 }
 
-const AVATAR_COLORS = ['#6366f1','#8b5cf6','#ec4899','#10b981','#f59e0b','#3b82f6','#14b8a6','#f97316']
+const AVATAR_COLORS = ['#0466C8','#8b5cf6','#ec4899','#10b981','#f59e0b','#3b82f6','#14b8a6','#f97316']
 function avatarColor(name = '') {
   let h = 0
   for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % AVATAR_COLORS.length
@@ -285,11 +285,11 @@ function PageNumbers({ current, total, onChange }) {
           <button key={p} onClick={() => onChange(p)}
             style={{
               width: '32px', height: '32px', borderRadius: '8px', border: '1px solid',
-              borderColor: p === current ? 'transparent' : '#e2e8f0',
-              background: p === current ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#ffffff',
-              color: p === current ? '#fff' : '#64748b',
+              borderColor: p === current ? 'transparent' : '#E3E7EE',
+              background: p === current ? 'linear-gradient(135deg,#0466C8,#8b5cf6)' : '#ffffff',
+              color: p === current ? '#fff' : '#7D8597',
               fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
-              boxShadow: p === current ? '0 2px 8px rgba(99,102,241,0.3)' : 'none',
+              boxShadow: p === current ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none',
               transition: 'all 0.15s',
             }}>
             {p}
@@ -473,15 +473,15 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
 
           {/* ── Page Header ── */}
           <div style={{ marginBottom: '28px' }}>
-            <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Team Appraisal</h1>
-            <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px', marginBottom: 0 }}>
+            <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#001233', margin: 0 }}>Team Appraisal</h1>
+            <p style={{ fontSize: '13px', color: '#7D8597', marginTop: '6px', marginBottom: 0 }}>
               Review and rate your team members' goal achievement
             </p>
 
             {/* Breadcrumb */}
             {(selectedCycle || selectedEmp) && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', fontSize: '13px', flexWrap: 'wrap' }}>
-                <span style={{ color: '#6366f1', cursor: 'pointer', fontWeight: '500' }}
+                <span style={{ color: '#0466C8', cursor: 'pointer', fontWeight: '500' }}
                   onClick={() => { setSelectedCycle(null); setSelectedEmp(null); setTeam([]); setAppraisalData(null) }}>
                   Appraisals
                 </span>
@@ -489,7 +489,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   <>
                     <span style={{ color: '#cbd5e1', fontSize: '16px' }}>›</span>
                     <span
-                      style={{ color: selectedEmp ? '#6366f1' : '#0f172a', cursor: selectedEmp ? 'pointer' : 'default', fontWeight: selectedEmp ? '500' : '700' }}
+                      style={{ color: selectedEmp ? '#0466C8' : '#001233', cursor: selectedEmp ? 'pointer' : 'default', fontWeight: selectedEmp ? '500' : '700' }}
                       onClick={() => { if (selectedEmp) { setSelectedEmp(null); setAppraisalData(null) } }}>
                       {selectedCycle.name}
                     </span>
@@ -498,7 +498,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                 {selectedEmp && (
                   <>
                     <span style={{ color: '#cbd5e1', fontSize: '16px' }}>›</span>
-                    <span style={{ color: '#0f172a', fontWeight: '700' }}>{selectedEmp.employee_name}</span>
+                    <span style={{ color: '#001233', fontWeight: '700' }}>{selectedEmp.employee_name}</span>
                     {isSubmitted && (
                       <span style={{ fontSize: '11px', fontWeight: '700', padding: '2px 10px', borderRadius: '20px', background: 'rgba(16,185,129,0.1)', color: '#059669', border: '1px solid rgba(16,185,129,0.2)' }}>
                         ✓ Submitted
@@ -527,9 +527,9 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
           ════════════════════════════════════════ */}
           {!selectedCycle && (
             cycles.length === 0 ? (
-              <div style={{ padding: '80px 48px', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+              <div style={{ padding: '80px 48px', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #E3E7EE', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                 <div style={{ fontSize: '44px', marginBottom: '14px' }}>📋</div>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: '#64748b' }}>No appraisal cycles yet</div>
+                <div style={{ fontSize: '16px', fontWeight: '700', color: '#7D8597' }}>No appraisal cycles yet</div>
                 <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>Contact your administrator to create an appraisal cycle.</div>
               </div>
             ) : (
@@ -537,21 +537,21 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                 {/* Cycle KPI bar */}
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', flexWrap: 'wrap' }}>
                   {[
-                    { label: 'Total Cycles', value: cycleCounts.all,    color: '#6366f1', bg: 'rgba(99,102,241,0.08)',  border: 'rgba(99,102,241,0.2)'  },
+                    { label: 'Total Cycles', value: cycleCounts.all,    color: '#0466C8', bg: 'rgba(4, 102, 200,0.08)',  border: 'rgba(4, 102, 200,0.2)'  },
                     { label: 'Active',        value: cycleCounts.active, color: '#059669', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)'  },
                     { label: 'Closed',        value: cycleCounts.closed, color: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', border: 'rgba(139,92,246,0.2)'  },
-                    { label: 'Draft',         value: cycleCounts.draft,  color: '#64748b', bg: 'rgba(100,116,139,0.08)',border: 'rgba(100,116,139,0.2)' },
+                    { label: 'Draft',         value: cycleCounts.draft,  color: '#7D8597', bg: 'rgba(100,116,139,0.08)',border: 'rgba(100,116,139,0.2)' },
                   ].filter(s => s.value > 0 || s.label === 'Total Cycles').map(s => (
                     <div key={s.label} style={{ padding: '14px 22px', background: s.bg, border: `1px solid ${s.border}`, borderRadius: '14px', textAlign: 'center', minWidth: '90px' }}>
                       <div style={{ fontSize: '28px', fontWeight: '800', color: s.color, lineHeight: 1 }}>{s.value}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', marginTop: '5px' }}>{s.label}</div>
+                      <div style={{ fontSize: '11px', color: '#7D8597', fontWeight: '600', marginTop: '5px' }}>{s.label}</div>
                     </div>
                   ))}
                 </div>
 
                 {/* Filter pills */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Select a Cycle</div>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Select a Cycle</div>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {[
                       { key: 'all', label: 'All' },
@@ -565,9 +565,9 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                         <button key={f.key} onClick={() => setCycleFilter(f.key)}
                           style={{
                             padding: '5px 14px', borderRadius: '20px', border: '1px solid',
-                            borderColor: active ? (sm?.border || 'rgba(99,102,241,0.35)') : '#e2e8f0',
-                            background:  active ? (sm ? `rgba(${sm.color === '#059669' ? '16,185,129' : sm.color === '#8b5cf6' ? '139,92,246' : '100,116,139'},0.08)` : 'rgba(99,102,241,0.08)') : '#fff',
-                            color:       active ? (sm?.color || '#6366f1') : '#64748b',
+                            borderColor: active ? (sm?.border || 'rgba(4, 102, 200,0.35)') : '#E3E7EE',
+                            background:  active ? (sm ? `rgba(${sm.color === '#059669' ? '16,185,129' : sm.color === '#8b5cf6' ? '139,92,246' : '100,116,139'},0.08)` : 'rgba(4, 102, 200,0.08)') : '#fff',
+                            color:       active ? (sm?.color || '#0466C8') : '#7D8597',
                             fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
                             display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.15s',
                           }}>
@@ -583,7 +583,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                 </div>
 
                 {filteredCycles.length === 0 ? (
-                  <div style={{ padding: '60px 40px', textAlign: 'center', background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', color: '#94a3b8', fontSize: '13px' }}>
+                  <div style={{ padding: '60px 40px', textAlign: 'center', background: '#fff', borderRadius: '16px', border: '1px solid #E3E7EE', color: '#94a3b8', fontSize: '13px' }}>
                     No {cycleFilter} cycles found.
                   </div>
                 ) : (
@@ -605,8 +605,8 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                           <div style={{ padding: '20px 22px' }}>
                             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
                               <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginBottom: '6px' }}>{cycle.name}</div>
-                                <div style={{ fontSize: '12px', color: '#64748b' }}>
+                                <div style={{ fontSize: '16px', fontWeight: '800', color: '#001233', marginBottom: '6px' }}>{cycle.name}</div>
+                                <div style={{ fontSize: '12px', color: '#7D8597' }}>
                                   {new Date(cycle.period_start).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                   {' – '}
                                   {new Date(cycle.period_end).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -636,14 +636,14 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
           {selectedCycle && !selectedEmp && (
             <div style={{ animation: 'fadeIn 0.25s ease' }}>
               {teamLoading ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#64748b', fontSize: '14px', padding: '60px 20px' }}>
-                  <div style={{ width: '22px', height: '22px', border: '2px solid rgba(99,102,241,0.2)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#7D8597', fontSize: '14px', padding: '60px 20px' }}>
+                  <div style={{ width: '22px', height: '22px', border: '2px solid rgba(4, 102, 200,0.2)', borderTopColor: '#0466C8', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
                   Loading team members…
                 </div>
               ) : team.length === 0 ? (
-                <div style={{ padding: '80px 48px', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #e2e8f0' }}>
+                <div style={{ padding: '80px 48px', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #E3E7EE' }}>
                   <div style={{ fontSize: '44px', marginBottom: '14px' }}>👥</div>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#64748b' }}>No direct reports found</div>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#7D8597' }}>No direct reports found</div>
                   <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>No team members assigned to you in this cycle.</div>
                 </div>
               ) : (
@@ -651,7 +651,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   {/* ── KPI Cards ── */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: '12px', marginBottom: '20px' }}>
                     {[
-                      { label: 'Total Members', value: team.length,      Icon: FiUsers,        color: '#6366f1', iconBg: 'rgba(99,102,241,0.15)',  cardBg: 'linear-gradient(135deg,rgba(99,102,241,0.09),rgba(139,92,246,0.05))', border: 'rgba(99,102,241,0.2)'  },
+                      { label: 'Total Members', value: team.length,      Icon: FiUsers,        color: '#0466C8', iconBg: 'rgba(4, 102, 200,0.15)',  cardBg: 'linear-gradient(135deg,rgba(4, 102, 200,0.09),rgba(139,92,246,0.05))', border: 'rgba(4, 102, 200,0.2)'  },
                       { label: 'Reviewed',       value: reviewedCount,    Icon: FiCheckCircle,  color: '#059669', iconBg: 'rgba(16,185,129,0.15)',  cardBg: 'linear-gradient(135deg,rgba(16,185,129,0.09),rgba(5,150,105,0.05))',  border: 'rgba(16,185,129,0.2)'  },
                       { label: 'In Progress',    value: inProgressCount,  Icon: FiEdit3,        color: '#d97706', iconBg: 'rgba(245,158,11,0.15)',  cardBg: 'linear-gradient(135deg,rgba(245,158,11,0.09),rgba(217,119,6,0.05))',  border: 'rgba(245,158,11,0.2)'  },
                       { label: 'Pending',        value: pendingCount,     Icon: FiClock,        color: '#ef4444', iconBg: 'rgba(239,68,68,0.15)',   cardBg: 'linear-gradient(135deg,rgba(239,68,68,0.09),rgba(220,38,38,0.05))',   border: 'rgba(239,68,68,0.2)'   },
@@ -661,11 +661,11 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                           <card.Icon size={18} color={card.color} />
                         </div>
                         <div style={{ fontSize: '30px', fontWeight: '800', color: card.color, lineHeight: 1 }}>{card.value}</div>
-                        <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginTop: '5px' }}>{card.label}</div>
+                        <div style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600', marginTop: '5px' }}>{card.label}</div>
                       </div>
                     ))}
                     {/* Completion rate — gradient card */}
-                    <div style={{ padding: '18px 20px', background: 'linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%)', borderRadius: '16px', boxShadow: '0 4px 18px rgba(99,102,241,0.3)', color: '#fff' }}>
+                    <div style={{ padding: '18px 20px', background: 'linear-gradient(135deg,#0466C8 0%,#8b5cf6 100%)', borderRadius: '16px', boxShadow: '0 4px 18px rgba(4, 102, 200,0.3)', color: '#fff' }}>
                       <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '14px' }}>
                         <FiTrendingUp size={18} color="#fff" />
                       </div>
@@ -678,15 +678,15 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   </div>
 
                   {/* ── Advanced Filter Panel ── */}
-                  <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', marginBottom: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+                  <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', marginBottom: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
                     {/* Panel header toggle */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: showFilters ? '1px solid #f1f5f9' : 'none', cursor: 'pointer' }}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: showFilters ? '1px solid #F1F4F8' : 'none', cursor: 'pointer' }}
                       onClick={() => setShowFilters(v => !v)}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <FiFilter size={14} color="#6366f1" />
-                        <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Filters & Search</span>
+                        <FiFilter size={14} color="#0466C8" />
+                        <span style={{ fontSize: '13px', fontWeight: '700', color: '#001233' }}>Filters & Search</span>
                         {activeFiltersCount > 0 && (
-                          <span style={{ padding: '1px 8px', borderRadius: '10px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', color: '#fff', fontSize: '11px', fontWeight: '800' }}>
+                          <span style={{ padding: '1px 8px', borderRadius: '10px', background: 'linear-gradient(135deg,#0466C8,#8b5cf6)', color: '#fff', fontSize: '11px', fontWeight: '800' }}>
                             {activeFiltersCount} active
                           </span>
                         )}
@@ -729,9 +729,9 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                               <button key={s.key} onClick={() => setTeamSort(s.key)}
                                 style={{
                                   padding: '6px 13px', borderRadius: '8px', border: '1px solid',
-                                  borderColor: teamSort === s.key ? 'rgba(99,102,241,0.4)' : '#e2e8f0',
-                                  background:  teamSort === s.key ? 'rgba(99,102,241,0.1)' : '#f8fafc',
-                                  color:       teamSort === s.key ? '#6366f1' : '#64748b',
+                                  borderColor: teamSort === s.key ? 'rgba(4, 102, 200,0.4)' : '#E3E7EE',
+                                  background:  teamSort === s.key ? 'rgba(4, 102, 200,0.1)' : '#f8fafc',
+                                  color:       teamSort === s.key ? '#0466C8' : '#7D8597',
                                   fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
                                 }}>{s.label}
                               </button>
@@ -742,24 +742,24 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                         {/* Row 2: status pills + count */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                           {[
-                            { key: 'all',         label: 'All',         color: '#6366f1', bg: 'rgba(99,102,241,0.1)',   border: 'rgba(99,102,241,0.3)'   },
+                            { key: 'all',         label: 'All',         color: '#0466C8', bg: 'rgba(4, 102, 200,0.1)',   border: 'rgba(4, 102, 200,0.3)'   },
                             { key: 'reviewed',    label: 'Reviewed',    color: '#059669', bg: 'rgba(16,185,129,0.1)',   border: 'rgba(16,185,129,0.3)'   },
                             { key: 'in_progress', label: 'In Progress', color: '#d97706', bg: 'rgba(245,158,11,0.1)',   border: 'rgba(245,158,11,0.3)'   },
-                            { key: 'pending',     label: 'Pending',     color: '#64748b', bg: 'rgba(100,116,139,0.1)',  border: 'rgba(100,116,139,0.25)' },
+                            { key: 'pending',     label: 'Pending',     color: '#7D8597', bg: 'rgba(100,116,139,0.1)',  border: 'rgba(100,116,139,0.25)' },
                           ].map(f => {
                             const isActive = teamFilter === f.key
                             return (
                               <button key={f.key} onClick={() => { setTeamFilter(f.key); setTeamPage(1) }}
                                 style={{
                                   padding: '5px 14px', borderRadius: '20px', border: '1px solid',
-                                  borderColor: isActive ? f.border : '#e2e8f0',
+                                  borderColor: isActive ? f.border : '#E3E7EE',
                                   background:  isActive ? f.bg : 'transparent',
                                   color:       isActive ? f.color : '#94a3b8',
                                   fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
                                   display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.15s',
                                 }}>
                                 {f.label}
-                                <span style={{ padding: '1px 6px', borderRadius: '10px', background: isActive ? 'rgba(0,0,0,0.07)' : '#f1f5f9', fontSize: '11px', fontWeight: '800', color: isActive ? f.color : '#94a3b8' }}>
+                                <span style={{ padding: '1px 6px', borderRadius: '10px', background: isActive ? 'rgba(0,0,0,0.07)' : '#F1F4F8', fontSize: '11px', fontWeight: '800', color: isActive ? f.color : '#94a3b8' }}>
                                   {teamStatusCounts[f.key]}
                                 </span>
                               </button>
@@ -775,11 +775,11 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
 
                   {/* ── Team Member Rows ── */}
                   {pagedTeam.length === 0 ? (
-                    <div style={{ padding: '48px', textAlign: 'center', background: '#fff', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ padding: '48px', textAlign: 'center', background: '#fff', borderRadius: '14px', border: '1px solid #E3E7EE' }}>
                       <FiSearch size={28} color="#cbd5e1" style={{ marginBottom: '12px' }} />
-                      <div style={{ color: '#64748b', fontSize: '14px', fontWeight: '600' }}>No results found</div>
+                      <div style={{ color: '#7D8597', fontSize: '14px', fontWeight: '600' }}>No results found</div>
                       {activeFiltersCount > 0 && (
-                        <button onClick={clearAllFilters} style={{ marginTop: '10px', padding: '6px 16px', borderRadius: '8px', border: 'none', background: 'rgba(99,102,241,0.1)', color: '#6366f1', fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit' }}>
+                        <button onClick={clearAllFilters} style={{ marginTop: '10px', padding: '6px 16px', borderRadius: '8px', border: 'none', background: 'rgba(4, 102, 200,0.1)', color: '#0466C8', fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit' }}>
                           Clear filters
                         </button>
                       )}
@@ -797,21 +797,21 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                             style={{
                               padding: '14px 20px',
                               background: isReviewed ? 'linear-gradient(135deg,rgba(16,185,129,0.05),rgba(5,150,105,0.03))' : '#fff',
-                              border: `1px solid ${isReviewed ? 'rgba(16,185,129,0.25)' : '#e2e8f0'}`,
-                              borderLeft: `4px solid ${isReviewed ? '#10b981' : '#e2e8f0'}`,
+                              border: `1px solid ${isReviewed ? 'rgba(16,185,129,0.25)' : '#E3E7EE'}`,
+                              borderLeft: `4px solid ${isReviewed ? '#10b981' : '#E3E7EE'}`,
                               borderRadius: '14px', cursor: 'pointer', transition: 'all 0.15s',
                               display: 'flex', alignItems: 'center', gap: '16px',
                               boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                             }}
-                            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(4px)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = isReviewed ? 'rgba(16,185,129,0.4)' : 'rgba(99,102,241,0.35)' }}
-                            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = isReviewed ? 'rgba(16,185,129,0.25)' : '#e2e8f0' }}
+                            onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(4px)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = isReviewed ? 'rgba(16,185,129,0.4)' : 'rgba(4, 102, 200,0.35)' }}
+                            onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = isReviewed ? 'rgba(16,185,129,0.25)' : '#E3E7EE' }}
                           >
                             <div style={{ width: '46px', height: '46px', borderRadius: '13px', background: col, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: '800', color: '#fff', flexShrink: 0, letterSpacing: '0.5px', boxShadow: `0 4px 12px ${col}44` }}>
                               {getInitials(emp.employee_name)}
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{emp.employee_name}</div>
-                              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>{emp.designation || '—'} · {emp.employee_code}</div>
+                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#001233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{emp.employee_name}</div>
+                              <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '2px' }}>{emp.designation || '—'} · {emp.employee_code}</div>
                             </div>
                             <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                               <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '20px', fontWeight: '600', background: selfMeta ? selfMeta.bg : 'rgba(100,116,139,0.08)', color: selfMeta ? selfMeta.color : '#94a3b8', whiteSpace: 'nowrap' }}>
@@ -835,11 +835,11 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
 
                   {/* ── Pagination ── */}
                   {(totalPages > 1 || filteredTeam.length > PAGE_SIZES[0]) && (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', flexWrap: 'wrap', gap: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '12px', flexWrap: 'wrap', gap: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                       {/* Left: count info + page size */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-                        <div style={{ fontSize: '12px', color: '#64748b' }}>
-                          Showing <strong style={{ color: '#0f172a' }}>{Math.min((teamPage - 1) * pageSize + 1, filteredTeam.length)}–{Math.min(teamPage * pageSize, filteredTeam.length)}</strong> of <strong style={{ color: '#0f172a' }}>{filteredTeam.length}</strong>
+                        <div style={{ fontSize: '12px', color: '#7D8597' }}>
+                          Showing <strong style={{ color: '#001233' }}>{Math.min((teamPage - 1) * pageSize + 1, filteredTeam.length)}–{Math.min(teamPage * pageSize, filteredTeam.length)}</strong> of <strong style={{ color: '#001233' }}>{filteredTeam.length}</strong>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                           <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600', whiteSpace: 'nowrap' }}>Per page:</span>
@@ -847,11 +847,11 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                             <button key={s} onClick={() => { setPageSize(s); setTeamPage(1) }}
                               style={{
                                 width: '34px', height: '28px', borderRadius: '7px', border: '1px solid',
-                                borderColor: pageSize === s ? 'rgba(99,102,241,0.4)' : '#e2e8f0',
-                                background: pageSize === s ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : '#f8fafc',
+                                borderColor: pageSize === s ? 'rgba(4, 102, 200,0.4)' : '#E3E7EE',
+                                background: pageSize === s ? 'linear-gradient(135deg,#0466C8,#8b5cf6)' : '#f8fafc',
                                 color: pageSize === s ? '#fff' : '#94a3b8',
                                 fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
-                                boxShadow: pageSize === s ? '0 2px 6px rgba(99,102,241,0.25)' : 'none',
+                                boxShadow: pageSize === s ? '0 2px 6px rgba(4, 102, 200,0.25)' : 'none',
                                 transition: 'all 0.15s',
                               }}>
                               {s}
@@ -863,12 +863,12 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                       {totalPages > 1 && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <button onClick={() => setTeamPage(p => Math.max(1, p - 1))} disabled={teamPage === 1}
-                            style={{ height: '32px', padding: '0 12px', background: teamPage === 1 ? '#f8fafc' : 'rgba(99,102,241,0.08)', border: `1px solid ${teamPage === 1 ? '#e2e8f0' : 'rgba(99,102,241,0.25)'}`, borderRadius: '8px', color: teamPage === 1 ? '#cbd5e1' : '#6366f1', fontSize: '12px', fontWeight: '700', cursor: teamPage === 1 ? 'not-allowed' : 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            style={{ height: '32px', padding: '0 12px', background: teamPage === 1 ? '#f8fafc' : 'rgba(4, 102, 200,0.08)', border: `1px solid ${teamPage === 1 ? '#E3E7EE' : 'rgba(4, 102, 200,0.25)'}`, borderRadius: '8px', color: teamPage === 1 ? '#cbd5e1' : '#0466C8', fontSize: '12px', fontWeight: '700', cursor: teamPage === 1 ? 'not-allowed' : 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <FiChevronLeft size={14} /> Prev
                           </button>
                           <PageNumbers current={teamPage} total={totalPages} onChange={setTeamPage} />
                           <button onClick={() => setTeamPage(p => Math.min(totalPages, p + 1))} disabled={teamPage === totalPages}
-                            style={{ height: '32px', padding: '0 12px', background: teamPage === totalPages ? '#f8fafc' : 'rgba(99,102,241,0.08)', border: `1px solid ${teamPage === totalPages ? '#e2e8f0' : 'rgba(99,102,241,0.25)'}`, borderRadius: '8px', color: teamPage === totalPages ? '#cbd5e1' : '#6366f1', fontSize: '12px', fontWeight: '700', cursor: teamPage === totalPages ? 'not-allowed' : 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            style={{ height: '32px', padding: '0 12px', background: teamPage === totalPages ? '#f8fafc' : 'rgba(4, 102, 200,0.08)', border: `1px solid ${teamPage === totalPages ? '#E3E7EE' : 'rgba(4, 102, 200,0.25)'}`, borderRadius: '8px', color: teamPage === totalPages ? '#cbd5e1' : '#0466C8', fontSize: '12px', fontWeight: '700', cursor: teamPage === totalPages ? 'not-allowed' : 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             Next <FiChevronRight size={14} />
                           </button>
                         </div>
@@ -886,43 +886,43 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
           {selectedCycle && selectedEmp && (
             <div style={{ maxWidth: '900px', animation: 'fadeIn 0.25s ease' }}>
               {loading ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#64748b', fontSize: '14px', padding: '60px 20px' }}>
-                  <div style={{ width: '22px', height: '22px', border: '2px solid rgba(99,102,241,0.2)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#7D8597', fontSize: '14px', padding: '60px 20px' }}>
+                  <div style={{ width: '22px', height: '22px', border: '2px solid rgba(4, 102, 200,0.2)', borderTopColor: '#0466C8', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
                   Loading appraisal…
                 </div>
               ) : (
                 <>
                   {/* Employee profile card */}
-                  <div style={{ padding: '22px 26px', background: 'linear-gradient(135deg,rgba(99,102,241,0.07),rgba(139,92,246,0.04))', border: '1.5px solid rgba(99,102,241,0.2)', borderRadius: '18px', marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
+                  <div style={{ padding: '22px 26px', background: 'linear-gradient(135deg,rgba(4, 102, 200,0.07),rgba(139,92,246,0.04))', border: '1.5px solid rgba(4, 102, 200,0.2)', borderRadius: '18px', marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
                     <div style={{ width: '58px', height: '58px', borderRadius: '16px', background: avatarColor(selectedEmp.employee_name), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: '800', color: '#fff', flexShrink: 0, boxShadow: `0 6px 18px ${avatarColor(selectedEmp.employee_name)}44` }}>
                       {getInitials(selectedEmp.employee_name)}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a' }}>{selectedEmp.employee_name}</div>
-                      <div style={{ fontSize: '13px', color: '#64748b', marginTop: '3px' }}>{selectedEmp.designation || '—'} · {selectedEmp.employee_code} · {selectedCycle.name}</div>
+                      <div style={{ fontSize: '18px', fontWeight: '800', color: '#001233' }}>{selectedEmp.employee_name}</div>
+                      <div style={{ fontSize: '13px', color: '#7D8597', marginTop: '3px' }}>{selectedEmp.designation || '—'} · {selectedEmp.employee_code} · {selectedCycle.name}</div>
                     </div>
                     {isSubmitted && (
                       <div style={{ padding: '10px 18px', background: 'linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.06))', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '12px', flexShrink: 0 }}>
                         <div style={{ fontSize: '12px', fontWeight: '700', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.06em' }}>✓ Review Submitted</div>
-                        <div style={{ fontSize: '12px', color: '#64748b', marginTop: '3px' }}>
+                        <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '3px' }}>
                           {new Date(appraisalData.managerAppraisal.submitted_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                         </div>
                       </div>
                     )}
                     {isClosed && !isSubmitted && (
-                      <span style={{ padding: '8px 16px', background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#6366f1', flexShrink: 0 }}>Cycle Closed</span>
+                      <span style={{ padding: '8px 16px', background: 'rgba(4, 102, 200,0.08)', border: '1px solid rgba(4, 102, 200,0.2)', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#0466C8', flexShrink: 0 }}>Cycle Closed</span>
                     )}
                   </div>
 
                   {/* Goals */}
                   {appraisalData?.goals?.length === 0 ? (
-                    <div style={{ padding: '60px', textAlign: 'center', background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', marginBottom: '24px' }}>
+                    <div style={{ padding: '60px', textAlign: 'center', background: '#fff', borderRadius: '16px', border: '1px solid #E3E7EE', marginBottom: '24px' }}>
                       <div style={{ fontSize: '36px', marginBottom: '12px' }}>🎯</div>
-                      <div style={{ color: '#64748b', fontSize: '14px' }}>No goals assigned in this cycle.</div>
+                      <div style={{ color: '#7D8597', fontSize: '14px' }}>No goals assigned in this cycle.</div>
                     </div>
                   ) : (
                     <>
-                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '14px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '14px' }}>
                         Goals · {appraisalData?.goals?.length} item{appraisalData?.goals?.length !== 1 ? 's' : ''}
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
@@ -933,19 +933,19 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                           const barColor = pct >= 70 ? '#10b981' : pct >= 40 ? '#f59e0b' : '#ef4444'
                           const ratingLabel = pct >= 90 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 40 ? 'Satisfactory' : 'Needs Work'
                           return (
-                            <div key={goal.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-                              <div style={{ padding: '16px 22px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-                                <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', color: '#fff', flexShrink: 0, marginTop: '1px' }}>
+                            <div key={goal.id} style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                              <div style={{ padding: '16px 22px', borderBottom: '1px solid #F1F4F8', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                                <div style={{ width: '30px', height: '30px', borderRadius: '9px', background: 'linear-gradient(135deg,#0466C8,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', color: '#fff', flexShrink: 0, marginTop: '1px' }}>
                                   {gIdx + 1}
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', lineHeight: '1.4' }}>{goal.title}</div>
-                                  {goal.target_metric && <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>🎯 {goal.target_metric}</div>}
+                                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#001233', lineHeight: '1.4' }}>{goal.title}</div>
+                                  {goal.target_metric && <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '4px' }}>🎯 {goal.target_metric}</div>}
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '6px', flexWrap: 'wrap' }}>
-                                    <span style={{ fontSize: '10px', color: '#6366f1', fontWeight: '700', background: 'rgba(99,102,241,0.08)', padding: '2px 8px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                    <span style={{ fontSize: '10px', color: '#0466C8', fontWeight: '700', background: 'rgba(4, 102, 200,0.08)', padding: '2px 8px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                                       Technique: {goal.performance_technique || 'KPI'}
                                     </span>
-                                    <span style={{ fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
+                                    <span style={{ fontSize: '11px', color: '#33415C', background: '#F1F4F8', padding: '2px 6px', borderRadius: '4px' }}>
                                       Weight: <strong>{goal.weight || 0}%</strong>
                                     </span>
                                     <span style={{ fontSize: '11px', color: '#0f766e', background: '#e0f2fe', padding: '2px 6px', borderRadius: '4px' }}>
@@ -970,13 +970,13 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                                 </div>
                               </div>
                               <div style={{ padding: '18px 22px' }}>
-                                <div style={{ padding: '12px 14px', background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)', borderRadius: '10px', marginBottom: '18px' }}>
-                                  <div style={{ fontSize: '10px', color: '#6366f1', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Actual Progress</div>
+                                <div style={{ padding: '12px 14px', background: 'rgba(4, 102, 200,0.05)', border: '1px solid rgba(4, 102, 200,0.1)', borderRadius: '10px', marginBottom: '18px' }}>
+                                  <div style={{ fontSize: '10px', color: '#0466C8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Actual Progress</div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    <div style={{ flex: 1, height: '7px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                                      <div style={{ height: '100%', width: `${Math.min(100, Number(goal.progress) || 0)}%`, background: 'linear-gradient(90deg,#6366f1,#8b5cf6)', borderRadius: '4px', transition: 'width 0.6s ease' }} />
+                                    <div style={{ flex: 1, height: '7px', background: '#F1F4F8', borderRadius: '4px', overflow: 'hidden' }}>
+                                      <div style={{ height: '100%', width: `${Math.min(100, Number(goal.progress) || 0)}%`, background: 'linear-gradient(90deg,#0466C8,#8b5cf6)', borderRadius: '4px', transition: 'width 0.6s ease' }} />
                                     </div>
-                                    <span style={{ fontSize: '14px', fontWeight: '800', color: '#6366f1', minWidth: '38px', textAlign: 'right' }}>{Math.round(Number(goal.progress) || 0)}%</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '800', color: '#0466C8', minWidth: '38px', textAlign: 'right' }}>{Math.round(Number(goal.progress) || 0)}%</span>
                                   </div>
                                 </div>
                               </div>
@@ -1000,7 +1000,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   {/* ── System Performance Score Card ── */}
                   {appraisalData?.systemScores && (
                     <div style={{
-                      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                      background: 'linear-gradient(135deg, #001233 0%, #001233 100%)',
                       borderRadius: '16px',
                       padding: '24px',
                       marginBottom: '22px',
@@ -1057,7 +1057,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                                 </span>
                               </div>
                               <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginTop: '8px', overflow: 'hidden' }}>
-                                <div style={{ height: '100%', width: `${scoreVal}%`, background: '#6366f1', borderRadius: '2px' }} />
+                                <div style={{ height: '100%', width: `${scoreVal}%`, background: '#0466C8', borderRadius: '2px' }} />
                               </div>
                             </div>
                           )
@@ -1067,10 +1067,10 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   )}
 
                   {/* Overall comment */}
-                  <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px 22px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-                    <label style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', display: 'block', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Overall Manager Comments</label>
+                  <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '20px 22px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <label style={{ fontSize: '11px', color: '#7D8597', fontWeight: '700', display: 'block', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Overall Manager Comments</label>
                     {readOnly ? (
-                      <div style={{ fontSize: '13px', color: '#64748b', padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', minHeight: '72px', lineHeight: '1.7' }}>
+                      <div style={{ fontSize: '13px', color: '#7D8597', padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #E3E7EE', minHeight: '72px', lineHeight: '1.7' }}>
                         {overallComment || <span style={{ color: '#94a3b8' }}>No overall comment provided.</span>}
                       </div>
                     ) : (
@@ -1082,18 +1082,18 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   </div>
 
                   {/* Recommendations */}
-                  <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px 22px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-                    <h3 style={{ margin: '0 0 16px 0', fontSize: '13px', fontWeight: '800', color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '20px 22px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <h3 style={{ margin: '0 0 16px 0', fontSize: '13px', fontWeight: '800', color: '#001233', borderBottom: '1px solid #F1F4F8', paddingBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                       Development & Growth Recommendations
                     </h3>
                     
                     {/* Promotion Recommendation */}
                     <div style={{ marginBottom: '16px' }}>
-                      <label style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                      <label style={{ fontSize: '11px', color: '#7D8597', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                         Promotion Recommendation / Notes
                       </label>
                       {readOnly ? (
-                        <div style={{ fontSize: '13px', color: '#64748b', padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', minHeight: '44px', lineHeight: '1.7' }}>
+                        <div style={{ fontSize: '13px', color: '#7D8597', padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #E3E7EE', minHeight: '44px', lineHeight: '1.7' }}>
                           {promotionRecommendation || <span style={{ color: '#94a3b8' }}>No promotion recommendations recorded.</span>}
                         </div>
                       ) : (
@@ -1106,11 +1106,11 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
 
                     {/* Training Recommendation */}
                     <div>
-                      <label style={{ fontSize: '11px', color: '#64748b', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                      <label style={{ fontSize: '11px', color: '#7D8597', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                         Training & Upskilling Recommendation
                       </label>
                       {readOnly ? (
-                        <div style={{ fontSize: '13px', color: '#64748b', padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', minHeight: '44px', lineHeight: '1.7' }}>
+                        <div style={{ fontSize: '13px', color: '#7D8597', padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #E3E7EE', minHeight: '44px', lineHeight: '1.7' }}>
                           {trainingRecommendation || <span style={{ color: '#94a3b8' }}>No training recommendations recorded.</span>}
                         </div>
                       ) : (
@@ -1126,13 +1126,13 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                   {appraisalData?.selfAppraisal && (
                     <div style={{
                       background: '#fff',
-                      border: '1.5px solid #e8eaf0',
+                      border: '1.5px solid #E3E7EE',
                       borderRadius: '16px',
                       padding: '24px 26px',
                       marginBottom: '24px',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                     }}>
-                      <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: '800', color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
+                      <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: '800', color: '#001233', borderBottom: '1px solid #F1F4F8', paddingBottom: '12px' }}>
                         Employee Self Reflection & Rating
                       </h3>
 
@@ -1147,11 +1147,11 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                           { label: 'Career Goals', val: appraisalData.selfAppraisal.career_goals },
                           { label: 'Overall Comments', val: appraisalData.selfAppraisal.overall_comment },
                         ].map((ref, idx) => (
-                          <div key={idx} style={{ padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                            <div style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>
+                          <div key={idx} style={{ padding: '14px 18px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #E3E7EE' }}>
+                            <div style={{ fontSize: '10px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>
                               {ref.label}
                             </div>
-                            <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+                            <div style={{ fontSize: '13px', color: '#33415C', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
                               {ref.val || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No response provided.</span>}
                             </div>
                           </div>
@@ -1165,13 +1165,13 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
                     <div style={{ display: 'flex', gap: '12px', paddingTop: '4px' }}>
                       <button onClick={handleSave} disabled={saving}
                         style={{
-                          padding: '12px 26px', background: '#fff', border: '1.5px solid rgba(99,102,241,0.3)', borderRadius: '11px', color: '#6366f1',
+                          padding: '12px 26px', background: '#fff', border: '1.5px solid rgba(4, 102, 200,0.3)', borderRadius: '11px', color: '#0466C8',
                           fontWeight: '700', fontSize: '14px', cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
                           opacity: saving ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.15s',
                           boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                         }}
-                        onMouseEnter={e => { if (!saving) { e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.5)' } }}
-                        onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)' }}>
+                        onMouseEnter={e => { if (!saving) { e.currentTarget.style.background = 'rgba(4, 102, 200,0.08)'; e.currentTarget.style.borderColor = 'rgba(4, 102, 200,0.5)' } }}
+                        onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = 'rgba(4, 102, 200,0.3)' }}>
                         <FiSave size={15} /> {saving ? 'Saving…' : 'Save Draft'}
                       </button>
                       <button onClick={handleSubmit} disabled={submitting}
@@ -1203,7 +1203,7 @@ export default function ManagerAppraisal({ isSubComponent = false }) {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <EmployeeSidebar active="manager-appraisal" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Team Appraisal" />

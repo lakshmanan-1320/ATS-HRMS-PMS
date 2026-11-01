@@ -24,13 +24,13 @@ export default function BellCurvePage() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
       <ClientAdminSidebar active="bell-curve" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <ClientAdminTopBar />
         
         {/* Header Header section */}
-        <div style={{ padding: '24px 32px 12px 32px', background: '#fff', borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ padding: '24px 40px 12px 40px', background: '#fff', borderBottom: '1px solid #E3E7EE' }}>
           <PageHeader
             icon={FiTrendingUp}
             title="Performance Calibration Workspace"
@@ -43,8 +43,8 @@ export default function BellCurvePage() {
               onClick={() => setActiveTab('dashboard')}
               style={{
                 padding: '12px 8px', background: 'none', border: 'none',
-                borderBottom: activeTab === 'dashboard' ? '3px solid #6366f1' : '3px solid transparent',
-                color: activeTab === 'dashboard' ? '#6366f1' : '#64748b',
+                borderBottom: activeTab === 'dashboard' ? '3px solid #0466C8' : '3px solid transparent',
+                color: activeTab === 'dashboard' ? '#0466C8' : '#7D8597',
                 fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s'
               }}
             >
@@ -54,8 +54,8 @@ export default function BellCurvePage() {
               onClick={() => setActiveTab('configurations')}
               style={{
                 padding: '12px 8px', background: 'none', border: 'none',
-                borderBottom: activeTab === 'configurations' ? '3px solid #6366f1' : '3px solid transparent',
-                color: activeTab === 'configurations' ? '#6366f1' : '#64748b',
+                borderBottom: activeTab === 'configurations' ? '3px solid #0466C8' : '3px solid transparent',
+                color: activeTab === 'configurations' ? '#0466C8' : '#7D8597',
                 fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s'
               }}
             >

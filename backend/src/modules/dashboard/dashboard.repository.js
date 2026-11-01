@@ -29,8 +29,8 @@ async function getDepartmentCount(orgId) {
   return Number(r.rows[0]?.total || 0)
 }
 
-async function getGoalStats(clientId, dateFrom, dateTo) {
-  const params = [clientId]
+async function getGoalStats(orgId, dateFrom, dateTo) {
+  const params = [orgId]
   let dateFilter = ''
   if (dateFrom) { params.push(dateFrom); dateFilter += ` AND created_at >= $${params.length}::timestamptz` }
   if (dateTo)   { params.push(dateTo);   dateFilter += ` AND created_at <= $${params.length}::timestamptz` }
@@ -38,11 +38,12 @@ async function getGoalStats(clientId, dateFrom, dateTo) {
   const r = await query(`
     SELECT status, COUNT(*) AS count
     FROM goals
-    WHERE client_admin_id = $1 AND parent_goal_id IS NULL${dateFilter}
+    WHERE organization_id = $1 AND parent_goal_id IS NULL${dateFilter}
     GROUP BY status
   `, params)
+  // goals.status is UPPERCASE in the DB; the service expects lower-case keys
   const map = {}
-  r.rows.forEach(row => { map[row.status] = Number(row.count) })
+  r.rows.forEach(row => { map[String(row.status || '').toLowerCase()] = Number(row.count) })
   const total = Object.values(map).reduce((a, b) => a + b, 0)
   return { by_status: map, total }
 }
@@ -89,8 +90,8 @@ async function getAppraisalStats(clientId, dateFrom, dateTo) {
   return r.rows[0]
 }
 
-async function getRecentGoals(clientId, dateFrom, dateTo) {
-  const params = [clientId]
+async function getRecentGoals(orgId, dateFrom, dateTo) {
+  const params = [orgId]
   let dateFilter = ''
   if (dateFrom) { params.push(dateFrom); dateFilter += ` AND g.created_at >= $${params.length}::timestamptz` }
   if (dateTo)   { params.push(dateTo);   dateFilter += ` AND g.created_at <= $${params.length}::timestamptz` }
@@ -100,26 +101,26 @@ async function getRecentGoals(clientId, dateFrom, dateTo) {
            CONCAT(e.first_name, ' ', e.last_name) AS assigned_to
     FROM goals g
     LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
-    WHERE g.client_admin_id = $1 AND g.parent_goal_id IS NULL${dateFilter}
+    WHERE g.organization_id = $1 AND g.parent_goal_id IS NULL${dateFilter}
     ORDER BY g.created_at DESC
     LIMIT 6
   `, params)
   return r.rows
 }
 
-async function getGoalCompletionTrend(clientId) {
+async function getGoalCompletionTrend(orgId) {
   const r = await query(`
     SELECT
       TO_CHAR(DATE_TRUNC('month', created_at), 'Mon') AS month,
       COUNT(*) AS total,
-      COUNT(*) FILTER (WHERE status = 'completed') AS completed
+      COUNT(*) FILTER (WHERE status = 'COMPLETED') AS completed
     FROM goals
-    WHERE client_admin_id = $1
+    WHERE organization_id = $1
       AND parent_goal_id IS NULL
       AND created_at >= NOW() - INTERVAL '6 months'
     GROUP BY DATE_TRUNC('month', created_at)
     ORDER BY DATE_TRUNC('month', created_at)
-  `, [clientId])
+  `, [orgId])
   return r.rows
 }
 
@@ -137,7 +138,8 @@ async function getRecentNotifications(clientId, options = {}) {
                g.updated_at AS created_at
         FROM goals g
         LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
-        WHERE g.client_admin_id = $1 AND g.status = 'pending_approval'
+        WHERE g.organization_id = (SELECT organization_id FROM client_admins WHERE client_admin_id = $1)
+          AND g.status = 'PENDING_APPROVAL'
           AND g.parent_goal_id IS NULL
         ORDER BY g.updated_at DESC LIMIT 3
       )
@@ -150,7 +152,8 @@ async function getRecentNotifications(clientId, options = {}) {
                g.updated_at AS created_at
         FROM goals g
         LEFT JOIN employees e ON g.assigned_to_employee_id = e.employee_id
-        WHERE g.client_admin_id = $1 AND g.status = 'rejected'
+        WHERE g.organization_id = (SELECT organization_id FROM client_admins WHERE client_admin_id = $1)
+          AND g.status = 'REJECTED'
           AND g.parent_goal_id IS NULL
         ORDER BY g.updated_at DESC LIMIT 2
       )
@@ -193,13 +196,13 @@ async function getRecentNotifications(clientId, options = {}) {
   queries.push(`
     (
       SELECT 'regularization_pending' AS type,
-             ar.regularization_type AS title,
+             COALESCE(ar.request_type, ar.request_category) AS title,
              CONCAT(e.first_name, ' ', e.last_name) AS actor,
              ar.created_at
-      FROM attendance_regularizations ar
+      FROM attendance_regularization_requests ar
       JOIN employees e ON e.employee_id = ar.employee_id
       JOIN client_admins ca ON ca.organization_id = e.organization_id
-      WHERE ca.client_admin_id = $1 AND ar.current_status = 'PENDING'
+      WHERE ca.client_admin_id = $1 AND ar.approval_status = 'PENDING'
       ORDER BY ar.created_at DESC LIMIT 3
     )
   `);
@@ -222,9 +225,9 @@ async function getPendingLeavesCount(orgId) {
 async function getPendingRegularizationsCount(orgId) {
   const r = await query(`
     SELECT COUNT(*) AS count
-    FROM attendance_regularizations ar
+    FROM attendance_regularization_requests ar
     JOIN employees e ON e.employee_id = ar.employee_id
-    WHERE e.organization_id = $1 AND ar.current_status = 'PENDING'
+    WHERE e.organization_id = $1 AND ar.approval_status = 'PENDING'
   `, [orgId])
   return Number(r.rows[0]?.count || 0)
 }

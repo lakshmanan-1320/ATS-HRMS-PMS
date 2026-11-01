@@ -12,14 +12,14 @@ api.interceptors.request.use(cfg => {
 })
 
 const labelStyle = {
-  display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b',
+  display: 'block', fontSize: '11px', fontWeight: '700', color: '#7D8597',
   marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em',
 }
 
 const inputStyle = {
   width: '100%', padding: '10px 14px', background: '#ffffff',
-  border: '1px solid #e2e8f0', borderRadius: '10px',
-  fontSize: '13px', color: '#1e293b', outline: 'none',
+  border: '1px solid #E3E7EE', borderRadius: '10px',
+  fontSize: '13px', color: '#001233', outline: 'none',
   boxSizing: 'border-box', fontFamily: 'inherit',
 }
 
@@ -83,7 +83,7 @@ export default function RegularizationNewRequest() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter,sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter,sans-serif' }}>
       <EmployeeSidebar active="regularization" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Regularizations" />
@@ -94,8 +94,8 @@ export default function RegularizationNewRequest() {
             <button
               onClick={() => navigate('/employee/regularization')}
               style={{
-                padding: '8px 16px', background: '#ffffff', border: '1px solid #e2e8f0',
-                borderRadius: '10px', fontSize: '13px', color: '#475569', cursor: 'pointer',
+                padding: '8px 16px', background: '#ffffff', border: '1px solid #E3E7EE',
+                borderRadius: '10px', fontSize: '13px', color: '#33415C', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.06)', flexShrink: 0,
               }}
@@ -103,10 +103,10 @@ export default function RegularizationNewRequest() {
               ← Back
             </button>
             <div>
-              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#001233', margin: 0 }}>
                 New Regularization Request
               </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0' }}>
+              <p style={{ fontSize: '13px', color: '#7D8597', margin: '4px 0 0' }}>
                 Submit an adjustment for a missed punch or wrong attendance record
               </p>
             </div>
@@ -116,10 +116,10 @@ export default function RegularizationNewRequest() {
 
             {/* Form Card */}
             <div style={{
-              background: '#ffffff', border: '1px solid #e2e8f0',
+              background: '#ffffff', border: '1px solid #E3E7EE',
               borderRadius: '20px', padding: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             }}>
-              <h3 style={{ margin: '0 0 24px', fontSize: '15px', fontWeight: '700', color: '#0f172a' }}>
+              <h3 style={{ margin: '0 0 24px', fontSize: '15px', fontWeight: '700', color: '#001233' }}>
                 Request Details
               </h3>
 
@@ -214,9 +214,9 @@ export default function RegularizationNewRequest() {
                     type="button"
                     onClick={() => navigate('/employee/regularization')}
                     style={{
-                      flex: 1, padding: '11px 0', background: '#f1f5f9',
-                      border: '1px solid #e2e8f0', borderRadius: '10px',
-                      fontSize: '13px', fontWeight: '600', color: '#475569', cursor: 'pointer',
+                      flex: 1, padding: '11px 0', background: '#F1F4F8',
+                      border: '1px solid #E3E7EE', borderRadius: '10px',
+                      fontSize: '13px', fontWeight: '600', color: '#33415C', cursor: 'pointer',
                     }}
                   >
                     Cancel
@@ -244,10 +244,10 @@ export default function RegularizationNewRequest() {
 
             {/* Guide Card */}
             <div style={{
-              background: '#ffffff', border: '1px solid #e2e8f0',
+              background: '#ffffff', border: '1px solid #E3E7EE',
               borderRadius: '20px', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             }}>
-              <h4 style={{ margin: '0 0 16px', fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
+              <h4 style={{ margin: '0 0 16px', fontSize: '13px', fontWeight: '700', color: '#001233' }}>
                 Correction Types
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -257,7 +257,7 @@ export default function RegularizationNewRequest() {
                     onClick={() => { setType(val); setCheckInTime(''); setCheckOutTime('') }}
                     style={{
                       padding: '12px 14px', borderRadius: '10px', cursor: 'pointer',
-                      border: `1px solid ${type === val ? '#10b981' : '#f1f5f9'}`,
+                      border: `1px solid ${type === val ? '#10b981' : '#F1F4F8'}`,
                       background: type === val ? 'rgba(16,185,129,0.06)' : '#f8fafc',
                       transition: 'all 0.15s',
                     }}
@@ -272,12 +272,12 @@ export default function RegularizationNewRequest() {
 
               <div style={{
                 marginTop: '20px', padding: '14px', borderRadius: '10px',
-                background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)',
+                background: 'rgba(4, 102, 200,0.06)', border: '1px solid rgba(4, 102, 200,0.15)',
               }}>
-                <div style={{ fontSize: '12px', fontWeight: '700', color: '#6366f1', marginBottom: '6px' }}>
+                <div style={{ fontSize: '12px', fontWeight: '700', color: '#0466C8', marginBottom: '6px' }}>
                   Policy Reminder
                 </div>
-                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#64748b', lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#7D8597', lineHeight: '1.7' }}>
                   <li>Requests must be within the allowed window (typically 7 days)</li>
                   <li>Only one pending request allowed per date</li>
                   <li>Cannot regularize on approved leave dates</li>

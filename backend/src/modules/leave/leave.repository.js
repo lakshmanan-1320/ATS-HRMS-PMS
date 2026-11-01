@@ -443,6 +443,11 @@ async function getAdminLeaveRequests(filters = {}) {
   const params = []
   const conditions = []
 
+  // Tenant scoping: only requests from employees of the caller's organization
+  if (filters.organization_id) {
+    params.push(filters.organization_id)
+    conditions.push(`e.organization_id = $${params.length}`)
+  }
   if (filters.from_date) {
     params.push(filters.from_date)
     conditions.push(`r.start_date >= $${params.length}`)
@@ -460,16 +465,27 @@ async function getAdminLeaveRequests(filters = {}) {
             t.leave_type_code,
             CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
             e.employee_code,
+            e.designation,
+            d.name AS department_name,
             CONCAT(m.first_name, ' ', m.last_name) AS manager_name
      FROM leave_requests r
      JOIN leave_types t ON t.leave_type_id = r.leave_type_id
      JOIN employees e ON e.employee_id = r.employee_id
+     LEFT JOIN departments d ON d.department_id = e.department_id
      LEFT JOIN employees m ON m.employee_id = r.manager_employee_id
      ${where}
      ORDER BY r.created_at DESC`,
     params
   );
   return result.rows;
+}
+
+async function isEmployeeInOrganization(employeeId, organizationId) {
+  const result = await query(
+    'SELECT 1 FROM employees WHERE employee_id = $1 AND organization_id = $2',
+    [employeeId, organizationId]
+  );
+  return result.rowCount > 0;
 }
 
 async function updateLeaveRequest(leaveRequestId, data, txClient = null) {
@@ -660,6 +676,7 @@ module.exports = {
   getMyLeaveRequests,
   getManagerLeaveRequests,
   getAdminLeaveRequests,
+  isEmployeeInOrganization,
   updateLeaveRequest,
   createAuditLog,
   getAuditLogsForRequest,

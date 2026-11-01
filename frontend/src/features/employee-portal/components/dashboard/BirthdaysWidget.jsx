@@ -1,45 +1,44 @@
 import React from 'react'
-import { FiUser } from 'react-icons/fi'
-import { CakeIcon } from '../shared/Icons'
-import { WidgetCard, EmptyState } from '../shared/UI'
-import { COLORS } from '../../theme'
+import { FiGift } from 'react-icons/fi'
+import { PmsCard, CardHeader, HeaderChip, BigStat, EmptyBox, ListRow, dayLabel } from '../shared/PmsUI'
+
+function nextBirthday(dobStr, now) {
+  const dob = new Date(dobStr)
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const bday = new Date(now.getFullYear(), dob.getMonth(), dob.getDate())
+  if (bday < today) bday.setFullYear(now.getFullYear() + 1)
+  return { date: bday, days: Math.round((bday - today) / 864e5) }
+}
 
 export default function BirthdaysWidget({ birthdays }) {
   const now = new Date()
+  const n = birthdays.length
+  const first = n ? nextBirthday(birthdays[0].date_of_birth, now) : null
   return (
-    <WidgetCard
-      icon={<CakeIcon />}
-      iconBg="rgba(236,72,153,0.1)"
-      iconColor={COLORS.pink}
-      title="Upcoming Birthdays"
-      subtitle="Next 30 days"
-    >
-      {birthdays.length === 0 ? (
-        <EmptyState message="No birthdays this month" />
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {birthdays.map((m, idx) => {
-            const dob  = new Date(m.date_of_birth)
-            const bday = new Date(now.getFullYear(), dob.getMonth(), dob.getDate())
-            if (bday < now) bday.setFullYear(now.getFullYear() + 1)
-            const dLeft = Math.ceil((bday - now) / 864e5)
-            return (
-              <div key={m.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: idx < birthdays.length - 1 ? '1px solid #f8fafc' : 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: COLORS.pink, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><FiUser size={13} color="#ffffff" /></div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: '11px', fontWeight: '600', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.first_name} {m.last_name}</div>
-                    <div style={{ fontSize: '10px', color: COLORS.textMuted }}>{bday.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</div>
-                  </div>
-                </div>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: '700', color: dLeft === 0 ? COLORS.pink : COLORS.textMuted, background: dLeft === 0 ? 'rgba(236,72,153,0.1)' : '#f8fafc', padding: '2px 7px', borderRadius: '10px', whiteSpace: 'nowrap', marginLeft: '8px' }}>
-                  {dLeft === 0 ? <><CakeIcon size={10} /> Today</> : `${dLeft}d`}
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </WidgetCard>
+    <PmsCard>
+      <CardHeader title="Upcoming Birthdays" chip={<HeaderChip icon={<FiGift size={14} />} />} />
+      <BigStat
+        value={n}
+        pill="Next 30 days"
+        caption={n === 0 ? "Let's celebrate soon!" : `${birthdays[0].first_name} · ${dayLabel(first.days)}`}
+      />
+      <div style={{ marginTop: 'auto', paddingTop: '14px' }}>
+        {n === 0 ? (
+          <EmptyBox icon={<FiGift size={14} />} title="No birthdays this month" />
+        ) : birthdays.slice(0, 3).map((m, i, arr) => {
+          const { date, days } = nextBirthday(m.date_of_birth, now)
+          return (
+            <ListRow
+              key={m.id || i}
+              title={`${m.first_name || ''} ${m.last_name || ''}`.trim()}
+              sub={date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+              right={dayLabel(days)}
+              rightTone={days === 0 ? 'blue' : 'grey'}
+              last={i === arr.length - 1}
+            />
+          )
+        })}
+      </div>
+    </PmsCard>
   )
 }

@@ -147,7 +147,7 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
       sorter: (a, b) => `${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`),
       render: (_, r) => (
         <div>
-          <Text style={{ fontWeight: 700, color: '#1e293b', display: 'block' }}>{`${r.first_name} ${r.last_name}`}</Text>
+          <Text style={{ fontWeight: 700, color: '#001233', display: 'block' }}>{`${r.first_name} ${r.last_name}`}</Text>
           <Text style={{ fontSize: 11, color: '#94a3b8' }}>{r.employee_code || 'N/A'} · {r.designation || 'N/A'}</Text>
         </div>
       )
@@ -171,13 +171,13 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
       key: 'score',
       align: 'center',
       sorter: (a, b) => a.appraisal_score - b.appraisal_score,
-      render: (val) => <Text style={{ fontWeight: 800, color: '#6366f1' }}>{val}</Text>
+      render: (val) => <Text style={{ fontWeight: 800, color: '#0466C8' }}>{val}</Text>
     },
     {
       title: 'Original Bucket',
       key: 'original_bucket',
       render: (_, r) => (
-        <Tag color="default" style={{ borderColor: '#cbd5e1', color: '#64748b', fontWeight: 600, borderRadius: 6 }}>
+        <Tag color="default" style={{ borderColor: '#cbd5e1', color: '#7D8597', fontWeight: 600, borderRadius: 6 }}>
           {r.original_bucket_name || 'N/A'}
         </Tag>
       )
@@ -213,10 +213,10 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
         const content = (
           <div style={{ maxWidth: 240, padding: '4px 8px' }}>
             <div><Text style={{ fontWeight: 700, display: 'block', fontSize: 12 }}>Calibrated By</Text></div>
-            <Text style={{ fontSize: 11, color: '#64748b', display: 'block' }}>{r.calibrated_by_email}</Text>
+            <Text style={{ fontSize: 11, color: '#7D8597', display: 'block' }}>{r.calibrated_by_email}</Text>
             <Divider style={{ margin: '6px 0' }} />
             <div><Text style={{ fontWeight: 700, display: 'block', fontSize: 12 }}>Reason</Text></div>
-            <Text style={{ fontSize: 11, color: '#475569', display: 'block', whiteSpace: 'normal', wordBreak: 'break-all' }}>{r.override_reason}</Text>
+            <Text style={{ fontSize: 11, color: '#33415C', display: 'block', whiteSpace: 'normal', wordBreak: 'break-all' }}>{r.override_reason}</Text>
           </div>
         );
 
@@ -240,7 +240,7 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
               icon={<FiEdit3 size={15} />}
               onClick={() => handleOpenOverrideModal(r)}
               disabled={disabled}
-              style={{ color: disabled ? '#cbd5e1' : '#6366f1' }}
+              style={{ color: disabled ? '#cbd5e1' : '#0466C8' }}
             />
           </Tooltip>
         );
@@ -249,7 +249,7 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
   ];
 
   return (
-    <Card style={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+    <Card style={{ borderRadius: 16, border: '1px solid #E3E7EE', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
       {/* Filtering Control Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}>
         
@@ -307,7 +307,7 @@ export default function BellCurveResults({ run, results, buckets, onOverride }) 
         {/* Download Buttons */}
         <Space>
           <Button icon={<FiDownload />} onClick={handleExportCSV}>Export CSV</Button>
-          <Button type="primary" icon={<FiFileText />} onClick={handleExportPDF} style={{ background: '#4f46e5', borderColor: '#4f46e5' }}>
+          <Button type="primary" icon={<FiFileText />} onClick={handleExportPDF} style={{ background: '#0353A4', borderColor: '#0353A4' }}>
             Export PDF Report
           </Button>
         </Space>

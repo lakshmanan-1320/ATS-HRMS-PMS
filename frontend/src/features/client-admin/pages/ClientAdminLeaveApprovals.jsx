@@ -20,7 +20,7 @@ const STATUS_STYLE = {
   PENDING:   { bg: '#fef3c7', color: '#b45309', border: '#fde68a' },
   APPROVED:  { bg: '#dcfce7', color: '#15803d', border: '#bbf7d0' },
   REJECTED:  { bg: '#fee2e2', color: '#b91c1c', border: '#fecaca' },
-  CANCELLED: { bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' },
+  CANCELLED: { bg: '#F1F4F8', color: '#33415C', border: '#E3E7EE' },
 }
 
 const PAGE_SIZE = 10
@@ -166,7 +166,7 @@ export default function ClientAdminLeaveApprovals() {
   const relevantBalance = modal ? balances.find(b => b.leave_type_id === modal.leave.leave_type_id) : null
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#F1F4F8', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <ClientAdminSidebar active="leave-approvals" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
@@ -186,7 +186,7 @@ export default function ClientAdminLeaveApprovals() {
                   </button>
                 )}
                 <button onClick={load}
-                  style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(194,7,26,0.3)' }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(4, 102, 200,0.3)' }}>
                   <FiRefreshCw size={13} /> Refresh
                 </button>
               </>
@@ -196,37 +196,37 @@ export default function ClientAdminLeaveApprovals() {
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Requests', color: '#C2071A', icon: <FiList size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { key: 'PENDING',  label: 'Pending',        color: '#d97706', icon: <FiClock size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { key: 'APPROVED', label: 'Approved',       color: '#15803d', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { key: 'REJECTED', label: 'Rejected',       color: '#dc2626', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'ALL',      label: 'Total Requests', color: '#0466C8', icon: <FiList size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { key: 'PENDING',  label: 'Pending',        color: '#d97706', icon: <FiClock size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { key: 'APPROVED', label: 'Approved',       color: '#15803d', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { key: 'REJECTED', label: 'Rejected',       color: '#dc2626', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
             ].map(({ key, label, color, icon }) => (
               <div key={key}
                 onClick={() => { setStatus(key); setPage(1) }}
-                style={{ background: '#fff', border: `1.5px solid ${statusFilter === key ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: statusFilter === key ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
+                style={{ background: '#fff', border: `1.5px solid ${statusFilter === key ? color : '#E3E7EE'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: statusFilter === key ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
                 <div style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {icon}
                 </div>
                 <div>
-                  <div style={{ fontSize: '26px', fontWeight: '800', color: statusFilter === key ? color : '#0f172a', lineHeight: 1 }}>{counts[key]}</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginTop: 3 }}>{label}</div>
+                  <div style={{ fontSize: '26px', fontWeight: '800', color: statusFilter === key ? color : '#001233', lineHeight: 1 }}>{counts[key]}</div>
+                  <div style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600', marginTop: 3 }}>{label}</div>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Filter Bar */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {/* Primary filters row */}
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '9px', padding: '0 11px' }}>
                 <FiSearch size={13} color="#94a3b8" />
                 <input
                   placeholder="Search employee, code or leave type…"
                   value={search}
                   className="ca-borderless-input"
                   onChange={e => { setSearch(e.target.value); setPage(1) }}
-                  style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }}
+                  style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#001233', outline: 'none', fontFamily: 'inherit', width: '100%' }}
                 />
                 {search && (
                   <button onClick={() => { setSearch(''); setPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}>
@@ -238,15 +238,15 @@ export default function ClientAdminLeaveApprovals() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <FiCalendar size={13} color="#94a3b8" />
                 <input type="date" value={fromDate} onChange={e => { setFromDate(e.target.value); setPage(1) }}
-                  style={{ padding: '8px 10px', border: '1px solid #e2e8f0', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', fontFamily: 'inherit', cursor: 'pointer' }} />
+                  style={{ padding: '8px 10px', border: '1px solid #E3E7EE', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', fontFamily: 'inherit', cursor: 'pointer' }} />
                 <span style={{ color: '#94a3b8', fontSize: '12px' }}>to</span>
                 <input type="date" value={toDate} min={fromDate || undefined} onChange={e => { setToDate(e.target.value); setPage(1) }}
-                  style={{ padding: '8px 10px', border: '1px solid #e2e8f0', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', fontFamily: 'inherit', cursor: 'pointer' }} />
+                  style={{ padding: '8px 10px', border: '1px solid #E3E7EE', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', fontFamily: 'inherit', cursor: 'pointer' }} />
               </div>
 
               <button
                 onClick={() => setShowAdvanced(v => !v)}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#feecee' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#f7a6af' : '#e2e8f0'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#941018' : '#374151', cursor: 'pointer' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#EEF8FF' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#C9DDF3' : '#E3E7EE'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#023E7D' : '#374151', cursor: 'pointer' }}>
                 <FiFilter size={12} />
                 Advanced {hasAdvancedFilters ? '•' : ''}
                 {showAdvanced ? <FiChevronUp size={11} /> : <FiChevronDown size={11} />}
@@ -261,7 +261,7 @@ export default function ClientAdminLeaveApprovals() {
 
               <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5 }}>
                 <FiFilter size={12} color="#94a3b8" />
-                <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>
+                <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600' }}>
                   {filtered.length} of {leaves.length} result{filtered.length !== 1 ? 's' : ''}
                 </span>
               </div>
@@ -269,11 +269,11 @@ export default function ClientAdminLeaveApprovals() {
 
             {/* Advanced filters panel */}
             {showAdvanced && (
-              <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #F1F4F8', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Leave Type</label>
                   <select value={leaveTypeFilter} onChange={e => { setLeaveTypeFilter(e.target.value); setPage(1) }}
-                    style={{ padding: '7px 11px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '160px' }}>
+                    style={{ padding: '7px 11px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '160px' }}>
                     <option value="">All Leave Types</option>
                     {uniqueLeaveTypes.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
@@ -282,7 +282,7 @@ export default function ClientAdminLeaveApprovals() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Manager</label>
                   <select value={managerFilter} onChange={e => { setManagerFilter(e.target.value); setPage(1) }}
-                    style={{ padding: '7px 11px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '160px' }}>
+                    style={{ padding: '7px 11px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '160px' }}>
                     <option value="">All Managers</option>
                     {uniqueManagers.map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
@@ -291,7 +291,7 @@ export default function ClientAdminLeaveApprovals() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sort By</label>
                   <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-                    style={{ padding: '7px 11px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '140px' }}>
+                    style={{ padding: '7px 11px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '140px' }}>
                     <option value="created_at">Applied On</option>
                     <option value="start_date">Start Date</option>
                     <option value="end_date">End Date</option>
@@ -301,10 +301,10 @@ export default function ClientAdminLeaveApprovals() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Order</label>
-                  <div style={{ display: 'flex', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', borderRadius: '8px', border: '1px solid #E3E7EE', overflow: 'hidden' }}>
                     {[{ val: 'desc', label: '↓ Newest' }, { val: 'asc', label: '↑ Oldest' }].map(o => (
                       <button key={o.val} onClick={() => setSortDir(o.val)}
-                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#C2071A' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
+                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#0466C8' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
                         {o.label}
                       </button>
                     ))}
@@ -327,20 +327,20 @@ export default function ClientAdminLeaveApprovals() {
           {/* Status Tab Pills */}
           <div style={{ display: 'flex', gap: 8, marginBottom: '16px', flexWrap: 'wrap' }}>
             {[
-              { val: 'ALL',      label: 'All',      color: '#C2071A' },
+              { val: 'ALL',      label: 'All',      color: '#0466C8' },
               { val: 'PENDING',  label: 'Pending',  color: '#d97706' },
               { val: 'APPROVED', label: 'Approved', color: '#16a34a' },
               { val: 'REJECTED', label: 'Rejected', color: '#dc2626' },
             ].map(o => (
               <button key={o.val} onClick={() => { setStatus(o.val); setPage(1) }} style={{
                 padding: '7px 16px', borderRadius: '20px',
-                border: `1.5px solid ${statusFilter === o.val ? o.color : '#e2e8f0'}`,
+                border: `1.5px solid ${statusFilter === o.val ? o.color : '#E3E7EE'}`,
                 background: statusFilter === o.val ? o.color : '#fff',
-                color: statusFilter === o.val ? '#fff' : '#475569',
+                color: statusFilter === o.val ? '#fff' : '#33415C',
                 fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7, transition: 'all 0.15s',
               }}>
                 {o.label}
-                <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#f1f5f9', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>
+                <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#F1F4F8', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>
                   {counts[o.val]}
                 </span>
               </button>
@@ -348,11 +348,11 @@ export default function ClientAdminLeaveApprovals() {
           </div>
 
           {/* Table */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-                <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading leave requests…</div>
+                <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>Loading leave requests…</div>
               </div>
             ) : error ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
@@ -360,7 +360,7 @@ export default function ClientAdminLeaveApprovals() {
                   <FiAlertTriangle size={24} color="#ffffff" />
                 </div>
                 <div style={{ color: '#dc2626', fontSize: '14px', fontWeight: '600', marginBottom: 12 }}>{error}</div>
-                <button onClick={load} style={{ padding: '9px 20px', background: '#C2071A', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
+                <button onClick={load} style={{ padding: '9px 20px', background: '#0466C8', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
                   Retry
                 </button>
               </div>
@@ -371,7 +371,7 @@ export default function ClientAdminLeaveApprovals() {
                 </div>
                 <div style={{ color: '#374151', fontSize: '14px', fontWeight: '700', marginBottom: 6 }}>No leave requests match the current filters</div>
                 {hasAnyFilter && (
-                  <span onClick={resetAll} style={{ color: '#C2071A', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
+                  <span onClick={resetAll} style={{ color: '#0466C8', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
                     Clear all filters
                   </span>
                 )}
@@ -380,9 +380,9 @@ export default function ClientAdminLeaveApprovals() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
                       {['Employee', 'Leave Type', 'From', 'To', 'Days', 'Manager', 'Applied On', 'Status', 'Actions'].map(h => (
-                        <th key={h} style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
+                        <th key={h} style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -391,40 +391,40 @@ export default function ClientAdminLeaveApprovals() {
                       const badge = STATUS_STYLE[l.current_status] || STATUS_STYLE.CANCELLED
                       return (
                         <tr key={l.leave_request_id}
-                          style={{ borderBottom: idx < paginated.length - 1 ? '1px solid #f1f5f9' : 'none', transition: 'background 0.15s' }}
+                          style={{ borderBottom: idx < paginated.length - 1 ? '1px solid #F1F4F8' : 'none', transition: 'background 0.15s' }}
                           onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
                           <td style={{ padding: '14px 18px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', flexShrink: 0 }}>
+                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', flexShrink: 0 }}>
                                 {l.employee_name?.[0]}
                               </div>
                               <div>
-                                <div style={{ fontWeight: '700', color: '#0f172a', lineHeight: 1.3 }}>{l.employee_name}</div>
+                                <div style={{ fontWeight: '700', color: '#001233', lineHeight: 1.3 }}>{l.employee_name}</div>
                                 <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'monospace', marginTop: 2 }}>{l.employee_code}</div>
                               </div>
                             </div>
                           </td>
                           <td style={{ padding: '14px 18px' }}>
-                            <span style={{ background: '#f1f5f9', color: '#475569', padding: '3px 9px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', whiteSpace: 'nowrap' }}>
+                            <span style={{ background: '#F1F4F8', color: '#33415C', padding: '3px 9px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', whiteSpace: 'nowrap' }}>
                               {l.leave_type_name || '—'}
                             </span>
                           </td>
-                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#C2071A', whiteSpace: 'nowrap' }}>{fmtDate(l.start_date)}</td>
+                          <td style={{ padding: '14px 18px', fontWeight: '700', color: '#0466C8', whiteSpace: 'nowrap' }}>{fmtDate(l.start_date)}</td>
                           <td style={{ padding: '14px 18px', fontWeight: '600', color: '#374151', whiteSpace: 'nowrap' }}>{fmtDate(l.end_date)}</td>
                           <td style={{ padding: '14px 18px' }}>
-                            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '8px', background: '#feecee', color: '#941018', fontWeight: '800', fontSize: '13px' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '8px', background: '#EEF8FF', color: '#023E7D', fontWeight: '800', fontSize: '13px' }}>
                               {parseFloat(l.total_leave_days)}
                             </span>
                           </td>
                           <td style={{ padding: '14px 18px', color: '#374151', fontWeight: '500', whiteSpace: 'nowrap' }}>
                             {l.manager_name
                               ? <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}><FiUser size={11} color="#94a3b8" />{l.manager_name}</div>
-                              : <span style={{ color: '#e2e8f0' }}>—</span>
+                              : <span style={{ color: '#E3E7EE' }}>—</span>
                             }
                           </td>
-                          <td style={{ padding: '14px 18px', color: '#64748b', fontWeight: '500', whiteSpace: 'nowrap' }}>{fmtDate(l.created_at)}</td>
+                          <td style={{ padding: '14px 18px', color: '#7D8597', fontWeight: '500', whiteSpace: 'nowrap' }}>{fmtDate(l.created_at)}</td>
                           <td style={{ padding: '14px 18px' }}>
                             <span style={{ display: 'inline-flex', alignItems: 'center', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', background: badge.bg, color: badge.color, border: `1px solid ${badge.border}`, textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
                               {l.current_status}
@@ -447,7 +447,7 @@ export default function ClientAdminLeaveApprovals() {
                                 </button>
                               </div>
                             ) : (
-                              <span style={{ color: '#e2e8f0', fontSize: '13px' }}>—</span>
+                              <span style={{ color: '#E3E7EE', fontSize: '13px' }}>—</span>
                             )}
                           </td>
                         </tr>
@@ -461,13 +461,13 @@ export default function ClientAdminLeaveApprovals() {
 
           {/* Pagination */}
           {!loading && !error && filtered.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
-              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
+              <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: '500' }}>
                 Showing <strong style={{ color: '#374151' }}>{((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, filtered.length)}</strong> of <strong style={{ color: '#374151' }}>{filtered.length}</strong> requests
               </span>
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#e2e8f0' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #E3E7EE', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#E3E7EE' : '#374151' }}>
                   ‹ Prev
                 </button>
 
@@ -476,14 +476,14 @@ export default function ClientAdminLeaveApprovals() {
                     <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8', fontSize: '13px' }}>…</span>
                   ) : (
                     <button key={p} onClick={() => setPage(p)}
-                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #E3E7EE', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#0466C8,#023E7D)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {p}
                     </button>
                   )
                 )}
 
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#e2e8f0' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #E3E7EE', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#E3E7EE' : '#374151' }}>
                   Next ›
                 </button>
               </div>
@@ -509,24 +509,24 @@ export default function ClientAdminLeaveApprovals() {
                     ? <FiCheckCircle size={18} color="#ffffff" />
                     : <FiXCircle size={18} color="#ffffff" />}
                 </div>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#001233' }}>
                   {modal.action === 'approve' ? 'Approve Leave Request' : 'Reject Leave Request'}
                 </h3>
               </div>
-              <button onClick={() => setModal(null)} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}>
+              <button onClick={() => setModal(null)} style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}>
                 <FiX size={14} />
               </button>
             </div>
 
             {/* Employee + request summary */}
-            <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '16px 18px', marginBottom: '18px', border: '1px solid #e2e8f0' }}>
+            <div style={{ background: '#f8fafc', borderRadius: '14px', padding: '16px 18px', marginBottom: '18px', border: '1px solid #E3E7EE' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', flexShrink: 0 }}>
                   {modal.leave.employee_name?.[0]}
                 </div>
                 <div>
-                  <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '14px' }}>{modal.leave.employee_name}</div>
-                  <div style={{ fontSize: '11px', color: '#64748b', fontFamily: 'monospace' }}>{modal.leave.employee_code}</div>
+                  <div style={{ fontWeight: '700', color: '#001233', fontSize: '14px' }}>{modal.leave.employee_name}</div>
+                  <div style={{ fontSize: '11px', color: '#7D8597', fontFamily: 'monospace' }}>{modal.leave.employee_code}</div>
                 </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px' }}>
@@ -536,14 +536,14 @@ export default function ClientAdminLeaveApprovals() {
                   { label: 'From',        value: fmtDate(modal.leave.start_date) },
                   { label: 'To',          value: fmtDate(modal.leave.end_date) },
                 ].map(({ label, value }) => (
-                  <div key={label} style={{ background: '#fff', borderRadius: '8px', padding: '8px 10px', border: '1px solid #e2e8f0' }}>
+                  <div key={label} style={{ background: '#fff', borderRadius: '8px', padding: '8px 10px', border: '1px solid #E3E7EE' }}>
                     <div style={{ color: '#94a3b8', marginBottom: 2, fontWeight: '600' }}>{label}</div>
                     <div style={{ color: '#374151', fontWeight: '700' }}>{value}</div>
                   </div>
                 ))}
               </div>
               {modal.leave.leave_reason && (
-                <div style={{ marginTop: 8, padding: '8px 10px', background: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12px', color: '#475569', fontStyle: 'italic' }}>
+                <div style={{ marginTop: 8, padding: '8px 10px', background: '#fff', borderRadius: '8px', border: '1px solid #E3E7EE', fontSize: '12px', color: '#33415C', fontStyle: 'italic' }}>
                   "{modal.leave.leave_reason}"
                 </div>
               )}
@@ -555,7 +555,7 @@ export default function ClientAdminLeaveApprovals() {
                 Leave Balance — {modal.leave.leave_type_name}
               </div>
               {loadingBalance ? (
-                <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{ fontSize: '12px', color: '#7D8597', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <div style={{ width: 14, height: 14, border: '2px solid #99f6e4', borderTopColor: '#0f766e', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                   Fetching balance…
                 </div>
@@ -568,18 +568,18 @@ export default function ClientAdminLeaveApprovals() {
                   ].map(item => (
                     <div key={item.label} style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '22px', fontWeight: '800', color: item.color, lineHeight: 1 }}>{item.value}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', marginTop: 4 }}>{item.label}</div>
+                      <div style={{ fontSize: '11px', color: '#7D8597', fontWeight: '600', marginTop: 4 }}>{item.label}</div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div style={{ fontSize: '12px', color: '#64748b' }}>No balance record found for this leave type.</div>
+                <div style={{ fontSize: '12px', color: '#7D8597' }}>No balance record found for this leave type.</div>
               )}
             </div>
 
             {/* Remarks */}
             <div style={{ marginBottom: '18px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
                 Remarks {modal.action === 'reject' ? <span style={{ color: '#dc2626' }}>*</span> : <span style={{ fontWeight: '400', color: '#94a3b8' }}>(optional)</span>}
               </label>
               <textarea
@@ -587,7 +587,7 @@ export default function ClientAdminLeaveApprovals() {
                 onChange={e => setRemarks(e.target.value)}
                 placeholder={modal.action === 'approve' ? 'Add a note (optional)…' : 'Reason for rejection…'}
                 rows={3}
-                style={{ width: '100%', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#0f172a', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box', background: '#f8fafc' }}
+                style={{ width: '100%', padding: '10px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box', background: '#f8fafc' }}
               />
             </div>
 
@@ -602,7 +602,7 @@ export default function ClientAdminLeaveApprovals() {
 
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setModal(null)}
-                style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>
+                style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>
                 Cancel
               </button>
               <button onClick={handleSubmitAction} disabled={submitting}

@@ -121,18 +121,18 @@ export default function LeavePlanEmployees({ planId }) {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '0 10px', width: '260px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', padding: '0 10px', width: '260px' }}>
           <FiSearch size={13} color="#94a3b8" />
           <input
             placeholder="Search assigned employees…"
             value={searchAssigned}
             onChange={e => setSearchAssigned(e.target.value)}
-            style={{ border: 'none', background: 'transparent', padding: '6px 0', fontSize: '13px', color: '#0f172a', outline: 'none', width: '100%' }}
+            style={{ border: 'none', background: 'transparent', padding: '6px 0', fontSize: '13px', color: '#001233', outline: 'none', width: '100%' }}
           />
         </div>
         <button
           onClick={openAssignModal}
-          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#feecee', border: '1px solid #f7a6af', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#941018', cursor: 'pointer', transition: 'all 0.15s' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#EEF8FF', border: '1px solid #C9DDF3', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#023E7D', cursor: 'pointer', transition: 'all 0.15s' }}
         >
           <FiUserPlus size={13} /> Assign Employees
         </button>
@@ -140,35 +140,35 @@ export default function LeavePlanEmployees({ planId }) {
 
       {loading ? (
         <div style={{ padding: '40px', textAlign: 'center' }}>
-          <div style={{ width: 30, height: 30, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
-          <div style={{ color: '#64748b', fontSize: '13px' }}>Loading assigned employees…</div>
+          <div style={{ width: 30, height: 30, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ color: '#7D8597', fontSize: '13px' }}>Loading assigned employees…</div>
         </div>
       ) : filteredAssigned.length === 0 ? (
-        <div style={{ padding: '40px', textAlign: 'center', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px' }}>
-          <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>
+        <div style={{ padding: '40px', textAlign: 'center', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px' }}>
+          <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>
             {assigned.length === 0 ? 'No employees assigned to this plan.' : 'No matches found.'}
           </div>
         </div>
       ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden' }}>
+        <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Employee</th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Employee Code</th>
-                <th style={{ padding: '12px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Email</th>
+              <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Employee</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Employee Code</th>
+                <th style={{ padding: '12px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Email</th>
               </tr>
             </thead>
             <tbody>
               {filteredAssigned.map((emp, idx) => (
-                <tr key={emp.employee_id} style={{ borderBottom: idx < filteredAssigned.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
-                  <td style={{ padding: '12px 18px', fontWeight: '700', color: '#0f172a' }}>
+                <tr key={emp.employee_id} style={{ borderBottom: idx < filteredAssigned.length - 1 ? '1px solid #F1F4F8' : 'none' }}>
+                  <td style={{ padding: '12px 18px', fontWeight: '700', color: '#001233' }}>
                     {emp.first_name} {emp.last_name}
                   </td>
-                  <td style={{ padding: '12px 18px', fontFamily: 'monospace', color: '#475569' }}>
+                  <td style={{ padding: '12px 18px', fontFamily: 'monospace', color: '#33415C' }}>
                     {emp.employee_code}
                   </td>
-                  <td style={{ padding: '12px 18px', color: '#64748b' }}>
+                  <td style={{ padding: '12px 18px', color: '#7D8597' }}>
                     {emp.email}
                   </td>
                 </tr>
@@ -188,44 +188,44 @@ export default function LeavePlanEmployees({ planId }) {
             onClick={e => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Assign Employees</h3>
+              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#001233' }}>Assign Employees</h3>
               <button
                 onClick={() => setModalOpen(false)}
-                style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}
               >
                 <FiX size={14} />
               </button>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '0 10px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', padding: '0 10px', marginBottom: '16px' }}>
               <FiSearch size={13} color="#94a3b8" />
               <input
                 placeholder="Search unassigned employees by name or code…"
                 value={searchUnassigned}
                 onChange={e => setSearchUnassigned(e.target.value)}
-                style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', width: '100%' }}
+                style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#001233', outline: 'none', width: '100%' }}
               />
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', border: '1px solid #e2e8f0', borderRadius: '12px', marginBottom: '20px' }}>
+            <div style={{ flex: 1, overflowY: 'auto', border: '1px solid #E3E7EE', borderRadius: '12px', marginBottom: '20px' }}>
               {filteredUnassigned.length === 0 ? (
-                <div style={{ padding: '40px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
+                <div style={{ padding: '40px', textAlign: 'center', color: '#7D8597', fontSize: '13px' }}>
                   No unassigned employees available.
                 </div>
               ) : (
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0 }}>
+                    <tr style={{ background: '#f8fafc', borderBottom: '1px solid #E3E7EE', position: 'sticky', top: 0 }}>
                       <th style={{ padding: '10px 14px', width: '40px' }}>
                         <input
                           type="checkbox"
                           checked={filteredUnassigned.length > 0 && filteredUnassigned.every(e => selectedIds.includes(e.employee_id))}
                           onChange={() => handleToggleAll(filteredUnassigned)}
-                          style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#C2071A' }}
+                          style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#0466C8' }}
                         />
                       </th>
-                      <th style={{ padding: '10px 14px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Employee</th>
-                      <th style={{ padding: '10px 14px', color: '#64748b', fontWeight: '700', textAlign: 'left' }}>Code</th>
+                      <th style={{ padding: '10px 14px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Employee</th>
+                      <th style={{ padding: '10px 14px', color: '#7D8597', fontWeight: '700', textAlign: 'left' }}>Code</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -235,20 +235,20 @@ export default function LeavePlanEmployees({ planId }) {
                         <tr
                           key={emp.employee_id}
                           onClick={() => handleToggleSelect(emp.employee_id)}
-                          style={{ borderBottom: idx < filteredUnassigned.length - 1 ? '1px solid #f1f5f9' : 'none', background: isSel ? '#f5f7ff' : 'transparent', cursor: 'pointer' }}
+                          style={{ borderBottom: idx < filteredUnassigned.length - 1 ? '1px solid #F1F4F8' : 'none', background: isSel ? '#f5f7ff' : 'transparent', cursor: 'pointer' }}
                         >
                           <td style={{ padding: '10px 14px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                             <input
                               type="checkbox"
                               checked={isSel}
                               onChange={() => handleToggleSelect(emp.employee_id)}
-                              style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#C2071A' }}
+                              style={{ cursor: 'pointer', width: '15px', height: '15px', accentColor: '#0466C8' }}
                             />
                           </td>
-                          <td style={{ padding: '10px 14px', fontWeight: '600', color: '#0f172a' }}>
+                          <td style={{ padding: '10px 14px', fontWeight: '600', color: '#001233' }}>
                             {emp.first_name} {emp.last_name}
                           </td>
-                          <td style={{ padding: '10px 14px', fontFamily: 'monospace', color: '#64748b' }}>
+                          <td style={{ padding: '10px 14px', fontFamily: 'monospace', color: '#7D8597' }}>
                             {emp.employee_code}
                           </td>
                         </tr>
@@ -260,11 +260,11 @@ export default function LeavePlanEmployees({ planId }) {
             </div>
 
             <div style={{ display: 'flex', gap: 10 }}>
-              <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>Cancel</button>
+              <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>Cancel</button>
               <button
                 onClick={handleAssign}
                 disabled={selectedIds.length === 0 || assigning}
-                style={{ flex: 2, padding: '11px', background: selectedIds.length === 0 ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: selectedIds.length === 0 ? 'not-allowed' : 'pointer', boxShadow: selectedIds.length === 0 ? 'none' : '0 4px 14px rgba(194,7,26,0.35)' }}
+                style={{ flex: 2, padding: '11px', background: selectedIds.length === 0 ? '#E3E7EE' : 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: selectedIds.length === 0 ? 'not-allowed' : 'pointer', boxShadow: selectedIds.length === 0 ? 'none' : '0 4px 14px rgba(4, 102, 200,0.35)' }}
               >
                 {assigning ? 'Assigning…' : `Assign ${selectedIds.length} Selected`}
               </button>

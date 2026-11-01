@@ -79,14 +79,14 @@ export default function KpiReviewsPage({ isSubComponent = false }) {
 
       return (
         <div style={{ marginTop: 8 }}>
-          <div style={{ fontWeight: 700, fontSize: 14, color: '#0f172a', marginBottom: 12 }}>
+          <div style={{ fontWeight: 700, fontSize: 14, color: '#001233', marginBottom: 12 }}>
             Checklist Progress: {completedCount} / {totalCount} Completed ({pct}%)
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '12px 16px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '12px 16px', background: '#f8fafc', borderRadius: 8, border: '1px solid #E3E7EE' }}>
             {tasks.map((t, idx) => (
               <div key={t.task_id || idx} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13 }}>
                 <span style={{ fontSize: 16, color: t.is_completed ? '#10b981' : '#cbd5e1' }}>{t.is_completed ? '✅' : '⬜'}</span>
-                <span style={{ textDecoration: t.is_completed ? 'line-through' : 'none', color: t.is_completed ? '#94a3b8' : '#334155' }}>
+                <span style={{ textDecoration: t.is_completed ? 'line-through' : 'none', color: t.is_completed ? '#94a3b8' : '#33415C' }}>
                   {t.title}
                 </span>
               </div>
@@ -296,7 +296,7 @@ export default function KpiReviewsPage({ isSubComponent = false }) {
   const reviewModal = (
     <Modal
       title={
-        <div style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: 12 }}>
+        <div style={{ borderBottom: '1px solid #F1F4F8', paddingBottom: 12 }}>
           <Title level={4} style={{ margin: 0 }}>Review KPI Submission</Title>
           <Text type="secondary">Submitted by {selectedSub?.employee_name}</Text>
         </div>
@@ -412,7 +412,7 @@ export default function KpiReviewsPage({ isSubComponent = false }) {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
       <SidebarComponent active="kpi-reviews" />
       
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>

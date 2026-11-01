@@ -10,49 +10,49 @@ import { FiSettings, FiUploadCloud, FiClipboard, FiClock, FiCheckCircle, FiXCirc
 // Axios configuration will be initialized inside the component function to ensure sa_token is read correctly.
 
 const s = {
-  page: { display: 'flex', minHeight: '100vh', background: '#f3f7fa', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
+  page: { display: 'flex', minHeight: '100vh', background: '#FFFFFF', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
   main: { flex: 1, padding: '32px 36px', overflowY: 'auto' },
   header: { marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  h1: { fontSize: '24px', fontWeight: '800', color: '#1e293b', marginBottom: '4px', margin: 0 },
-  sub: { fontSize: '13px', color: '#475569', margin: 0, fontWeight: 500 },
-  tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '8px' },
+  h1: { fontSize: '24px', fontWeight: '800', color: '#001233', marginBottom: '4px', margin: 0 },
+  sub: { fontSize: '13px', color: '#33415C', margin: 0, fontWeight: 500 },
+  tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #E3E7EE', marginBottom: '24px', paddingBottom: '8px' },
   tabBtn: (active) => ({
-    padding: '8px 16px', background: active ? 'rgba(194,7,26,0.06)' : 'transparent',
-    border: 'none', color: active ? '#C2071A' : '#64748b',
+    padding: '8px 16px', background: active ? 'rgba(4, 102, 200,0.06)' : 'transparent',
+    border: 'none', color: active ? '#0466C8' : '#7D8597',
     fontSize: '13px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s',
-    borderBottom: active ? '2px solid #C2071A' : 'none',
+    borderBottom: active ? '2px solid #0466C8' : 'none',
     borderRadius: active ? '8px 8px 0 0' : '8px',
     fontFamily: 'inherit'
   }),
   card: {
-    background: '#ffffff', border: '1px solid #e2e8f0',
+    background: '#ffffff', border: '1px solid #E3E7EE',
     borderRadius: '12px', padding: '24px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)', marginBottom: '24px'
   },
-  sectionTitle: { margin: '0 0 16px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  sectionTitle: { margin: '0 0 16px 0', color: '#001233', fontSize: '16px', fontWeight: '800', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px', marginBottom: '20px' },
   formGroup: { display: 'flex', flexDirection: 'column', gap: '6px' },
-  label: { fontSize: '11px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  label: { fontSize: '11px', fontWeight: '700', color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' },
   input: {
     padding: '10px 14px', background: '#ffffff',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none',
     fontFamily: 'inherit', transition: 'border-color 0.15s ease'
   },
   select: {
     padding: '10px 14px', background: '#ffffff',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none', cursor: 'pointer',
     fontFamily: 'inherit', transition: 'border-color 0.15s ease'
   },
   btn: {
-    padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A 0%, #941018 100%)',
+    padding: '10px 20px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
     border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff',
-    cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.35)',
+    cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 14px rgba(4, 102, 200, 0.35)',
     display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit'
   },
   btnSec: {
     padding: '10px 20px', background: '#ffffff',
-    border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#64748b',
+    border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#7D8597',
     cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit',
     display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
   },
@@ -63,15 +63,15 @@ const s = {
   },
   table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
   th: {
-    padding: '12px 16px', color: '#475569', fontWeight: '700',
-    borderBottom: '1px solid #e2e8f0',
+    padding: '12px 16px', color: '#33415C', fontWeight: '700',
+    borderBottom: '1px solid #E3E7EE',
     textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em',
     background: '#f8fafc'
   },
-  tr: { borderBottom: '1px solid #e2e8f0', transition: 'background 0.2s' },
-  td: { padding: '12px 16px', color: '#1e293b', fontWeight: '500' },
+  tr: { borderBottom: '1px solid #E3E7EE', transition: 'background 0.2s' },
+  td: { padding: '12px 16px', color: '#001233', fontWeight: '500' },
   badge: (status) => {
-    let bg = '#f1f5f9'; let color = '#475569'; let border = 'rgba(71,85,105,0.2)';
+    let bg = '#F1F4F8'; let color = '#33415C'; let border = 'rgba(71,85,105,0.2)';
     if (status === 'APPROVED' || status === 'EFFECTIVE') { bg = '#dcfce7'; color = '#15803d'; border = 'rgba(21,128,61,0.2)'; }
     else if (status === 'LOCKED' || status === 'CANCELLED') { bg = '#fee2e2'; color = '#b91c1c'; border = 'rgba(185,28,28,0.2)'; }
     else if (status === 'DRAFT' || status === 'GENERATED' || status === 'PENDING') { bg = '#fef3c7'; color = '#b45309'; border = 'rgba(180,83,9,0.2)'; }
@@ -89,19 +89,19 @@ const s = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100
   },
   modalContent: {
-    background: '#ffffff', border: '1px solid #e2e8f0',
+    background: '#ffffff', border: '1px solid #E3E7EE',
     borderRadius: '16px', width: '90%', maxWidth: '800px', padding: '28px',
     boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02)',
     maxHeight: '90vh', overflowY: 'auto'
   },
   kpiContainer: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '24px' },
   kpiCard: {
-    background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px',
+    background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '12px',
     padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '4px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
   },
-  kpiLabel: { fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' },
-  kpiValue: { fontSize: '20px', fontWeight: '800', color: '#1e293b' }
+  kpiLabel: { fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  kpiValue: { fontSize: '20px', fontWeight: '800', color: '#001233' }
 }
 
 export default function ClientAdminPayroll() {
@@ -864,7 +864,7 @@ export default function ClientAdminPayroll() {
   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
   return (
-    <div style={s.page}>
+    <div className="pms-page" style={s.page}>
       <ClientAdminSidebar active="payroll" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
@@ -924,7 +924,7 @@ export default function ClientAdminPayroll() {
                   <tbody>
                     {runs.length === 0 ? (
                       <tr>
-                        <td colSpan="5" style={{ ...s.td, textAlign: 'center', padding: '32px', fontWeight: 600, color: '#64748b' }}>
+                        <td colSpan="5" style={{ ...s.td, textAlign: 'center', padding: '32px', fontWeight: 600, color: '#7D8597' }}>
                           No payroll runs generated yet. Click "Generate Run" above.
                         </td>
                       </tr>
@@ -944,8 +944,8 @@ export default function ClientAdminPayroll() {
                           </td>
                           <td style={s.td}>
                             <button style={s.btnSec} onClick={() => loadRunDetails(r.payroll_run_id)}
-                              onMouseEnter={e => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#1e293b' }}
-                              onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#64748b' }}
+                              onMouseEnter={e => { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.color = '#001233' }}
+                              onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#7D8597' }}
                             >
                               View Details
                             </button>
@@ -962,16 +962,16 @@ export default function ClientAdminPayroll() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <button style={s.btnSec} onClick={() => setSelectedRunId(null)}
-                        onMouseEnter={e => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#1e293b' }}
-                        onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#64748b' }}
+                        onMouseEnter={e => { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.color = '#001233' }}
+                        onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#7D8597' }}
                       >
                         ← Back
                       </button>
                       <div>
-                        <h3 style={{ color: '#1e293b', margin: 0, fontSize: '18px', fontWeight: '800' }}>
+                        <h3 style={{ color: '#001233', margin: 0, fontSize: '18px', fontWeight: '800' }}>
                           Payroll Run: {new Date(2000, runDetails?.run?.payroll_month - 1).toLocaleString('default', { month: 'long' })} {runDetails?.run?.payroll_year}
                         </h3>
-                        <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
+                        <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: 600 }}>
                           Period: {runDetails?.run?.payroll_start_date?.split('T')[0]} to {runDetails?.run?.payroll_end_date?.split('T')[0]}
                         </span>
                       </div>
@@ -987,16 +987,16 @@ export default function ClientAdminPayroll() {
                       )}
                       {runDetails?.run?.current_status !== 'LOCKED' && (
                         <>
-                          <button style={{ ...s.btn, background: 'rgba(194,7,26,0.06)', border: '1px solid rgba(194,7,26,0.15)', color: '#C2071A', boxShadow: 'none' }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(194,7,26,0.12)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(194,7,26,0.06)'}
+                          <button style={{ ...s.btn, background: 'rgba(4, 102, 200,0.06)', border: '1px solid rgba(4, 102, 200,0.15)', color: '#0466C8', boxShadow: 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(4, 102, 200,0.12)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(4, 102, 200,0.06)'}
                             onClick={() => setShowAdjModal(true)}
                           >
                             <AddIcon size={18} /> Add Adjustment
                           </button>
-                          <button style={{ ...s.btn, background: 'rgba(194,7,26,0.06)', border: '1px solid rgba(194,7,26,0.15)', color: '#941018', boxShadow: 'none' }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(194,7,26,0.12)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(194,7,26,0.06)'}
+                          <button style={{ ...s.btn, background: 'rgba(4, 102, 200,0.06)', border: '1px solid rgba(4, 102, 200,0.15)', color: '#023E7D', boxShadow: 'none' }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(4, 102, 200,0.12)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(4, 102, 200,0.06)'}
                             onClick={() => setShowBulkAdjModal(true)}
                           >
                             <FiUploadCloud size={14} /> Bulk Adjustments
@@ -1007,7 +1007,7 @@ export default function ClientAdminPayroll() {
                   </div>
 
                   <div style={{ overflowX: 'auto' }}>
-                    <h4 style={{ color: '#1e293b', margin: '0 0 12px 0', fontSize: '14px', fontWeight: '800' }}>Calculated Salaries</h4>
+                    <h4 style={{ color: '#001233', margin: '0 0 12px 0', fontSize: '14px', fontWeight: '800' }}>Calculated Salaries</h4>
                     <table style={s.table}>
                       <thead>
                         <tr>
@@ -1041,7 +1041,7 @@ export default function ClientAdminPayroll() {
                               <td style={{ ...s.td, fontWeight: '700' }}>{getEmpName(ep.employee_id)}</td>
                               <td style={s.td}>{parseFloat(ep.working_days)}</td>
                               <td style={s.td}>{parseFloat(ep.present_days)} / {parseFloat(ep.paid_leave_days)}</td>
-                              <td style={{ ...s.td, color: parseFloat(ep.lop_days) > 0 ? '#b91c1c' : '#1e293b', fontWeight: parseFloat(ep.lop_days) > 0 ? '700' : '500' }}>
+                              <td style={{ ...s.td, color: parseFloat(ep.lop_days) > 0 ? '#b91c1c' : '#001233', fontWeight: parseFloat(ep.lop_days) > 0 ? '700' : '500' }}>
                                 <div>{parseFloat(ep.lop_days)}</div>
                                 {(parseFloat(ep.lop_days_absence) > 0 || parseFloat(ep.lop_days_late) > 0) && (
                                   <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: '500', marginTop: '2px', fontStyle: 'italic' }}>
@@ -1051,7 +1051,7 @@ export default function ClientAdminPayroll() {
                               </td>
                               <td style={s.td}>
                                 <div>₹{gross.toFixed(2)}</div>
-                                <div style={{ fontSize: '10px', color: '#C2071A', fontWeight: '700' }}>CTC: ₹{ctc.toFixed(2)}</div>
+                                <div style={{ fontSize: '10px', color: '#0466C8', fontWeight: '700' }}>CTC: ₹{ctc.toFixed(2)}</div>
                               </td>
                               <td style={s.td}>₹{benefits.toFixed(2)}</td>
                               <td style={s.td}>₹{pf.toFixed(2)} / ₹{esi.toFixed(2)}</td>
@@ -1064,8 +1064,8 @@ export default function ClientAdminPayroll() {
                               {runDetails?.run?.current_status === 'LOCKED' && (
                                 <td style={s.td}>
                                   <button style={{ ...s.btnSec, padding: '4px 10px', fontSize: '12px' }} onClick={() => handleDownloadPayslip(ep.employee_payroll_id)}
-                                    onMouseEnter={e => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#1e293b' }}
-                                    onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#64748b' }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = '#F1F4F8'; e.currentTarget.style.color = '#001233' }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#7D8597' }}
                                   >
                                     ⬇️ Download
                                   </button>
@@ -1081,7 +1081,7 @@ export default function ClientAdminPayroll() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '24px' }}>
                   <div style={s.card}>
-                    <h4 style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#1e293b', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
+                    <h4 style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#001233', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
                       <FiClipboard size={15} /> Manual Adjustments
                     </h4>
                     <table style={s.table}>
@@ -1098,7 +1098,7 @@ export default function ClientAdminPayroll() {
                       <tbody>
                         {runDetails?.adjustments?.length === 0 ? (
                           <tr>
-                            <td colSpan="6" style={{ ...s.td, textAlign: 'center', padding: '24px', color: '#64748b', fontWeight: 600 }}>
+                            <td colSpan="6" style={{ ...s.td, textAlign: 'center', padding: '24px', color: '#7D8597', fontWeight: 600 }}>
                               No adjustments added to this run.
                             </td>
                           </tr>
@@ -1133,23 +1133,23 @@ export default function ClientAdminPayroll() {
                   </div>
 
                   <div style={s.card}>
-                    <h4 style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#1e293b', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
+                    <h4 style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#001233', margin: '0 0 16px 0', fontSize: '15px', fontWeight: '800' }}>
                       <FiClock size={15} /> Action Audit Log
                     </h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '300px', overflowY: 'auto' }}>
                       {runDetails?.logs?.length === 0 ? (
-                        <div style={{ color: '#64748b', fontSize: '13px', fontWeight: 600 }}>No logs recorded.</div>
+                        <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: 600 }}>No logs recorded.</div>
                       ) : (
                         runDetails?.logs?.map(log => (
                           <div key={log.log_id} style={{
-                            padding: '12px', background: '#f8fafc', border: '1px solid #e2e8f0',
+                            padding: '12px', background: '#f8fafc', border: '1px solid #E3E7EE',
                             borderRadius: '10px'
                           }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#C2071A', textTransform: 'uppercase' }}>{log.action}</span>
-                              <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '600' }}>{new Date(log.created_at).toLocaleString()}</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#0466C8', textTransform: 'uppercase' }}>{log.action}</span>
+                              <span style={{ fontSize: '10px', color: '#7D8597', fontWeight: '600' }}>{new Date(log.created_at).toLocaleString()}</span>
                             </div>
-                            <div style={{ fontSize: '12px', color: '#475569', fontWeight: '500' }}>{log.remarks}</div>
+                            <div style={{ fontSize: '12px', color: '#33415C', fontWeight: '500' }}>{log.remarks}</div>
                           </div>
                         ))
                       )}
@@ -1198,7 +1198,7 @@ export default function ClientAdminPayroll() {
               <tbody>
                 {components.length === 0 ? (
                   <tr>
-                    <td colSpan="8" style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#64748b', fontWeight: 600 }}>
+                    <td colSpan="8" style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#7D8597', fontWeight: 600 }}>
                       No components defined yet. Click "+ Define Component" above.
                     </td>
                   </tr>
@@ -1215,8 +1215,8 @@ export default function ClientAdminPayroll() {
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >
                         <td style={s.td}>
-                          <div style={{ fontWeight: '700', color: '#1e293b' }}>{c.component_name}</div>
-                          <div style={{ fontSize: '10px', color: '#C2071A', fontWeight: '700' }}>CODE: {c.component_code}</div>
+                          <div style={{ fontWeight: '700', color: '#001233' }}>{c.component_name}</div>
+                          <div style={{ fontSize: '10px', color: '#0466C8', fontWeight: '700' }}>CODE: {c.component_code}</div>
                         </td>
                         <td style={s.td}>
                           <span style={{
@@ -1226,7 +1226,7 @@ export default function ClientAdminPayroll() {
                             border: `1px solid ${c.component_type === 'EARNING' ? 'rgba(21,128,61,0.2)' : c.component_type === 'DEDUCTION' ? 'rgba(185,28,28,0.2)' : 'rgba(109,40,217,0.2)'}`
                           }}>{c.component_type}</span>
                         </td>
-                        <td style={{ ...s.td, fontWeight: '700', textTransform: 'uppercase', fontSize: '11px', color: '#64748b' }}>
+                        <td style={{ ...s.td, fontWeight: '700', textTransform: 'uppercase', fontSize: '11px', color: '#7D8597' }}>
                           {c.category}
                         </td>
                         <td style={s.td}>
@@ -1237,7 +1237,7 @@ export default function ClientAdminPayroll() {
                           <div style={{ fontSize: '11px', color: '#94a3b8' }}>Order: {c.display_order}</div>
                         </td>
                         <td style={s.td}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '11px', fontWeight: '600', color: '#475569' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '11px', fontWeight: '600', color: '#33415C' }}>
                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: c.include_in_gross ? '#15803d' : '#b91c1c' }}>
                               {c.include_in_gross ? <FiCheckCircle size={12} /> : <FiXCircle size={12} />} Gross
                             </span>
@@ -1252,8 +1252,8 @@ export default function ClientAdminPayroll() {
                         <td style={s.td}>
                           <span style={{
                             fontSize: '11px', fontWeight: '700', padding: '2px 8px', borderRadius: '6px',
-                            background: c.is_active ? '#dcfce7' : '#f1f5f9',
-                            color: c.is_active ? '#15803d' : '#64748b'
+                            background: c.is_active ? '#dcfce7' : '#F1F4F8',
+                            color: c.is_active ? '#15803d' : '#7D8597'
                           }}>{c.is_active ? 'Active' : 'Inactive'}</span>
                         </td>
                         <td style={s.td}>
@@ -1378,7 +1378,7 @@ export default function ClientAdminPayroll() {
                 <tbody>
                   {revisions.length === 0 ? (
                     <tr>
-                      <td colSpan="9" style={{ ...s.td, textAlign: 'center', padding: '24px', color: '#64748b', fontWeight: 600 }}>
+                      <td colSpan="9" style={{ ...s.td, textAlign: 'center', padding: '24px', color: '#7D8597', fontWeight: 600 }}>
                         No revisions matches standard filters.
                       </td>
                     </tr>
@@ -1395,7 +1395,7 @@ export default function ClientAdminPayroll() {
                           </td>
                           <td style={s.td}>
                             <div style={{ fontWeight: '600' }}>{r.reason}</div>
-                            <div style={{ fontSize: '11px', color: '#64748b' }}>{r.remarks || '—'}</div>
+                            <div style={{ fontSize: '11px', color: '#7D8597' }}>{r.remarks || '—'}</div>
                           </td>
                           <td style={s.td}>
                             <div>₹{parseFloat(oldAmt || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
@@ -1435,10 +1435,10 @@ export default function ClientAdminPayroll() {
         {/* Tab content: Settings */}
         {activeTab === 'settings' && (
           <div style={s.card}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 16px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 16px 0', color: '#001233', fontSize: '16px', fontWeight: '800' }}>
               <FiSettings size={16} /> Organization Week Off Configuration
             </h3>
-            <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '24px', fontWeight: 500 }}>
+            <p style={{ color: '#7D8597', fontSize: '13px', marginBottom: '24px', fontWeight: 500 }}>
               Select which days of the week are considered week-offs (non-working days) in your company.
             </p>
             <form onSubmit={handleUpdateWeekOff} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -1451,9 +1451,9 @@ export default function ClientAdminPayroll() {
                       onClick={() => handleToggleWeekDay(index)}
                       style={{
                         padding: '16px', borderRadius: '12px', cursor: 'pointer',
-                        background: isChecked ? 'rgba(194,7,26,0.06)' : '#ffffff',
-                        border: `1px solid ${isChecked ? '#C2071A' : '#e2e8f0'}`,
-                        color: isChecked ? '#C2071A' : '#1e293b',
+                        background: isChecked ? 'rgba(4, 102, 200,0.06)' : '#ffffff',
+                        border: `1px solid ${isChecked ? '#0466C8' : '#E3E7EE'}`,
+                        color: isChecked ? '#0466C8' : '#001233',
                         display: 'flex', alignItems: 'center', gap: '12px', transition: 'all 0.2s',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)'
                       }}
@@ -1462,7 +1462,7 @@ export default function ClientAdminPayroll() {
                         type="checkbox"
                         checked={isChecked}
                         onChange={() => {}} // handled by div click
-                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--primary-color, #C2071A)' }}
+                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: 'var(--primary-color, #0466C8)' }}
                       />
                       <span style={{ fontSize: '13px', fontWeight: '700' }}>{day}</span>
                     </div>
@@ -1484,26 +1484,26 @@ export default function ClientAdminPayroll() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
             {/* Overtime Settings Configuration */}
             <div style={s.card}>
-              <h3 style={{ margin: '0 0 20px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
+              <h3 style={{ margin: '0 0 20px 0', color: '#001233', fontSize: '16px', fontWeight: '800' }}>
                 ⏰ Overtime Settings
               </h3>
               <form onSubmit={handleSaveOvertimeSettings} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', color: '#475569' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', color: '#33415C' }}>
                     <input
                       type="checkbox"
                       checked={otSettings.is_enabled}
                       onChange={e => setOtSettings({ ...otSettings, is_enabled: e.target.checked })}
-                      style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color, #C2071A)' }}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color, #0466C8)' }}
                     />
                     Enable Overtime Tracking
                   </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', color: '#475569' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '700', color: '#33415C' }}>
                     <input
                       type="checkbox"
                       checked={otSettings.requires_approval}
                       onChange={e => setOtSettings({ ...otSettings, requires_approval: e.target.checked })}
-                      style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color, #C2071A)' }}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--primary-color, #0466C8)' }}
                     />
                     Requires Manager Approval
                   </label>
@@ -1666,7 +1666,7 @@ export default function ClientAdminPayroll() {
 
             {/* Overtime Logs History Audit */}
             <div style={s.card}>
-              <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 20px 0', color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 20px 0', color: '#001233', fontSize: '16px', fontWeight: '800' }}>
                 <FiClipboard size={16} /> Overtime Request Logs & Audit
               </h3>
               <div style={{ overflowX: 'auto', maxHeight: '420px' }}>
@@ -1682,7 +1682,7 @@ export default function ClientAdminPayroll() {
                   <tbody>
                     {otLogs.length === 0 ? (
                       <tr>
-                        <td colSpan="4" style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#64748b', fontWeight: 600 }}>
+                        <td colSpan="4" style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#7D8597', fontWeight: 600 }}>
                           No overtime requests logs recorded.
                         </td>
                       </tr>
@@ -1700,8 +1700,8 @@ export default function ClientAdminPayroll() {
                               <div>{log.attendance_date.split('T')[0]}</div>
                               <span style={{
                                 fontSize: '9px', fontWeight: '700', padding: '1px 6px', borderRadius: '4px',
-                                background: log.day_type === 'HOLIDAY' ? '#fef3c7' : log.day_type === 'WEEKEND' ? '#ede9fe' : '#f1f5f9',
-                                color: log.day_type === 'HOLIDAY' ? '#b45309' : log.day_type === 'WEEKEND' ? '#6d28d9' : '#475569'
+                                background: log.day_type === 'HOLIDAY' ? '#fef3c7' : log.day_type === 'WEEKEND' ? '#ede9fe' : '#F1F4F8',
+                                color: log.day_type === 'HOLIDAY' ? '#b45309' : log.day_type === 'WEEKEND' ? '#6d28d9' : '#33415C'
                               }}>{log.day_type}</span>
                             </td>
                             <td style={s.td}>
@@ -1728,8 +1728,8 @@ export default function ClientAdminPayroll() {
         <div style={s.modalBackdrop} onClick={() => setShowRevisionModal(false)}>
           <div style={{ ...s.modalContent, maxWidth: '1000px' }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, color: '#1e293b', fontSize: '17px', fontWeight: '800' }}>Create Salary Revision</h3>
-              <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowRevisionModal(false)}>×</button>
+              <h3 style={{ margin: 0, color: '#001233', fontSize: '17px', fontWeight: '800' }}>Create Salary Revision</h3>
+              <button style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowRevisionModal(false)}>×</button>
             </div>
             
             <form onSubmit={handleCreateSalaryRevision} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
@@ -1840,40 +1840,40 @@ export default function ClientAdminPayroll() {
 
                 {/* KPI comparison cards inside modal */}
                 {newBase > 0 && (
-                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: '800', color: '#64748b', textTransform: 'uppercase' }}>Revision Analysis & Timeline</span>
+                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #E3E7EE', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '800', color: '#7D8597', textTransform: 'uppercase' }}>Revision Analysis & Timeline</span>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#ffffff', padding: '12px 16px', borderRadius: '8px', border: '1px solid #E3E7EE', justifyContent: 'center' }}>
                       <div style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Current Salary</span>
+                        <span style={{ fontSize: '10px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase' }}>Current Salary</span>
                         <div style={{ fontSize: '14px', fontWeight: '800' }}>₹{currentBase.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
                         <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Eff: {revCurrentConfig?.effective_from ? new Date(revCurrentConfig.effective_from).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}</div>
                       </div>
-                      <div style={{ fontSize: '20px', color: '#e2e8f0', fontWeight: 'bold' }}>↓</div>
+                      <div style={{ fontSize: '20px', color: '#E3E7EE', fontWeight: 'bold' }}>↓</div>
                       <div style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>New Salary</span>
+                        <span style={{ fontSize: '10px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase' }}>New Salary</span>
                         <div style={{ fontSize: '14px', fontWeight: '800' }}>₹{newBase.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
                         <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '2px' }}>Eff: {revForm.effective_from ? new Date(revForm.effective_from).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}</div>
                       </div>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: '9px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Previous Annual CTC</div>
+                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E3E7EE' }}>
+                        <div style={{ fontSize: '9px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase' }}>Previous Annual CTC</div>
                         <div style={{ fontSize: '13px', fontWeight: '800' }}>₹{(currentMonthlyCTC * 12).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
                       </div>
-                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: '9px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>New Annual CTC</div>
+                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E3E7EE' }}>
+                        <div style={{ fontSize: '9px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase' }}>New Annual CTC</div>
                         <div style={{ fontSize: '13px', fontWeight: '800' }}>₹{(revCalculatedCTC * 12).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
                       </div>
-                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: '9px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Annual Increment</div>
+                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E3E7EE' }}>
+                        <div style={{ fontSize: '9px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase' }}>Annual Increment</div>
                         <div style={{ fontSize: '13px', fontWeight: '800', color: '#15803d' }}>
                           + ₹{((revCalculatedCTC * 12) - (currentMonthlyCTC * 12)).toLocaleString('en-IN', { maximumFractionDigits: 0 })} ({(currentMonthlyCTC > 0 ? (((revCalculatedCTC * 12) - (currentMonthlyCTC * 12)) / (currentMonthlyCTC * 12)) * 100 : 0).toFixed(1)}%)
                         </div>
                       </div>
-                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: '9px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>Monthly Increment</div>
+                      <div style={{ background: '#fff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E3E7EE' }}>
+                        <div style={{ fontSize: '9px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase' }}>Monthly Increment</div>
                         <div style={{ fontSize: '13px', fontWeight: '800', color: '#15803d' }}>
                           + ₹{(revCalculatedCTC - currentMonthlyCTC).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                         </div>
@@ -1889,14 +1889,14 @@ export default function ClientAdminPayroll() {
 
               {/* Dynamic Components Allocation Preview inside modal */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '800', color: '#64748b', textTransform: 'uppercase' }}>Components Allocation Preview</span>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: '#7D8597', textTransform: 'uppercase' }}>Components Allocation Preview</span>
                 {newBase === 0 ? (
-                  <div style={{ color: '#64748b', fontSize: '13px', padding: '40px 0', textAlign: 'center', fontWeight: '600' }}>
+                  <div style={{ color: '#7D8597', fontSize: '13px', padding: '40px 0', textAlign: 'center', fontWeight: '600' }}>
                     Enter a new salary amount to preview component breakdowns.
                   </div>
                 ) : (
                   <div>
-                    <div style={{ overflowX: 'auto', maxHeight: '380px', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px', background: '#f8fafc' }}>
+                    <div style={{ overflowX: 'auto', maxHeight: '380px', border: '1px solid #E3E7EE', borderRadius: '10px', padding: '10px', background: '#f8fafc' }}>
                       <table style={s.table}>
                         <thead>
                           <tr>
@@ -1915,12 +1915,12 @@ export default function ClientAdminPayroll() {
                             else formulaTxt = 'Fixed Allowance (Editable)'
 
                             return (
-                              <tr key={c.component_id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                              <tr key={c.component_id} style={{ borderBottom: '1px solid #E3E7EE' }}>
                                 <td style={{ ...s.td, padding: '8px' }}>
                                   <div style={{ fontWeight: '700' }}>{c.component_name}</div>
                                   <div style={{ fontSize: '9px', color: '#94a3b8' }}>{c.component_code} · {c.component_type}</div>
                                 </td>
-                                <td style={{ ...s.td, padding: '8px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>
+                                <td style={{ ...s.td, padding: '8px', fontSize: '11px', color: '#7D8597', textTransform: 'uppercase' }}>
                                   {formulaTxt}
                                 </td>
                                 <td style={{ ...s.td, padding: '8px', textAlign: 'right' }}>
@@ -1945,26 +1945,26 @@ export default function ClientAdminPayroll() {
                     </div>
 
                     {/* Total Summary Breakdown Box */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', background: '#f1f5f9', padding: '12px', borderRadius: '10px', marginTop: '12px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', background: '#F1F4F8', padding: '12px', borderRadius: '10px', marginTop: '12px', border: '1px solid #E3E7EE', textAlign: 'center' }}>
                       <div>
-                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Gross Salary</span>
-                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#1e293b', marginTop: '2px' }}>₹{revGross.toLocaleString('en-IN')}</div>
+                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Gross Salary</span>
+                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#001233', marginTop: '2px' }}>₹{revGross.toLocaleString('en-IN')}</div>
                       </div>
                       <div>
-                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Deductions</span>
+                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Deductions</span>
                         <div style={{ fontSize: '12px', fontWeight: '800', color: '#b91c1c', marginTop: '2px' }}>-₹{revDeductions.toLocaleString('en-IN')}</div>
                       </div>
                       <div>
-                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Employer Cont.</span>
+                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Employer Cont.</span>
                         <div style={{ fontSize: '12px', fontWeight: '800', color: '#6d28d9', marginTop: '2px' }}>₹{revEmployerContrib.toLocaleString('en-IN')}</div>
                       </div>
                       <div>
-                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Net Take-Home</span>
+                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Net Take-Home</span>
                         <div style={{ fontSize: '12px', fontWeight: '800', color: '#15803d', marginTop: '2px' }}>₹{revNetTakeHome.toLocaleString('en-IN')}</div>
                       </div>
                       <div>
-                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>CTC (Monthly)</span>
-                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#C2071A', marginTop: '2px' }}>₹{revCalculatedCTC.toLocaleString('en-IN')}</div>
+                        <span style={{ fontSize: '8px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.04em' }}>CTC (Monthly)</span>
+                        <div style={{ fontSize: '12px', fontWeight: '800', color: '#0466C8', marginTop: '2px' }}>₹{revCalculatedCTC.toLocaleString('en-IN')}</div>
                       </div>
                     </div>
 
@@ -1981,8 +1981,8 @@ export default function ClientAdminPayroll() {
         <div style={s.modalBackdrop} onClick={() => setShowGenModal(false)}>
           <div style={s.modalContent} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>Generate Payroll Run</h3>
-              <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowGenModal(false)}>×</button>
+              <h3 style={{ margin: 0, color: '#001233', fontSize: '16px', fontWeight: '800' }}>Generate Payroll Run</h3>
+              <button style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowGenModal(false)}>×</button>
             </div>
             <form onSubmit={handleGeneratePayroll} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -2053,10 +2053,10 @@ export default function ClientAdminPayroll() {
         <div style={s.modalBackdrop} onClick={() => setShowCompModal(false)}>
           <div style={s.modalContent} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>
+              <h3 style={{ margin: 0, color: '#001233', fontSize: '16px', fontWeight: '800' }}>
                 {editingCompId ? 'Edit Payroll Component' : 'Define Payroll Component'}
               </h3>
-              <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowCompModal(false)}>×</button>
+              <button style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowCompModal(false)}>×</button>
             </div>
             <form onSubmit={handleSaveComponent} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
@@ -2191,42 +2191,42 @@ export default function ClientAdminPayroll() {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '6px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#33415C' }}>
                   <input
                     type="checkbox"
                     checked={compForm.include_gross}
                     onChange={e => setCompForm({ ...compForm, include_gross: e.target.checked })}
-                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #0466C8)' }}
                   />
                   Include in Gross Salary
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#33415C' }}>
                   <input
                     type="checkbox"
                     checked={compForm.include_ctc}
                     onChange={e => setCompForm({ ...compForm, include_ctc: e.target.checked })}
-                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #0466C8)' }}
                   />
                   Include in CTC
                 </label>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#33415C' }}>
                   <input
                     type="checkbox"
                     checked={compForm.is_taxable}
                     onChange={e => setCompForm({ ...compForm, is_taxable: e.target.checked })}
-                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #0466C8)' }}
                   />
                   Is Taxable Component
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '700', color: '#33415C' }}>
                   <input
                     type="checkbox"
                     checked={compForm.is_mandatory}
                     onChange={e => setCompForm({ ...compForm, is_mandatory: e.target.checked })}
-                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #C2071A)' }}
+                    style={{ width: '15px', height: '15px', accentColor: 'var(--primary-color, #0466C8)' }}
                   />
                   Is Mandatory Component
                 </label>
@@ -2248,8 +2248,8 @@ export default function ClientAdminPayroll() {
         <div style={s.modalBackdrop} onClick={() => setShowAdjModal(false)}>
           <div style={s.modalContent} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>Add Manual Adjustment</h3>
-              <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowAdjModal(false)}>×</button>
+              <h3 style={{ margin: 0, color: '#001233', fontSize: '16px', fontWeight: '800' }}>Add Manual Adjustment</h3>
+              <button style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowAdjModal(false)}>×</button>
             </div>
             <form onSubmit={handleAddAdjustment} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={s.formGroup}>
@@ -2335,11 +2335,11 @@ export default function ClientAdminPayroll() {
         <div style={s.modalBackdrop} onClick={() => setShowBulkAdjModal(false)}>
           <div style={s.modalContent} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, color: '#1e293b', fontSize: '16px', fontWeight: '800' }}>Bulk Import Adjustments / LOP</h3>
-              <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowBulkAdjModal(false)}>×</button>
+              <h3 style={{ margin: 0, color: '#001233', fontSize: '16px', fontWeight: '800' }}>Bulk Import Adjustments / LOP</h3>
+              <button style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '20px', cursor: 'pointer' }} onClick={() => setShowBulkAdjModal(false)}>×</button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <p style={{ color: '#475569', fontSize: '13px', margin: 0, fontWeight: 500 }}>
+              <p style={{ color: '#33415C', fontSize: '13px', margin: 0, fontWeight: 500 }}>
                 Upload a CSV file to apply additions, deductions, or LOP overrides for this month's payroll.
               </p>
               
@@ -2347,16 +2347,16 @@ export default function ClientAdminPayroll() {
                 <FiDownload size={13} /> Download CSV Template
               </button>
 
-              <div style={{ border: '2px dashed #e2e8f0', borderRadius: '12px', padding: '24px', textAlign: 'center', background: '#f8fafc' }}>
+              <div style={{ border: '2px dashed #E3E7EE', borderRadius: '12px', padding: '24px', textAlign: 'center', background: '#f8fafc' }}>
                 <label style={{ cursor: 'pointer', display: 'block' }}>
-                  <span style={{ fontSize: '14px', fontWeight: '700', color: '#C2071A' }}>Choose CSV File</span>
+                  <span style={{ fontSize: '14px', fontWeight: '700', color: '#0466C8' }}>Choose CSV File</span>
                   <input
                     type="file"
                     accept=".csv"
                     onChange={handleCsvUpload}
                     style={{ display: 'none' }}
                   />
-                  <p style={{ fontSize: '11px', color: '#64748b', marginTop: '6px', margin: 0, fontWeight: 600 }}>Supports ADDITION, DEDUCTION, and LOP</p>
+                  <p style={{ fontSize: '11px', color: '#7D8597', marginTop: '6px', margin: 0, fontWeight: 600 }}>Supports ADDITION, DEDUCTION, and LOP</p>
                 </label>
               </div>
             </div>

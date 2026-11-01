@@ -39,13 +39,13 @@ function formatTimeStr(iso) {
 }
 
 const selectStyle = {
-  padding: '7px 12px', background: '#ffffff', border: '1px solid #e2e8f0',
+  padding: '7px 12px', background: '#ffffff', border: '1px solid #E3E7EE',
   borderRadius: '8px', fontSize: '13px', color: '#374151', outline: 'none',
   cursor: 'pointer', fontFamily: 'inherit',
 }
 
 const filterInputStyle = {
-  padding: '7px 12px', background: '#ffffff', border: '1px solid #e2e8f0',
+  padding: '7px 12px', background: '#ffffff', border: '1px solid #E3E7EE',
   borderRadius: '8px', fontSize: '13px', color: '#374151', outline: 'none',
   fontFamily: 'inherit',
 }
@@ -124,16 +124,16 @@ export default function RegularizationRequest() {
   <title>Regularization History</title>
   <style>
     *{box-sizing:border-box}
-    body{font-family:Arial,sans-serif;padding:28px;color:#1e293b;margin:0}
+    body{font-family:Arial,sans-serif;padding:28px;color:#001233;margin:0}
     h2{margin:0 0 2px;font-size:20px;font-weight:700}
-    .sub{margin:0 0 20px;font-size:12px;color:#64748b}
+    .sub{margin:0 0 20px;font-size:12px;color:#7D8597}
     .kpis{display:flex;gap:12px;margin-bottom:22px}
-    .kpi{border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;flex:1;text-align:center}
+    .kpi{border:1px solid #E3E7EE;border-radius:8px;padding:12px 16px;flex:1;text-align:center}
     .kpi-val{font-size:24px;font-weight:800;line-height:1}
-    .kpi-lbl{font-size:11px;color:#64748b;margin-top:4px}
+    .kpi-lbl{font-size:11px;color:#7D8597;margin-top:4px}
     table{width:100%;border-collapse:collapse;font-size:12px}
-    th{background:#f8fafc;padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;font-weight:700}
-    td{padding:8px 10px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+    th{background:#f8fafc;padding:8px 10px;text-align:left;border-bottom:2px solid #E3E7EE;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:#7D8597;font-weight:700}
+    td{padding:8px 10px;border-bottom:1px solid #F1F4F8;vertical-align:top}
     .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
     .PENDING{background:#fef3c7;color:#d97706}
     .APPROVED{background:#d1fae5;color:#059669}
@@ -181,7 +181,7 @@ export default function RegularizationRequest() {
     }, [])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter,sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter,sans-serif' }}>
       <EmployeeSidebar active="regularization" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Regularizations" />
@@ -190,8 +190,8 @@ export default function RegularizationRequest() {
           {/* Page header */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '28px' }}>
             <div>
-              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', margin: 0 }}>Attendance Regularization</h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0' }}>
+              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#001233', margin: 0 }}>Attendance Regularization</h1>
+              <p style={{ fontSize: '13px', color: '#7D8597', margin: '4px 0 0' }}>
                 Track and manage your attendance correction requests
               </p>
             </div>
@@ -201,8 +201,8 @@ export default function RegularizationRequest() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
                   padding: '9px 16px', background: '#ffffff',
-                  border: '1px solid #e2e8f0', borderRadius: '10px',
-                  fontSize: '13px', fontWeight: '600', color: '#475569', cursor: 'pointer',
+                  border: '1px solid #E3E7EE', borderRadius: '10px',
+                  fontSize: '13px', fontWeight: '600', color: '#33415C', cursor: 'pointer',
                   boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
                 }}
               >
@@ -226,7 +226,7 @@ export default function RegularizationRequest() {
           {/* KPI Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Requests', value: stats.total,     color: '#6366f1', bg: 'rgba(99,102,241,0.09)',  icon: '📋' },
+              { label: 'Total Requests', value: stats.total,     color: '#0466C8', bg: 'rgba(4, 102, 200,0.09)',  icon: '📋' },
               { label: 'Pending',        value: stats.pending,   color: '#d97706', bg: 'rgba(234,179,8,0.09)',   icon: '⏳' },
               { label: 'Approved',       value: stats.approved,  color: '#059669', bg: 'rgba(16,185,129,0.09)',  icon: '✅' },
               { label: 'Rejected',       value: stats.rejected,  color: '#ef4444', bg: 'rgba(239,68,68,0.09)',   icon: '❌' },
@@ -234,7 +234,7 @@ export default function RegularizationRequest() {
             ].map(k => (
               <div key={k.label} style={{
                 background: '#ffffff', borderRadius: '16px', padding: '20px',
-                border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                border: '1px solid #E3E7EE', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               }}>
                 <div style={{
                   width: '40px', height: '40px', borderRadius: '10px', background: k.bg,
@@ -244,7 +244,7 @@ export default function RegularizationRequest() {
                   {k.icon}
                 </div>
                 <div style={{ fontSize: '28px', fontWeight: '800', color: k.color, lineHeight: 1 }}>{k.value}</div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '5px' }}>{k.label}</div>
+                <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '5px' }}>{k.label}</div>
               </div>
             ))}
           </div>
@@ -252,7 +252,7 @@ export default function RegularizationRequest() {
           {/* Filters */}
           <div style={{
             background: '#ffffff', borderRadius: '16px', padding: '18px 24px',
-            border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            border: '1px solid #E3E7EE', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             marginBottom: '20px',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
@@ -277,19 +277,19 @@ export default function RegularizationRequest() {
               </select>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '12px', color: '#64748b', whiteSpace: 'nowrap' }}>From</span>
+                <span style={{ fontSize: '12px', color: '#7D8597', whiteSpace: 'nowrap' }}>From</span>
                 <input type="date" value={filterFrom} onChange={e => setFilterFrom(e.target.value)} style={filterInputStyle} />
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '12px', color: '#64748b', whiteSpace: 'nowrap' }}>To</span>
+                <span style={{ fontSize: '12px', color: '#7D8597', whiteSpace: 'nowrap' }}>To</span>
                 <input type="date" value={filterTo} onChange={e => setFilterTo(e.target.value)} style={filterInputStyle} />
               </div>
 
               {hasFilters && (
                 <button onClick={resetFilters} style={{
-                  padding: '7px 14px', background: '#f1f5f9', border: '1px solid #e2e8f0',
-                  borderRadius: '8px', fontSize: '12px', color: '#64748b', cursor: 'pointer', fontWeight: '500',
+                  padding: '7px 14px', background: '#F1F4F8', border: '1px solid #E3E7EE',
+                  borderRadius: '8px', fontSize: '12px', color: '#7D8597', cursor: 'pointer', fontWeight: '500',
                 }}>
                   Clear
                 </button>
@@ -304,7 +304,7 @@ export default function RegularizationRequest() {
           {/* Table */}
           <div style={{
             background: '#ffffff', borderRadius: '16px', overflow: 'hidden',
-            border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            border: '1px solid #E3E7EE', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
           }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8', fontSize: '14px' }}>
@@ -338,9 +338,9 @@ export default function RegularizationRequest() {
                   <tr style={{ background: '#f8fafc' }}>
                     {['Date', 'Type', 'Check-In', 'Check-Out', 'Reason', 'Status'].map(h => (
                       <th key={h} style={{
-                        padding: '14px 20px', color: '#64748b', fontWeight: '600',
+                        padding: '14px 20px', color: '#7D8597', fontWeight: '600',
                         fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em',
-                        borderBottom: '1px solid #e8eaf0',
+                        borderBottom: '1px solid #E3E7EE',
                       }}>
                         {h}
                       </th>
@@ -353,24 +353,24 @@ export default function RegularizationRequest() {
                     return (
                       <tr
                         key={r.regularization_id}
-                        style={{ borderBottom: '1px solid #f1f5f9', transition: 'background 0.15s' }}
+                        style={{ borderBottom: '1px solid #F1F4F8', transition: 'background 0.15s' }}
                         onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >
-                        <td style={{ padding: '14px 20px', color: '#0f172a', fontWeight: '600' }}>
+                        <td style={{ padding: '14px 20px', color: '#001233', fontWeight: '600' }}>
                           {formatDateStr(r.attendance_date)}
                         </td>
-                        <td style={{ padding: '14px 20px', color: '#475569' }}>
+                        <td style={{ padding: '14px 20px', color: '#33415C' }}>
                           {TYPE_LABELS[r.regularization_type] || r.regularization_type.replace(/_/g, ' ')}
                         </td>
-                        <td style={{ padding: '14px 20px', color: '#475569', fontFamily: 'monospace', fontSize: '12px' }}>
+                        <td style={{ padding: '14px 20px', color: '#33415C', fontFamily: 'monospace', fontSize: '12px' }}>
                           {formatTimeStr(r.requested_checkin_time)}
                         </td>
-                        <td style={{ padding: '14px 20px', color: '#475569', fontFamily: 'monospace', fontSize: '12px' }}>
+                        <td style={{ padding: '14px 20px', color: '#33415C', fontFamily: 'monospace', fontSize: '12px' }}>
                           {formatTimeStr(r.requested_checkout_time)}
                         </td>
                         <td
-                          style={{ padding: '14px 20px', color: '#475569', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                          style={{ padding: '14px 20px', color: '#33415C', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                           title={r.reason}
                         >
                           {r.reason}
@@ -400,9 +400,9 @@ export default function RegularizationRequest() {
             {!loading && filtered.length > PAGE_SIZE && (
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '14px 24px', borderTop: '1px solid #f1f5f9',
+                padding: '14px 24px', borderTop: '1px solid #F1F4F8',
               }}>
-                <span style={{ fontSize: '13px', color: '#64748b' }}>
+                <span style={{ fontSize: '13px', color: '#7D8597' }}>
                   Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
                 </span>
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
@@ -410,7 +410,7 @@ export default function RegularizationRequest() {
                     onClick={() => setPage(p => Math.max(1, p - 1))}
                     disabled={page === 1}
                     style={{
-                      padding: '6px 14px', border: '1px solid #e2e8f0', borderRadius: '8px',
+                      padding: '6px 14px', border: '1px solid #E3E7EE', borderRadius: '8px',
                       background: page === 1 ? '#f8fafc' : '#fff',
                       color: page === 1 ? '#cbd5e1' : '#374151',
                       cursor: page === 1 ? 'not-allowed' : 'pointer', fontSize: '13px',
@@ -427,7 +427,7 @@ export default function RegularizationRequest() {
                         onClick={() => setPage(p)}
                         style={{
                           padding: '6px 12px', borderRadius: '8px', fontSize: '13px',
-                          border: `1px solid ${page === p ? '#10b981' : '#e2e8f0'}`,
+                          border: `1px solid ${page === p ? '#10b981' : '#E3E7EE'}`,
                           background: page === p ? '#10b981' : '#fff',
                           color: page === p ? '#fff' : '#374151',
                           fontWeight: page === p ? '600' : '400', cursor: 'pointer',
@@ -441,7 +441,7 @@ export default function RegularizationRequest() {
                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
                     style={{
-                      padding: '6px 14px', border: '1px solid #e2e8f0', borderRadius: '8px',
+                      padding: '6px 14px', border: '1px solid #E3E7EE', borderRadius: '8px',
                       background: page === totalPages ? '#f8fafc' : '#fff',
                       color: page === totalPages ? '#cbd5e1' : '#374151',
                       cursor: page === totalPages ? 'not-allowed' : 'pointer', fontSize: '13px',

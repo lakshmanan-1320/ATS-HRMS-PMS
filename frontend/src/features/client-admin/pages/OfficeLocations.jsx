@@ -369,13 +369,13 @@ export default function OfficeLocations() {
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="office-locations" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+        <div className="pms-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
           <PageHeader
@@ -388,9 +388,9 @@ export default function OfficeLocations() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '7px',
                   padding: '9px 18px', borderRadius: '10px', border: 'none',
-                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                  background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                   color: '#ffffff', fontSize: '13px', fontWeight: 700,
-                  cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                  cursor: 'pointer', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                   fontFamily: "'Inter', sans-serif"
                 }}
               >
@@ -415,14 +415,14 @@ export default function OfficeLocations() {
                   onChange={e => setSearchQuery(e.target.value)}
                   style={{
                     width: '100%', paddingLeft: '34px', padding: '8px 12px 8px 34px',
-                    borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc',
+                    borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc',
                     fontSize: '13px', boxSizing: 'border-box'
                   }}
                 />
               </div>
 
               <span style={{
-                background: '#FEECEE', color: '#C2071A', padding: '5px 14px',
+                background: '#EEF8FF', color: '#0466C8', padding: '5px 14px',
                 borderRadius: 20, fontWeight: 700, fontSize: 11.5, letterSpacing: '0.02em',
               }}>
                 {filteredLocations.length} Office Zones
@@ -430,10 +430,10 @@ export default function OfficeLocations() {
             </div>
 
             {/* Log Table */}
-            <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+            <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
-                  <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                  <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', textAlign: 'left' }}>
                     <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Location Name</th>
                     <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Address</th>
                     <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>GPS Coordinates</th>
@@ -444,20 +444,20 @@ export default function OfficeLocations() {
                 </thead>
                 <tbody>
                   {loadingLocations ? (
-                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading office locations...</td></tr>
+                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#7D8597' }}>Loading office locations...</td></tr>
                   ) : filteredLocations.length === 0 ? (
                     <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No office locations found.</td></tr>
                   ) : filteredLocations.map((loc, i) => (
                     <tr key={loc.office_location_id} style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}>
-                      <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>
-                        <Link to={`/client-admin/attendance/office-locations/${loc.office_location_id}`} style={{ color: '#0f172a', textDecoration: 'none' }}>
+                      <td style={{ padding: '14px 16px', fontWeight: 700, color: '#001233' }}>
+                        <Link to={`/client-admin/attendance/office-locations/${loc.office_location_id}`} style={{ color: '#001233', textDecoration: 'none' }}>
                           {loc.location_name}
                         </Link>
                       </td>
-                      <td style={{ padding: '14px 16px', color: '#475569', maxWidth: '280px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <td style={{ padding: '14px 16px', color: '#33415C', maxWidth: '280px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {loc.address || '—'}
                       </td>
-                      <td style={{ padding: '14px 16px', fontFamily: 'monospace', fontSize: '12px', color: '#334155' }}>
+                      <td style={{ padding: '14px 16px', fontFamily: 'monospace', fontSize: '12px', color: '#33415C' }}>
                         {parseFloat(loc.latitude).toFixed(4)}, {parseFloat(loc.longitude).toFixed(4)}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
@@ -470,7 +470,7 @@ export default function OfficeLocations() {
                           onClick={() => handleToggleStatus(loc)}
                           style={{
                             padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, cursor: 'pointer',
-                            background: loc.is_active ? '#e8fbf0' : '#feecee',
+                            background: loc.is_active ? '#e8fbf0' : '#EEF8FF',
                             color: loc.is_active ? '#0fa958' : '#dc2626'
                           }}
                         >
@@ -482,7 +482,7 @@ export default function OfficeLocations() {
                           <button onClick={() => handleOpenEdit(loc)} style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#fef3c7', color: '#d97706', cursor: 'pointer' }}>
                             <FiEdit2 size={14} />
                           </button>
-                          <button onClick={() => handleDelete(loc)} style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#feecee', color: '#dc2626', cursor: 'pointer' }}>
+                          <button onClick={() => handleDelete(loc)} style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#EEF8FF', color: '#dc2626', cursor: 'pointer' }}>
                             <FiTrash2 size={14} />
                           </button>
                         </div>
@@ -503,14 +503,14 @@ export default function OfficeLocations() {
         <div style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
           <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px 28px', width: '740px', maxWidth: '95vw', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#001233' }}>
                 {editingLocation ? 'Edit Office Location' : 'Add New Office Location'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><FiX size={18} /></button>
+              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', color: '#7D8597', cursor: 'pointer' }}><FiX size={18} /></button>
             </div>
 
             {modalError && (
-              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#feecee', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
+              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#EEF8FF', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
                 {modalError}
               </div>
             )}
@@ -519,14 +519,14 @@ export default function OfficeLocations() {
               {/* Location Name & Status */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', alignItems: 'end' }}>
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Location Name *</label>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Location Name *</label>
                   <input
                     type="text"
                     placeholder="e.g. Headquarters - Tech Park"
                     value={formData.locationName}
                     onChange={e => setFormData(prev => ({ ...prev, locationName: e.target.value }))}
                     required
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box' }}
                   />
                 </div>
                 <div style={{ paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -537,7 +537,7 @@ export default function OfficeLocations() {
                     onChange={e => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
                     style={{ cursor: 'pointer', width: 16, height: 16 }}
                   />
-                  <label htmlFor="isActiveModal" style={{ fontSize: '13px', fontWeight: 700, color: '#334155', cursor: 'pointer' }}>
+                  <label htmlFor="isActiveModal" style={{ fontSize: '13px', fontWeight: 700, color: '#33415C', cursor: 'pointer' }}>
                     Active
                   </label>
                 </div>
@@ -545,7 +545,7 @@ export default function OfficeLocations() {
 
               {/* Address Search via Google Autocomplete */}
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Search Address / Building</label>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Search Address / Building</label>
                 {isLoaded && !isApiKeyMissing ? (
                   <Autocomplete onLoad={ref => (autocompleteRef.current = ref)} onPlaceChanged={handlePlaceSelect}>
                     <div style={{ position: 'relative' }}>
@@ -556,7 +556,7 @@ export default function OfficeLocations() {
                         value={formData.address}
                         onChange={e => setFormData(prev => ({ ...prev, address: e.target.value }))}
                         onBlur={e => handleForwardGeocode(e.target.value)}
-                        style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }}
+                        style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box' }}
                       />
                     </div>
                   </Autocomplete>
@@ -569,18 +569,18 @@ export default function OfficeLocations() {
                       value={formData.address}
                       onChange={e => setFormData(prev => ({ ...prev, address: e.target.value }))}
                       onBlur={e => handleForwardGeocode(e.target.value)}
-                      style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }}
+                      style={{ width: '100%', padding: '10px 12px 10px 34px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box' }}
                     />
                   </div>
                 )}
               </div>
 
               {/* Interactive Google Map Canvas */}
-              <div style={{ height: '300px', width: '100%', borderRadius: '12px', overflow: 'hidden', background: '#f8fafc', position: 'relative', border: '1px solid #e2e8f0' }}>
+              <div style={{ height: '300px', width: '100%', borderRadius: '12px', overflow: 'hidden', background: '#f8fafc', position: 'relative', border: '1px solid #E3E7EE' }}>
                 {isApiKeyMissing ? (
-                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center', color: '#64748b' }}>
+                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center', color: '#7D8597' }}>
                     <FiMapPin size={28} color="#94a3b8" style={{ marginBottom: 8 }} />
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155' }}>Interactive Map Unavailable</div>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#33415C' }}>Interactive Map Unavailable</div>
                     <div style={{ fontSize: '11.5px', color: '#94a3b8', marginTop: 4 }}>Google Maps API Key is not configured. Coordinates can be set manually.</div>
                   </div>
                 ) : loadError ? (
@@ -590,8 +590,8 @@ export default function OfficeLocations() {
                     <div style={{ fontSize: '11.5px', marginTop: 4 }}>{loadError.message || 'Failed to load Google Maps SDK.'}</div>
                   </div>
                 ) : !isLoaded ? (
-                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', color: '#64748b' }}>
-                    <div style={{ width: 28, height: 28, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', color: '#7D8597' }}>
+                    <div style={{ width: 28, height: 28, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                     <span style={{ marginTop: 10, fontSize: '12px', fontWeight: 600 }}>Loading Google Map…</span>
                   </div>
                 ) : (
@@ -620,9 +620,9 @@ export default function OfficeLocations() {
                       center={{ lat: parseFloat(formData.latitude) || 13.0827, lng: parseFloat(formData.longitude) || 80.2707 }}
                       radius={parseFloat(formData.radiusMeters) || 100}
                       options={{
-                        fillColor: '#C2071A',
+                        fillColor: '#0466C8',
                         fillOpacity: 0.18,
-                        strokeColor: '#C2071A',
+                        strokeColor: '#0466C8',
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
                       }}
@@ -640,7 +640,7 @@ export default function OfficeLocations() {
               {/* Lat, Lng and Current Location Button */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '12px', alignItems: 'end' }}>
                 <div>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Latitude *</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C' }}>Latitude *</label>
                   <input
                     type="text"
                     value={formData.latitude}
@@ -651,11 +651,11 @@ export default function OfficeLocations() {
                       if (!isNaN(latNum)) setMapCenter([latNum, parseFloat(formData.longitude) || 80.2707])
                     }}
                     required
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box', marginTop: '4px', fontFamily: 'monospace' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box', marginTop: '4px', fontFamily: 'monospace' }}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Longitude *</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C' }}>Longitude *</label>
                   <input
                     type="text"
                     value={formData.longitude}
@@ -666,7 +666,7 @@ export default function OfficeLocations() {
                       if (!isNaN(lngNum)) setMapCenter([parseFloat(formData.latitude) || 13.0827, lngNum])
                     }}
                     required
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box', marginTop: '4px', fontFamily: 'monospace' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box', marginTop: '4px', fontFamily: 'monospace' }}
                   />
                 </div>
                 <button
@@ -675,7 +675,7 @@ export default function OfficeLocations() {
                   disabled={searching}
                   style={{
                     padding: '9px 14px', borderRadius: '8px', border: 'none',
-                    background: '#f1f5f9', color: '#475569', fontWeight: 700, fontSize: '12px', cursor: 'pointer',
+                    background: '#F1F4F8', color: '#33415C', fontWeight: 700, fontSize: '12px', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: '4px'
                   }}
                 >
@@ -685,7 +685,7 @@ export default function OfficeLocations() {
 
               {/* Radius Select */}
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Geofence Radius (Meters)</label>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Geofence Radius (Meters)</label>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {[50, 100, 200, 500, 1000].map(r => (
                     <button
@@ -697,8 +697,8 @@ export default function OfficeLocations() {
                       }}
                       style={{
                         padding: '7px 14px', borderRadius: '8px', border: 'none',
-                        background: (!isCustomRadius && Number(formData.radiusMeters) === r) ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#f1f5f9',
-                        color: (!isCustomRadius && Number(formData.radiusMeters) === r) ? '#ffffff' : '#475569',
+                        background: (!isCustomRadius && Number(formData.radiusMeters) === r) ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#F1F4F8',
+                        color: (!isCustomRadius && Number(formData.radiusMeters) === r) ? '#ffffff' : '#33415C',
                         fontWeight: 700, fontSize: '12px', cursor: 'pointer'
                       }}
                     >
@@ -710,8 +710,8 @@ export default function OfficeLocations() {
                     onClick={() => setIsCustomRadius(true)}
                     style={{
                       padding: '7px 14px', borderRadius: '8px', border: 'none',
-                      background: isCustomRadius ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#f1f5f9',
-                      color: isCustomRadius ? '#ffffff' : '#475569',
+                      background: isCustomRadius ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#F1F4F8',
+                      color: isCustomRadius ? '#ffffff' : '#33415C',
                       fontWeight: 700, fontSize: '12px', cursor: 'pointer'
                     }}
                   >
@@ -726,7 +726,7 @@ export default function OfficeLocations() {
                       value={formData.radiusMeters}
                       onChange={e => setFormData(prev => ({ ...prev, radiusMeters: parseInt(e.target.value, 10) || 100 }))}
                       placeholder="Radius in meters"
-                      style={{ width: '120px', padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '12px' }}
+                      style={{ width: '120px', padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '12px' }}
                     />
                   )}
                 </div>
@@ -735,12 +735,12 @@ export default function OfficeLocations() {
               {/* Geofence Test Section */}
               <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>Test Geofence Accuracy</span>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#001233' }}>Test Geofence Accuracy</span>
                   <button
                     type="button"
                     onClick={handleTestGeofence}
                     disabled={testingGeofence}
-                    style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontSize: '11.5px', fontWeight: 700, cursor: 'pointer' }}
+                    style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', fontSize: '11.5px', fontWeight: 700, cursor: 'pointer' }}
                   >
                     {testingGeofence ? 'Testing...' : 'Test My Current Location'}
                   </button>
@@ -754,10 +754,10 @@ export default function OfficeLocations() {
 
               {/* Modal Buttons */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '8px' }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 600, cursor: 'pointer' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#F1F4F8', color: '#33415C', fontWeight: 600, cursor: 'pointer' }}>
                   Cancel
                 </button>
-                <button type="submit" style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                <button type="submit" style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' }}>
                   {editingLocation ? 'Update Location' : 'Create Location'}
                 </button>
               </div>

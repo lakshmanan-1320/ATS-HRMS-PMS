@@ -18,7 +18,7 @@ const STATUS_COLOR = {
   PENDING:   { bg: 'rgba(245,158,11,0.12)',  color: '#d97706', border: 'rgba(245,158,11,0.3)' },
   APPROVED:  { bg: 'rgba(16,185,129,0.12)',  color: '#059669', border: 'rgba(16,185,129,0.3)' },
   REJECTED:  { bg: 'rgba(239,68,68,0.12)',   color: '#ef4444', border: 'rgba(239,68,68,0.3)' },
-  CANCELLED: { bg: 'rgba(100,116,139,0.12)', color: '#64748b', border: 'rgba(100,116,139,0.3)' },
+  CANCELLED: { bg: 'rgba(100,116,139,0.12)', color: '#7D8597', border: 'rgba(100,116,139,0.3)' },
 }
 
 const ITEMS_PER_PAGE = 10
@@ -42,19 +42,19 @@ function UsedPct(used, allocated) {
 function Pagination({ page, totalPages, onChange }) {
   if (totalPages <= 1) return null
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px', padding: '16px 20px', borderTop: '1px solid #f1f5f9' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px', padding: '16px 20px', borderTop: '1px solid #F1F4F8' }}>
       <button
         onClick={() => onChange(page - 1)} disabled={page === 1}
-        style={{ padding: '5px 10px', border: '1px solid #e2e8f0', borderRadius: '6px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151', cursor: page === 1 ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}
+        style={{ padding: '5px 10px', border: '1px solid #E3E7EE', borderRadius: '6px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151', cursor: page === 1 ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}
       >← Prev</button>
       {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
         <button key={p} onClick={() => onChange(p)}
-          style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', borderColor: p === page ? '#C2071A' : '#e2e8f0', background: p === page ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}
+          style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', borderColor: p === page ? '#0466C8' : '#E3E7EE', background: p === page ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}
         >{p}</button>
       ))}
       <button
         onClick={() => onChange(page + 1)} disabled={page === totalPages}
-        style={{ padding: '5px 10px', border: '1px solid #e2e8f0', borderRadius: '6px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151', cursor: page === totalPages ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}
+        style={{ padding: '5px 10px', border: '1px solid #E3E7EE', borderRadius: '6px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151', cursor: page === totalPages ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}
       >Next →</button>
     </div>
   )
@@ -212,33 +212,33 @@ export default function LeaveDashboard() {
   const s = {
     page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
     main: { flex: 1, padding: '28px 32px', overflowY: 'auto' },
-    section: { fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' },
-    divider: { flex: 1, height: '1px', background: '#e8eaf0' },
+    section: { fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' },
+    divider: { flex: 1, height: '1px', background: '#E3E7EE' },
     balanceGrid: { display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' },
     tableCard: { background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)', marginBottom: '32px' },
-    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' },
-    td: { padding: '14px 16px', color: '#1e293b', borderBottom: '1px solid #edf2f7', fontSize: '13px' },
+    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' },
+    td: { padding: '14px 16px', color: '#001233', borderBottom: '1px solid #edf2f7', fontSize: '13px' },
     emptyCell: { padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' },
     badge: (st) => ({
       display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px',
       background: (STATUS_COLOR[st] || STATUS_COLOR.CANCELLED).bg,
       color: (STATUS_COLOR[st] || STATUS_COLOR.CANCELLED).color,
     }),
-    filterBar: { display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', borderBottom: '1px solid #e8eaf0', flexWrap: 'wrap', background: '#fcfcfd' },
-    filterInput: { padding: '7px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#fff', outline: 'none', height: '34px', boxSizing: 'border-box' },
-    tabBar: { display: 'flex', gap: 0, padding: '0 18px', borderBottom: '1px solid #e8eaf0' },
+    filterBar: { display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', borderBottom: '1px solid #E3E7EE', flexWrap: 'wrap', background: '#fcfcfd' },
+    filterInput: { padding: '7px 12px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#fff', outline: 'none', height: '34px', boxSizing: 'border-box' },
+    tabBar: { display: 'flex', gap: 0, padding: '0 18px', borderBottom: '1px solid #E3E7EE' },
     tab: (active) => ({
       padding: '13px 20px', fontSize: '13px', fontWeight: active ? '700' : '500',
-      color: active ? '#C2071A' : '#64748b', border: 'none', borderBottom: active ? '2.5px solid #C2071A' : '2.5px solid transparent',
+      color: active ? '#0466C8' : '#7D8597', border: 'none', borderBottom: active ? '2.5px solid #0466C8' : '2.5px solid transparent',
       background: 'none', cursor: 'pointer', marginBottom: '-1px', transition: 'all 0.15s',
     }),
     cancelBtn: { padding: '4px 10px', background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', fontSize: '11px', fontWeight: '600', color: '#ef4444', cursor: 'pointer' },
-    exportBtn: { marginLeft: 'auto', padding: '8px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
-    applyBtn: { padding: '9px 18px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+    exportBtn: { marginLeft: 'auto', padding: '8px 16px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' },
+    applyBtn: { padding: '9px 18px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' },
   }
 
   return (
-    <div style={s.page}>
+    <div className="pms-page" style={s.page}>
       <EmployeeSidebar active="leave" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Leave" />
@@ -247,13 +247,13 @@ export default function LeaveDashboard() {
           {/* Page Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiCalendar size={20} color="#0466C8" strokeWidth={2.5} />
                 </div>
                 My Leave Dashboard
               </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Track balances, optional holidays, and manage your time off</p>
+              <p style={{ fontSize: '13px', color: '#7D8597', margin: 0, fontWeight: 500 }}>Track balances, optional holidays, and manage your time off</p>
             </div>
             <button style={s.applyBtn} onClick={() => navigate('/employee/leave-request')}>
               <FiPlus size={16} color="#ffffff" stroke="#ffffff" strokeWidth={2.5} />
@@ -269,7 +269,7 @@ export default function LeaveDashboard() {
             <div style={s.balanceGrid}>
               {balances.map(b => {
                 const usedPct = UsedPct(parseFloat(b.used_days), parseFloat(b.allocated_days))
-                const accent  = b.is_paid_leave ? '#C2071A' : '#10b981'
+                const accent  = b.is_paid_leave ? '#0466C8' : '#10b981'
                 return (
                   <div
                     key={b.leave_balance_id}
@@ -278,7 +278,7 @@ export default function LeaveDashboard() {
                     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)' }}
                   >
                     {/* Left: gradient panel */}
-                    <div style={{ background: b.is_paid_leave ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)', padding: '18px 24px', width: '210px', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div style={{ background: b.is_paid_leave ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)', padding: '18px 24px', width: '210px', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <div>
                         <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.75)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>{b.leave_type_name}</div>
                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
@@ -302,20 +302,20 @@ export default function LeaveDashboard() {
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
                         {[
                           ['Allocated', parseFloat(b.allocated_days), accent,    'Total days assigned'],
-                          ['Used',      parseFloat(b.used_days),      '#475569', 'Days taken so far'],
+                          ['Used',      parseFloat(b.used_days),      '#33415C', 'Days taken so far'],
                           ['Pending',   parseFloat(b.pending_days),   '#d97706', 'Awaiting approval'],
                         ].map(([lbl, val, col, desc]) => (
                           <div key={lbl} style={{ display: 'flex', flexDirection: 'column' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
                               <div style={{ width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0, background: lbl === 'Pending' ? '#f59e0b' : lbl === 'Used' ? '#94a3b8' : accent }} />
-                              <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{lbl}</span>
+                              <span style={{ fontSize: '10px', color: '#7D8597', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{lbl}</span>
                             </div>
                             <span style={{ fontSize: '28px', fontWeight: '900', color: col, lineHeight: 1, marginBottom: '4px' }}>{val}</span>
                             <span style={{ fontSize: '11px', color: '#94a3b8' }}>{desc}</span>
                           </div>
                         ))}
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '14px', paddingTop: '12px', borderTop: '1px solid #f1f5f9' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '14px', paddingTop: '12px', borderTop: '1px solid #F1F4F8' }}>
                         <span style={{ fontSize: '11px', color: '#94a3b8' }}>Leave Type</span>
                         <div style={{ padding: '4px 12px', borderRadius: '6px', background: `${accent}0d`, border: `1px solid ${accent}28` }}>
                           <span style={{ fontSize: '11px', fontWeight: '700', color: accent }}>{b.is_paid_leave ? 'Paid Leave' : 'Unpaid Leave'}</span>
@@ -339,11 +339,11 @@ export default function LeaveDashboard() {
             <div style={{ background: '#fff', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '20px', padding: '26px', marginBottom: '32px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                 <div>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '4px' }}>Optional Holidays</div>
-                  <div style={{ fontSize: '12px', color: '#64748b' }}>Leave Year {ohData.leave_year} &nbsp;·&nbsp; {fmt(ohData.leave_year_start)} – {fmt(ohData.leave_year_end)}</div>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#001233', marginBottom: '4px' }}>Optional Holidays</div>
+                  <div style={{ fontSize: '12px', color: '#7D8597' }}>Leave Year {ohData.leave_year} &nbsp;·&nbsp; {fmt(ohData.leave_year_start)} – {fmt(ohData.leave_year_end)}</div>
                 </div>
                 {ohData.calendar_count === 0 ? (
-                  <div style={{ padding: '5px 12px', borderRadius: '20px', background: 'rgba(100,116,139,0.08)', color: '#64748b', fontSize: '12px', fontWeight: '700' }}>No holidays this year</div>
+                  <div style={{ padding: '5px 12px', borderRadius: '20px', background: 'rgba(100,116,139,0.08)', color: '#7D8597', fontSize: '12px', fontWeight: '700' }}>No holidays this year</div>
                 ) : ohData.remaining_days > 0 ? (
                   <div style={{ padding: '5px 12px', borderRadius: '20px', background: 'rgba(245,158,11,0.1)', color: '#d97706', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(245,158,11,0.25)' }}>{ohData.remaining_days} of {ohData.allocated_days} remaining</div>
                 ) : (
@@ -359,7 +359,7 @@ export default function LeaveDashboard() {
               )}
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px', marginBottom: '20px' }}>
-                {[['Limit', ohData.allocated_days, '#C2071A'], ['Availed', ohData.used_days, '#d97706'], ['Remaining', ohData.remaining_days, '#059669']].map(([lbl, val, col]) => (
+                {[['Limit', ohData.allocated_days, '#0466C8'], ['Availed', ohData.used_days, '#d97706'], ['Remaining', ohData.remaining_days, '#059669']].map(([lbl, val, col]) => (
                   <div key={lbl} style={{ background: '#f8fafc', borderRadius: '12px', padding: '14px', textAlign: 'center', border: `1px solid ${col}22` }}>
                     <div style={{ fontSize: '26px', fontWeight: '800', color: col, lineHeight: 1, marginBottom: '4px' }}>{val}</div>
                     <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{lbl}</div>
@@ -369,17 +369,17 @@ export default function LeaveDashboard() {
 
               {ohData.allocated_days > 0 && (
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '12px', color: '#64748b' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '12px', color: '#7D8597' }}>
                     <span>Utilization ({ohData.used_days} of {ohData.allocated_days} availed)</span>
                     <span>{Math.round(ohUsedPct)}%</span>
                   </div>
-                  <div style={{ height: '8px', borderRadius: '6px', background: '#f1f5f9', overflow: 'hidden' }}>
+                  <div style={{ height: '8px', borderRadius: '6px', background: '#F1F4F8', overflow: 'hidden' }}>
                     <div style={{ height: '100%', borderRadius: '6px', width: `${Math.min(100, ohUsedPct)}%`, background: ohUsedPct >= 100 ? 'linear-gradient(90deg,#ef4444,#dc2626)' : 'linear-gradient(90deg,#f59e0b,#d97706)', transition: 'width 0.5s' }} />
                   </div>
                 </div>
               )}
 
-              <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
+              <div style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
                 Available Optional Holidays — choose up to {ohData.allocated_days}
               </div>
               {(!ohData.available_optional_holidays || ohData.available_optional_holidays.length === 0) ? (
@@ -392,7 +392,7 @@ export default function LeaveDashboard() {
                     const isToggling  = togglingId === h.holiday_id
                     return (
                       <div key={h.holiday_id}
-                        style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '10px', cursor: (isToggling || isDisabled) ? 'not-allowed' : 'pointer', border: `1px solid ${h.is_availed ? 'rgba(245,158,11,0.3)' : '#e2e8f0'}`, background: h.is_availed ? 'rgba(245,158,11,0.06)' : '#f8fafc', opacity: isDisabled ? 0.4 : 1, transition: 'all 0.15s' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '10px', cursor: (isToggling || isDisabled) ? 'not-allowed' : 'pointer', border: `1px solid ${h.is_availed ? 'rgba(245,158,11,0.3)' : '#E3E7EE'}`, background: h.is_availed ? 'rgba(245,158,11,0.06)' : '#f8fafc', opacity: isDisabled ? 0.4 : 1, transition: 'all 0.15s' }}
                         onClick={() => { if (!isDisabled && !isToggling) toggleOH(h.holiday_id) }}
                         title={isDisabled ? 'Quota exhausted — un-avail another first' : h.is_availed ? 'Click to un-avail' : `Click to avail (${ohData.remaining_days} slot${ohData.remaining_days !== 1 ? 's' : ''} remaining)`}
                       >
@@ -400,8 +400,8 @@ export default function LeaveDashboard() {
                           {isToggling ? '…' : h.is_availed ? <FiCheck size={12} color="#ffffff" /> : ''}
                         </div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{h.holiday_name}</div>
-                          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{fmt(h.holiday_date)}</div>
+                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#001233' }}>{h.holiday_name}</div>
+                          <div style={{ fontSize: '11px', color: '#7D8597', marginTop: '2px' }}>{fmt(h.holiday_date)}</div>
                           {h.description && <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{h.description}</div>}
                         </div>
                         <div style={{ marginLeft: 'auto', padding: '2px 8px', borderRadius: '20px', fontSize: '11px', fontWeight: '600', background: h.is_availed ? 'rgba(245,158,11,0.1)' : 'transparent', color: h.is_availed ? '#d97706' : '#94a3b8', border: `1px solid ${h.is_availed ? 'rgba(245,158,11,0.25)' : 'transparent'}` }}>
@@ -440,7 +440,7 @@ export default function LeaveDashboard() {
                 <input type="date" value={fDateTo} onChange={e => setFDateTo(e.target.value)} style={{ ...s.filterInput, colorScheme: 'light' }} title="To date" />
                 {(fStatus !== 'ALL' || fLeaveType !== 'ALL' || fDateFrom || fDateTo) && (
                   <button onClick={() => { setFStatus('ALL'); setFLeaveType('ALL'); setFDateFrom(''); setFDateTo('') }}
-                    style={{ padding: '6px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#64748b', cursor: 'pointer' }}>
+                    style={{ padding: '6px 12px', border: '1px solid #E3E7EE', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#7D8597', cursor: 'pointer' }}>
                     Clear
                   </button>
                 )}
@@ -456,7 +456,7 @@ export default function LeaveDashboard() {
                 </select>
                 {pFStatus !== 'ALL' && (
                   <button onClick={() => setPFStatus('ALL')}
-                    style={{ padding: '6px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#64748b', cursor: 'pointer' }}>
+                    style={{ padding: '6px 12px', border: '1px solid #E3E7EE', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#7D8597', cursor: 'pointer' }}>
                     Clear
                   </button>
                 )}
@@ -489,16 +489,16 @@ export default function LeaveDashboard() {
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
                           <td style={s.td}>
-                            <div style={{ fontWeight: '600', color: '#0f172a' }}>{r.leave_type_name}</div>
-                            {r.leave_reason && <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{r.leave_reason}</div>}
+                            <div style={{ fontWeight: '600', color: '#001233' }}>{r.leave_type_name}</div>
+                            {r.leave_reason && <div style={{ fontSize: '11px', color: '#7D8597', marginTop: '2px' }}>{r.leave_reason}</div>}
                           </td>
                           <td style={s.td}>
                             <div>{fmt(r.start_date)}</div>
                             {r.start_date !== r.end_date && <div style={{ color: '#94a3b8', fontSize: '11px' }}>→ {fmt(r.end_date)}</div>}
                           </td>
-                          <td style={{ ...s.td, fontWeight: '700', color: '#0f172a' }}>{parseFloat(r.total_leave_days)}</td>
+                          <td style={{ ...s.td, fontWeight: '700', color: '#001233' }}>{parseFloat(r.total_leave_days)}</td>
                           <td style={s.td}>
-                            <span style={{ fontSize: '11px', color: '#C2071A', fontWeight: '600' }}>
+                            <span style={{ fontSize: '11px', color: '#0466C8', fontWeight: '600' }}>
                               {r.session_type === 'FULL_DAY' ? 'Full Day' : r.session_type === 'FIRST_HALF' ? 'First Half' : r.session_type === 'SECOND_HALF' ? 'Second Half' : r.session_type}
                             </span>
                           </td>
@@ -539,11 +539,11 @@ export default function LeaveDashboard() {
                             onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                           >
-                            <td style={{ ...s.td, fontWeight: '600', color: '#0f172a' }}>{fmt(r.permission_date)}</td>
+                            <td style={{ ...s.td, fontWeight: '600', color: '#001233' }}>{fmt(r.permission_date)}</td>
                             <td style={s.td}>{fmtTime(r.start_time)}</td>
                             <td style={s.td}>{fmtTime(r.end_time)}</td>
-                            <td style={{ ...s.td, fontWeight: '700', color: '#0f172a' }}>{r.duration_hours ? `${r.duration_hours}h` : '-'}</td>
-                            <td style={{ ...s.td, color: '#64748b', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.reason || '-'}</td>
+                            <td style={{ ...s.td, fontWeight: '700', color: '#001233' }}>{r.duration_hours ? `${r.duration_hours}h` : '-'}</td>
+                            <td style={{ ...s.td, color: '#7D8597', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.reason || '-'}</td>
                             <td style={s.td}><span style={s.badge(st)}>{st}</span></td>
                             <td style={s.td}>
                               {st === 'PENDING' && (

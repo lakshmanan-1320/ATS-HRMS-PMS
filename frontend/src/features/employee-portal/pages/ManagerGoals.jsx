@@ -11,8 +11,8 @@ api.interceptors.request.use(cfg => {
 })
 
 const STATUS_META = {
-  draft:       { bg: 'rgba(100,116,139,0.1)', color: '#64748b', label: 'Draft' },
-  active:      { bg: 'rgba(99,102,241,0.1)',  color: '#6366f1', label: 'Active' },
+  draft:       { bg: 'rgba(100,116,139,0.1)', color: '#7D8597', label: 'Draft' },
+  active:      { bg: 'rgba(4, 102, 200,0.1)',  color: '#0466C8', label: 'Active' },
   in_progress: { bg: 'rgba(14,165,233,0.1)',  color: '#0284c7', label: 'In Progress' },
   submitted:   { bg: 'rgba(245,158,11,0.1)',  color: '#d97706', label: 'Submitted' },
   approved:    { bg: 'rgba(16,185,129,0.1)',  color: '#059669', label: 'Approved' },
@@ -21,14 +21,14 @@ const STATUS_META = {
 }
 
 const ACTION_META = {
-  created:                       { label: 'Goal Created',                  color: '#6366f1' },
+  created:                       { label: 'Goal Created',                  color: '#0466C8' },
   sub_goal_added:                { label: 'Sub-Goal Added',                color: '#8b5cf6' },
   submitted_for_approval:        { label: 'Submitted for Approval',        color: '#d97706' },
   approved:                      { label: 'Approved by Manager',           color: '#059669' },
   rejected:                      { label: 'Rejected by Manager',           color: '#ef4444' },
   activated:                     { label: 'Goal Activated',                color: '#22c55e' },
   completion_requested:          { label: 'Completion Requested',          color: '#0284c7' },
-  completion_withdrawn:          { label: 'Completion Request Withdrawn',  color: '#64748b' },
+  completion_withdrawn:          { label: 'Completion Request Withdrawn',  color: '#7D8597' },
   completion_approved:           { label: 'Completion Approved',           color: '#10b981' },
   completion_rejected:           { label: 'Completion Rejected',           color: '#ef4444' },
   sub_goal_completion_requested: { label: 'Sub-Goal Completion Requested', color: '#0284c7' },
@@ -46,15 +46,15 @@ const STATUS_BORDER = {
   submitted:   '#d97706',
   approved:    '#10b981',
   rejected:    '#ef4444',
-  in_progress: '#6366f1',
+  in_progress: '#0466C8',
   completed:   '#10b981',
   draft:       '#94a3b8',
 }
 
 const inputSt = {
   boxSizing: 'border-box', padding: '8px 12px',
-  background: '#ffffff', border: '1px solid #e2e8f0',
-  borderRadius: '8px', color: '#1e293b', fontSize: '13px', fontFamily: 'inherit',
+  background: '#ffffff', border: '1px solid #E3E7EE',
+  borderRadius: '8px', color: '#001233', fontSize: '13px', fontFamily: 'inherit',
   outline: 'none', colorScheme: 'light',
 }
 
@@ -76,7 +76,7 @@ function initials(name) {
 }
 
 function Avatar({ name, size = 36 }) {
-  const colors = ['#6366f1', '#8b5cf6', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444']
+  const colors = ['#0466C8', '#8b5cf6', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444']
   const idx = name ? name.charCodeAt(0) % colors.length : 0
   return (
     <div style={{
@@ -126,16 +126,16 @@ function RejectModal({ title, onConfirm, onClose }) {
   const [reason, setReason] = useState('')
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.12)' }}>
-        <div style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '4px' }}>{title || 'Reject'}</div>
-        <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'block', marginBottom: '6px', marginTop: '14px' }}>Reason for rejection</label>
+      <div style={{ background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '28px', width: '100%', maxWidth: '420px', boxShadow: '0 10px 30px rgba(0,0,0,0.12)' }}>
+        <div style={{ fontSize: '15px', fontWeight: '700', color: '#001233', marginBottom: '4px' }}>{title || 'Reject'}</div>
+        <label style={{ fontSize: '12px', fontWeight: '600', color: '#7D8597', display: 'block', marginBottom: '6px', marginTop: '14px' }}>Reason for rejection</label>
         <textarea
           rows={4} value={reason} onChange={e => setReason(e.target.value)} autoFocus
           placeholder="Provide feedback so the employee can improve and resubmit..."
           style={{ ...inputSt, width: '100%', resize: 'vertical' }}
         />
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
-          <button onClick={onClose} style={{ padding: '8px 18px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', color: '#64748b', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit' }}>Cancel</button>
+          <button onClick={onClose} style={{ padding: '8px 18px', borderRadius: '8px', border: '1px solid #E3E7EE', background: '#f8fafc', color: '#7D8597', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit' }}>Cancel</button>
           <button onClick={() => onConfirm(reason)} style={{ padding: '8px 18px', borderRadius: '8px', border: 'none', background: '#ef4444', color: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: '600', fontFamily: 'inherit' }}>Reject</button>
         </div>
       </div>
@@ -161,12 +161,12 @@ function GoalTimeline({ goalId }) {
   if (!history.length) return <div style={{ padding: '12px 0', textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>No activity recorded yet.</div>
 
   return (
-    <div style={{ marginTop: '12px', padding: '14px 16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e8eaf0' }}>
+    <div style={{ marginTop: '12px', padding: '14px 16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #E3E7EE' }}>
       <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Activity Timeline</div>
       <div style={{ position: 'relative', paddingLeft: '20px' }}>
-        <div style={{ position: 'absolute', left: '5px', top: '4px', bottom: '4px', width: '2px', background: '#e8eaf0', borderRadius: '1px' }} />
+        <div style={{ position: 'absolute', left: '5px', top: '4px', bottom: '4px', width: '2px', background: '#E3E7EE', borderRadius: '1px' }} />
         {history.map(entry => {
-          const meta = ACTION_META[entry.action] || { label: entry.action, color: '#64748b' }
+          const meta = ACTION_META[entry.action] || { label: entry.action, color: '#7D8597' }
           const isSub = String(entry.goal_id) !== String(goalId)
           return (
             <div key={entry.id} style={{ position: 'relative', marginBottom: '12px' }}>
@@ -174,11 +174,11 @@ function GoalTimeline({ goalId }) {
               <div style={{ fontSize: '12px', fontWeight: '600', color: meta.color, marginBottom: '2px' }}>{meta.label}</div>
               {isSub && entry.goal_title && <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '2px' }}>↳ {entry.goal_title}</div>}
               <div style={{ fontSize: '11px', color: '#94a3b8' }}>
-                {entry.actor_name && <span style={{ color: '#64748b', fontWeight: '500' }}>{entry.actor_name}</span>}
+                {entry.actor_name && <span style={{ color: '#7D8597', fontWeight: '500' }}>{entry.actor_name}</span>}
                 <span style={{ marginLeft: entry.actor_name ? '8px' : 0 }}>{fmtDateTime(entry.created_at)}</span>
               </div>
               {entry.note && (
-                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', padding: '6px 10px', background: '#ffffff', borderRadius: '6px', lineHeight: '1.5', borderLeft: `2px solid ${meta.color}40`, border: '1px solid #e8eaf0' }}>
+                <div style={{ fontSize: '11px', color: '#7D8597', marginTop: '4px', padding: '6px 10px', background: '#ffffff', borderRadius: '6px', lineHeight: '1.5', borderLeft: `2px solid ${meta.color}40`, border: '1px solid #E3E7EE' }}>
                   {entry.note}
                 </div>
               )}
@@ -194,7 +194,7 @@ function StatCard({ label, value, color, icon }) {
   return (
     <div style={{
       flex: 1, minWidth: '120px',
-      background: '#ffffff', border: '1px solid #e8eaf0',
+      background: '#ffffff', border: '1px solid #E3E7EE',
       borderRadius: '12px', padding: '16px 20px',
       borderTop: `3px solid ${color}`,
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
@@ -225,9 +225,9 @@ function Pagination({ page, limit, total, onPageChange }) {
       onClick={onClick} disabled={disabled}
       style={{
         minWidth: '32px', height: '32px', padding: '0 6px', borderRadius: '8px',
-        border: `1px solid ${active ? '#6366f1' : '#e2e8f0'}`,
-        background: active ? '#6366f1' : disabled ? '#f8fafc' : '#ffffff',
-        color: active ? '#ffffff' : disabled ? '#cbd5e1' : '#475569',
+        border: `1px solid ${active ? '#0466C8' : '#E3E7EE'}`,
+        background: active ? '#0466C8' : disabled ? '#f8fafc' : '#ffffff',
+        color: active ? '#ffffff' : disabled ? '#cbd5e1' : '#33415C',
         cursor: disabled ? 'default' : 'pointer',
         fontSize: '13px', fontWeight: '600', fontFamily: 'inherit',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -237,7 +237,7 @@ function Pagination({ page, limit, total, onPageChange }) {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '20px', flexWrap: 'wrap', gap: '10px' }}>
-      <div style={{ fontSize: '13px', color: '#64748b' }}>
+      <div style={{ fontSize: '13px', color: '#7D8597' }}>
         Showing <strong>{Math.min((page - 1) * limit + 1, total)}</strong>–<strong>{Math.min(page * limit, total)}</strong> of <strong>{total}</strong>
       </div>
       <div style={{ display: 'flex', gap: '4px', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -418,9 +418,9 @@ export default function ManagerGoals() {
   const tabStyle = (key) => ({
     padding: '9px 22px', borderRadius: '8px', border: '1.5px solid',
     cursor: 'pointer', fontSize: '13px', fontWeight: '700', fontFamily: 'inherit',
-    background: activeTab === key ? '#6366f1' : '#ffffff',
-    color: activeTab === key ? '#fff' : '#64748b',
-    borderColor: activeTab === key ? '#6366f1' : '#e2e8f0',
+    background: activeTab === key ? '#0466C8' : '#ffffff',
+    color: activeTab === key ? '#fff' : '#7D8597',
+    borderColor: activeTab === key ? '#0466C8' : '#E3E7EE',
     transition: 'all 0.15s',
   })
 
@@ -442,7 +442,7 @@ export default function ManagerGoals() {
   ]
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
       <EmployeeSidebar active="manager-goals" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Team Goals" />
@@ -450,8 +450,8 @@ export default function ManagerGoals() {
 
           {/* Page Header */}
           <div style={{ marginBottom: '24px' }}>
-            <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>Team Goals</h1>
-            <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
+            <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#001233' }}>Team Goals</h1>
+            <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#7D8597' }}>
               Review team submissions and approve completions
             </p>
           </div>
@@ -462,7 +462,7 @@ export default function ManagerGoals() {
               <StatCard label="Pending Approvals" value={gCounts.submitted || 0} color="#d97706" />
               <StatCard label="Approved Goals"    value={gCounts.approved || 0} color="#10b981" />
               <StatCard label="Rejected Goals"    value={gCounts.rejected || 0} color="#ef4444" />
-              <StatCard label="In Progress"       value={gCounts.in_progress || 0} color="#6366f1" />
+              <StatCard label="In Progress"       value={gCounts.in_progress || 0} color="#0466C8" />
             </> : <>
               <StatCard label="Pending Completions" value={cCounts.pending || 0}  color="#d97706" />
               <StatCard label="Approved"            value={cCounts.approved || 0} color="#10b981" />
@@ -502,13 +502,13 @@ export default function ManagerGoals() {
               />
 
               {goalLoading ? (
-                <div style={{ background: '#fff', borderRadius: '12px', padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', border: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', borderRadius: '12px', padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', border: '1px solid #E3E7EE' }}>
                   Loading...
                 </div>
               ) : goalData.goals.length === 0 ? (
-                <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '56px 48px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                <div style={{ background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '56px 48px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                   <div style={{ fontSize: '36px', marginBottom: '12px' }}>📋</div>
-                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#475569', marginBottom: '4px' }}>No goals found</div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#33415C', marginBottom: '4px' }}>No goals found</div>
                   <div style={{ fontSize: '13px', color: '#94a3b8' }}>
                     {goalFilters.status !== 'all' || goalFilters.search || goalFilters.employeeId
                       ? 'Try adjusting your filters'
@@ -518,7 +518,7 @@ export default function ManagerGoals() {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {goalData.goals.map(goal => {
-                    const borderColor = STATUS_BORDER[goal.status] || '#e2e8f0'
+                    const borderColor = STATUS_BORDER[goal.status] || '#E3E7EE'
                     const isPending = goal.status === 'submitted'
                     const isApproved = goal.status === 'approved'
                     const isRejected = goal.status === 'rejected'
@@ -527,7 +527,7 @@ export default function ManagerGoals() {
                     return (
                       <div key={goal.id} style={{
                         background: '#ffffff',
-                        border: '1px solid #e8eaf0',
+                        border: '1px solid #E3E7EE',
                         borderLeft: `4px solid ${borderColor}`,
                         borderRadius: '12px',
                         padding: '20px 24px',
@@ -538,12 +538,12 @@ export default function ManagerGoals() {
                           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flex: 1 }}>
                             <Avatar name={goal.created_by_employee_name} />
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>{goal.title}</div>
-                              <div style={{ fontSize: '12px', color: '#6366f1', fontWeight: '600' }}>
+                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#001233', marginBottom: '2px' }}>{goal.title}</div>
+                              <div style={{ fontSize: '12px', color: '#0466C8', fontWeight: '600' }}>
                                 {goal.created_by_employee_name || '—'}
                               </div>
                               {goal.description && (
-                                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px', lineHeight: '1.5' }}>{goal.description}</div>
+                                <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '4px', lineHeight: '1.5' }}>{goal.description}</div>
                               )}
                             </div>
                           </div>
@@ -556,13 +556,13 @@ export default function ManagerGoals() {
                         {/* Meta row */}
                         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '14px', paddingLeft: '48px' }}>
                           {goal.target_metric && (
-                            <span style={{ fontSize: '12px', color: '#64748b' }}>🎯 <strong>Target:</strong> {goal.target_metric}</span>
+                            <span style={{ fontSize: '12px', color: '#7D8597' }}>🎯 <strong>Target:</strong> {goal.target_metric}</span>
                           )}
                           {goal.submitted_at && (
-                            <span style={{ fontSize: '12px', color: '#64748b' }}>📤 <strong>Submitted:</strong> {fmtDate(goal.submitted_at)}</span>
+                            <span style={{ fontSize: '12px', color: '#7D8597' }}>📤 <strong>Submitted:</strong> {fmtDate(goal.submitted_at)}</span>
                           )}
                           {goal.due_date && (
-                            <span style={{ fontSize: '12px', color: '#64748b' }}>📅 <strong>Due:</strong> {fmtDate(goal.due_date)}</span>
+                            <span style={{ fontSize: '12px', color: '#7D8597' }}>📅 <strong>Due:</strong> {fmtDate(goal.due_date)}</span>
                           )}
                         </div>
 
@@ -571,7 +571,7 @@ export default function ManagerGoals() {
                           <div style={{ marginLeft: '48px', marginBottom: '14px', padding: '10px 14px', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#059669', fontWeight: '600' }}>
                               <span>✓ Approved</span>
-                              <span style={{ fontWeight: '400', color: '#64748b' }}>
+                              <span style={{ fontWeight: '400', color: '#7D8597' }}>
                                 on {fmtDateTime(goal.approved_at)}
                                 {goal.approved_by_name && ` · by ${goal.approved_by_name}`}
                               </span>
@@ -586,7 +586,7 @@ export default function ManagerGoals() {
                               {goal.rejected_by_name && ` · by ${goal.rejected_by_name}`}
                             </div>
                             {goal.rejection_reason && (
-                              <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>
+                              <div style={{ fontSize: '12px', color: '#7D8597', lineHeight: '1.5' }}>
                                 <strong>Reason:</strong> {goal.rejection_reason}
                               </div>
                             )}
@@ -613,7 +613,7 @@ export default function ManagerGoals() {
                           )}
                           <button
                             onClick={() => setExpandedHistory(histOpen ? null : `goal-${goal.id}`)}
-                            style={{ padding: '7px 14px', borderRadius: '7px', border: '1px solid #e2e8f0', background: histOpen ? '#f1f5f9' : '#f8fafc', color: histOpen ? '#6366f1' : '#64748b', cursor: 'pointer', fontSize: '11px', fontWeight: '600', fontFamily: 'inherit', marginLeft: isPending ? '0' : '0' }}
+                            style={{ padding: '7px 14px', borderRadius: '7px', border: '1px solid #E3E7EE', background: histOpen ? '#F1F4F8' : '#f8fafc', color: histOpen ? '#0466C8' : '#7D8597', cursor: 'pointer', fontSize: '11px', fontWeight: '600', fontFamily: 'inherit', marginLeft: isPending ? '0' : '0' }}
                           >
                             {histOpen ? '▲ Hide History' : '▼ View History'}
                           </button>
@@ -647,13 +647,13 @@ export default function ManagerGoals() {
               />
 
               {completionLoading ? (
-                <div style={{ background: '#fff', borderRadius: '12px', padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', border: '1px solid #e2e8f0' }}>
+                <div style={{ background: '#fff', borderRadius: '12px', padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '14px', border: '1px solid #E3E7EE' }}>
                   Loading...
                 </div>
               ) : completionData.requests.length === 0 ? (
-                <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '56px 48px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                <div style={{ background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '56px 48px', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                   <div style={{ fontSize: '36px', marginBottom: '12px' }}>✅</div>
-                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#475569', marginBottom: '4px' }}>No completion requests</div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#33415C', marginBottom: '4px' }}>No completion requests</div>
                   <div style={{ fontSize: '13px', color: '#94a3b8' }}>
                     {completionFilters.status !== 'all' || completionFilters.search || completionFilters.employeeId
                       ? 'Try adjusting your filters'
@@ -672,7 +672,7 @@ export default function ManagerGoals() {
                     return (
                       <div key={goal.id} style={{
                         background: '#ffffff',
-                        border: '1px solid #e8eaf0',
+                        border: '1px solid #E3E7EE',
                         borderLeft: `4px solid ${borderColor}`,
                         borderRadius: '12px',
                         padding: '20px 24px',
@@ -683,8 +683,8 @@ export default function ManagerGoals() {
                           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flex: 1 }}>
                             <Avatar name={goal.assigned_to_employee_name} />
                             <div style={{ flex: 1 }}>
-                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>{goal.title}</div>
-                              <div style={{ fontSize: '12px', color: '#6366f1', fontWeight: '600' }}>
+                              <div style={{ fontSize: '14px', fontWeight: '700', color: '#001233', marginBottom: '2px' }}>{goal.title}</div>
+                              <div style={{ fontSize: '12px', color: '#0466C8', fontWeight: '600' }}>
                                 {goal.assigned_to_employee_name || '—'}
                               </div>
                               {goal.parent_goal_title && (
@@ -697,7 +697,7 @@ export default function ManagerGoals() {
                           <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
                             <PriorityBadge priority={goal.priority} />
                             {goal.weight && (
-                              <span style={{ fontSize: '11px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: 'rgba(99,102,241,0.08)', color: '#6366f1' }}>
+                              <span style={{ fontSize: '11px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: 'rgba(4, 102, 200,0.08)', color: '#0466C8' }}>
                                 ⚖️ {goal.weight}%
                               </span>
                             )}
@@ -709,23 +709,23 @@ export default function ManagerGoals() {
 
                         {/* Meta */}
                         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '12px', paddingLeft: '48px' }}>
-                          {goal.target_metric && <span style={{ fontSize: '12px', color: '#64748b' }}>🎯 <strong>Target:</strong> {goal.target_metric}</span>}
-                          {goal.completion_submitted_at && <span style={{ fontSize: '12px', color: '#64748b' }}>📤 <strong>Submitted:</strong> {fmtDate(goal.completion_submitted_at)}</span>}
-                          {goal.due_date && <span style={{ fontSize: '12px', color: '#64748b' }}>📅 <strong>Due:</strong> {fmtDate(goal.due_date)}</span>}
+                          {goal.target_metric && <span style={{ fontSize: '12px', color: '#7D8597' }}>🎯 <strong>Target:</strong> {goal.target_metric}</span>}
+                          {goal.completion_submitted_at && <span style={{ fontSize: '12px', color: '#7D8597' }}>📤 <strong>Submitted:</strong> {fmtDate(goal.completion_submitted_at)}</span>}
+                          {goal.due_date && <span style={{ fontSize: '12px', color: '#7D8597' }}>📅 <strong>Due:</strong> {fmtDate(goal.due_date)}</span>}
                         </div>
 
                         {/* Employee Note */}
                         {goal.completion_note && (
-                          <div style={{ marginLeft: '48px', marginBottom: '12px', padding: '10px 14px', background: 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.12)', borderRadius: '8px' }}>
+                          <div style={{ marginLeft: '48px', marginBottom: '12px', padding: '10px 14px', background: 'rgba(4, 102, 200,0.04)', border: '1px solid rgba(4, 102, 200,0.12)', borderRadius: '8px' }}>
                             <div style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>Employee Note / Evidence</div>
-                            <div style={{ fontSize: '13px', color: '#1e293b', lineHeight: '1.6' }}>{goal.completion_note}</div>
+                            <div style={{ fontSize: '13px', color: '#001233', lineHeight: '1.6' }}>{goal.completion_note}</div>
                           </div>
                         )}
 
                         {/* Weight impact info */}
                         {isPending && goal.weight && (
-                          <div style={{ marginLeft: '48px', marginBottom: '12px', fontSize: '12px', color: '#64748b', background: '#f8fafc', padding: '8px 12px', borderRadius: '6px', border: '1px solid #f1f5f9' }}>
-                            Approving this will add <strong style={{ color: '#6366f1' }}>{goal.weight}%</strong> to the parent goal's progress.
+                          <div style={{ marginLeft: '48px', marginBottom: '12px', fontSize: '12px', color: '#7D8597', background: '#f8fafc', padding: '8px 12px', borderRadius: '6px', border: '1px solid #F1F4F8' }}>
+                            Approving this will add <strong style={{ color: '#0466C8' }}>{goal.weight}%</strong> to the parent goal's progress.
                           </div>
                         )}
 
@@ -734,7 +734,7 @@ export default function ManagerGoals() {
                           <div style={{ marginLeft: '48px', marginBottom: '12px', padding: '10px 14px', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px' }}>
                             <div style={{ fontSize: '12px', color: '#059669', fontWeight: '600' }}>
                               ✓ Completion Approved
-                              <span style={{ fontWeight: '400', color: '#64748b', marginLeft: '8px' }}>
+                              <span style={{ fontWeight: '400', color: '#7D8597', marginLeft: '8px' }}>
                                 on {fmtDateTime(goal.completion_approved_at)}
                                 {goal.completion_approved_by_name && ` · by ${goal.completion_approved_by_name}`}
                               </span>
@@ -748,7 +748,7 @@ export default function ManagerGoals() {
                               ✗ Completion Rejected on {fmtDateTime(goal.completion_rejected_at)}
                             </div>
                             {goal.completion_rejection_reason && (
-                              <div style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>
+                              <div style={{ fontSize: '12px', color: '#7D8597', lineHeight: '1.5' }}>
                                 <strong>Reason:</strong> {goal.completion_rejection_reason}
                               </div>
                             )}
@@ -775,7 +775,7 @@ export default function ManagerGoals() {
                           )}
                           <button
                             onClick={() => setExpandedHistory(histOpen ? null : `comp-${goal.id}`)}
-                            style={{ padding: '7px 14px', borderRadius: '7px', border: '1px solid #e2e8f0', background: histOpen ? '#f1f5f9' : '#f8fafc', color: histOpen ? '#6366f1' : '#64748b', cursor: 'pointer', fontSize: '11px', fontWeight: '600', fontFamily: 'inherit' }}
+                            style={{ padding: '7px 14px', borderRadius: '7px', border: '1px solid #E3E7EE', background: histOpen ? '#F1F4F8' : '#f8fafc', color: histOpen ? '#0466C8' : '#7D8597', cursor: 'pointer', fontSize: '11px', fontWeight: '600', fontFamily: 'inherit' }}
                           >
                             {histOpen ? '▲ Hide History' : '▼ View History'}
                           </button>

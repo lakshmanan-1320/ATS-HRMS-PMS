@@ -95,7 +95,9 @@ async function getRequestById(requestId) {
     `SELECT r.*,
             e.first_name, e.last_name, e.employee_code,
             d.name as department_name,
-            e.manager_employee_id
+            e.manager_employee_id,
+            e.organization_id,
+            e.designation
      FROM attendance_regularization_requests r
      JOIN employees e ON r.employee_id = e.employee_id
      LEFT JOIN departments d ON e.department_id = d.department_id
@@ -135,6 +137,24 @@ async function getPendingRequestsForManager(managerEmployeeId) {
      WHERE e.manager_employee_id = $1 AND r.approval_status = 'PENDING'
      ORDER BY r.created_at ASC`,
     [managerEmployeeId]
+  );
+  return res.rows;
+}
+
+/**
+ * Lists pending requests for every employee of an organization (client-admin view).
+ */
+async function getPendingRequestsForOrganization(organizationId) {
+  const res = await query(
+    `SELECT r.*,
+            e.first_name, e.last_name, e.employee_code, e.designation,
+            d.name as department_name
+     FROM attendance_regularization_requests r
+     JOIN employees e ON r.employee_id = e.employee_id
+     LEFT JOIN departments d ON e.department_id = d.department_id
+     WHERE e.organization_id = $1 AND r.approval_status = 'PENDING'
+     ORDER BY r.created_at ASC`,
+    [organizationId]
   );
   return res.rows;
 }
@@ -210,6 +230,7 @@ module.exports = {
   getRequestById,
   getEmployeeRequests,
   getPendingRequestsForManager,
+  getPendingRequestsForOrganization,
   updateRequestStatus,
   getRequestCountInPeriod,
   hasPendingRequestForDate,

@@ -347,3 +347,262 @@ input[type=number] {
   font-size: 13px !important;
   width: 100%;
 }
+
+/* -------------------------------------------------------------
+   PMS employee dashboard (Figma "Employee" frame 1130:1349)
+   Layout only — colours/typography live in employee-portal/theme.js (PMS).
+------------------------------------------------------------- */
+:root {
+  --pms-navy: #001233;
+  --pms-blue: #0466C8;
+  --pms-steel: #407BA7;
+  --pms-muted: #7D8597;
+  --pms-border: #E3E7EE;
+  --pms-surface-alt: #F1F4F8;
+  --pms-ice: #EEF8FF;
+}
+
+.pms-page { background: #ffffff; }
+.pms-main { padding: 0 40px 40px; min-width: 0; }
+.pms-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 25px;
+}
+.pms-span-2 { grid-column: span 2; }
+.pms-span-3 { grid-column: span 3; }
+.pms-workday-body {
+  display: grid;
+  grid-template-columns: minmax(0, 430fr) minmax(0, 818fr);
+  gap: 24px;
+}
+.pms-att-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12.5px;
+}
+.pms-att-top {
+  display: grid;
+  grid-template-columns: minmax(0, 265fr) minmax(0, 265fr) minmax(0, 240fr);
+  gap: 16px;
+  align-items: start;
+}
+.pms-scroll-x { overflow-x: auto; }
+.pms-tabs-scroll { overflow-x: auto; scrollbar-width: none; }
+.pms-tabs-scroll::-webkit-scrollbar { display: none; }
+.pms-hover-lift { transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease; }
+.pms-hover-lift:hover { transform: translateY(-1px); }
+.pms-icon-btn { transition: background .15s ease, border-color .15s ease; }
+.pms-icon-btn:hover { background: #F1F4F8 !important; border-color: #C9DDF3 !important; }
+.pms-dark-btn:hover { background: rgba(255,255,255,0.2) !important; }
+.pms-focus:focus-visible { outline: 2px solid #52ACEF; outline-offset: 2px; }
+
+@media (max-width: 1365px) {
+  .pms-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pms-span-3 { grid-column: span 2; }
+  .pms-workday-body { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1023px) {
+  .pms-main { padding: 0 24px 32px; }
+  .pms-att-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pms-hide-md { display: none !important; }
+}
+@media (max-width: 767px) {
+  .pms-main { padding: 0 16px 24px; }
+  .pms-grid-4 { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .pms-span-2, .pms-span-3 { grid-column: auto; }
+  .pms-att-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pms-att-top { grid-template-columns: minmax(0, 1fr); }
+  .pms-hide-sm { display: none !important; }
+}
+aside.no-scrollbar input.pms-sidebar-search::placeholder { color: rgba(255,255,255,0.45) !important; font-size: 13.5px !important; font-weight: 500 !important; }
+.pms-topbar { padding: 24px 40px 0; }
+@media (max-width: 1023px) { .pms-topbar { padding: 20px 24px 0; } }
+@media (max-width: 767px)  { .pms-topbar { padding: 16px 16px 0; } }
+.pms-banner-text { padding-left: 290px; }
+@media (max-width: 767px) { .pms-banner-text { padding-left: 24px; } }
+.pms-span-full { grid-column: 1 / -1; }
+@media (max-width: 1365px) { .pms-help-card { grid-column: 1 / -1; } }
+/* Policy reader content (HTML from the policy editor) */
+.pms-policy-content h1, .pms-policy-content h2, .pms-policy-content h3, .pms-policy-content h4 {
+  font-family: 'Poppins', 'Inter', sans-serif; color: #001233; line-height: 1.4; margin: 18px 0 8px; border-radius: 6px;
+}
+.pms-policy-content h2 { font-size: 17px; }
+.pms-policy-content h3 { font-size: 15px; }
+.pms-policy-content p { margin: 0 0 10px; color: #33415C; }
+.pms-policy-content ul, .pms-policy-content ol { padding-left: 20px; margin: 0 0 10px; color: #33415C; }
+.pms-policy-content a { color: #0466C8; }
+.pms-show-sm { display: none; }
+@media (max-width: 767px) { .pms-show-sm { display: block !important; } }
+
+/* -------------------------------------------------------------
+   PMS look for the remaining employee-module pages.
+   Pages opt in with className="pms-page" on their outer layout div.
+   Only presentation is overridden here (no layout/behaviour changes).
+------------------------------------------------------------- */
+.pms-page {
+  background: #ffffff !important; color: #001233;
+  /* shared components read these variables for their accent colour */
+  --primary-color: #0466C8;
+  --card-active-bg: #EEF8FF;
+  --card-active-border: #C9DDF3;
+  --hero-card-gradient: linear-gradient(96deg, #EEF8FF 0%, #F5FAFF 50%, #E3EEFA 100%);
+  --navbar-active-gradient: linear-gradient(135deg, #0466C8 0%, #023E7D 100%);
+}
+
+/* Typography: Poppins for page content + page-level modals (sidebar keeps Inter) */
+.pms-page > :not(aside),
+.pms-page > :not(aside) *:not(svg):not(svg *):not(code):not(pre) {
+  font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Content gutter matches the dashboard (40px desktop) */
+.pms-page :is(main:not(.pms-main), .pms-content) { padding: 24px 40px 40px !important; background: #ffffff !important; }
+@media (max-width: 1023px) { .pms-page :is(main:not(.pms-main), .pms-content) { padding: 20px 24px 32px !important; } }
+@media (max-width: 767px)  { .pms-page :is(main:not(.pms-main), .pms-content) { padding: 16px 16px 24px !important; } }
+
+/* Headings */
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) h1 {
+  font-size: clamp(24px, 2.4vw, 32px) !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.5px;
+  color: #001233 !important;
+}
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) h2,
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) h3,
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) h4 { color: #001233 !important; font-weight: 700 !important; }
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) h1 + p,
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) p { color: #7D8597 !important; }
+
+/* Cards: flat white with the Figma hairline border and large radius */
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) div:is(
+  [style*="background: rgb(255, 255, 255)"], [style*="background-color: rgb(255, 255, 255)"],
+  [style*="background: white"], [style*="background-color: white"]
+):is(
+  [style*="border-radius: 14px"], [style*="border-radius: 16px"], [style*="border-radius: 18px"],
+  [style*="border-radius: 20px"], [style*="border-radius: 24px"]
+) {
+  border-radius: 20px !important;
+  border: 1px solid #E3E7EE !important;
+  box-shadow: none !important;
+}
+
+/* Tables */
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) table thead tr,
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) table thead th {
+  background: #F1F4F8 !important;
+  background-image: none !important;
+  color: #33415C !important;
+  border-color: #E3E7EE !important;
+}
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) table tbody td { border-color: #EEF1F5 !important; }
+
+/* Form fields */
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea) {
+  border-color: #E3E7EE !important;
+  color: #001233;
+}
+.pms-page :is(main:not(.pms-main), .pms-content, .pms-content-flush) :is(input, select, textarea):focus {
+  border-color: #0466C8 !important;
+  box-shadow: 0 0 0 3px rgba(4, 102, 200, 0.12) !important;
+  outline: none;
+}
+
+/* Shared performance modules (goal / KPI / feedback) embedded in the employee hub
+   still use an indigo accent in their own source; map it to PMS blue here only. */
+.pms-page [style*="background: rgb(99, 102, 241)"], .pms-page [style*="background-color: rgb(99, 102, 241)"] { background: #0466C8 !important; }
+.pms-page [style*="background: rgb(79, 70, 229)"], .pms-page [style*="background-color: rgb(79, 70, 229)"] { background: #0353A4 !important; }
+.pms-page [style^="color: rgb(99, 102, 241)"], .pms-page [style*="; color: rgb(99, 102, 241)"],
+.pms-page [style^="color: rgb(79, 70, 229)"], .pms-page [style*="; color: rgb(79, 70, 229)"] { color: #0466C8 !important; }
+.pms-page [style*="border-color: rgb(99, 102, 241)"], .pms-page [style*="solid rgb(99, 102, 241)"] { border-color: #0466C8 !important; }
+.pms-page [style*="linear-gradient"][style*="rgb(99, 102, 241)"],
+.pms-page [style*="linear-gradient"][style*="rgb(79, 70, 229)"] { background: linear-gradient(135deg, #0466C8 0%, #023E7D 100%) !important; }
+
+/* Shared modules embedded in employee pages that hard-code the old red accent */
+.pms-page [style^="color: rgb(194, 7, 26)"], .pms-page [style*="; color: rgb(194, 7, 26)"] { color: #0466C8 !important; }
+.pms-page [style*="background: rgb(194, 7, 26)"], .pms-page [style*="background-color: rgb(194, 7, 26)"] { background: #0466C8 !important; }
+.pms-page [style*="border-color: rgb(194, 7, 26)"], .pms-page [style*="solid rgb(194, 7, 26)"] { border-color: #0466C8 !important; }
+.pms-page [style*="linear-gradient"][style*="rgb(194, 7, 26)"], .pms-page [style*="linear-gradient"][style*="rgb(208, 16, 33)"] { background: linear-gradient(135deg, #0466C8 0%, #023E7D 100%) !important; }
+.pms-page [style*="background: rgba(194, 7, 26, 0.05)"], .pms-page [style*="background-color: rgba(194, 7, 26, 0.05)"] { background: rgba(4, 102, 200, 0.05) !important; }
+.pms-page [style*="background: rgba(194, 7, 26, 0.06)"], .pms-page [style*="background-color: rgba(194, 7, 26, 0.06)"] { background: rgba(4, 102, 200, 0.06) !important; }
+.pms-page [style*="background: rgba(194, 7, 26, 0.08)"], .pms-page [style*="background-color: rgba(194, 7, 26, 0.08)"] { background: rgba(4, 102, 200, 0.08) !important; }
+.pms-page [style*="background: rgba(194, 7, 26, 0.1)"], .pms-page [style*="background-color: rgba(194, 7, 26, 0.1)"] { background: rgba(4, 102, 200, 0.1) !important; }
+.pms-page [style*="background: rgba(194, 7, 26, 0.12)"], .pms-page [style*="background-color: rgba(194, 7, 26, 0.12)"] { background: rgba(4, 102, 200, 0.12) !important; }
+.pms-page [style*="background: rgba(194, 7, 26, 0.15)"], .pms-page [style*="background-color: rgba(194, 7, 26, 0.15)"] { background: rgba(4, 102, 200, 0.15) !important; }
+.pms-page [style*="solid rgba(194, 7, 26, 0.2)"] { border-color: rgba(4, 102, 200, 0.2) !important; }
+.pms-page [style*="solid rgba(194, 7, 26, 0.25)"] { border-color: rgba(4, 102, 200, 0.25) !important; }
+.pms-page [style*="solid rgba(194, 7, 26, 0.3)"] { border-color: rgba(4, 102, 200, 0.3) !important; }
+.pms-page svg[stroke="#C2071A"], .pms-page svg[color="#C2071A"] { color: #0466C8 !important; stroke: currentColor; }
+.pms-page [style*="linear-gradient(rgb(254, 236, 238)"] { background-image: linear-gradient(#EEF8FF, #EEF8FF) !important; }
+.pms-page svg[style*="stroke: rgb(194, 7, 26)"] { color: #0466C8 !important; stroke: #0466C8 !important; }
+/* Pages whose embedded modules bring their own 24px padding: add 16px so content lines up with the 40px top bar gutter */
+.pms-page .pms-content-flush { padding-left: 16px !important; padding-right: 16px !important; }
+@media (max-width: 1023px) { .pms-page .pms-content-flush { padding-left: 0 !important; padding-right: 0 !important; } }
+.pms-page [style*="box-shadow"][style*="rgba(194, 7, 26"] { box-shadow: 0 6px 16px rgba(4, 102, 200, 0.28) !important; }
+
+/* ---- Client-admin PMS dashboard ---- */
+html body.client-admin-theme div.pms-page[class][class] { background: #ffffff !important; }
+.pms-filter-bar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.pms-filter-bar > label { flex: 1 1 150px; }
+.pms-quick-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1365px) { .pms-quick-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 767px)  { .pms-quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+
+/* -------------------------------------------------------------
+   Client-admin pages in the PMS shell (opt-in via .pms-page).
+   Beats the legacy body.client-admin-theme overrides on these pages only.
+------------------------------------------------------------- */
+html body.client-admin-theme .pms-page main,
+html body.client-admin-theme .pms-page .pms-content { background: #ffffff !important; }
+
+/* Cards: flat, hairline PMS border, no heavy shadows */
+html body.client-admin-theme .pms-page main div[style*="border-radius"]:not([style*="linear-gradient"]):not([style*="position: fixed"]) {
+  border-color: #E3E7EE !important;
+  box-shadow: none !important;
+}
+html body.client-admin-theme .pms-page :is(main, .pms-content) div:is(
+  [style*="border-radius: 14px"], [style*="border-radius: 16px"], [style*="border-radius: 18px"],
+  [style*="border-radius: 20px"]
+):not([style*="linear-gradient"]):not([style*="position: fixed"]) {
+  border-radius: 20px !important;
+}
+html body.client-admin-theme .pms-page main div[style*="border-bottom"] { border-color: #EEF1F5 !important; }
+
+/* Tables */
+html body.client-admin-theme .pms-page :is(main, .pms-content) table thead tr,
+html body.client-admin-theme .pms-page :is(main, .pms-content) table thead th {
+  background: #F1F4F8 !important;
+  background-image: none !important;
+  color: #33415C !important;
+}
+
+/* Form controls */
+html body.client-admin-theme .pms-page :is(main, .pms-content, div[style*="position: fixed"]) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]), select, textarea) {
+  border-color: #E3E7EE !important;
+  border-radius: 12px !important;
+}
+html body.client-admin-theme .pms-page :is(main, .pms-content, div[style*="position: fixed"]) :is(input, select, textarea):focus {
+  border-color: #0466C8 !important;
+  box-shadow: 0 0 0 3px rgba(4, 102, 200, 0.12) !important;
+  outline: none !important;
+}
+
+/* Modals: navy-tinted backdrop, rounded PMS panel */
+html body.client-admin-theme .pms-page div[style*="position: fixed"][style*="inset: 0"] {
+  background: rgba(0, 18, 51, 0.5) !important;
+}
+html body.client-admin-theme .pms-page div[style*="position: fixed"][style*="inset: 0"] > div {
+  border-radius: 24px !important;
+  border-color: #E3E7EE !important;
+  box-shadow: 0 30px 60px rgba(0, 18, 51, 0.25) !important;
+}
+html body.client-admin-theme .pms-page div[style*="position: fixed"][style*="inset: 0"] > div :is(h1, h2, h3, h4) { color: #001233 !important; }
+
+/* PageHeader icon tile is circular; keep the legacy square-tile override from fighting it */
+html body.client-admin-theme .pms-page .pms-page-header div[style*="border-radius: 50%"] { border-radius: 50% !important; background: #EEF8FF !important; }
+
+/* Indigo focus ring used by the legacy fixed-overlay rules → PMS blue */
+html body.client-admin-theme .pms-page [style*="color: rgb(99, 102, 241)"] { color: #0466C8 !important; }
+html body.client-admin-theme .pms-page .pms-content-flush { background: #ffffff !important; }
+html body.client-admin-theme #root:has(.pms-page), html body.client-admin-theme:has(.pms-page) { background: #ffffff !important; }

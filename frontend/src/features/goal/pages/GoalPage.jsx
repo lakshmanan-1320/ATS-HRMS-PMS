@@ -20,7 +20,7 @@ import GoalSubmitDialog from '../components/GoalSubmitDialog'
 
 /* ─── Status Colors ─── */
 export const STATUS_META = {
-  DRAFT: { label: 'Draft', color: '#64748b', bg: '#f1f5f9', border: 'rgba(100,116,139,0.25)' },
+  DRAFT: { label: 'Draft', color: '#7D8597', bg: '#F1F4F8', border: 'rgba(100,116,139,0.25)' },
   PENDING_APPROVAL: { label: 'Pending Approval', color: '#ea580c', bg: '#fff7ed', border: 'rgba(234,88,12,0.25)' },
   CHANGES_REQUESTED: { label: 'Changes Requested', color: '#7c3aed', bg: '#f5f3ff', border: 'rgba(124,58,237,0.25)' },
   ACTIVE: { label: 'Active', color: '#2563eb', bg: '#eff6ff', border: 'rgba(37,99,235,0.25)' },
@@ -30,7 +30,7 @@ export const STATUS_META = {
 }
 
 export const PRIORITY_META = {
-  LOW: { label: 'Low', color: '#64748b', bg: '#f1f5f9' },
+  LOW: { label: 'Low', color: '#7D8597', bg: '#F1F4F8' },
   MEDIUM: { label: 'Medium', color: '#2563eb', bg: '#dbeafe' },
   HIGH: { label: 'High', color: '#ea580c', bg: '#ffedd5' },
   CRITICAL: { label: 'Critical', color: '#dc2626', bg: '#fee2e2' },
@@ -83,26 +83,26 @@ function Pagination({ page, totalPages, onPrev, onNext, onPage }) {
     pages.push(totalPages)
     return pages
   }
-  const btn = { borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s', border: '1px solid #e2e8f0' }
+  const btn = { borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s', border: '1px solid #E3E7EE' }
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 24 }}>
-      <button onClick={onPrev} disabled={page === 1} style={{ ...btn, padding: '8px 16px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#475569', cursor: page === 1 ? 'not-allowed' : 'pointer' }}>← Prev</button>
+      <button onClick={onPrev} disabled={page === 1} style={{ ...btn, padding: '8px 16px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#33415C', cursor: page === 1 ? 'not-allowed' : 'pointer' }}>← Prev</button>
       {getPages().map((p, i) =>
         p === '...' ? (
           <span key={`dots-${i}`} style={{ padding: '0 4px', color: '#94a3b8', fontSize: 13 }}>…</span>
         ) : (
           <button key={p} onClick={() => onPage(p)} style={{
             ...btn, width: 38, height: 38,
-            background: p === page ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : '#fff',
-            color: p === page ? '#fff' : '#475569',
-            border: p === page ? 'none' : '1px solid #e2e8f0',
-            boxShadow: p === page ? '0 2px 8px rgba(99,102,241,0.3)' : 'none',
+            background: p === page ? 'linear-gradient(135deg,#0466C8,#0353A4)' : '#fff',
+            color: p === page ? '#fff' : '#33415C',
+            border: p === page ? 'none' : '1px solid #E3E7EE',
+            boxShadow: p === page ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none',
             fontWeight: p === page ? 700 : 600,
           }}>{p}</button>
         )
       )}
-      <button onClick={onNext} disabled={page === totalPages} style={{ ...btn, padding: '8px 16px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#475569', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}>Next →</button>
+      <button onClick={onNext} disabled={page === totalPages} style={{ ...btn, padding: '8px 16px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#33415C', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}>Next →</button>
     </div>
   )
 }
@@ -316,13 +316,13 @@ export default function GoalPage({ isSubComponent = false }) {
                 Submit Goal Plan
               </button>
             )}
-            {canCreate && (
+            {canCreateGoal() && (
               <button
                 onClick={() => { setEditingGoal(null); setShowForm(true) }}
                 style={{
-                  padding: '9px 18px', background: 'var(--primary-color, #C2071A)', border: 'none', borderRadius: '10px',
+                  padding: '9px 18px', background: 'var(--primary-color, #0466C8)', border: 'none', borderRadius: '10px',
                   color: '#fff', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit',
-                  boxShadow: '0 4px 14px rgba(194,7,26,0.3)', transition: 'all 0.2s',
+                  boxShadow: '0 4px 14px rgba(4, 102, 200,0.3)', transition: 'all 0.2s',
                 }}
               >
                 + Create Goal
@@ -334,13 +334,13 @@ export default function GoalPage({ isSubComponent = false }) {
 
       {/* ─── Tab Switcher (For Managers & Admins) ─── */}
       {(role === 'client_admin' || isManager || role === 'manager' || role === 'hr') && (
-        <div style={{ display: 'flex', borderBottom: '2px solid #e2e8f0', marginBottom: 24, gap: 16 }}>
+        <div style={{ display: 'flex', borderBottom: '2px solid #E3E7EE', marginBottom: 24, gap: 16 }}>
           <button
             onClick={() => { setActiveTab('my'); store.setFilters({ is_my_goals: 'true' }) }}
             style={{
               padding: '12px 16px', background: 'none', border: 'none',
-              borderBottom: activeTab === 'my' ? '3px solid #6366f1' : '3px solid transparent',
-              color: activeTab === 'my' ? '#6366f1' : '#64748b', fontSize: 14, fontWeight: 700,
+              borderBottom: activeTab === 'my' ? '3px solid #0466C8' : '3px solid transparent',
+              color: activeTab === 'my' ? '#0466C8' : '#7D8597', fontSize: 14, fontWeight: 700,
               cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s'
             }}
           ><FiUser style={{ marginRight: 6, verticalAlign: 'middle' }} /> My Goals</button>
@@ -348,8 +348,8 @@ export default function GoalPage({ isSubComponent = false }) {
             onClick={() => { setActiveTab('team'); store.setFilters({ is_my_goals: 'false' }) }}
             style={{
               padding: '12px 16px', background: 'none', border: 'none',
-              borderBottom: activeTab === 'team' ? '3px solid #6366f1' : '3px solid transparent',
-              color: activeTab === 'team' ? '#6366f1' : '#64748b', fontSize: 14, fontWeight: 700,
+              borderBottom: activeTab === 'team' ? '3px solid #0466C8' : '3px solid transparent',
+              color: activeTab === 'team' ? '#0466C8' : '#7D8597', fontSize: 14, fontWeight: 700,
               cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s'
             }}
           ><FiUsers style={{ marginRight: 6, verticalAlign: 'middle' }} /> Team Goal Plans</button>
@@ -361,12 +361,12 @@ export default function GoalPage({ isSubComponent = false }) {
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           padding: '16px 20px', borderRadius: 12, background: STATUS_META[overallPlanStatus]?.bg || '#f8fafc',
-          border: `1px solid ${STATUS_META[overallPlanStatus]?.border || '#e2e8f0'}`,
+          border: `1px solid ${STATUS_META[overallPlanStatus]?.border || '#E3E7EE'}`,
           marginBottom: 20
         }}>
           <div>
-            <span style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>Overall Goal Plan Status</span>
-            <div style={{ fontSize: 18, fontWeight: 800, color: STATUS_META[overallPlanStatus]?.color || '#1e293b', marginTop: 4 }}>
+            <span style={{ fontSize: 11, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>Overall Goal Plan Status</span>
+            <div style={{ fontSize: 18, fontWeight: 800, color: STATUS_META[overallPlanStatus]?.color || '#001233', marginTop: 4 }}>
               {overallPlanStatus === 'ACTIVE' ? '✓ Approved & Active' : STATUS_META[overallPlanStatus]?.label || overallPlanStatus}
             </div>
           </div>
@@ -496,7 +496,7 @@ export default function GoalPage({ isSubComponent = false }) {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
       <SidebarComponent active="goals" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <TopBarComponent />

@@ -1,56 +1,59 @@
 import React from 'react';
 
 /**
- * PageHeader - Standardized page header component for Client Admin and feature modules.
- * Matches exact specs from Image 2 reference:
- * - 44x44px rounded container with brand red tint background (#FEECEE)
- * - Brand red stroke icon (#C2071A)
- * - 22px extra-bold title (#111827)
- * - 13px medium subtitle (#64748b)
- * - Right-aligned slot for action buttons / filters
+ * PageHeader — standard PMS page heading (Figma "PMS" design system).
+ * - Optional 48px soft-blue icon tile (#EEF8FF) with a PMS-blue stroke icon (#0466C8)
+ * - Large Poppins navy title (#001233) + muted subtitle (#7D8597)
+ * - Right-aligned slot for action buttons / filters (wraps under the title on narrow screens)
+ * Props are unchanged so every page using it keeps working as before.
  */
 export default function PageHeader({ icon: Icon, title, subtitle, actions, children }) {
   return (
-    <div style={{
+    <div className="pms-page-header" style={{
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-end',
       justifyContent: 'space-between',
-      marginBottom: 24,
-      fontFamily: "'Inter', sans-serif"
+      flexWrap: 'wrap',
+      gap: '16px 24px',
+      marginBottom: 28,
+      fontFamily: "'Poppins', 'Inter', sans-serif"
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
         {Icon && (
           <div style={{
-            width: 44,
-            height: 44,
-            borderRadius: 12,
+            width: 48,
+            height: 48,
+            borderRadius: '50%',
             flexShrink: 0,
-            backgroundImage: 'linear-gradient(#FEECEE, #FEECEE)',
+            backgroundImage: 'linear-gradient(#EEF8FF, #EEF8FF)',
+            border: '1px solid #C9DDF3',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <Icon size={24} style={{ color: '#C2071A', stroke: '#C2071A' }} strokeWidth={2.25} />
+            <Icon size={22} style={{ color: '#0466C8', stroke: '#0466C8' }} strokeWidth={2} />
           </div>
         )}
-        <div>
+        <div style={{ minWidth: 0 }}>
           <h1 style={{
             margin: 0,
-            fontSize: 22,
-            fontWeight: 800,
-            color: '#111827',
-            letterSpacing: '-0.4px',
-            lineHeight: 1.2
+            fontFamily: "'Poppins', 'Inter', sans-serif",
+            fontSize: 'clamp(24px, 2.4vw, 32px)',
+            fontWeight: 700,
+            color: '#001233',
+            letterSpacing: '-0.5px',
+            lineHeight: 1.3
           }}>
             {title}
           </h1>
           {subtitle && (
             <p style={{
-              margin: '3px 0 0',
-              color: '#64748b',
+              margin: '2px 0 0',
+              fontFamily: "'Poppins', 'Inter', sans-serif",
+              color: '#7D8597',
               fontSize: 13,
-              fontWeight: 500,
-              lineHeight: 1.4
+              fontWeight: 400,
+              lineHeight: 1.5
             }}>
               {subtitle}
             </p>
@@ -58,7 +61,7 @@ export default function PageHeader({ icon: Icon, title, subtitle, actions, child
         </div>
       </div>
       {(actions || children) && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           {actions || children}
         </div>
       )}

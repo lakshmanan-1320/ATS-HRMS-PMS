@@ -128,10 +128,16 @@ async function getManagerRequests(managerEmployeeId) {
 }
 
 async function getAllRequests(filters = {}) {
-  const { employeeId, status, startDate, endDate } = filters;
+  const { employeeId, status, startDate, endDate, organizationId } = filters;
   const params = [];
   let pi = 1;
   let where = 'WHERE 1=1';
+
+  if (organizationId) {
+    where += ` AND e.organization_id = $${pi}`;
+    params.push(organizationId);
+    pi++;
+  }
 
   if (employeeId) {
     where += ` AND r.employee_id = $${pi}`;

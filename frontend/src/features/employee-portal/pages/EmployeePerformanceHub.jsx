@@ -45,15 +45,15 @@ export default function EmployeePerformanceHub() {
 
   const renderSubTabs = () => {
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', borderBottom: '2px solid #e2e8f0', marginBottom: 24, gap: 0, background: '#fff', padding: '0 24px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', borderBottom: '2px solid #E3E7EE', marginBottom: 24, gap: 0, background: '#fff', padding: '0 24px' }}>
         {tabs.map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             style={{
               padding: '16px 18px', background: 'none', border: 'none',
-              borderBottom: activeTab === tab.key ? '3px solid #6366f1' : '3px solid transparent',
-              color: activeTab === tab.key ? '#6366f1' : '#64748b', fontSize: 14, fontWeight: 700,
+              borderBottom: activeTab === tab.key ? '3px solid #0466C8' : '3px solid transparent',
+              color: activeTab === tab.key ? '#0466C8' : '#7D8597', fontSize: 14, fontWeight: 700,
               cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s', whiteSpace: 'nowrap'
             }}
           >
@@ -148,13 +148,13 @@ export default function EmployeePerformanceHub() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', 'Roboto', system-ui, -apple-system, sans-serif" }}>
       <EmployeeSidebar active="performance" />
       
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="My Performance" />
         
-        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
+        <div className="pms-content-flush" style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
           {renderSubTabs()}
           <div style={{ padding: '0 24px' }}>
             {renderContent()}

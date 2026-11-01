@@ -96,7 +96,7 @@ const loadGrid = async () => {
   }
 };
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
       <ClientAdminSidebar active="nine-box" />
 
       <div
@@ -112,9 +112,9 @@ const loadGrid = async () => {
         {/* Header */}
         <div
           style={{
-            padding: '24px 32px 12px 32px',
+            padding: '24px 40px 12px 40px',
             background: '#fff',
-            borderBottom: '1px solid #e2e8f0',
+            borderBottom: '1px solid #E3E7EE',
           }}
         >
           <PageHeader
@@ -133,9 +133,9 @@ const loadGrid = async () => {
                 border: 'none',
                 borderBottom:
                   activeTab === 'matrix'
-                    ? '3px solid #6366f1'
+                    ? '3px solid #0466C8'
                     : '3px solid transparent',
-                color: activeTab === 'matrix' ? '#6366f1' : '#64748b',
+                color: activeTab === 'matrix' ? '#0466C8' : '#7D8597',
                 fontSize: 14,
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -152,9 +152,9 @@ const loadGrid = async () => {
                 border: 'none',
                 borderBottom:
                   activeTab === 'employees'
-                    ? '3px solid #6366f1'
+                    ? '3px solid #0466C8'
                     : '3px solid transparent',
-                color: activeTab === 'employees' ? '#6366f1' : '#64748b',
+                color: activeTab === 'employees' ? '#0466C8' : '#7D8597',
                 fontSize: 14,
                 fontWeight: 700,
                 cursor: 'pointer',

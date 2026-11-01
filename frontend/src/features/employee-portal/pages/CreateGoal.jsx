@@ -13,13 +13,13 @@ api.interceptors.request.use(cfg => {
 
 const inputSt = {
   width: '100%', boxSizing: 'border-box', padding: '10px 14px',
-  background: '#ffffff', border: '1px solid #e2e8f0',
-  borderRadius: '8px', color: '#1e293b', fontSize: '13px', fontFamily: 'inherit',
+  background: '#ffffff', border: '1px solid #E3E7EE',
+  borderRadius: '8px', color: '#001233', fontSize: '13px', fontFamily: 'inherit',
   colorScheme: 'light', outline: 'none',
 }
 
 const labelSt = {
-  fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'block', marginBottom: '6px',
+  fontSize: '12px', fontWeight: '600', color: '#7D8597', display: 'block', marginBottom: '6px',
 }
 
 function Toast({ msg, type, onClose }) {
@@ -45,7 +45,7 @@ function Toggle({ checked, onChange }) {
       onClick={e => { e.stopPropagation(); onChange() }}
       style={{
         width: '42px', height: '24px', borderRadius: '12px', flexShrink: 0,
-        background: checked ? '#6366f1' : '#e2e8f0',
+        background: checked ? '#0466C8' : '#E3E7EE',
         position: 'relative', cursor: 'pointer', transition: 'background 0.2s',
       }}
     >
@@ -161,7 +161,7 @@ export default function CreateGoal() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
+      <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
         <EmployeeSidebar active="goals" />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <EmployeeTopBar title="Create Goal" />
@@ -175,46 +175,51 @@ export default function CreateGoal() {
 
   if (goalConfig && !goalConfig.allow_employee_goal) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
+      <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
         <EmployeeSidebar active="goals" />
-        <main style={{ flex: 1, padding: '32px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <EmployeeTopBar title="Create Goal" />
+          <main style={{ flex: 1, padding: '32px' }}>
           <div style={{ color: '#ef4444', fontSize: '14px', padding: '24px', background: 'rgba(239,68,68,0.06)', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.15)' }}>
             Goal creation is currently disabled by your administrator.
           </div>
         </main>
+        </div>
       </div>
     )
   }
 
-  const weightColor = totalWeight === 100 ? '#10b981' : totalWeight > 100 ? '#ef4444' : '#6366f1'
+  const weightColor = totalWeight === 100 ? '#10b981' : totalWeight > 100 ? '#ef4444' : '#0466C8'
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' }}>
       <EmployeeSidebar active="goals" />
-      <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <EmployeeTopBar title="Create Goal" />
+        <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px' }}>
           <button
             onClick={() => navigate('/employee/goals')}
-            style={{ padding: '7px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', color: '#64748b', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit' }}
+            style={{ padding: '7px 14px', borderRadius: '8px', border: '1px solid #E3E7EE', background: '#f8fafc', color: '#7D8597', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit' }}
           >
             ← Back
           </button>
           <div>
-            <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '700', color: '#0f172a' }}>Create Goal</h1>
-            <p style={{ margin: '3px 0 0', fontSize: '12px', color: '#64748b' }}>Define your goal and optionally add sub-goals</p>
+            <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '700', color: '#001233' }}>Create Goal</h1>
+            <p style={{ margin: '3px 0 0', fontSize: '12px', color: '#7D8597' }}>Define your goal and optionally add sub-goals</p>
           </div>
         </div>
 
         <div style={{ maxWidth: '700px' }}>
 
           {/* Goal Details */}
-          <div style={{ background: '#ffffff', border: '1px solid #e8eaf0', borderRadius: '16px', padding: '24px', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '3px solid #6366f1' }}>
+          <div style={{ background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '24px', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '3px solid #0466C8' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(99,102,241,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>🎯</div>
+              <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(4, 102, 200,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>🎯</div>
               <div>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>Goal Details</div>
+                <div style={{ fontSize: '13px', fontWeight: '700', color: '#001233' }}>Goal Details</div>
                 <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '1px' }}>Define the main goal information</div>
               </div>
             </div>
@@ -256,12 +261,12 @@ export default function CreateGoal() {
             </div>
 
             {/* Time-Specific Toggle */}
-            <div style={{ padding: '16px', background: isTimeSpecific ? 'rgba(99,102,241,0.06)' : '#f8fafc', border: `1px solid ${isTimeSpecific ? 'rgba(99,102,241,0.2)' : '#e2e8f0'}`, borderRadius: '10px', transition: 'all 0.2s' }}>
+            <div style={{ padding: '16px', background: isTimeSpecific ? 'rgba(4, 102, 200,0.06)' : '#f8fafc', border: `1px solid ${isTimeSpecific ? 'rgba(4, 102, 200,0.2)' : '#E3E7EE'}`, borderRadius: '10px', transition: 'all 0.2s' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }} onClick={() => setIsTimeSpecific(v => !v)}>
                 <Toggle checked={isTimeSpecific} onChange={() => setIsTimeSpecific(v => !v)} />
                 <div>
-                  <div style={{ fontSize: '13px', fontWeight: '600', color: isTimeSpecific ? '#1e293b' : '#94a3b8' }}>Time-Specific Goal</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '600', color: isTimeSpecific ? '#001233' : '#94a3b8' }}>Time-Specific Goal</div>
+                  <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '2px' }}>
                     {isTimeSpecific ? 'Start and end dates are set for this goal' : 'Toggle on to set start and end dates'}
                   </div>
                 </div>
@@ -283,12 +288,12 @@ export default function CreateGoal() {
           </div>
 
           {/* Sub-Goals */}
-          <div style={{ background: '#ffffff', border: '1px solid #e8eaf0', borderRadius: '16px', padding: '24px', marginBottom: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '3px solid #818cf8' }}>
+          <div style={{ background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '24px', marginBottom: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '3px solid #818cf8' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(129,140,248,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>🔗</div>
                 <div>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#001233' }}>
                     Sub-Goals <span style={{ color: '#94a3b8', fontWeight: 400, fontSize: '12px' }}>— optional</span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '1px' }}>Break this goal into measurable sub-goals</div>
@@ -296,7 +301,7 @@ export default function CreateGoal() {
               </div>
               {hasSubGoals && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '90px', height: '6px', background: '#f1f5f9', borderRadius: '3px' }}>
+                  <div style={{ width: '90px', height: '6px', background: '#F1F4F8', borderRadius: '3px' }}>
                     <div style={{
                       height: '100%', width: `${Math.min(100, totalWeight)}%`,
                       background: weightColor, borderRadius: '3px', transition: 'width 0.2s',
@@ -308,7 +313,7 @@ export default function CreateGoal() {
                 </div>
               )}
             </div>
-            <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 18px', paddingLeft: '38px' }}>
+            <p style={{ fontSize: '12px', color: '#7D8597', margin: '0 0 18px', paddingLeft: '38px' }}>
               If added, total weightage must equal 100%.
             </p>
 
@@ -318,12 +323,12 @@ export default function CreateGoal() {
                   display: 'grid', gridTemplateColumns: '28px 1fr 130px auto',
                   gap: '10px', alignItems: 'center',
                   padding: '12px 14px', borderRadius: '10px',
-                  background: '#f8fafc', border: '1px solid #e8eaf0',
+                  background: '#f8fafc', border: '1px solid #E3E7EE',
                 }}>
                   <div style={{
                     width: '24px', height: '24px', borderRadius: '50%',
-                    background: sg.title.trim() ? 'rgba(99,102,241,0.12)' : '#f1f5f9',
-                    color: sg.title.trim() ? '#6366f1' : '#94a3b8',
+                    background: sg.title.trim() ? 'rgba(4, 102, 200,0.12)' : '#F1F4F8',
+                    color: sg.title.trim() ? '#0466C8' : '#94a3b8',
                     fontSize: '11px', fontWeight: '700',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
@@ -359,7 +364,7 @@ export default function CreateGoal() {
 
             <button
               onClick={addSubGoal}
-              style={{ marginTop: '12px', padding: '8px 16px', borderRadius: '8px', border: '1px dashed rgba(99,102,241,0.35)', background: 'rgba(99,102,241,0.05)', color: '#6366f1', cursor: 'pointer', fontSize: '12px', fontWeight: '600', fontFamily: 'inherit' }}
+              style={{ marginTop: '12px', padding: '8px 16px', borderRadius: '8px', border: '1px dashed rgba(4, 102, 200,0.35)', background: 'rgba(4, 102, 200,0.05)', color: '#0466C8', cursor: 'pointer', fontSize: '12px', fontWeight: '600', fontFamily: 'inherit' }}
             >
               + Add Sub-Goal
             </button>
@@ -384,7 +389,7 @@ export default function CreateGoal() {
             <button
               onClick={() => navigate('/employee/goals')}
               disabled={saving}
-              style={{ padding: '11px 24px', borderRadius: '10px', border: '1px solid #e2e8f0', background: '#ffffff', color: '#64748b', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit', fontWeight: '500' }}
+              style={{ padding: '11px 24px', borderRadius: '10px', border: '1px solid #E3E7EE', background: '#ffffff', color: '#7D8597', cursor: 'pointer', fontSize: '13px', fontFamily: 'inherit', fontWeight: '500' }}
             >
               Cancel
             </button>
@@ -393,10 +398,10 @@ export default function CreateGoal() {
               disabled={saving}
               style={{
                 padding: '11px 28px', borderRadius: '10px', border: 'none',
-                background: saving ? 'rgba(99,102,241,0.5)' : 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                background: saving ? 'rgba(4, 102, 200,0.5)' : 'linear-gradient(135deg, #0466C8, #0353A4)',
                 color: '#fff', cursor: saving ? 'default' : 'pointer',
                 fontSize: '13px', fontWeight: '700', fontFamily: 'inherit',
-                boxShadow: saving ? 'none' : '0 4px 16px rgba(99,102,241,0.35)',
+                boxShadow: saving ? 'none' : '0 4px 16px rgba(4, 102, 200,0.35)',
                 display: 'flex', alignItems: 'center', gap: '6px',
               }}
             >
@@ -407,6 +412,7 @@ export default function CreateGoal() {
 
         <Toast msg={toast.msg} type={toast.type} onClose={() => setToast({ msg: '' })} />
       </main>
+      </div>
     </div>
   )
 }

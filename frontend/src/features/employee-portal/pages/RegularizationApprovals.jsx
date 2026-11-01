@@ -14,20 +14,20 @@ const s = {
   page: { display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Inter, sans-serif' },
   main: { flex: 1, padding: '40px', overflowY: 'auto' },
   header: { marginBottom: '32px' },
-  h1: { fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '4px', margin: 0 },
-  sub: { fontSize: '13px', color: '#64748b', margin: 0 },
+  h1: { fontSize: '22px', fontWeight: '800', color: '#001233', marginBottom: '4px', margin: 0 },
+  sub: { fontSize: '13px', color: '#7D8597', margin: 0 },
   tableCard: {
-    background: '#ffffff', border: '1px solid #e8eaf0',
+    background: '#ffffff', border: '1px solid #E3E7EE',
     borderRadius: '20px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '32px'
   },
   table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
   th: {
-    padding: '16px 20px', color: '#64748b', fontWeight: '600',
-    borderBottom: '1px solid #e8eaf0', background: '#f8fafc',
+    padding: '16px 20px', color: '#7D8597', fontWeight: '600',
+    borderBottom: '1px solid #E3E7EE', background: '#f8fafc',
     textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.05em'
   },
-  tr: { borderBottom: '1px solid #f1f5f9', transition: 'background 0.2s' },
-  td: { padding: '16px 20px', color: '#1e293b' },
+  tr: { borderBottom: '1px solid #F1F4F8', transition: 'background 0.2s' },
+  td: { padding: '16px 20px', color: '#001233' },
   actionBtn: {
     background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)',
     borderRadius: '8px', padding: '6px 12px', color: '#059669', fontSize: '12px',
@@ -44,19 +44,19 @@ const s = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
   },
   modal: {
-    background: '#ffffff', border: '1px solid #e2e8f0',
+    background: '#ffffff', border: '1px solid #E3E7EE',
     borderRadius: '20px', padding: '32px', width: '450px', maxWidth: '90%',
     boxShadow: '0 10px 30px rgba(0,0,0,0.12)'
   },
   modalHeader: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    marginBottom: '20px', borderBottom: '1px solid #e8eaf0', paddingBottom: '12px'
+    marginBottom: '20px', borderBottom: '1px solid #E3E7EE', paddingBottom: '12px'
   },
-  closeBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#64748b', cursor: 'pointer' },
+  closeBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#7D8597', cursor: 'pointer' },
   textarea: {
     width: '100%', padding: '10px 14px', background: '#ffffff',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box',
     resize: 'vertical', minHeight: '100px', marginBottom: '16px', fontFamily: 'inherit',
   },
   submitRejectBtn: {
@@ -130,7 +130,7 @@ export default function RegularizationApprovals() {
   }
 
   return (
-    <div style={s.page}>
+    <div className="pms-page" style={s.page}>
       <EmployeeSidebar active="regularization-approvals" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Regularization Approvals" />
@@ -166,7 +166,7 @@ export default function RegularizationApprovals() {
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
                     <td style={{ ...s.td, fontWeight: '700' }}>{r.first_name} {r.last_name}</td>
-                    <td style={{ ...s.td, color: '#64748b' }}>{r.employee_code}</td>
+                    <td style={{ ...s.td, color: '#7D8597' }}>{r.employee_code}</td>
                     <td style={{ ...s.td, fontWeight: '600' }}>{r.attendance_date.split('T')[0]}</td>
                     <td style={s.td}>{r.regularization_type.replace(/_/g, ' ')}</td>
                     <td style={s.td}>{formatTimeStr(r.requested_checkin_time)}</td>
@@ -193,14 +193,14 @@ export default function RegularizationApprovals() {
           <div style={s.modalOverlay}>
             <div style={s.modal}>
               <div style={s.modalHeader}>
-                <h3 style={{ margin: 0, color: '#0f172a', fontSize: '16px', fontWeight: '700' }}>
+                <h3 style={{ margin: 0, color: '#001233', fontSize: '16px', fontWeight: '700' }}>
                   Reject Request
                 </h3>
                 <button style={s.closeBtn} onClick={() => setRejectModalOpen(false)}>×</button>
               </div>
 
               <form onSubmit={handleRejectSubmit}>
-                <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 16px 0' }}>
+                <p style={{ fontSize: '13px', color: '#7D8597', margin: '0 0 16px 0' }}>
                   Provide comments to let the employee know why their request is rejected:
                 </p>
                 <textarea

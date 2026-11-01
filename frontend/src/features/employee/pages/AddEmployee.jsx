@@ -25,26 +25,26 @@ const BLANK = {
 
 const iStyle = (err) => ({
   padding: '9px 13px', background: '#ffffff',
-  border: `1px solid ${err ? '#ef4444' : '#e2e8f0'}`,
-  borderRadius: 10, color: '#1e293b', fontSize: 13, outline: 'none',
+  border: `1px solid ${err ? '#ef4444' : '#E3E7EE'}`,
+  borderRadius: 10, color: '#001233', fontSize: 13, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit',
   transition: 'border-color 0.15s ease',
 })
 
 const selStyle = {
-  padding: '9px 13px', background: '#ffffff', border: '1px solid #e2e8f0',
-  borderRadius: 10, color: '#1e293b', fontSize: 13, outline: 'none',
+  padding: '9px 13px', background: '#ffffff', border: '1px solid #E3E7EE',
+  borderRadius: 10, color: '#001233', fontSize: 13, outline: 'none',
   width: '100%', boxSizing: 'border-box', fontFamily: 'inherit', cursor: 'pointer',
 }
 
 function Field({ label, required, error, children, hint }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <label style={{ fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-        {label}{required && <span style={{ color: '#C2071A', marginLeft: 2 }}>*</span>}
+      <label style={{ fontSize: 11, fontWeight: 600, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        {label}{required && <span style={{ color: '#0466C8', marginLeft: 2 }}>*</span>}
       </label>
       {children}
-      {hint && !error && <span style={{ fontSize: 11, color: '#64748b' }}>{hint}</span>}
+      {hint && !error && <span style={{ fontSize: 11, color: '#7D8597' }}>{hint}</span>}
       {error && <span style={{ fontSize: 11, color: '#ef4444' }}>{error}</span>}
     </div>
   )
@@ -52,7 +52,7 @@ function Field({ label, required, error, children, hint }) {
 
 function SectionTitle({ title }) {
   return (
-    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#64748b', marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid #e2e8f0' }}>
+    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7D8597', marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid #E3E7EE' }}>
       {title}
     </div>
   )
@@ -285,8 +285,8 @@ export default function AddEmployee() {
     }
   }
 
-  const inputFocus = e => { e.target.style.borderColor = '#C2071A' }
-  const inputBlur  = e => { e.target.style.borderColor = '#e2e8f0' }
+  const inputFocus = e => { e.target.style.borderColor = '#0466C8' }
+  const inputBlur  = e => { e.target.style.borderColor = '#E3E7EE' }
 
   const filteredManagerEmployees = employees.filter(e => {
     if (!form.department_id) return false
@@ -302,29 +302,29 @@ export default function AddEmployee() {
 
   if (credentials) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Roboto, system-ui, sans-serif' }}>
+      <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Roboto, system-ui, sans-serif' }}>
         <ClientAdminSidebar active="employees" />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <ClientAdminTopBar />
           <main style={{ flex: 1, padding: '32px 36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ background: '#fff', borderRadius: 20, padding: 36, maxWidth: 520, width: '100%', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', border: '1px solid #e2e8f0' }}>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#1e293b', marginBottom: 6 }}>Employee Created</div>
-              <p style={{ fontSize: 13, color: '#64748b', marginBottom: 24 }}>
+            <div style={{ background: '#fff', borderRadius: 20, padding: 36, maxWidth: 520, width: '100%', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', border: '1px solid #E3E7EE' }}>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#001233', marginBottom: 6 }}>Employee Created</div>
+              <p style={{ fontSize: 13, color: '#7D8597', marginBottom: 24 }}>
                 Share this temporary password with the employee for their first sign-in. They'll be prompted to change it after OTP verification.
               </p>
-              <div style={{ padding: 16, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, marginBottom: 24 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b', marginBottom: 4 }}>{credentials.name}</div>
-                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>{credentials.employeeCode} · {credentials.email}</div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 14px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 8 }}>
-                  <code style={{ color: '#C2071A', fontSize: 16, fontWeight: 700 }}>{credentials.tempPassword}</code>
+              <div style={{ padding: 16, background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 12, marginBottom: 24 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#001233', marginBottom: 4 }}>{credentials.name}</div>
+                <div style={{ fontSize: 12, color: '#7D8597', marginBottom: 14 }}>{credentials.employeeCode} · {credentials.email}</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '10px 14px', background: '#F1F4F8', border: '1px solid #E3E7EE', borderRadius: 8 }}>
+                  <code style={{ color: '#0466C8', fontSize: 16, fontWeight: 700 }}>{credentials.tempPassword}</code>
                   <button onClick={() => navigator.clipboard?.writeText(credentials.tempPassword)}
-                    style={{ padding: '6px 12px', background: 'rgba(194,7,26,0.08)', border: '1px solid rgba(194,7,26,0.2)', borderRadius: 8, color: '#C2071A', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
+                    style={{ padding: '6px 12px', background: 'rgba(4, 102, 200,0.08)', border: '1px solid rgba(4, 102, 200,0.2)', borderRadius: 8, color: '#0466C8', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
                     Copy
                   </button>
                 </div>
               </div>
               <button onClick={() => navigate('/client-admin/employees')}
-                style={{ width: '100%', padding: '11px 0', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: 10, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ width: '100%', padding: '11px 0', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: 10, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
                 Done — Go to Employees
               </button>
             </div>
@@ -335,7 +335,7 @@ export default function AddEmployee() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
       <ClientAdminSidebar active="employees" />
       {toast && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, position: 'fixed', top: 24, right: 24, zIndex: 9999, padding: '12px 18px', borderRadius: 12, fontSize: 13, fontWeight: 500, minWidth: 280, background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
@@ -347,17 +347,17 @@ export default function AddEmployee() {
         <main style={{ flex: 1, padding: '32px 36px', overflow: 'auto' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13 }}>
-            <button onClick={() => navigate('/client-admin/employees')} style={{ background: 'none', border: 'none', color: '#C2071A', cursor: 'pointer', fontSize: 13, fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
+            <button onClick={() => navigate('/client-admin/employees')} style={{ background: 'none', border: 'none', color: '#0466C8', cursor: 'pointer', fontSize: 13, fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>
               Employees
             </button>
             <span style={{ color: '#94a3b8' }}>/</span>
-            <span style={{ color: '#64748b', fontWeight: 600 }}>Add Employee</span>
+            <span style={{ color: '#7D8597', fontWeight: 600 }}>Add Employee</span>
           </div>
 
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, padding: '28px 36px', boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}>
+          <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: 16, padding: '28px 36px', boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}>
             <div style={{ marginBottom: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 800, margin: 0, color: '#1e293b' }}>Add New Employee Profile</h2>
-              <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0 0', fontWeight: 500 }}>Create system access, register organizational details, and initialize payroll config.</p>
+              <h2 style={{ fontSize: 20, fontWeight: 800, margin: 0, color: '#001233' }}>Add New Employee Profile</h2>
+              <p style={{ fontSize: 13, color: '#7D8597', margin: '4px 0 0 0', fontWeight: 500 }}>Create system access, register organizational details, and initialize payroll config.</p>
             </div>
 
             <div style={{ marginBottom: 28 }}>
@@ -497,8 +497,8 @@ export default function AddEmployee() {
               
               {/* Preview Components Table */}
               {parseFloat(salaryAmt) > 0 && (
-                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #e2e8f0' }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 12 }}>Salary Component Breakdown Preview</div>
+                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #E3E7EE' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', marginBottom: 12 }}>Salary Component Breakdown Preview</div>
                   
                   {previewSummary && previewSummary.is_valid === false && (
                     <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', color: '#991b1b', padding: '12px 16px', borderRadius: '10px', fontSize: '13px', fontWeight: '600', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -508,38 +508,38 @@ export default function AddEmployee() {
                   )}
 
                   {/* Calculation summary preview box */}
-                  <div style={{ display: 'flex', gap: '20px', background: '#f1f5f9', padding: '12px 16px', borderRadius: '10px', marginBottom: '16px', border: '1px solid #e2e8f0', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '20px', background: '#F1F4F8', padding: '12px 16px', borderRadius: '10px', marginBottom: '16px', border: '1px solid #E3E7EE', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Gross: </span>
-                      <strong style={{ color: '#1e293b' }}>₹{grossTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Gross: </span>
+                      <strong style={{ color: '#001233' }}>₹{grossTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Deductions: </span>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Deductions: </span>
                       <strong style={{ color: '#b91c1c' }}>- ₹{deductionsTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Benefits: </span>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Benefits: </span>
                       <strong style={{ color: '#6d28d9' }}>₹{employerContribTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Net Take-Home: </span>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Net Take-Home: </span>
                       <strong style={{ color: '#15803d' }}>₹{netTakeHome.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>CTC: </span>
-                      <strong style={{ color: '#C2071A' }}>₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>CTC: </span>
+                      <strong style={{ color: '#0466C8' }}>₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                     </div>
                   </div>
 
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                     <thead>
                       <tr>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Component</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Type</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Formula/Basis</th>
-                        <th style={{ textAlign: 'center', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Auto</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Config Rate / Amount</th>
-                        <th style={{ textAlign: 'right', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Calculated Monthly Value</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Component</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Type</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Formula/Basis</th>
+                        <th style={{ textAlign: 'center', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Auto</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Config Rate / Amount</th>
+                        <th style={{ textAlign: 'right', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Calculated Monthly Value</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -554,10 +554,10 @@ export default function AddEmployee() {
 
                         return (
                           <tr key={c.component_id}>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', fontWeight: 600 }}>{c.component_name} ({c.component_code})</td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0' }}>{c.component_type}</td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>{formulaTxt}</td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textAlign: 'center' }}>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', fontWeight: 600 }}>{c.component_name} ({c.component_code})</td>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE' }}>{c.component_type}</td>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>{formulaTxt}</td>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textAlign: 'center' }}>
                               {isFixed ? (
                                 <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700' }}>—</span>
                               ) : (
@@ -580,7 +580,7 @@ export default function AddEmployee() {
                                 />
                               )}
                             </td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0' }}>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE' }}>
                               {isFixed ? (
                                 <div className="groww-input-box" style={{ width: 105, height: 30 }}>
                                   <span className="groww-prefix">₹</span>
@@ -591,14 +591,14 @@ export default function AddEmployee() {
                                   />
                                 </div>
                               ) : !isAuto ? (
-                                <div className="groww-input-box" style={{ width: 105, height: 30, background: '#feecee', borderColor: '#f7a6af' }}>
-                                  <span className="groww-prefix" style={{ color: '#C2071A' }}>₹</span>
+                                <div className="groww-input-box" style={{ width: 105, height: 30, background: '#EEF8FF', borderColor: '#C9DDF3' }}>
+                                  <span className="groww-prefix" style={{ color: '#0466C8' }}>₹</span>
                                   <input
                                     type="number"
                                     placeholder="Amount"
                                     value={c.manual_amount !== null && c.manual_amount !== undefined ? (Math.round(c.manual_amount * 100) / 100) : ''}
                                     onChange={e => handleUpdateComponentField(index, 'manual_amount', e.target.value)}
-                                    style={{ color: '#C2071A' }}
+                                    style={{ color: '#0466C8' }}
                                   />
                                 </div>
                               ) : (
@@ -612,15 +612,15 @@ export default function AddEmployee() {
                                 </div>
                               )}
                             </td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textAlign: 'right', fontWeight: 700, color: c.component_type === 'DEDUCTION' ? '#b91c1c' : '#15803d' }}>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textAlign: 'right', fontWeight: 700, color: c.component_type === 'DEDUCTION' ? '#b91c1c' : '#15803d' }}>
                               ₹{parseFloat(c.calculated_amount || 0).toFixed(2)}
                             </td>
                           </tr>
                         )
                       })}
-                      <tr style={{ background: '#f1f5f9' }}>
+                      <tr style={{ background: '#F1F4F8' }}>
                         <td colSpan="5" style={{ padding: '8px 12px', fontWeight: 700 }}>Cost to Company (CTC):</td>
-                        <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 800, color: '#C2071A' }}>
+                        <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 800, color: '#0466C8' }}>
                           ₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </td>
                       </tr>
@@ -682,11 +682,11 @@ export default function AddEmployee() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 28, paddingTop: 20, borderTop: '1px solid #e2e8f0' }}>
-              <button onClick={() => navigate('/client-admin/employees')} style={{ padding: '10px 20px', background: 'rgba(0,0,0,0.04)', border: '1px solid #e2e8f0', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#64748b', fontFamily: 'inherit', fontWeight: 600 }}>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 28, paddingTop: 20, borderTop: '1px solid #E3E7EE' }}>
+              <button onClick={() => navigate('/client-admin/employees')} style={{ padding: '10px 20px', background: 'rgba(0,0,0,0.04)', border: '1px solid #E3E7EE', borderRadius: 10, cursor: 'pointer', fontSize: 13, color: '#7D8597', fontFamily: 'inherit', fontWeight: 600 }}>
                 Cancel
               </button>
-              <button onClick={handleSave} disabled={saving} style={{ padding: '10px 24px', background: saving ? 'rgba(194,7,26,0.5)' : 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: 10, cursor: saving ? 'default' : 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit', boxShadow: saving ? 'none' : '0 4px 14px rgba(194,7,26,0.35)' }}>
+              <button onClick={handleSave} disabled={saving} style={{ padding: '10px 24px', background: saving ? 'rgba(4, 102, 200,0.5)' : 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: 10, cursor: saving ? 'default' : 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit', boxShadow: saving ? 'none' : '0 4px 14px rgba(4, 102, 200,0.35)' }}>
                 {saving ? 'Saving…' : 'Add Employee'}
               </button>
             </div>

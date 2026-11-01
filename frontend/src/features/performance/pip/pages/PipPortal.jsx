@@ -528,7 +528,7 @@ export default function PipPortal() {
           </Col>
           <Col span={6}>
             <Card style={{ borderRadius: 12 }}>
-              <Statistic title="Active PIPs" value={stats?.activePips || 0} prefix={<FiClipboard style={{ color: '#6366f1' }} />} />
+              <Statistic title="Active PIPs" value={stats?.activePips || 0} prefix={<FiClipboard style={{ color: '#0466C8' }} />} />
             </Card>
           </Col>
           <Col span={6}>
@@ -548,7 +548,7 @@ export default function PipPortal() {
         </Row>
         <Card title="Average Performance Improvement Progress" style={{ borderRadius: 12, marginBottom: 24 }}>
           <div style={{ textAlign: 'center', padding: '30px 0' }}>
-            <Progress type="dashboard" percent={stats?.averageImprovement || 0} strokeColor="#6366f1" width={160} strokeWidth={10} />
+            <Progress type="dashboard" percent={stats?.averageImprovement || 0} strokeColor="#0466C8" width={160} strokeWidth={10} />
             <div style={{ marginTop: 12 }}>
               <Text type="secondary">Average weighted progress metric completion rate across all current active and monitoring plans.</Text>
             </div>
@@ -560,7 +560,7 @@ export default function PipPortal() {
 
   const renderCandidates = () => {
     const columns = [
-      { title: 'Employee', dataIndex: 'employee_name', key: 'emp', render: (_, r) => <div><strong style={{ color: '#0f172a' }}>{r.first_name} {r.last_name}</strong><div style={{ fontSize: 11, color: '#64748b' }}>{r.employee_code}</div></div> },
+      { title: 'Employee', dataIndex: 'employee_name', key: 'emp', render: (_, r) => <div><strong style={{ color: '#001233' }}>{r.first_name} {r.last_name}</strong><div style={{ fontSize: 11, color: '#7D8597' }}>{r.employee_code}</div></div> },
       { title: 'Department', dataIndex: 'department_name', key: 'dept' },
       { title: 'Manager', dataIndex: 'manager_name', key: 'manager' },
       { title: 'Source', dataIndex: 'source', key: 'source', render: (val) => <Tag color="blue">{val}</Tag> },
@@ -709,7 +709,7 @@ export default function PipPortal() {
                             Target: {m.target_value}% | Weight: {m.weight}% | Mode: {m.calculation_type || m.direction || 'HIGHER_IS_BETTER'}
                           </Text>
                         </div>
-                        <Progress percent={Math.round(m.completion_pct)} size="small" strokeColor={isMon ? "#ea580c" : "#6366f1"} />
+                        <Progress percent={Math.round(m.completion_pct)} size="small" strokeColor={isMon ? "#ea580c" : "#0466C8"} />
                         <div style={{ marginTop: 4, display: 'flex', justifyContent: 'space-between', fontSize: 11 }}>
                           <Text type="secondary">Current live value: {m.current_value}%</Text>
                           {m.required && <Tag color="red">Required</Tag>}
@@ -789,12 +789,12 @@ export default function PipPortal() {
 
   const renderActivePips = () => {
     const columns = [
-      { title: 'Employee', dataIndex: 'employee_name', key: 'emp', render: (_, r) => <div><strong style={{ color: '#0f172a' }}>{r.first_name} {r.last_name}</strong><div style={{ fontSize: 11, color: '#64748b' }}>{r.employee_code}</div></div> },
+      { title: 'Employee', dataIndex: 'employee_name', key: 'emp', render: (_, r) => <div><strong style={{ color: '#001233' }}>{r.first_name} {r.last_name}</strong><div style={{ fontSize: 11, color: '#7D8597' }}>{r.employee_code}</div></div> },
       { title: 'Template', dataIndex: 'template_name', key: 'template' },
       { title: 'Status', dataIndex: 'status', key: 'status', render: (val) => <Tag color={val === 'ACTIVE' ? 'geekblue' : val === 'MONITORING' ? 'orange' : 'green'}>{val}</Tag> },
       { title: 'Dates', key: 'dates', render: (_, r) => <div style={{ fontSize: 12 }}>{r.start_date} to {r.end_date}</div> },
       { title: 'Read Conf.', dataIndex: 'employee_acknowledged', key: 'ack', render: (val) => val ? <Tag color="green">Read</Tag> : <Tag color="default">Pending</Tag> },
-      { title: 'Progress', dataIndex: 'overall_progress', key: 'progress', render: (val) => <div style={{ width: 140 }}><Progress percent={Math.round(val)} size="small" strokeColor="#6366f1" /></div> },
+      { title: 'Progress', dataIndex: 'overall_progress', key: 'progress', render: (val) => <div style={{ width: 140 }}><Progress percent={Math.round(val)} size="small" strokeColor="#0466C8" /></div> },
       {
         title: 'Actions',
         key: 'actions',
@@ -822,7 +822,7 @@ export default function PipPortal() {
 
   const renderMonitoring = () => {
     const columns = [
-      { title: 'Employee', dataIndex: 'employee_name', key: 'emp', render: (_, r) => <div><strong style={{ color: '#0f172a' }}>{r.first_name} {r.last_name}</strong><div style={{ fontSize: 11, color: '#64748b' }}>{r.employee_code}</div></div> },
+      { title: 'Employee', dataIndex: 'employee_name', key: 'emp', render: (_, r) => <div><strong style={{ color: '#001233' }}>{r.first_name} {r.last_name}</strong><div style={{ fontSize: 11, color: '#7D8597' }}>{r.employee_code}</div></div> },
       { title: 'Template', dataIndex: 'template_name', key: 'template' },
       { title: 'Status', dataIndex: 'status', key: 'status', render: (val) => <Tag color={val === 'MONITORING' ? 'orange' : val === 'EXTENDED' ? 'purple' : 'green'}>{val}</Tag> },
       { title: 'Dates', key: 'dates', render: (_, r) => <div style={{ fontSize: 12 }}>{r.start_date} to {r.end_date}</div> },
@@ -1094,13 +1094,13 @@ export default function PipPortal() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="pip" />
       
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
         
-        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
+        <div className="pms-content-flush" style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
           <div style={{ padding: '24px 24px 8px 24px' }}>
             <PageHeader
               icon={FiTrendingUp}
@@ -1110,7 +1110,7 @@ export default function PipPortal() {
           </div>
 
           {/* Sub-Tabs Nav */}
-          <div style={{ display: 'flex', borderBottom: '2px solid #e2e8f0', marginBottom: 24, gap: 16, background: '#fff', padding: '0 24px' }}>
+          <div style={{ display: 'flex', borderBottom: '2px solid #E3E7EE', marginBottom: 24, gap: 16, background: '#fff', padding: '0 24px' }}>
             {subTabs.map(tab => {
               const IconComp = tab.icon;
               return (
@@ -1119,8 +1119,8 @@ export default function PipPortal() {
                   onClick={() => { setActiveTab(tab.key); setSelectedPip(null); }}
                   style={{
                     padding: '16px 20px', background: 'none', border: 'none',
-                    borderBottom: activeTab === tab.key ? '3px solid #6366f1' : '3px solid transparent',
-                    color: activeTab === tab.key ? '#6366f1' : '#64748b', fontSize: 14, fontWeight: 700,
+                    borderBottom: activeTab === tab.key ? '3px solid #0466C8' : '3px solid transparent',
+                    color: activeTab === tab.key ? '#0466C8' : '#7D8597', fontSize: 14, fontWeight: 700,
                     cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'all 0.2s'
                   }}
                 >
@@ -1413,7 +1413,7 @@ export default function PipPortal() {
                   name={`metric_${m.pip_metric_id}`}
                   extra={<span style={{ fontSize: 12, color: '#059669' }}>✓ Synced from {m.metric_source}</span>}
                 >
-                  <InputNumber disabled style={{ width: '100%', color: '#1e293b', backgroundColor: '#f1f5f9' }} />
+                  <InputNumber disabled style={{ width: '100%', color: '#001233', backgroundColor: '#F1F4F8' }} />
                 </Form.Item>
               );
             }

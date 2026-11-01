@@ -187,7 +187,7 @@ export default function TechniqueConfigurationPage() {
     }
   };
   return (
-    <Card style={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+    <Card style={{ borderRadius: 16, border: '1px solid #E3E7EE', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
       <div style={{ marginBottom: 24 }}>
         <Title level={4} style={{ margin: 0, fontWeight: 800 }}>Measurement Technique Configuration</Title>
         <Paragraph type="secondary" style={{ margin: '4px 0 0 0', fontSize: 13 }}>
@@ -196,7 +196,7 @@ export default function TechniqueConfigurationPage() {
       </div>
 
       <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: '#475569' }}>Select Performance Technique:</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: '#33415C' }}>Select Performance Technique:</span>
         <Select
           value={selectedTechnique}
           onChange={setSelectedTechnique}
@@ -211,23 +211,23 @@ export default function TechniqueConfigurationPage() {
 
       {selectedTechnique === 'CONTINUOUS_FEEDBACK' && (
         <div>
-          <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#334155', marginBottom: 16 }}>
+          <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#33415C', marginBottom: 16 }}>
             Continuous Feedback Progress Weights
           </Title>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
             {/* Reflection Submission Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Reflection Submission</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Employee submits self-reflection answers</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Reflection Submission</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Employee submits self-reflection answers</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Required:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Required:</span>
                 <Switch checked={reflectionEnabled} onChange={setReflectionEnabled} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                 <InputNumber
                   min={0}
                   max={100}
@@ -242,17 +242,17 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             {/* Manager Coaching Feedback Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Manager Coaching Feedback</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Manager posts at least one coaching note</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Manager Coaching Feedback</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Manager posts at least one coaching note</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Required:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Required:</span>
                 <Switch checked={feedbackEnabled} onChange={setFeedbackEnabled} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                 <InputNumber
                   min={0}
                   max={100}
@@ -267,17 +267,17 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             {/* Verified Action Items Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Verified Action Items</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Assigned action items are verified by the manager</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Verified Action Items</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Assigned action items are verified by the manager</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Required:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Required:</span>
                 <Switch checked={actionsEnabled} onChange={setActionsEnabled} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                 <InputNumber
                   min={0}
                   max={100}
@@ -292,17 +292,17 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             {/* Goal Closure Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Manager Final Goal Closure</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Manager finalizes cycle by marking assignment completed</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Manager Final Goal Closure</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Manager finalizes cycle by marking assignment completed</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Required:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Required:</span>
                 <Switch checked={closureEnabled} onChange={setClosureEnabled} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                 <InputNumber
                   min={0}
                   max={100}
@@ -341,7 +341,7 @@ export default function TechniqueConfigurationPage() {
               type="primary"
               disabled={!isTotalValid || saving}
               onClick={handleSave}
-              style={{ background: isTotalValid ? '#6366f1' : '#cbd5e1', border: 'none', height: 40, padding: '0 24px', borderRadius: 8, fontWeight: 700 }}
+              style={{ background: isTotalValid ? '#0466C8' : '#cbd5e1', border: 'none', height: 40, padding: '0 24px', borderRadius: 8, fontWeight: 700 }}
             >
               {saving ? 'Saving...' : 'Save Configuration'}
             </Button>
@@ -351,24 +351,24 @@ export default function TechniqueConfigurationPage() {
 
       {selectedTechnique === '360_FEEDBACK' && (
         <div>
-          <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#334155', marginBottom: 16 }}>
+          <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#33415C', marginBottom: 16 }}>
             Reviewer Configuration & Weights
           </Title>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
             {/* Manager Review */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 0.8fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 0.8fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Manager Review</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Allow direct manager to submit feedback</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Manager Review</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Allow direct manager to submit feedback</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Enabled:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Enabled:</span>
                 <Switch checked={allowManager} onChange={setAllowManager} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'flex-end' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 12, color: '#475569' }}>Min Req:</span>
+                  <span style={{ fontSize: 12, color: '#33415C' }}>Min Req:</span>
                   <InputNumber
                     min={0}
                     value={managerMinRequired}
@@ -378,7 +378,7 @@ export default function TechniqueConfigurationPage() {
                   />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                  <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                   <InputNumber
                     min={0}
                     max={100}
@@ -394,18 +394,18 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             {/* Peer Reviews */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 0.8fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 0.8fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Peer Reviews</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Allow colleagues/peers to submit feedback</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Peer Reviews</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Allow colleagues/peers to submit feedback</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Enabled:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Enabled:</span>
                 <Switch checked={allowPeers} onChange={setAllowPeers} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'flex-end' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 12, color: '#475569' }}>Min Req:</span>
+                  <span style={{ fontSize: 12, color: '#33415C' }}>Min Req:</span>
                   <InputNumber
                     min={0}
                     value={peerMinRequired}
@@ -415,7 +415,7 @@ export default function TechniqueConfigurationPage() {
                   />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                  <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                   <InputNumber
                     min={0}
                     max={100}
@@ -431,18 +431,18 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             {/* Direct Report Reviews */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 0.8fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 0.8fr 1fr', alignItems: 'center', background: '#f8fafc', padding: '12px 18px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
               <div>
-                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>Direct Report Reviews</strong>
-                <span style={{ fontSize: 11, color: '#64748b' }}>Allow subordinates/direct reports to submit feedback</span>
+                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>Direct Report Reviews</strong>
+                <span style={{ fontSize: 11, color: '#7D8597' }}>Allow subordinates/direct reports to submit feedback</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 12, color: '#475569' }}>Enabled:</span>
+                <span style={{ fontSize: 12, color: '#33415C' }}>Enabled:</span>
                 <Switch checked={allowDirectReports} onChange={setAllowDirectReports} size="small" />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'flex-end' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 12, color: '#475569' }}>Min Req:</span>
+                  <span style={{ fontSize: 12, color: '#33415C' }}>Min Req:</span>
                   <InputNumber
                     min={0}
                     value={directReportMinRequired}
@@ -452,7 +452,7 @@ export default function TechniqueConfigurationPage() {
                   />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontSize: 12, color: '#475569' }}>Weight:</span>
+                  <span style={{ fontSize: 12, color: '#33415C' }}>Weight:</span>
                   <InputNumber
                     min={0}
                     max={100}
@@ -468,13 +468,13 @@ export default function TechniqueConfigurationPage() {
             </div>
           </div>
 
-          <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#334155', marginBottom: 16 }}>
+          <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#33415C', marginBottom: 16 }}>
             360° Review Rules & Policies
           </Title>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24, background: '#f8fafc', padding: 20, borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24, background: '#f8fafc', padding: 20, borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <div>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>ANONYMOUS FEEDBACK</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#33415C', display: 'block', marginBottom: 6 }}>ANONYMOUS FEEDBACK</span>
               <Select
                 value={anonymousEnabled ? 'true' : 'false'}
                 onChange={val => setAnonymousEnabled(val === 'true')}
@@ -487,7 +487,7 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             <div>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>MINIMUM COMPLETION RATE FOR FINALIZATION</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#33415C', display: 'block', marginBottom: 6 }}>MINIMUM COMPLETION RATE FOR FINALIZATION</span>
               <Select
                 value={minimumCompletionPercentage}
                 onChange={val => setMinimumCompletionPercentage(val)}
@@ -502,7 +502,7 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             <div>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>REMINDER FREQUENCY (DAYS)</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#33415C', display: 'block', marginBottom: 6 }}>REMINDER FREQUENCY (DAYS)</span>
               <InputNumber
                 min={1}
                 value={reminderIntervalDays}
@@ -512,7 +512,7 @@ export default function TechniqueConfigurationPage() {
             </div>
 
             <div>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>LATE SUBMISSION POLICY</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#33415C', display: 'block', marginBottom: 6 }}>LATE SUBMISSION POLICY</span>
               <Select
                 value={lateSubmissionPolicy}
                 onChange={val => setLateSubmissionPolicy(val)}
@@ -549,7 +549,7 @@ export default function TechniqueConfigurationPage() {
               type="primary"
               disabled={!is360WeightValid || saving}
               onClick={handleSave}
-              style={{ background: is360WeightValid ? '#6366f1' : '#cbd5e1', border: 'none', height: 40, padding: '0 24px', borderRadius: 8, fontWeight: 700 }}
+              style={{ background: is360WeightValid ? '#0466C8' : '#cbd5e1', border: 'none', height: 40, padding: '0 24px', borderRadius: 8, fontWeight: 700 }}
             >
               {saving ? 'Saving...' : 'Save Configuration'}
             </Button>
@@ -560,10 +560,10 @@ export default function TechniqueConfigurationPage() {
       {selectedTechnique === 'KPI' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div>
-            <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#334155', marginBottom: 6 }}>
+            <Title level={5} style={{ fontSize: 14, fontWeight: 700, color: '#33415C', marginBottom: 6 }}>
               📈 KPI Options Configurations
             </Title>
-            <Paragraph type="secondary" style={{ fontSize: 11, color: '#64748b', margin: 0 }}>
+            <Paragraph type="secondary" style={{ fontSize: 11, color: '#7D8597', margin: 0 }}>
               Define options available for Goal KPIs. Reused dynamically during goal setup dropdowns.
             </Paragraph>
           </div>
@@ -571,14 +571,14 @@ export default function TechniqueConfigurationPage() {
           <Row gutter={[16, 16]}>
             {/* Measurement Types */}
             <Col xs={24} md={12}>
-              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Allowed Measurement Types</span>} size="small" style={{ borderRadius: 10, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Allowed Measurement Types</span>} size="small" style={{ borderRadius: 10, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12, minHeight: 40 }}>
                   {measurementTypes.map(t => (
                     <span
                       key={t}
                       style={{
-                        padding: '4px 10px', borderRadius: 8, background: '#f1f5f9',
-                        color: '#334155', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #e2e8f0'
+                        padding: '4px 10px', borderRadius: 8, background: '#F1F4F8',
+                        color: '#33415C', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #E3E7EE'
                       }}
                     >
                       {t === 'NUMBER' ? '🔢 NUMBER' : t === 'PERCENTAGE' ? '٪ PERCENTAGE' : t === 'CURRENCY' ? '💵 CURRENCY' : t === 'BOOLEAN' ? '☑️ BOOLEAN' : t === 'TEXT' ? '✏️ TEXT' : t}
@@ -620,14 +620,14 @@ export default function TechniqueConfigurationPage() {
 
             {/* Units */}
             <Col xs={24} md={12}>
-              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Measurement Units</span>} size="small" style={{ borderRadius: 10, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Measurement Units</span>} size="small" style={{ borderRadius: 10, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12, minHeight: 40 }}>
                   {units.map(u => (
                     <span
                       key={u}
                       style={{
-                        padding: '4px 10px', borderRadius: 8, background: '#f1f5f9',
-                        color: '#334155', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #e2e8f0'
+                        padding: '4px 10px', borderRadius: 8, background: '#F1F4F8',
+                        color: '#33415C', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #E3E7EE'
                       }}
                     >
                       {u}
@@ -663,14 +663,14 @@ export default function TechniqueConfigurationPage() {
 
             {/* KPI Types */}
             <Col xs={24} md={12}>
-              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>KPI Types</span>} size="small" style={{ borderRadius: 10, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>KPI Types</span>} size="small" style={{ borderRadius: 10, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12, minHeight: 40 }}>
                   {kpiTypes.map(t => (
                     <span
                       key={t}
                       style={{
-                        padding: '4px 10px', borderRadius: 8, background: '#f1f5f9',
-                        color: '#334155', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #e2e8f0'
+                        padding: '4px 10px', borderRadius: 8, background: '#F1F4F8',
+                        color: '#33415C', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #E3E7EE'
                       }}
                     >
                       {t}
@@ -706,14 +706,14 @@ export default function TechniqueConfigurationPage() {
 
             {/* Frequencies */}
             <Col xs={24} md={12}>
-              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Tracking Frequencies</span>} size="small" style={{ borderRadius: 10, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Tracking Frequencies</span>} size="small" style={{ borderRadius: 10, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12, minHeight: 40 }}>
                   {frequencies.map(f => (
                     <span
                       key={f}
                       style={{
-                        padding: '4px 10px', borderRadius: 8, background: '#f1f5f9',
-                        color: '#334155', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #e2e8f0'
+                        padding: '4px 10px', borderRadius: 8, background: '#F1F4F8',
+                        color: '#33415C', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #E3E7EE'
                       }}
                     >
                       {f}
@@ -749,14 +749,14 @@ export default function TechniqueConfigurationPage() {
 
             {/* Priorities */}
             <Col xs={24} md={12}>
-              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Priority Levels</span>} size="small" style={{ borderRadius: 10, border: '1px solid #e2e8f0' }}>
+              <Card title={<span style={{ fontSize: 13, fontWeight: 700 }}>Priority Levels</span>} size="small" style={{ borderRadius: 10, border: '1px solid #E3E7EE' }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12, minHeight: 40 }}>
                   {priorities.map(p => (
                     <span
                       key={p}
                       style={{
-                        padding: '4px 10px', borderRadius: 8, background: '#f1f5f9',
-                        color: '#334155', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #e2e8f0'
+                        padding: '4px 10px', borderRadius: 8, background: '#F1F4F8',
+                        color: '#33415C', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid #E3E7EE'
                       }}
                     >
                       {p}

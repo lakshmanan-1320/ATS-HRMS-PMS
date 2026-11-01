@@ -158,8 +158,8 @@ export default function LeaveTypesConfig() {
 
   const inputStyle = {
     width: '100%', padding: '10px 14px', background: '#f8fafc',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box',
     fontFamily: 'inherit', transition: 'border-color 0.15s'
   }
 
@@ -172,7 +172,7 @@ export default function LeaveTypesConfig() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#F1F4F8', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <ClientAdminSidebar active="leave" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
@@ -186,7 +186,7 @@ export default function LeaveTypesConfig() {
             actions={
               <button
                 onClick={openCreateModal}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)', transition: 'all 0.2s' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)', transition: 'all 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
               >
@@ -199,10 +199,10 @@ export default function LeaveTypesConfig() {
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#C2071A', icon: <FiList size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#C2071A', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#C2071A', icon: <FiDollarSign size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#C2071A', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { key: 'ALL',      label: 'Total Policies',   value: stats.total,    color: '#0466C8', icon: <FiList size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { key: 'ACTIVE',   label: 'Active',           value: stats.active,   color: '#0466C8', icon: <FiCheckCircle size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { key: 'PAID',     label: 'Paid Leave Types', value: stats.paid,     color: '#0466C8', icon: <FiDollarSign size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { key: 'INACTIVE', label: 'Inactive',         value: stats.inactive, color: '#0466C8', icon: <FiXCircle size={22} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
             ].map(({ key, label, value, color, icon }) => {
               const active = isStatActive(key)
               return (
@@ -215,13 +215,13 @@ export default function LeaveTypesConfig() {
                     else if (key === 'PAID')     { setPaidFilter('PAID'); setStatusFilter('ALL') }
                     setPage(1)
                   }}
-                  style={{ background: '#fff', border: `1.5px solid ${active ? color : '#e2e8f0'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
+                  style={{ background: '#fff', border: `1.5px solid ${active ? color : '#E3E7EE'}`, borderRadius: '14px', padding: '18px 20px', boxShadow: active ? `0 4px 14px ${color}22` : '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s' }}>
                   <div style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     {icon}
                   </div>
                   <div>
-                    <div style={{ fontSize: '26px', fontWeight: '800', color: active ? color : '#0f172a', lineHeight: 1 }}>{value}</div>
-                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginTop: 3 }}>{label}</div>
+                    <div style={{ fontSize: '26px', fontWeight: '800', color: active ? color : '#001233', lineHeight: 1 }}>{value}</div>
+                    <div style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600', marginTop: 3 }}>{label}</div>
                   </div>
                 </div>
               )
@@ -229,16 +229,16 @@ export default function LeaveTypesConfig() {
           </div>
 
           {/* Filter Bar */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '14px', padding: '14px 18px', marginBottom: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '9px', padding: '0 11px' }}>
                 <FiSearch size={13} color="#94a3b8" />
                 <input
                   placeholder="Search leave type, code or description…"
                   value={search}
                   className="ca-borderless-input"
                   onChange={e => { setSearch(e.target.value); setPage(1) }}
-                  style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#0f172a', outline: 'none', fontFamily: 'inherit', width: '100%' }}
+                  style={{ border: 'none', background: 'transparent', padding: '8px 0', fontSize: '13px', color: '#001233', outline: 'none', fontFamily: 'inherit', width: '100%' }}
                 />
                 {search && (
                   <button onClick={() => { setSearch(''); setPage(1) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex', padding: 0 }}>
@@ -250,7 +250,7 @@ export default function LeaveTypesConfig() {
               <select
                 value={statusFilter}
                 onChange={e => { setStatusFilter(e.target.value); setPage(1) }}
-                style={{ padding: '8px 11px', border: '1px solid #e2e8f0', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600' }}
+                style={{ padding: '8px 11px', border: '1px solid #E3E7EE', borderRadius: '9px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600' }}
               >
                 <option value="ALL">All Statuses</option>
                 <option value="ACTIVE">Active Only</option>
@@ -259,7 +259,7 @@ export default function LeaveTypesConfig() {
 
               <button
                 onClick={() => setShowAdvanced(v => !v)}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#feecee' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#f7a6af' : '#e2e8f0'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#941018' : '#374151', cursor: 'pointer' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 13px', background: showAdvanced || hasAdvancedFilters ? '#EEF8FF' : '#f8fafc', border: `1px solid ${showAdvanced || hasAdvancedFilters ? '#C9DDF3' : '#E3E7EE'}`, borderRadius: '9px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? '#023E7D' : '#374151', cursor: 'pointer' }}>
                 <FiFilter size={12} />
                 Advanced {hasAdvancedFilters ? '•' : ''}
                 {showAdvanced ? <FiChevronUp size={11} /> : <FiChevronDown size={11} />}
@@ -274,18 +274,18 @@ export default function LeaveTypesConfig() {
 
               <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5 }}>
                 <FiFilter size={12} color="#94a3b8" />
-                <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>
+                <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600' }}>
                   {filtered.length} of {types.length} polic{filtered.length !== 1 ? 'ies' : 'y'}
                 </span>
               </div>
             </div>
 
             {showAdvanced && (
-              <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #F1F4F8', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Pay Type</label>
                   <select value={paidFilter} onChange={e => { setPaidFilter(e.target.value); setPage(1) }}
-                    style={{ padding: '7px 11px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '130px' }}>
+                    style={{ padding: '7px 11px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '130px' }}>
                     <option value="ALL">All Types</option>
                     <option value="PAID">Paid Only</option>
                     <option value="UNPAID">Unpaid Only</option>
@@ -295,7 +295,7 @@ export default function LeaveTypesConfig() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Half Day</label>
                   <select value={halfDayFilter} onChange={e => { setHalfDayFilter(e.target.value); setPage(1) }}
-                    style={{ padding: '7px 11px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '130px' }}>
+                    style={{ padding: '7px 11px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '130px' }}>
                     <option value="ALL">All</option>
                     <option value="ALLOWED">Allowed</option>
                     <option value="BLOCKED">Blocked</option>
@@ -305,7 +305,7 @@ export default function LeaveTypesConfig() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sort By</label>
                   <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-                    style={{ padding: '7px 11px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '150px' }}>
+                    style={{ padding: '7px 11px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#f8fafc', outline: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: '600', minWidth: '150px' }}>
                     <option value="leave_type_name">Name</option>
                     <option value="leave_type_code">Code</option>
                     <option value="annual_quota_days">Annual Quota</option>
@@ -314,10 +314,10 @@ export default function LeaveTypesConfig() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Order</label>
-                  <div style={{ display: 'flex', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', borderRadius: '8px', border: '1px solid #E3E7EE', overflow: 'hidden' }}>
                     {[{ val: 'asc', label: '↑ A–Z' }, { val: 'desc', label: '↓ Z–A' }].map(o => (
                       <button key={o.val} onClick={() => setSortDir(o.val)}
-                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#C2071A' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
+                        style={{ padding: '7px 12px', border: 'none', fontSize: '12px', fontWeight: '700', cursor: 'pointer', background: sortDir === o.val ? '#0466C8' : '#f8fafc', color: sortDir === o.val ? '#fff' : '#374151', transition: 'all 0.15s' }}>
                         {o.label}
                       </button>
                     ))}
@@ -340,19 +340,19 @@ export default function LeaveTypesConfig() {
           {/* Status Tab Pills */}
           <div style={{ display: 'flex', gap: 8, marginBottom: '16px', flexWrap: 'wrap' }}>
             {[
-              { val: 'ALL',      label: 'All',      count: types.length,   color: '#C2071A' },
+              { val: 'ALL',      label: 'All',      count: types.length,   color: '#0466C8' },
               { val: 'ACTIVE',   label: 'Active',   count: stats.active,   color: '#16a34a' },
               { val: 'INACTIVE', label: 'Inactive', count: stats.inactive, color: '#dc2626' },
             ].map(o => (
               <button key={o.val} onClick={() => { setStatusFilter(o.val); setPage(1) }} style={{
                 padding: '7px 16px', borderRadius: '20px',
-                border: `1.5px solid ${statusFilter === o.val ? o.color : '#e2e8f0'}`,
+                border: `1.5px solid ${statusFilter === o.val ? o.color : '#E3E7EE'}`,
                 background: statusFilter === o.val ? o.color : '#fff',
-                color: statusFilter === o.val ? '#fff' : '#475569',
+                color: statusFilter === o.val ? '#fff' : '#33415C',
                 fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7, transition: 'all 0.15s',
               }}>
                 {o.label}
-                <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#f1f5f9', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>
+                <span style={{ background: statusFilter === o.val ? 'rgba(255,255,255,0.25)' : '#F1F4F8', color: statusFilter === o.val ? '#fff' : '#374151', borderRadius: '10px', padding: '1px 7px', fontSize: '11px', fontWeight: '800' }}>
                   {o.count}
                 </span>
               </button>
@@ -360,11 +360,11 @@ export default function LeaveTypesConfig() {
           </div>
 
           {/* Table */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
-                <div style={{ color: '#64748b', fontSize: '13px', fontWeight: '600' }}>Loading leave policies…</div>
+                <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ color: '#7D8597', fontSize: '13px', fontWeight: '600' }}>Loading leave policies…</div>
               </div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
@@ -375,11 +375,11 @@ export default function LeaveTypesConfig() {
                   {types.length === 0 ? 'No leave policies configured yet' : 'No policies match the current filters'}
                 </div>
                 {types.length === 0 ? (
-                  <button onClick={openCreateModal} style={{ marginTop: 8, padding: '9px 20px', background: 'linear-gradient(135deg,#C2071A,#941018)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
+                  <button onClick={openCreateModal} style={{ marginTop: 8, padding: '9px 20px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer' }}>
                     + Add First Leave Type
                   </button>
                 ) : hasAnyFilter && (
-                  <span onClick={resetAll} style={{ color: '#C2071A', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
+                  <span onClick={resetAll} style={{ color: '#0466C8', fontSize: '13px', cursor: 'pointer', fontWeight: '600', textDecoration: 'underline' }}>
                     Clear all filters
                   </span>
                 )}
@@ -388,9 +388,9 @@ export default function LeaveTypesConfig() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
                       {['Leave Type', 'Code', 'Annual Quota', 'Pay Type', 'Half Day', 'Attachment', 'Status', 'Actions'].map(h => (
-                        <th key={h} style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
+                        <th key={h} style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -398,24 +398,24 @@ export default function LeaveTypesConfig() {
                     {paginated.map((t, idx) => (
                       <tr
                         key={t.leave_type_id}
-                        style={{ borderBottom: idx < paginated.length - 1 ? '1px solid #f1f5f9' : 'none', transition: 'background 0.15s' }}
+                        style={{ borderBottom: idx < paginated.length - 1 ? '1px solid #F1F4F8' : 'none', transition: 'background 0.15s' }}
                         onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >
                         <td style={{ padding: '14px 18px' }}>
-                          <div style={{ fontWeight: '700', color: '#0f172a' }}>{t.leave_type_name}</div>
-                          {t.description && <div style={{ fontSize: '11px', color: '#64748b', marginTop: 2, fontWeight: 500 }}>{t.description}</div>}
+                          <div style={{ fontWeight: '700', color: '#001233' }}>{t.leave_type_name}</div>
+                          {t.description && <div style={{ fontSize: '11px', color: '#7D8597', marginTop: 2, fontWeight: 500 }}>{t.description}</div>}
                           {t.max_consecutive_days && (
                             <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: 2 }}>Max {t.max_consecutive_days} consecutive days</div>
                           )}
                         </td>
                         <td style={{ padding: '14px 18px' }}>
-                          <span style={{ fontFamily: 'monospace', background: '#feecee', color: '#941018', padding: '3px 9px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>
+                          <span style={{ fontFamily: 'monospace', background: '#EEF8FF', color: '#023E7D', padding: '3px 9px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>
                             {t.leave_type_code}
                           </span>
                         </td>
                         <td style={{ padding: '14px 18px' }}>
-                          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 48, height: 32, borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#374151', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>
+                          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 48, height: 32, borderRadius: '8px', background: '#f8fafc', border: '1px solid #E3E7EE', color: '#374151', fontWeight: '800', fontSize: '14px', padding: '0 10px' }}>
                              {parseFloat(t.annual_quota_days)}
                           </div>
                           <span style={{ fontSize: '11px', color: '#94a3b8', marginLeft: 6 }}>days/yr</span>
@@ -435,9 +435,9 @@ export default function LeaveTypesConfig() {
                         <td style={{ padding: '14px 18px' }}>
                           <span style={{
                             display: 'inline-flex', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px',
-                            background: t.allows_half_day ? '#ede9fe' : '#f1f5f9',
-                            color:      t.allows_half_day ? '#6d28d9' : '#64748b',
-                            border:     `1px solid ${t.allows_half_day ? '#ddd6fe' : '#e2e8f0'}`,
+                            background: t.allows_half_day ? '#ede9fe' : '#F1F4F8',
+                            color:      t.allows_half_day ? '#6d28d9' : '#7D8597',
+                            border:     `1px solid ${t.allows_half_day ? '#ddd6fe' : '#E3E7EE'}`,
                             textTransform: 'uppercase', letterSpacing: '0.04em'
                           }}>
                             {t.allows_half_day ? 'Allowed' : 'Blocked'}
@@ -452,8 +452,8 @@ export default function LeaveTypesConfig() {
                           <span style={{
                             display: 'inline-flex', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '6px',
                             background: t.is_active ? '#f0fdf4' : '#f8fafc',
-                            color:      t.is_active ? '#15803d' : '#64748b',
-                            border:     `1px solid ${t.is_active ? '#bbf7d0' : '#e2e8f0'}`,
+                            color:      t.is_active ? '#15803d' : '#7D8597',
+                            border:     `1px solid ${t.is_active ? '#bbf7d0' : '#E3E7EE'}`,
                             textTransform: 'uppercase', letterSpacing: '0.04em'
                           }}>
                             {t.is_active ? '● Active' : '○ Inactive'}
@@ -462,9 +462,9 @@ export default function LeaveTypesConfig() {
                         <td style={{ padding: '14px 18px' }}>
                           <button
                             onClick={() => openEditModal(t)}
-                            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#C2071A', color: '#ffffff', border: '1px solid #C2071A', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' }}
-                            onMouseEnter={e => { e.currentTarget.style.background = '#941018' }}
-                            onMouseLeave={e => { e.currentTarget.style.background = '#C2071A' }}
+                            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 12px', background: '#0466C8', color: '#ffffff', border: '1px solid #0466C8', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' }}
+                            onMouseEnter={e => { e.currentTarget.style.background = '#023E7D' }}
+                            onMouseLeave={e => { e.currentTarget.style.background = '#0466C8' }}
                           >
                             <FiEdit2 size={12} color="#ffffff" /> Configure
                           </button>
@@ -479,14 +479,14 @@ export default function LeaveTypesConfig() {
 
           {/* Pagination */}
           {!loading && filtered.length > PAGE_SIZE && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
-              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 20px', marginTop: '12px', background: '#fff', border: '1px solid #E3E7EE', borderRadius: '12px', flexWrap: 'wrap', gap: 10 }}>
+              <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: '500' }}>
                 Showing <strong style={{ color: '#374151' }}>{((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, filtered.length)}</strong> of <strong style={{ color: '#374151' }}>{filtered.length}</strong> policies
               </span>
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#e2e8f0' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #E3E7EE', cursor: page === 1 ? 'not-allowed' : 'pointer', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#E3E7EE' : '#374151' }}>
                   ‹ Prev
                 </button>
 
@@ -495,7 +495,7 @@ export default function LeaveTypesConfig() {
                     <span key={`d${i}`} style={{ padding: '6px 8px', color: '#94a3b8', fontSize: '13px' }}>…</span>
                   ) : (
                     <button key={p} onClick={() => setPage(p)}
-                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #e2e8f0', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#C2071A,#941018)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(194,7,26,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: page === p ? 'none' : '1px solid #E3E7EE', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg,#0466C8,#023E7D)' : '#fff', color: page === p ? '#fff' : '#374151', boxShadow: page === p ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {p}
                     </button>
                   )
@@ -503,7 +503,7 @@ export default function LeaveTypesConfig() {
 
                 <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #e2e8f0', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#e2e8f0' : '#374151' }}>
+                  style={{ padding: '6px 13px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid #E3E7EE', cursor: page === totalPages ? 'not-allowed' : 'pointer', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#E3E7EE' : '#374151' }}>
                   Next ›
                 </button>
               </div>
@@ -526,16 +526,16 @@ export default function LeaveTypesConfig() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#C2071A,#941018)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FiCalendar size={18} color="#fff" />
                 </div>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: '#001233' }}>
                   {editingType ? 'Modify Leave Policy' : 'Create Leave Policy'}
                 </h3>
               </div>
               <button
                 onClick={() => setModalOpen(false)}
-                style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}>
+                style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}>
                 <FiX size={14} />
               </button>
             </div>
@@ -543,33 +543,33 @@ export default function LeaveTypesConfig() {
             <form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Type Name *</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Type Name *</label>
                   <input style={inputStyle} placeholder="e.g. Annual Vacation" value={name} onChange={e => setName(e.target.value)} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Code *</label>
-                  <input style={{ ...inputStyle, fontFamily: 'monospace', background: editingType ? '#f1f5f9' : '#f8fafc' }} placeholder="e.g. AL" value={code} onChange={e => setCode(e.target.value)} disabled={!!editingType} />
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Code *</label>
+                  <input style={{ ...inputStyle, fontFamily: 'monospace', background: editingType ? '#F1F4F8' : '#f8fafc' }} placeholder="e.g. AL" value={code} onChange={e => setCode(e.target.value)} disabled={!!editingType} />
                 </div>
               </div>
 
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</label>
                 <input style={inputStyle} placeholder="Brief policy explanation…" value={description} onChange={e => setDescription(e.target.value)} />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Annual Quota (Days)</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Annual Quota (Days)</label>
                   <input style={inputStyle} type="number" step="0.5" value={quota} onChange={e => setQuota(e.target.value)} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Max Consecutive Days</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Max Consecutive Days</label>
                   <input style={inputStyle} type="number" placeholder="No limit" value={maxConsecutive} onChange={e => setMaxConsecutive(e.target.value)} />
                 </div>
               </div>
 
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Policy Options</div>
+              <div style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Policy Options</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
                   {[
                     { label: 'Paid Leave',              state: isPaid,        set: setIsPaid },
@@ -581,7 +581,7 @@ export default function LeaveTypesConfig() {
                     <label key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13px', color: '#374151', cursor: 'pointer', fontWeight: '600', minWidth: '45%' }}>
                       <input
                         type="checkbox" checked={state} onChange={e => set(e.target.checked)}
-                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#C2071A' }}
+                        style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: '#0466C8' }}
                       />
                       {label}
                     </label>
@@ -600,11 +600,11 @@ export default function LeaveTypesConfig() {
 
               <div style={{ display: 'flex', gap: 10 }}>
                 <button type="button" onClick={() => setModalOpen(false)}
-                  style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>
                   Cancel
                 </button>
                 <button type="submit"
-                  style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}
+                  style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)' }}
                   onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                   onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                   {editingType ? 'Update Policy' : 'Create Policy'}

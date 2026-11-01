@@ -23,7 +23,7 @@ import {
  * - Sortable columns with sleek chevrons
  * - Responsive table layout with clean cell spacing
  * - Pagination bar with current range and page numbers
- * - Insight HCM color pattern from globals.css (#C2071A brand red)
+ * - Insight HCM color pattern from globals.css (#0466C8 brand red)
  */
 
 export default function Table({
@@ -112,7 +112,7 @@ export default function Table({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '12px 18px',
-          borderBottom: '1px solid #f1f5f9',
+          borderBottom: '1px solid #F1F4F8',
           gap: '12px',
           flexWrap: 'wrap'
         }}
@@ -137,7 +137,7 @@ export default function Table({
                   fontWeight: isActive ? 700 : 600,
                   cursor: 'pointer',
                   background: isActive ? '#eceff3' : 'transparent',
-                  color: isActive ? '#0f172a' : '#64748b',
+                  color: isActive ? '#001233' : '#7D8597',
                   transition: 'all 0.15s ease'
                 }}
                 onMouseEnter={e => {
@@ -155,8 +155,8 @@ export default function Table({
                       fontWeight: 700,
                       padding: '2px 7px',
                       borderRadius: '10px',
-                      background: isActive ? '#ffffff' : '#f1f5f9',
-                      color: isActive ? 'var(--primary-color, #C2071A)' : '#64748b',
+                      background: isActive ? '#ffffff' : '#F1F4F8',
+                      color: isActive ? 'var(--primary-color, #0466C8)' : '#7D8597',
                       marginLeft: '2px'
                     }}
                   >
@@ -181,11 +181,11 @@ export default function Table({
                 borderRadius: '6px',
                 border: 'none',
                 background: 'transparent',
-                color: '#64748b',
+                color: '#7D8597',
                 cursor: 'pointer',
                 fontSize: '14px'
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
+              onMouseEnter={e => (e.currentTarget.style.background = '#F1F4F8')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               <FiPlus size={14} />
@@ -200,7 +200,7 @@ export default function Table({
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                border: '1px solid #e2e8f0',
+                border: '1px solid #E3E7EE',
                 borderRadius: '8px',
                 background: '#ffffff',
                 overflow: 'hidden'
@@ -217,7 +217,7 @@ export default function Table({
                   padding: '8px 11px',
                   border: 'none',
                   background: showSearchInput || searchValue ? '#f8fafc' : '#ffffff',
-                  color: showSearchInput || searchValue ? 'var(--primary-color, #C2071A)' : '#64748b',
+                  color: showSearchInput || searchValue ? 'var(--primary-color, #0466C8)' : '#7D8597',
                   cursor: 'pointer',
                   fontSize: '13px',
                   fontWeight: 600
@@ -243,7 +243,7 @@ export default function Table({
                       background: 'transparent',
                       fontSize: '13.5px',
                       padding: '6px 10px',
-                      color: '#1e293b',
+                      color: '#001233',
                       width: '210px',
                       fontFamily: 'inherit'
                     }}
@@ -282,18 +282,18 @@ export default function Table({
                 width: '34px',
                 height: '34px',
                 borderRadius: '8px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid #E3E7EE',
                 background: '#ffffff',
-                color: '#64748b',
+                color: '#7D8597',
                 cursor: 'pointer'
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = '#f8fafc';
-                e.currentTarget.style.color = 'var(--primary-color, #C2071A)';
+                e.currentTarget.style.color = 'var(--primary-color, #0466C8)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = '#ffffff';
-                e.currentTarget.style.color = '#64748b';
+                e.currentTarget.style.color = '#7D8597';
               }}
             >
               {sortDirection === 'desc' ? <FiArrowDown size={15} /> : <FiArrowUp size={15} />}
@@ -314,7 +314,7 @@ export default function Table({
             gap: '10px',
             padding: '10px 18px',
             background: '#fafbfc',
-            borderBottom: '1px solid #f1f5f9',
+            borderBottom: '1px solid #F1F4F8',
             flexWrap: 'wrap'
           }}
         >
@@ -330,9 +330,9 @@ export default function Table({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '8px 18px',
-            background: 'var(--card-active-bg, #FEECEE)',
-            borderBottom: '1px solid var(--card-active-border, #F7A6AF)',
-            color: 'var(--primary-color, #C2071A)',
+            background: 'var(--card-active-bg, #EEF8FF)',
+            borderBottom: '1px solid var(--card-active-border, #C9DDF3)',
+            color: 'var(--primary-color, #0466C8)',
             fontSize: '12.5px',
             fontWeight: 700
           }}
@@ -344,7 +344,7 @@ export default function Table({
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--primary-color, #C2071A)',
+              color: 'var(--primary-color, #0466C8)',
               cursor: 'pointer',
               fontWeight: 600,
               fontSize: '12px',
@@ -368,7 +368,7 @@ export default function Table({
         >
           {/* Header Row */}
           <thead>
-            <tr style={{ borderBottom: '1px solid #f1f5f9', background: '#ffffff' }}>
+            <tr style={{ borderBottom: '1px solid #F1F4F8', background: '#ffffff' }}>
               {selectable && (
                 <th
                   style={{
@@ -384,8 +384,8 @@ export default function Table({
                       width: '16px',
                       height: '16px',
                       borderRadius: '4px',
-                      border: isAllSelected || isSomeSelected ? '1.5px solid var(--primary-color, #C2071A)' : '1.5px solid #cbd5e1',
-                      background: isAllSelected || isSomeSelected ? 'var(--primary-color, #C2071A)' : '#ffffff',
+                      border: isAllSelected || isSomeSelected ? '1.5px solid var(--primary-color, #0466C8)' : '1.5px solid #cbd5e1',
+                      background: isAllSelected || isSomeSelected ? 'var(--primary-color, #0466C8)' : '#ffffff',
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -411,7 +411,7 @@ export default function Table({
                       paddingRight: cIdx === columns.length - 1 ? '22px' : '18px',
                       fontSize: '13.5px',
                       fontWeight: 650,
-                      color: '#1e293b',
+                      color: '#001233',
                       textTransform: 'none',
                       letterSpacing: 'normal',
                       textAlign: col.align || 'left',
@@ -435,7 +435,7 @@ export default function Table({
                         <span
                           style={{
                             display: 'inline-flex',
-                            color: isSort ? 'var(--primary-color, #C2071A)' : '#9ca3af',
+                            color: isSort ? 'var(--primary-color, #0466C8)' : '#9ca3af',
                             fontSize: '11px'
                           }}
                         >
@@ -462,14 +462,14 @@ export default function Table({
               <tr>
                 <td
                   colSpan={(selectable ? 1 : 0) + columns.length}
-                  style={{ padding: '60px 20px', textAlign: 'center', color: '#64748b' }}
+                  style={{ padding: '60px 20px', textAlign: 'center', color: '#7D8597' }}
                 >
                   <div
                     style={{
                       width: '32px',
                       height: '32px',
-                      border: '3px solid #e2e8f0',
-                      borderTopColor: 'var(--primary-color, #C2071A)',
+                      border: '3px solid #E3E7EE',
+                      borderTopColor: 'var(--primary-color, #0466C8)',
                       borderRadius: '50%',
                       margin: '0 auto 12px',
                       animation: 'spin 0.8s linear infinite'
@@ -485,7 +485,7 @@ export default function Table({
                   style={{ padding: '40px 20px', textAlign: 'center' }}
                 >
                   {emptyState || (
-                    <div style={{ color: '#64748b', fontSize: '13.5px' }}>
+                    <div style={{ color: '#7D8597', fontSize: '13.5px' }}>
                       No items found.
                     </div>
                   )}
@@ -529,8 +529,8 @@ export default function Table({
                             width: '16px',
                             height: '16px',
                             borderRadius: '4px',
-                            border: isSelected ? '1.5px solid var(--primary-color, #C2071A)' : '1.5px solid #cbd5e1',
-                            background: isSelected ? 'var(--primary-color, #C2071A)' : '#ffffff',
+                            border: isSelected ? '1.5px solid var(--primary-color, #0466C8)' : '1.5px solid #cbd5e1',
+                            background: isSelected ? 'var(--primary-color, #0466C8)' : '#ffffff',
                             display: 'inline-flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -555,7 +555,7 @@ export default function Table({
                             paddingLeft: cIdx === 0 && !selectable ? '22px' : '18px',
                             paddingRight: cIdx === columns.length - 1 ? '22px' : '18px',
                             fontSize: '14px',
-                            color: '#1e293b',
+                            color: '#001233',
                             verticalAlign: 'middle',
                             textAlign: col.align || 'left',
                             ...col.cellStyle
@@ -581,13 +581,13 @@ export default function Table({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '14px 20px',
-            borderTop: '1px solid #f1f5f9',
+            borderTop: '1px solid #F1F4F8',
             background: '#ffffff',
             flexWrap: 'wrap',
             gap: '12px'
           }}
         >
-          <span style={{ fontSize: '13px', color: '#475569', fontWeight: 500 }}>
+          <span style={{ fontSize: '13px', color: '#33415C', fontWeight: 500 }}>
             Showing {((pagination.currentPage - 1) * (pagination.pageSize || 10)) + 1}–
             {Math.min(pagination.currentPage * (pagination.pageSize || 10), pagination.totalItems || 0)} of{' '}
             {pagination.totalItems || 0} items
@@ -600,10 +600,10 @@ export default function Table({
               onClick={() => pagination.onPageChange(Math.max(1, pagination.currentPage - 1))}
               style={{
                 padding: '7px 13px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid #E3E7EE',
                 borderRadius: '8px',
                 background: pagination.currentPage <= 1 ? '#f8fafc' : '#ffffff',
-                color: pagination.currentPage <= 1 ? '#cbd5e1' : '#334155',
+                color: pagination.currentPage <= 1 ? '#cbd5e1' : '#33415C',
                 fontSize: '13px',
                 fontWeight: 600,
                 cursor: pagination.currentPage <= 1 ? 'default' : 'pointer',
@@ -638,12 +638,12 @@ export default function Table({
                       width: '34px',
                       height: '34px',
                       borderRadius: '8px',
-                      border: p === pagination.currentPage ? 'none' : '1px solid #e2e8f0',
+                      border: p === pagination.currentPage ? 'none' : '1px solid #E3E7EE',
                       background:
                         p === pagination.currentPage
-                          ? 'var(--navbar-active-gradient, linear-gradient(135deg, #D01021 0%, #B40619 100%))'
+                          ? 'var(--navbar-active-gradient, linear-gradient(135deg, #0466C8 0%, #023E7D 100%))'
                           : '#ffffff',
-                      color: p === pagination.currentPage ? '#ffffff' : '#334155',
+                      color: p === pagination.currentPage ? '#ffffff' : '#33415C',
                       fontSize: '13px',
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -661,10 +661,10 @@ export default function Table({
               onClick={() => pagination.onPageChange(Math.min(pagination.totalPages, pagination.currentPage + 1))}
               style={{
                 padding: '6px 12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid #E3E7EE',
                 borderRadius: '8px',
                 background: pagination.currentPage >= pagination.totalPages ? '#f8fafc' : '#ffffff',
-                color: pagination.currentPage >= pagination.totalPages ? '#cbd5e1' : '#475569',
+                color: pagination.currentPage >= pagination.totalPages ? '#cbd5e1' : '#33415C',
                 fontSize: '12px',
                 fontWeight: 600,
                 cursor: pagination.currentPage >= pagination.totalPages ? 'default' : 'pointer',

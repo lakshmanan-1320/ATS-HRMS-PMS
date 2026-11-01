@@ -220,7 +220,7 @@ async function handleGetTeamOptionalHolidays(req, res, next) {
 
 async function handleGetAdminLeaves(req, res, next) {
   try {
-    const leaves = await leaveService.getAdminLeaves(req.query);
+    const leaves = await leaveService.getAdminLeaves({ ...req.query, organization_id: req.user.organizationId });
     res.status(STATUS_CODES.OK).json(leaves);
   } catch (err) { next(err); }
 }
@@ -228,7 +228,7 @@ async function handleGetAdminLeaves(req, res, next) {
 async function handleGetAdminEmployeeBalances(req, res, next) {
   try {
     const { employee_id } = req.params;
-    const balances = await leaveService.getAdminEmployeeBalances(employee_id);
+    const balances = await leaveService.getAdminEmployeeBalances(employee_id, req.user.organizationId);
     res.status(STATUS_CODES.OK).json(balances);
   } catch (err) { next(err); }
 }
@@ -237,7 +237,7 @@ async function handleAdminApproveLeave(req, res, next) {
   try {
     const { leave_request_id } = req.params;
     const { remarks } = req.body;
-    const result = await leaveService.adminApproveLeave(leave_request_id, remarks);
+    const result = await leaveService.adminApproveLeave(leave_request_id, remarks, req.user.organizationId);
     res.status(STATUS_CODES.OK).json(result);
   } catch (err) { next(err); }
 }
@@ -246,7 +246,7 @@ async function handleAdminRejectLeave(req, res, next) {
   try {
     const { leave_request_id } = req.params;
     const { remarks } = req.body;
-    const result = await leaveService.adminRejectLeave(leave_request_id, remarks);
+    const result = await leaveService.adminRejectLeave(leave_request_id, remarks, req.user.organizationId);
     res.status(STATUS_CODES.OK).json(result);
   } catch (err) { next(err); }
 }

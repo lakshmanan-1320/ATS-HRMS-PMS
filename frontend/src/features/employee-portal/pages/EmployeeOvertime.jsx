@@ -105,29 +105,29 @@ export default function EmployeeOvertime() {
   const s = {
     layout: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
     main: { flex: 1, padding: '28px 32px', overflowY: 'auto' },
-    h1: { fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '10px' },
-    subtitle: { fontSize: '13px', color: '#64748b', margin: '0 0 28px 0', fontWeight: '500' },
-    tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '2px' },
+    h1: { fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '10px' },
+    subtitle: { fontSize: '13px', color: '#7D8597', margin: '0 0 28px 0', fontWeight: '500' },
+    tabs: { display: 'flex', gap: '8px', borderBottom: '1px solid #E3E7EE', marginBottom: '24px', paddingBottom: '2px' },
     tabBtn: (active) => ({
       padding: '10px 18px', background: 'none',
-      border: 'none', color: active ? '#C2071A' : '#64748b', fontSize: '13px', fontWeight: '700',
-      cursor: 'pointer', transition: 'all 0.2s', borderBottom: active ? '2.5px solid #C2071A' : '2.5px solid transparent',
+      border: 'none', color: active ? '#0466C8' : '#7D8597', fontSize: '13px', fontWeight: '700',
+      cursor: 'pointer', transition: 'all 0.2s', borderBottom: active ? '2.5px solid #0466C8' : '2.5px solid transparent',
       display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'inherit'
     }),
     card: { background: '#ffffff', border: 'none', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' },
-    title: { margin: '0 0 16px 0', color: '#0f172a', fontSize: '16px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' },
+    title: { margin: '0 0 16px 0', color: '#001233', fontSize: '16px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' },
     formGroup: { display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' },
-    label: { fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' },
-    input: { padding: '10px 14px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', fontFamily: 'inherit' },
-    select: { padding: '10px 14px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer', fontFamily: 'inherit' },
-    btn: { padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+    label: { fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    input: { padding: '10px 14px', background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', fontFamily: 'inherit' },
+    select: { padding: '10px 14px', background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', cursor: 'pointer', fontFamily: 'inherit' },
+    btn: { padding: '10px 20px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center', fontFamily: 'inherit', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' },
     alert: (isError) => ({ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', borderRadius: '10px', border: `1px solid ${isError ? '#fca5a5' : '#86efac'}`, background: isError ? '#fee2e2' : '#dcfce7', color: isError ? '#b91c1c' : '#15803d', fontSize: '13px', fontWeight: '600', marginBottom: '16px' }),
     table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' },
-    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' },
+    th: { padding: '14px 16px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' },
     tr: { borderBottom: '1px solid #edf2f7', transition: 'background 0.2s' },
-    td: { padding: '14px 16px', color: '#1e293b', fontWeight: '500' },
+    td: { padding: '14px 16px', color: '#001233', fontWeight: '500' },
     badge: (status) => {
-      let bg = '#f1f5f9'; let color = '#475569'; let border = 'rgba(71,85,105,0.2)';
+      let bg = '#F1F4F8'; let color = '#33415C'; let border = 'rgba(71,85,105,0.2)';
       if (status === 'APPROVED') { bg = 'rgba(16,185,129,0.12)'; color = '#059669'; border = 'rgba(16,185,129,0.25)'; }
       else if (status === 'REJECTED' || status === 'CANCELLED') { bg = 'rgba(239,68,68,0.12)'; color = '#ef4444'; border = 'rgba(239,68,68,0.25)'; }
       else if (status === 'PENDING') { bg = 'rgba(245,158,11,0.12)'; color = '#d97706'; border = 'rgba(245,158,11,0.25)'; }
@@ -136,15 +136,15 @@ export default function EmployeeOvertime() {
   }
 
   return (
-    <div style={s.layout}>
+    <div className="pms-page" style={s.layout}>
       <EmployeeSidebar active="overtime" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar />
         <main style={s.main}>
           <div style={{ marginBottom: '28px' }}>
             <h1 style={s.h1}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiClock size={20} color="#0466C8" strokeWidth={2.5} />
               </div>
               Overtime (OT) Management
             </h1>
@@ -153,10 +153,10 @@ export default function EmployeeOvertime() {
 
           <div style={s.tabs}>
             <button style={s.tabBtn(activeTab === 'apply')} onClick={() => setActiveTab('apply')}>
-              <FiClock size={15} color={activeTab === 'apply' ? '#C2071A' : '#64748b'} /> Apply Overtime
+              <FiClock size={15} color={activeTab === 'apply' ? '#0466C8' : '#7D8597'} /> Apply Overtime
             </button>
             <button style={s.tabBtn(activeTab === 'history')} onClick={() => setActiveTab('history')}>
-              <FiList size={15} color={activeTab === 'history' ? '#C2071A' : '#64748b'} /> History & Status
+              <FiList size={15} color={activeTab === 'history' ? '#0466C8' : '#7D8597'} /> History & Status
             </button>
           </div>
 
@@ -167,17 +167,17 @@ export default function EmployeeOvertime() {
             <div style={{ display: 'grid', gridTemplateColumns: '4fr 3fr', gap: '24px' }}>
               {/* Application Form */}
               <div style={s.card}>
-                <h3 style={s.title}><FiFileText color="#C2071A" /> Apply for Overtime Earning</h3>
+                <h3 style={s.title}><FiFileText color="#0466C8" /> Apply for Overtime Earning</h3>
                 {loading ? (
-                  <div style={{ padding: '20px 0', textAlign: 'center', color: '#64748b', fontWeight: '600' }}>Loading eligible dates...</div>
+                  <div style={{ padding: '20px 0', textAlign: 'center', color: '#7D8597', fontWeight: '600' }}>Loading eligible dates...</div>
                 ) : eligibleDates.length === 0 ? (
                   <div style={{
-                    background: 'rgba(194,7,26,0.04)', border: '1px dashed #C2071A',
-                    padding: '32px', borderRadius: '12px', textAlign: 'center', color: '#C2071A', fontWeight: '600'
+                    background: 'rgba(4, 102, 200,0.04)', border: '1px dashed #0466C8',
+                    padding: '32px', borderRadius: '12px', textAlign: 'center', color: '#0466C8', fontWeight: '600'
                   }}>
-                    <FiCalendar size={28} style={{ marginBottom: '8px' }} color="#C2071A" />
+                    <FiCalendar size={28} style={{ marginBottom: '8px' }} color="#0466C8" />
                     <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '700' }}>No Eligible Dates Found</p>
-                    <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+                    <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: '500' }}>
                       Overtime eligibility relies on checking out after shift requirements. No extra hours punches were found in the current cycle.
                     </span>
                   </div>
@@ -222,36 +222,36 @@ export default function EmployeeOvertime() {
 
               {/* Attendance Details Preview Card */}
               <div style={s.card}>
-                <h3 style={s.title}><FiClock color="#C2071A" /> Selected Date Calculations</h3>
+                <h3 style={s.title}><FiClock color="#0466C8" /> Selected Date Calculations</h3>
                 {selectedDateObj ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>Attendance Date</span>
-                      <strong style={{ fontSize: '13px', color: '#1e293b' }}>{selectedDateObj.attendance_date}</strong>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F1F4F8', paddingBottom: '8px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597' }}>Attendance Date</span>
+                      <strong style={{ fontSize: '13px', color: '#001233' }}>{selectedDateObj.attendance_date}</strong>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>Day Type</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F1F4F8', paddingBottom: '8px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597' }}>Day Type</span>
                       <span style={{
                         fontSize: '9px', fontWeight: '700', padding: '2px 8px', borderRadius: '4px',
-                        background: selectedDateObj.day_type === 'HOLIDAY' ? '#fef3c7' : selectedDateObj.day_type === 'WEEKEND' ? '#dbeafe' : '#f1f5f9',
-                        color: selectedDateObj.day_type === 'HOLIDAY' ? '#b45309' : selectedDateObj.day_type === 'WEEKEND' ? '#1d4ed8' : '#475569'
+                        background: selectedDateObj.day_type === 'HOLIDAY' ? '#fef3c7' : selectedDateObj.day_type === 'WEEKEND' ? '#dbeafe' : '#F1F4F8',
+                        color: selectedDateObj.day_type === 'HOLIDAY' ? '#b45309' : selectedDateObj.day_type === 'WEEKEND' ? '#1d4ed8' : '#33415C'
                       }}>{selectedDateObj.day_type}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>Shift Standard Duration</span>
-                      <strong style={{ fontSize: '13px', color: '#1e293b' }}>{(selectedDateObj.shift_minutes / 60).toFixed(1)} hrs</strong>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F1F4F8', paddingBottom: '8px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597' }}>Shift Standard Duration</span>
+                      <strong style={{ fontSize: '13px', color: '#001233' }}>{(selectedDateObj.shift_minutes / 60).toFixed(1)} hrs</strong>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>Actual Worked Duration</span>
-                      <strong style={{ fontSize: '13px', color: '#1e293b' }}>{(selectedDateObj.worked_minutes / 60).toFixed(1)} hrs</strong>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F1F4F8', paddingBottom: '8px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '700', color: '#7D8597' }}>Actual Worked Duration</span>
+                      <strong style={{ fontSize: '13px', color: '#001233' }}>{(selectedDateObj.worked_minutes / 60).toFixed(1)} hrs</strong>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(194,7,26,0.06)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(194,7,26,0.15)' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '800', color: '#C2071A' }}>Extra Hours (OT) Claimed</span>
-                      <strong style={{ fontSize: '14px', color: '#C2071A', fontWeight: '800' }}>{(selectedDateObj.extra_minutes / 60).toFixed(1)} hrs</strong>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(4, 102, 200,0.06)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(4, 102, 200,0.15)' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '800', color: '#0466C8' }}>Extra Hours (OT) Claimed</span>
+                      <strong style={{ fontSize: '14px', color: '#0466C8', fontWeight: '800' }}>{(selectedDateObj.extra_minutes / 60).toFixed(1)} hrs</strong>
                     </div>
                   </div>
                 ) : (
-                  <div style={{ color: '#64748b', fontSize: '13px', padding: '40px 0', textAlign: 'center', fontWeight: '500' }}>
+                  <div style={{ color: '#7D8597', fontSize: '13px', padding: '40px 0', textAlign: 'center', fontWeight: '500' }}>
                     Select an eligible date to view standard shift and calculated punches extra hours breakdowns.
                   </div>
                 )}
@@ -261,7 +261,7 @@ export default function EmployeeOvertime() {
 
           {activeTab === 'history' && (
             <div style={s.card}>
-              <h3 style={{ ...s.title, marginBottom: '20px' }}><FiList color="#C2071A" /> Overtime Requests History</h3>
+              <h3 style={{ ...s.title, marginBottom: '20px' }}><FiList color="#0466C8" /> Overtime Requests History</h3>
               <div style={{ overflowX: 'auto', borderRadius: '12px', overflow: 'hidden' }}>
                 <table style={s.table}>
                   <thead>
@@ -278,7 +278,7 @@ export default function EmployeeOvertime() {
                   <tbody>
                     {history.length === 0 ? (
                       <tr>
-                        <td colSpan="7" style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#64748b', fontWeight: 600 }}>
+                        <td colSpan="7" style={{ ...s.td, textAlign: 'center', padding: '32px', color: '#7D8597', fontWeight: 600 }}>
                           No overtime requests history found.
                         </td>
                       </tr>
@@ -291,23 +291,23 @@ export default function EmployeeOvertime() {
                             onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                           >
-                            <td style={{ ...s.td, fontWeight: '700', color: '#C2071A' }}>{req.attendance_date.split('T')[0]}</td>
+                            <td style={{ ...s.td, fontWeight: '700', color: '#0466C8' }}>{req.attendance_date.split('T')[0]}</td>
                             <td style={s.td}>
                               <span style={{
                                 fontSize: '9px', fontWeight: '700', padding: '2px 8px', borderRadius: '4px',
-                                background: req.day_type === 'HOLIDAY' ? '#fef3c7' : req.day_type === 'WEEKEND' ? '#dbeafe' : '#f1f5f9',
-                                color: req.day_type === 'HOLIDAY' ? '#b45309' : req.day_type === 'WEEKEND' ? '#1d4ed8' : '#475569'
+                                background: req.day_type === 'HOLIDAY' ? '#fef3c7' : req.day_type === 'WEEKEND' ? '#dbeafe' : '#F1F4F8',
+                                color: req.day_type === 'HOLIDAY' ? '#b45309' : req.day_type === 'WEEKEND' ? '#1d4ed8' : '#33415C'
                               }}>{req.day_type}</span>
                             </td>
                             <td style={s.td}>{reqHrs} hrs</td>
-                            <td style={{ ...s.td, fontWeight: '700', color: req.approval_status === 'APPROVED' ? '#059669' : '#1e293b' }}>
+                            <td style={{ ...s.td, fontWeight: '700', color: req.approval_status === 'APPROVED' ? '#059669' : '#001233' }}>
                               {appHrs} hrs
                             </td>
                             <td style={s.td}>{req.reason}</td>
                             <td style={s.td}>
                               <span style={s.badge(req.approval_status)}>{req.approval_status}</span>
                             </td>
-                            <td style={{ ...s.td, fontStyle: 'italic', color: '#64748b' }}>{req.remarks || '—'}</td>
+                            <td style={{ ...s.td, fontStyle: 'italic', color: '#7D8597' }}>{req.remarks || '—'}</td>
                           </tr>
                         )
                       })

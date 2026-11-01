@@ -178,6 +178,8 @@ export default function EmployeeSidebar({ active }) {
       activeId={active}
       sections={activeSections}
       onLogout={handleLogout}
+      variant="pms"
+      settingsPath="/employee/profile"
     />
   )
 }

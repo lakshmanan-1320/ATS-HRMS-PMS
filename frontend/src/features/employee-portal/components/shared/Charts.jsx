@@ -9,7 +9,7 @@ export function DonutChart({ segments, size = 130, strokeWidth = 13 }) {
   let cum = 0
   return (
     <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', display: 'block' }}>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#f1f5f9" strokeWidth={strokeWidth} />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F1F4F8" strokeWidth={strokeWidth} />
       {segments.filter(s => s.value > 0).map((seg, i) => {
         const len = (seg.value / total) * circ
         const offset = cum
@@ -42,7 +42,7 @@ export function MiniBarChart({ bars, height = 64 }) {
             <text x={x + w / 2} y={height - 5} textAnchor="middle" fontSize="5.5" fill="#94a3b8" fontFamily="sans-serif">
               {bar.label}
             </text>
-            <text x={x + w / 2} y={y - 2} textAnchor="middle" fontSize="5" fill="#64748b" fontFamily="sans-serif">
+            <text x={x + w / 2} y={y - 2} textAnchor="middle" fontSize="5" fill="#7D8597" fontFamily="sans-serif">
               {bar.value}
             </text>
           </g>
@@ -52,13 +52,13 @@ export function MiniBarChart({ bars, height = 64 }) {
   )
 }
 
-export function MiniRing({ pct, size = 56, color = '#C2071A' }) {
+export function MiniRing({ pct, size = 56, color = '#0466C8' }) {
   const r = (size - 7) / 2
   const circ = 2 * Math.PI * r
   return (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', display: 'block' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#f1f5f9" strokeWidth="7" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#F1F4F8" strokeWidth="7" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="7"
           strokeDasharray={`${(pct / 100) * circ} ${circ}`} strokeLinecap="round"
           style={{ transition: 'stroke-dasharray 1s ease' }} />

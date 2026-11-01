@@ -49,7 +49,7 @@ api.interceptors.request.use(cfg => {
 
 /* ─── Avatar colour palette ─── */
 const AVATAR_COLORS = [
-  ['#6366f1', '#e0e7ff'], ['#8b5cf6', '#ede9fe'], ['#ec4899', '#fce7f3'],
+  ['#0466C8', '#E3EEFA'], ['#8b5cf6', '#ede9fe'], ['#ec4899', '#fce7f3'],
   ['#f59e0b', '#fef3c7'], ['#10b981', '#d1fae5'], ['#0ea5e9', '#e0f2fe'],
   ['#ef4444', '#fee2e2'], ['#14b8a6', '#ccfbf1'],
 ]
@@ -78,7 +78,7 @@ function formatDisplayDate(iso) {
 /* ─── Stat Cards ─── */
 function StatSummary({ total, present, absent, onTime = 0, lateArrivals = 0, earlyExits = 0, completedShifts = 0 }) {
   const stats = [
-    { label: 'Total Employees', value: total,          icon: FiUsers,       color: '#6366f1', bg: 'linear-gradient(135deg,#6366f1,#818cf8)' },
+    { label: 'Total Employees', value: total,          icon: FiUsers,       color: '#0466C8', bg: 'linear-gradient(135deg,#0466C8,#818cf8)' },
     { label: 'Present Today',   value: present,        icon: FiCheckCircle, color: '#16a34a', bg: 'linear-gradient(135deg,#16a34a,#22c55e)' },
     { label: 'Absent Today',    value: absent,         icon: FiXCircle,     color: '#dc2626', bg: 'linear-gradient(135deg,#dc2626,#f87171)' },
     { label: 'On Time Checkin', value: onTime,         icon: FiCheckCircle, color: '#10b981', bg: 'linear-gradient(135deg,#10b981,#34d399)' },
@@ -91,7 +91,7 @@ function StatSummary({ total, present, absent, onTime = 0, lateArrivals = 0, ear
       {stats.map(c => (
         <div key={c.label} style={{
           background: '#fff',
-          border: '1px solid #e2e8f0',
+          border: '1px solid #E3E7EE',
           borderRadius: 16,
           padding: '16px 18px',
           display: 'flex',
@@ -112,8 +112,8 @@ function StatSummary({ total, present, absent, onTime = 0, lateArrivals = 0, ear
             <c.icon size={18} color="#fff" />
           </div>
           <div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', lineHeight: 1, letterSpacing: '-0.5px' }}>{c.value}</div>
-            <div style={{ fontSize: 11, color: '#64748b', marginTop: 4, fontWeight: 500 }}>{c.label}</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#001233', lineHeight: 1, letterSpacing: '-0.5px' }}>{c.value}</div>
+            <div style={{ fontSize: 11, color: '#7D8597', marginTop: 4, fontWeight: 500 }}>{c.label}</div>
           </div>
         </div>
       ))}
@@ -139,8 +139,8 @@ function StatusBadge({ status }) {
 }
 
 function LocationStatusBadge({ status }) {
-  let bg = '#f1f5f9'
-  let color = '#64748b'
+  let bg = '#F1F4F8'
+  let color = '#7D8597'
   let label = 'Location Not Verified'
 
   if (status === 'INSIDE_FENCE') {
@@ -181,7 +181,7 @@ function Pagination({ page, totalPages, total, pageSize, onPage, onPageSize }) {
 
   const btnBase = {
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    width: 34, height: 34, borderRadius: 8, border: '1px solid #e2e8f0',
+    width: 34, height: 34, borderRadius: 8, border: '1px solid #E3E7EE',
     fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s',
     fontFamily: 'inherit',
   }
@@ -191,13 +191,13 @@ function Pagination({ page, totalPages, total, pageSize, onPage, onPageSize }) {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       flexWrap: 'wrap', gap: 12, marginTop: 16,
       padding: '14px 18px',
-      background: '#fff', border: '1px solid #e2e8f0',
+      background: '#fff', border: '1px solid #E3E7EE',
       borderRadius: 14, boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
     }}>
       {/* Left: count + rows-per-page */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <span style={{ fontSize: 13, color: '#64748b', fontWeight: 500 }}>
-          Showing <strong style={{ color: '#0f172a' }}>{start}–{end}</strong> of <strong style={{ color: '#0f172a' }}>{total}</strong> employees
+        <span style={{ fontSize: 13, color: '#7D8597', fontWeight: 500 }}>
+          Showing <strong style={{ color: '#001233' }}>{start}–{end}</strong> of <strong style={{ color: '#001233' }}>{total}</strong> employees
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>Rows per page</span>
@@ -205,8 +205,8 @@ function Pagination({ page, totalPages, total, pageSize, onPage, onPageSize }) {
             value={pageSize}
             onChange={e => onPageSize(Number(e.target.value))}
             style={{
-              padding: '4px 8px', border: '1px solid #e2e8f0', borderRadius: 8,
-              fontSize: 12, color: '#1e293b', background: '#f8fafc',
+              padding: '4px 8px', border: '1px solid #E3E7EE', borderRadius: 8,
+              fontSize: 12, color: '#001233', background: '#f8fafc',
               outline: 'none', cursor: 'pointer', fontFamily: 'inherit',
             }}
           >
@@ -234,9 +234,9 @@ function Pagination({ page, totalPages, total, pageSize, onPage, onPageSize }) {
                 onClick={() => onPage(p)}
                 style={{
                   ...btnBase,
-                  background: page === p ? '#6366f1' : '#fff',
+                  background: page === p ? '#0466C8' : '#fff',
                   color: page === p ? '#fff' : '#374151',
-                  border: page === p ? '1px solid #6366f1' : '1px solid #e2e8f0',
+                  border: page === p ? '1px solid #0466C8' : '1px solid #E3E7EE',
                   boxShadow: page === p ? '0 2px 8px #6366f140' : 'none',
                 }}
               >
@@ -265,10 +265,10 @@ function TableSkeleton() {
       {Array.from({ length: 8 }).map((_, i) => (
         <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#fafbfc' }}>
           {[200, 80, 120, 120, 70, 80, 80, 60, 100, 100, 85, 85].map((w, j) => (
-            <td key={j} style={{ padding: '16px 18px', borderBottom: '1px solid #f1f5f9' }}>
+            <td key={j} style={{ padding: '16px 18px', borderBottom: '1px solid #F1F4F8' }}>
               <div style={{
                 height: 12, width: w, borderRadius: 6,
-                background: 'linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%)',
+                background: 'linear-gradient(90deg,#F1F4F8 25%,#E3E7EE 50%,#F1F4F8 75%)',
                 backgroundSize: '200% 100%',
                 animation: 'shimmer 1.5s infinite',
               }} />
@@ -330,18 +330,18 @@ export default function ClientAdminAttendance() {
   const records    = filtered.slice((safePage - 1) * pageSize, safePage * pageSize)
 
   const th = {
-    padding: '13px 18px', color: '#475569', fontWeight: 700,
+    padding: '13px 18px', color: '#33415C', fontWeight: 700,
     background: '#f8fafc', fontSize: 11, textTransform: 'uppercase',
-    letterSpacing: '0.06em', borderBottom: '2px solid #e2e8f0',
+    letterSpacing: '0.06em', borderBottom: '2px solid #E3E7EE',
     whiteSpace: 'nowrap', textAlign: 'left',
   }
   const td = {
-    padding: '15px 18px', color: '#1e293b', fontSize: 13,
-    fontWeight: 500, borderBottom: '1px solid #f1f5f9',
+    padding: '15px 18px', color: '#001233', fontSize: 13,
+    fontWeight: 500, borderBottom: '1px solid #F1F4F8',
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f4ff', fontFamily: 'Inter,system-ui,sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f0f4ff', fontFamily: 'Inter,system-ui,sans-serif' }}>
       <style>{`
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         @keyframes spin { to{transform:rotate(360deg)} }
@@ -353,7 +353,7 @@ export default function ClientAdminAttendance() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+        <div className="pms-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
 
           <PageHeader
             icon={FiCalendar}
@@ -370,8 +370,8 @@ export default function ClientAdminAttendance() {
                     onChange={e => setDate(e.target.value)}
                     style={{
                       paddingLeft: 32, paddingRight: 14, paddingTop: 9, paddingBottom: 9,
-                      border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 13,
-                      color: '#1e293b', outline: 'none', background: '#fff',
+                      border: '1px solid #E3E7EE', borderRadius: 10, fontSize: 13,
+                      color: '#001233', outline: 'none', background: '#fff',
                       fontFamily: 'inherit', boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
                     }}
                   />
@@ -384,7 +384,7 @@ export default function ClientAdminAttendance() {
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       padding: '9px 16px', background: '#f8fafc',
                       border: '1px solid #cbd5e1', borderRadius: 10,
-                      fontSize: 13, fontWeight: 600, color: '#334155',
+                      fontSize: 13, fontWeight: 600, color: '#33415C',
                       cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                     }}
                   >
@@ -399,7 +399,7 @@ export default function ClientAdminAttendance() {
                     display: 'inline-flex', alignItems: 'center', gap: 6,
                     padding: '9px 14px', background: '#f8fafc',
                     border: '1px solid #cbd5e1', borderRadius: 10,
-                    fontSize: 13, fontWeight: 600, color: '#334155',
+                    fontSize: 13, fontWeight: 600, color: '#33415C',
                     cursor: loading ? 'not-allowed' : 'pointer',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                   }}
@@ -416,7 +416,7 @@ export default function ClientAdminAttendance() {
           {/* ── Filters ── */}
           <div style={{
             display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center',
-            background: '#fff', border: '1px solid #e2e8f0', borderRadius: 14,
+            background: '#fff', border: '1px solid #E3E7EE', borderRadius: 14,
             padding: '12px 16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
           }}>
             {/* Search */}
@@ -428,12 +428,12 @@ export default function ClientAdminAttendance() {
                 onChange={e => setSearch(e.target.value)}
                 style={{
                   width: '100%', padding: '8px 14px 8px 36px',
-                  border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 13,
-                  color: '#1e293b', outline: 'none', background: '#f8fafc',
+                  border: '1px solid #E3E7EE', borderRadius: 10, fontSize: 13,
+                  color: '#001233', outline: 'none', background: '#f8fafc',
                   fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border 0.15s',
                 }}
-                onFocus={e => e.target.style.border = '1px solid #6366f1'}
-                onBlur={e => e.target.style.border = '1px solid #e2e8f0'}
+                onFocus={e => e.target.style.border = '1px solid #0466C8'}
+                onBlur={e => e.target.style.border = '1px solid #E3E7EE'}
               />
             </div>
 
@@ -443,8 +443,8 @@ export default function ClientAdminAttendance() {
                 value={deptFilter}
                 onChange={e => setDept(e.target.value)}
                 style={{
-                  padding: '8px 14px', border: '1px solid #e2e8f0', borderRadius: 10,
-                  fontSize: 13, color: '#1e293b', outline: 'none', background: '#f8fafc',
+                  padding: '8px 14px', border: '1px solid #E3E7EE', borderRadius: 10,
+                  fontSize: 13, color: '#001233', outline: 'none', background: '#f8fafc',
                   fontFamily: 'inherit', cursor: 'pointer',
                 }}
               >
@@ -456,7 +456,7 @@ export default function ClientAdminAttendance() {
             )}
 
             {/* Status Toggle */}
-            <div style={{ display: 'flex', gap: 3, background: '#f1f5f9', borderRadius: 10, padding: 3 }}>
+            <div style={{ display: 'flex', gap: 3, background: '#F1F4F8', borderRadius: 10, padding: 3 }}>
               {[
                 { val: 'all',     label: 'All' },
                 { val: 'present', label: 'Present' },
@@ -470,8 +470,8 @@ export default function ClientAdminAttendance() {
                     fontSize: 12, fontWeight: 700, transition: 'all 0.15s', fontFamily: 'inherit',
                     background: statusFilter === o.val ? '#fff' : 'transparent',
                     color: statusFilter === o.val
-                      ? (o.val === 'present' ? '#15803d' : o.val === 'absent' ? '#b91c1c' : '#1e293b')
-                      : '#64748b',
+                      ? (o.val === 'present' ? '#15803d' : o.val === 'absent' ? '#b91c1c' : '#001233')
+                      : '#7D8597',
                     boxShadow: statusFilter === o.val ? '0 1px 4px rgba(0,0,0,0.1)' : 'none',
                   }}
                 >
@@ -496,8 +496,8 @@ export default function ClientAdminAttendance() {
                 onClick={() => { setSearch(''); setStatus('all'); setDept('') }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 4,
-                  fontSize: 12, color: '#6366f1', fontWeight: 700,
-                  background: '#eef2ff', border: 'none', borderRadius: 8,
+                  fontSize: 12, color: '#0466C8', fontWeight: 700,
+                  background: '#EEF8FF', border: 'none', borderRadius: 8,
                   padding: '6px 12px', cursor: 'pointer',
                 }}
               >
@@ -508,7 +508,7 @@ export default function ClientAdminAttendance() {
 
           {/* ── Table Card ── */}
           <div style={{
-            background: '#fff', border: '1px solid #e2e8f0',
+            background: '#fff', border: '1px solid #E3E7EE',
             borderRadius: 16, overflow: 'hidden',
             boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
           }}>
@@ -516,16 +516,16 @@ export default function ClientAdminAttendance() {
               <div style={{ padding: '60px 40px', textAlign: 'center' }}>
                 <div style={{ fontSize: 40, marginBottom: 12 }}>⚠️</div>
                 <div style={{ color: '#dc2626', fontSize: 15, fontWeight: 700, marginBottom: 6 }}>Failed to load data</div>
-                <div style={{ color: '#64748b', fontSize: 13, marginBottom: 20 }}>{error}</div>
-                <button onClick={load} style={{ padding: '9px 24px', background: 'linear-gradient(135deg,#6366f1,#818cf8)', color: '#fff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                <div style={{ color: '#7D8597', fontSize: 13, marginBottom: 20 }}>{error}</div>
+                <button onClick={load} style={{ padding: '9px 24px', background: 'linear-gradient(135deg,#0466C8,#818cf8)', color: '#fff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                   Retry
                 </button>
               </div>
             ) : !loading && filtered.length === 0 ? (
               <div style={{ padding: '60px 40px', textAlign: 'center' }}>
                 <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
-                <div style={{ color: '#1e293b', fontSize: 15, fontWeight: 700, marginBottom: 6 }}>No records found</div>
-                <div style={{ color: '#64748b', fontSize: 13 }}>Try adjusting your filters or search query.</div>
+                <div style={{ color: '#001233', fontSize: 15, fontWeight: 700, marginBottom: 6 }}>No records found</div>
+                <div style={{ color: '#7D8597', fontSize: 13 }}>Try adjusting your filters or search query.</div>
               </div>
             ) : (
               <div style={{ overflowX: 'auto' }}>
@@ -567,22 +567,22 @@ export default function ClientAdminAttendance() {
                                     {r.first_name?.[0]}{r.last_name?.[0]}
                                   </div>
                                   <div>
-                                    <div style={{ fontWeight: 700, color: '#0f172a', lineHeight: 1.2 }}>
+                                    <div style={{ fontWeight: 700, color: '#001233', lineHeight: 1.2 }}>
                                       {r.first_name} {r.last_name}
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                              <td style={{ ...td, color: '#6366f1', fontFamily: 'monospace', fontSize: 12, fontWeight: 700 }}>
+                              <td style={{ ...td, color: '#0466C8', fontFamily: 'monospace', fontSize: 12, fontWeight: 700 }}>
                                 {r.employee_code}
                               </td>
-                              <td style={{ ...td, color: '#475569' }}>{r.department || '—'}</td>
-                              <td style={{ ...td, color: '#64748b' }}>{r.designation || '—'}</td>
+                              <td style={{ ...td, color: '#33415C' }}>{r.department || '—'}</td>
+                              <td style={{ ...td, color: '#7D8597' }}>{r.designation || '—'}</td>
                               <td style={td}><StatusBadge status={r.attendance_status} /></td>
                               <td style={{ ...td, color: r.check_in_time ? '#15803d' : '#94a3b8', fontWeight: r.check_in_time ? 600 : 400 }}>
                                 {formatTime(r.check_in_time)}
                               </td>
-                              <td style={{ ...td, color: r.check_out_time ? '#1e293b' : '#94a3b8' }}>
+                              <td style={{ ...td, color: r.check_out_time ? '#001233' : '#94a3b8' }}>
                                 {formatTime(r.check_out_time)}
                               </td>
                               <td style={{ ...td }}>
@@ -602,7 +602,7 @@ export default function ClientAdminAttendance() {
                               <td style={td}>
                                 {r.shift_name ? (
                                   <span style={{
-                                    background: r.shift_color_code || '#6366f1', color: '#fff',
+                                    background: r.shift_color_code || '#0466C8', color: '#fff',
                                     padding: '4px 8px', borderRadius: 8, fontSize: 11, fontWeight: 700,
                                     textShadow: '0 1px 2px rgba(0,0,0,0.15)'
                                   }}>
@@ -641,7 +641,7 @@ export default function ClientAdminAttendance() {
                                   ? `${Number(r.distance_from_office).toFixed(1)}m`
                                   : <span style={{ color: '#94a3b8' }}>—</span>}
                               </td>
-                              <td style={{ ...td, color: '#64748b' }}>
+                              <td style={{ ...td, color: '#7D8597' }}>
                                 {r.gps_accuracy != null
                                   ? `±${Number(r.gps_accuracy).toFixed(0)}m`
                                   : <span style={{ color: '#94a3b8' }}>—</span>}

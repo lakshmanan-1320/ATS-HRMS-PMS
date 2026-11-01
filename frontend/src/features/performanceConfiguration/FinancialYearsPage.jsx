@@ -10,7 +10,7 @@ import GoalRulesCard from './GoalRulesCard';
 const s = {
   card: {
     background: '#ffffff',
-    border: '1px solid #e2e8f0',
+    border: '1px solid #E3E7EE',
     borderRadius: '16px',
     padding: '24px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
@@ -26,12 +26,12 @@ const s = {
     margin: 0,
     fontSize: '18px',
     fontWeight: '800',
-    color: '#0f172a'
+    color: '#001233'
   },
   desc: {
     margin: '4px 0 0 0',
     fontSize: '12px',
-    color: '#64748b'
+    color: '#7D8597'
   },
   table: {
     width: '100%',
@@ -41,7 +41,7 @@ const s = {
   },
   th: {
     padding: '12px 20px',
-    color: '#64748b',
+    color: '#7D8597',
     fontWeight: '700',
     background: '#f8fafc',
     borderBottom: '1px solid #cbd5e1',
@@ -51,8 +51,8 @@ const s = {
   },
   td: {
     padding: '16px 20px',
-    borderBottom: '1px solid #f1f5f9',
-    color: '#334155',
+    borderBottom: '1px solid #F1F4F8',
+    color: '#33415C',
     fontWeight: '500'
   },
   badge: {
@@ -67,7 +67,7 @@ const s = {
     border: '1px solid #cbd5e1',
     borderRadius: '8px',
     background: '#ffffff',
-    color: '#475569',
+    color: '#33415C',
     cursor: 'pointer',
     fontSize: '11px',
     fontWeight: '700',
@@ -77,7 +77,7 @@ const s = {
     transition: 'all 0.15s'
   },
   createBtn: {
-    background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+    background: 'linear-gradient(135deg, #0466C8, #0353A4)',
     color: '#ffffff',
     border: 'none',
     borderRadius: '10px',
@@ -85,7 +85,7 @@ const s = {
     fontSize: '12px',
     fontWeight: '700',
     cursor: 'pointer',
-    boxShadow: '0 4px 12px rgba(99, 102, 241, 0.25)',
+    boxShadow: '0 4px 12px rgba(4, 102, 200, 0.25)',
     display: 'flex',
     alignItems: 'center',
     gap: '6px'
@@ -120,7 +120,7 @@ const s = {
     border: '1.5px solid #cbd5e1',
     borderRadius: '10px',
     fontSize: '13px',
-    color: '#1e293b',
+    color: '#001233',
     outline: 'none',
     boxSizing: 'border-box',
     fontFamily: 'inherit'
@@ -128,7 +128,7 @@ const s = {
   label: {
     fontSize: '12px',
     fontWeight: '700',
-    color: '#475569',
+    color: '#33415C',
     display: 'block',
     marginBottom: '6px'
   },
@@ -315,13 +315,13 @@ export default function FinancialYearsPage() {
       case 'ACTIVE':
         return { ...s.badge, background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0' };
       case 'DRAFT':
-        return { ...s.badge, background: '#eef2ff', color: '#4f46e5', border: '1px solid #c7d2fe' };
+        return { ...s.badge, background: '#EEF8FF', color: '#0353A4', border: '1px solid #c7d2fe' };
       case 'CLOSED':
-        return { ...s.badge, background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1' };
+        return { ...s.badge, background: '#F1F4F8', color: '#33415C', border: '1px solid #cbd5e1' };
       case 'ARCHIVED':
         return { ...s.badge, background: '#fffbeb', color: '#b45309', border: '1px solid #fde68a' };
       default:
-        return { ...s.badge, background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1' };
+        return { ...s.badge, background: '#F1F4F8', color: '#33415C', border: '1px solid #cbd5e1' };
     }
   };
 
@@ -352,12 +352,12 @@ export default function FinancialYearsPage() {
       {/* Loading state */}
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ height: '36px', background: '#f1f5f9', borderRadius: '8px' }} />
-          <div style={{ height: '50px', background: '#f1f5f9', borderRadius: '8px' }} />
-          <div style={{ height: '50px', background: '#f1f5f9', borderRadius: '8px' }} />
+          <div style={{ height: '36px', background: '#F1F4F8', borderRadius: '8px' }} />
+          <div style={{ height: '50px', background: '#F1F4F8', borderRadius: '8px' }} />
+          <div style={{ height: '50px', background: '#F1F4F8', borderRadius: '8px' }} />
         </div>
       ) : financialYears.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 20px', color: '#64748b' }}>
+        <div style={{ textAlign: 'center', padding: '40px 20px', color: '#7D8597' }}>
           <FiInfo size={32} style={{ color: '#cbd5e1', marginBottom: '8px' }} />
           <p style={{ fontWeight: '700', fontSize: '14px', margin: 0 }}>No Financial Years found.</p>
           <p style={{ fontSize: '12px', margin: '4px 0 0 0' }}>Get started by creating your first Financial Year cycle.</p>
@@ -376,8 +376,8 @@ export default function FinancialYearsPage() {
             <tbody>
               {financialYears.map((fy) => (
                 <tr key={fy.financial_year_id}>
-                  <td style={{ ...s.td, fontWeight: '700', color: '#0f172a' }}>{fy.name}</td>
-                  <td style={{ ...s.td, color: '#64748b' }}>
+                  <td style={{ ...s.td, fontWeight: '700', color: '#001233' }}>{fy.name}</td>
+                  <td style={{ ...s.td, color: '#7D8597' }}>
                     {formatDate(fy.start_date)} — {formatDate(fy.end_date)}
                   </td>
                   <td style={s.td}>
@@ -390,16 +390,16 @@ export default function FinancialYearsPage() {
                           <button 
                             onClick={() => handleOpenRules(fy)} 
                             style={s.actionBtn}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.color = '#6366f1' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#475569' }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#0466C8'; e.currentTarget.style.color = '#0466C8' }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#33415C' }}
                           >
                             <FiCalendar size={12} /> Goal Rules
                           </button>
                           <button 
                             onClick={() => handleOpenEdit(fy)} 
                             style={s.actionBtn}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.color = '#6366f1' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#475569' }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#0466C8'; e.currentTarget.style.color = '#0466C8' }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#33415C' }}
                           >
                             <FiEdit size={12} /> Edit
                           </button>
@@ -419,8 +419,8 @@ export default function FinancialYearsPage() {
                           <button 
                             onClick={() => handleOpenRules(fy)} 
                             style={s.actionBtn}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.color = '#6366f1' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#475569' }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#0466C8'; e.currentTarget.style.color = '#0466C8' }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#33415C' }}
                           >
                             <FiCalendar size={12} /> Goal Rules
                           </button>
@@ -530,7 +530,7 @@ export default function FinancialYearsPage() {
                 onClick={() => setShowModal(false)}
                 style={{
                   padding: '8px 16px', background: '#f8fafc', border: '1px solid #cbd5e1',
-                  color: '#475569', borderRadius: '10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
+                  color: '#33415C', borderRadius: '10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
                 }}
               >
                 Cancel
@@ -539,9 +539,9 @@ export default function FinancialYearsPage() {
                 type="submit"
                 disabled={saving}
                 style={{
-                  padding: '8px 16px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                  padding: '8px 16px', background: 'linear-gradient(135deg, #0466C8, #0353A4)',
                   color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '12px',
-                  fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.2)'
+                  fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(4, 102, 200,0.2)'
                 }}
               >
                 {saving ? 'Saving...' : 'Save Financial Year'}
@@ -557,14 +557,14 @@ export default function FinancialYearsPage() {
           <div style={s.modal}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#b45309' }}>
               <FiAlertTriangle size={24} />
-              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#001233', margin: 0 }}>
                 {confirmAction.type === 'activate' && 'Confirm Activation'}
                 {confirmAction.type === 'close' && 'Confirm Close'}
                 {confirmAction.type === 'archive' && 'Confirm Archive'}
               </h3>
             </div>
             
-            <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
+            <p style={{ fontSize: '13px', color: '#33415C', lineHeight: 1.5, margin: 0 }}>
               {confirmAction.type === 'activate' && (
                 <>Are you sure you want to activate <span style={{ fontWeight: '700' }}>"{confirmAction.fy.name}"</span>? Only one Financial Year can be Active at any time. Activating this will automatically CLOSE the currently active year.</>
               )}
@@ -582,7 +582,7 @@ export default function FinancialYearsPage() {
                 onClick={() => setConfirmAction(null)}
                 style={{
                   padding: '8px 16px', background: '#f8fafc', border: '1px solid #cbd5e1',
-                  color: '#475569', borderRadius: '10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
+                  color: '#33415C', borderRadius: '10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
                 }}
               >
                 Cancel
@@ -627,7 +627,7 @@ export default function FinancialYearsPage() {
                 onClick={() => setShowRulesModal(false)}
                 style={{
                   padding: '8px 16px', background: '#f8fafc', border: '1px solid #cbd5e1',
-                  color: '#475569', borderRadius: '10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
+                  color: '#33415C', borderRadius: '10px', fontSize: '12px', fontWeight: '700', cursor: 'pointer'
                 }}
               >
                 Cancel
@@ -637,9 +637,9 @@ export default function FinancialYearsPage() {
                   type="submit"
                   disabled={saving}
                   style={{
-                    padding: '8px 16px', background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                    padding: '8px 16px', background: 'linear-gradient(135deg, #0466C8, #0353A4)',
                     color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '12px',
-                    fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.2)'
+                    fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(4, 102, 200,0.2)'
                   }}
                 >
                   {saving ? 'Saving...' : 'Save Rules'}

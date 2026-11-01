@@ -1,38 +1,26 @@
 import React from 'react'
-import { EditReqIcon, CalIcon } from '../shared/Icons'
-import { WidgetCard, EmptyState, ViewAllLink } from '../shared/UI'
-import { COLORS } from '../../theme'
+import { FiEdit2 } from 'react-icons/fi'
+import { PmsCard, CardHeader, HeaderChip, BigStat, EmptyBox, ListRow } from '../shared/PmsUI'
 
-export default function PendingRegsWidget({ regs, onViewAll }) {
+export default function PendingRegsWidget({ regs, total, onViewAll }) {
+  const n = total ?? regs.length
   return (
-    <WidgetCard
-      icon={<EditReqIcon />}
-      iconBg="rgba(194,7,26,0.1)"
-      iconColor={COLORS.primary}
-      title="Regularization Requests"
-      subtitle="Attendance corrections"
-      action={onViewAll && <ViewAllLink onClick={onViewAll} />}
-    >
-      {regs.length === 0 ? (
-        <EmptyState message="No pending regularizations" positive />
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {regs.map((r, idx) => {
-            const rDate = new Date(r.date || r.attendance_date)
-            return (
-              <div key={r.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: idx < regs.length - 1 ? '1px solid #f8fafc' : 'none' }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.reason || r.regularization_type || 'Regularization'}</div>
-                  <div style={{ fontSize: '10px', color: COLORS.textMuted, marginTop: '1px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                    <CalIcon />{rDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  </div>
-                </div>
-                <span style={{ fontSize: '10px', fontWeight: '700', color: COLORS.primary, background: 'rgba(194,7,26,0.1)', padding: '2px 7px', borderRadius: '10px', whiteSpace: 'nowrap', marginLeft: '8px' }}>Pending</span>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </WidgetCard>
+    <PmsCard>
+      <CardHeader title="Regularization Requests" chip={<HeaderChip onClick={onViewAll} title="Open regularization requests" />} />
+      <BigStat value={n} pill="Corrections" caption={n === 0 ? 'All clear!' : `${n} correction${n === 1 ? '' : 's'} pending`} />
+      <div style={{ marginTop: 'auto', paddingTop: '14px' }}>
+        {regs.length === 0 ? (
+          <EmptyBox icon={<FiEdit2 size={13} />} title="No pending regularizations" />
+        ) : regs.slice(0, 3).map((r, i, arr) => (
+          <ListRow
+            key={r.id || i}
+            title={r.reason || r.regularization_type || 'Regularization'}
+            sub={new Date(r.date || r.attendance_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+            right="Pending"
+            last={i === arr.length - 1}
+          />
+        ))}
+      </div>
+    </PmsCard>
   )
 }

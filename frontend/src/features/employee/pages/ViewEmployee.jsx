@@ -7,20 +7,20 @@ import ClientAdminTopBar from '../../../components/layout/ClientAdminTopBar.jsx'
 
 const STATUS_META = {
   active:     { label: 'Active',      color: '#15803d', bg: '#dcfce7' },
-  inactive:   { label: 'Inactive',    color: '#475569', bg: '#f1f5f9' },
+  inactive:   { label: 'Inactive',    color: '#33415C', bg: '#F1F4F8' },
   exit:       { label: 'Exit',        color: '#7c3aed', bg: '#ede9fe' },
   terminated: { label: 'Terminated',  color: '#b91c1c', bg: '#fee2e2' },
 }
 
 const TYPE_META = {
-  full_time: { label: 'Full-time', color: '#C2071A', bg: 'rgba(194,7,26,0.08)' },
+  full_time: { label: 'Full-time', color: '#0466C8', bg: 'rgba(4, 102, 200,0.08)' },
   part_time: { label: 'Part-time', color: '#0891b2', bg: 'rgba(8,145,178,0.08)' },
   contract:  { label: 'Contract',  color: '#d97706', bg: 'rgba(217,119,6,0.08)' },
   intern:    { label: 'Intern',    color: '#7c3aed', bg: 'rgba(124,58,237,0.08)' },
 }
 
 // Same level palette used across the Employees / Org Chart pages — L1 uses the brand red.
-const LEVEL_META = { L1: '#C2071A', L2: '#7c3aed', L3: '#059669', L4: '#d97706', L5: '#475569' }
+const LEVEL_META = { L1: '#0466C8', L2: '#7c3aed', L3: '#059669', L4: '#d97706', L5: '#33415C' }
 
 const getLevelColor = (level) => {
   if (!level) return LEVEL_META.L5
@@ -39,14 +39,14 @@ function InfoRow({ label, value }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#94a3b8' }}>{label}</span>
-      <span style={{ fontSize: 13, fontWeight: 600, color: value ? '#1e293b' : '#e2e8f0' }}>{value || '—'}</span>
+      <span style={{ fontSize: 13, fontWeight: 600, color: value ? '#001233' : '#E3E7EE' }}>{value || '—'}</span>
     </div>
   )
 }
 
 function SectionTitle({ title }) {
   return (
-    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#64748b', marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid #e2e8f0' }}>
+    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#7D8597', marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid #E3E7EE' }}>
       {title}
     </div>
   )
@@ -92,11 +92,11 @@ export default function ViewEmployee() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Roboto, system-ui, sans-serif' }}>
+      <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', fontFamily: 'Roboto, system-ui, sans-serif' }}>
         <ClientAdminSidebar active="employees" />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <ClientAdminTopBar />
-          <main style={{ flex: 1, padding: '32px 36px', color: '#64748b', fontSize: 14 }}>Loading employee…</main>
+          <main style={{ flex: 1, padding: '32px 36px', color: '#7D8597', fontSize: 14 }}>Loading employee…</main>
         </div>
       </div>
     )
@@ -120,20 +120,20 @@ export default function ViewEmployee() {
   const calculatedCTC = grossTotal + employerContribTotal
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
       <ClientAdminSidebar active="employees" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
         <main style={{ flex: 1, padding: '32px 36px', overflow: 'auto' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13 }}>
-            <button onClick={() => navigate('/client-admin/employees')} style={{ background: 'none', border: 'none', color: '#C2071A', cursor: 'pointer', fontSize: 13, fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>Employees</button>
+            <button onClick={() => navigate('/client-admin/employees')} style={{ background: 'none', border: 'none', color: '#0466C8', cursor: 'pointer', fontSize: 13, fontWeight: 600, padding: 0, fontFamily: 'inherit' }}>Employees</button>
             <span style={{ color: '#94a3b8' }}>/</span>
-            <span style={{ color: '#1e293b', fontWeight: 600 }}>{emp.first_name} {emp.last_name}</span>
+            <span style={{ color: '#001233', fontWeight: 600 }}>{emp.first_name} {emp.last_name}</span>
           </div>
 
           {/* Profile header card */}
-          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #e2e8f0', padding: 28, marginBottom: 20, boxShadow: '0 4px 6px rgba(0,0,0,0.03)', maxWidth: 920 }}>
+          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #E3E7EE', padding: 28, marginBottom: 20, boxShadow: '0 4px 6px rgba(0,0,0,0.03)', maxWidth: 920 }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
                 <div style={{ width: 64, height: 64, borderRadius: '50%', background: `${lc}12`, border: `3px solid ${lc}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 800, color: lc, flexShrink: 0 }}>
@@ -141,13 +141,13 @@ export default function ViewEmployee() {
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
-                    <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#1e293b' }}>{emp.first_name} {emp.last_name}</h1>
+                    <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#001233' }}>{emp.first_name} {emp.last_name}</h1>
                     {emp.level_code && (
                       <span style={{ fontSize: 10, fontWeight: 700, color: lc, background: `${lc}15`, padding: '2px 7px', borderRadius: 6 }}>{emp.level_code}</span>
                     )}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                    <span style={{ display: 'inline-block', padding: '3px 10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 20, fontSize: 11, fontWeight: 700, color: '#475569', fontFamily: 'monospace' }}>
+                    <span style={{ display: 'inline-block', padding: '3px 10px', background: '#F1F4F8', border: '1px solid #E3E7EE', borderRadius: 20, fontSize: 11, fontWeight: 700, color: '#33415C', fontFamily: 'monospace' }}>
                       {emp.employee_code}
                     </span>
                     <span style={{ display: 'inline-block', padding: '3px 10px', background: sm.bg, borderRadius: 20, fontSize: 11, fontWeight: 700, color: sm.color }}>
@@ -160,7 +160,7 @@ export default function ViewEmployee() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
-                <button onClick={() => navigate(`/client-admin/employees/${id}/edit`)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(194,7,26,0.3)' }}>
+                <button onClick={() => navigate(`/client-admin/employees/${id}/edit`)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '9px 18px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(4, 102, 200,0.3)' }}>
                   <FiEdit2 size={14} /> Edit Employee
                 </button>
               </div>
@@ -168,7 +168,7 @@ export default function ViewEmployee() {
           </div>
 
           {/* Details card */}
-          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #e2e8f0', padding: 32, boxShadow: '0 4px 6px rgba(0,0,0,0.03)', maxWidth: 920 }}>
+          <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #E3E7EE', padding: 32, boxShadow: '0 4px 6px rgba(0,0,0,0.03)', maxWidth: 920 }}>
 
             <div style={{ marginBottom: 28 }}>
               <SectionTitle title="Personal Information" />
@@ -203,7 +203,7 @@ export default function ViewEmployee() {
                       <FiShuffle size={11} /> Hybrid
                     </span>
                   ) : (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 20, background: '#f1f5f9', color: '#475569', fontSize: 11, fontWeight: 700 }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 20, background: '#F1F4F8', color: '#33415C', fontSize: 11, fontWeight: 700 }}>
                       <FiBriefcase size={11} /> Office
                     </span>
                   )
@@ -224,40 +224,40 @@ export default function ViewEmployee() {
                   <InfoRow label="Cost to Company (CTC)" value={`₹${calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / Month (₹${(calculatedCTC * 12).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Annual)`} />
                 </div>
                 
-                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #e2e8f0', marginTop: 12 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 12, display: 'inline-block' }}>Component Breakdown</span>
+                <div style={{ background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #E3E7EE', marginTop: 12 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', marginBottom: 12, display: 'inline-block' }}>Component Breakdown</span>
                   
-                  <div style={{ display: 'flex', gap: '20px', background: '#f1f5f9', padding: '12px 16px', borderRadius: '10px', marginBottom: '16px', border: '1px solid #e2e8f0', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '20px', background: '#F1F4F8', padding: '12px 16px', borderRadius: '10px', marginBottom: '16px', border: '1px solid #E3E7EE', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Gross: </span>
-                      <strong style={{ color: '#1e293b' }}>₹{grossTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Gross: </span>
+                      <strong style={{ color: '#001233' }}>₹{grossTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Deductions: </span>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Deductions: </span>
                       <strong style={{ color: '#b91c1c' }}>- ₹{deductionsTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Benefits: </span>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Benefits: </span>
                       <strong style={{ color: '#6d28d9' }}>₹{employerContribTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>Net Take-Home: </span>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>Net Take-Home: </span>
                       <strong style={{ color: '#15803d' }}>₹{netTakeHome.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                     </div>
                     <div style={{ fontSize: '12px' }}>
-                      <span style={{ color: '#64748b', fontWeight: '600' }}>CTC: </span>
-                      <strong style={{ color: '#C2071A' }}>₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                      <span style={{ color: '#7D8597', fontWeight: '600' }}>CTC: </span>
+                      <strong style={{ color: '#0466C8' }}>₹{calculatedCTC.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                     </div>
                   </div>
 
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                     <thead>
                       <tr>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Component</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Type</th>
-                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Formula/Basis</th>
-                        <th style={{ textAlign: 'center', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Auto</th>
-                        <th style={{ textAlign: 'right', padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>Monthly Value</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Component</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Type</th>
+                        <th style={{ textAlign: 'left', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Formula/Basis</th>
+                        <th style={{ textAlign: 'center', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Auto</th>
+                        <th style={{ textAlign: 'right', padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>Monthly Value</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -272,17 +272,17 @@ export default function ViewEmployee() {
 
                         return (
                           <tr key={c.component_id}>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', fontWeight: 600 }}>{c.component_name} ({c.component_code})</td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0' }}>{c.component_type}</td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textTransform: 'uppercase', fontSize: 10, color: '#64748b' }}>{formulaTxt}</td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textAlign: 'center' }}>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', fontWeight: 600 }}>{c.component_name} ({c.component_code})</td>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE' }}>{c.component_type}</td>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textTransform: 'uppercase', fontSize: 10, color: '#7D8597' }}>{formulaTxt}</td>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textAlign: 'center' }}>
                               {isFixed ? '—' : c.is_manual_override ? (
                                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#b91c1c', fontWeight: 700 }}><FiXCircle size={12} /> Override</span>
                               ) : (
                                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#15803d', fontWeight: 700 }}><FiCheckCircle size={12} /> Auto</span>
                               )}
                             </td>
-                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #e2e8f0', textAlign: 'right', fontWeight: 700, color: c.component_type === 'DEDUCTION' ? '#b91c1c' : '#15803d' }}>
+                            <td style={{ padding: '6px 12px', borderBottom: '1px solid #E3E7EE', textAlign: 'right', fontWeight: 700, color: c.component_type === 'DEDUCTION' ? '#b91c1c' : '#15803d' }}>
                               ₹{parseFloat(c.calculated_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </td>
                           </tr>
@@ -314,9 +314,9 @@ export default function ViewEmployee() {
 
             {/* Salary Revision History Timeline */}
             {revisionHistory && revisionHistory.length > 0 && (
-              <div style={{ marginTop: 28, borderTop: '1px solid #e2e8f0', paddingTop: 28 }}>
+              <div style={{ marginTop: 28, borderTop: '1px solid #E3E7EE', paddingTop: 28 }}>
                 <SectionTitle title="Salary Revision History" />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingLeft: 12, borderLeft: '3px solid #C2071A' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingLeft: 12, borderLeft: '3px solid #0466C8' }}>
                   {revisionHistory.map((rev) => {
                     const isCTC = rev.new_salary_type === 'ANNUAL_CTC';
                     const amt = isCTC ? parseFloat(rev.new_ctc) : parseFloat(rev.new_gross);
@@ -324,11 +324,11 @@ export default function ViewEmployee() {
                     const increase = amt - oldAmt;
 
                     return (
-                      <div key={rev.revision_id} style={{ position: 'relative', background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #e2e8f0' }}>
+                      <div key={rev.revision_id} style={{ position: 'relative', background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #E3E7EE' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
                           <div>
-                            <span style={{ fontSize: 13, fontWeight: 800, color: '#C2071A' }}>{rev.reason}</span>
-                            <span style={{ fontSize: 11, color: '#64748b', marginLeft: 8 }}>• Effective from {fmtDate(rev.effective_from)}</span>
+                            <span style={{ fontSize: 13, fontWeight: 800, color: '#0466C8' }}>{rev.reason}</span>
+                            <span style={{ fontSize: 11, color: '#7D8597', marginLeft: 8 }}>• Effective from {fmtDate(rev.effective_from)}</span>
                           </div>
                           <span style={{
                             fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: '6px',
@@ -340,29 +340,29 @@ export default function ViewEmployee() {
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12, fontSize: 12 }}>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Previous Salary</span>
-                            <strong style={{ color: '#1e293b' }}>₹{parseFloat(oldAmt || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Previous Salary</span>
+                            <strong style={{ color: '#001233' }}>₹{parseFloat(oldAmt || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                             <span style={{ fontSize: 10, color: '#94a3b8', marginLeft: 4 }}>({rev.old_salary_type === 'ANNUAL_CTC' ? 'CTC' : 'Gross'})</span>
                           </div>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>New Salary</span>
-                            <strong style={{ color: '#1e293b' }}>₹{parseFloat(amt || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>New Salary</span>
+                            <strong style={{ color: '#001233' }}>₹{parseFloat(amt || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                             <span style={{ fontSize: 10, color: '#94a3b8', marginLeft: 4 }}>({rev.new_salary_type === 'ANNUAL_CTC' ? 'CTC' : 'Gross'})</span>
                           </div>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Revision Increase</span>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Revision Increase</span>
                             <strong style={{ color: '#15803d' }}>+ ₹{parseFloat(rev.increment_amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
                             <span style={{ fontSize: 10, color: '#15803d', marginLeft: 4 }}>({parseFloat(rev.increment_percentage).toFixed(1)}%)</span>
                           </div>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Created By</span>
-                            <span style={{ fontWeight: 600, color: '#475569' }}>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Created By</span>
+                            <span style={{ fontWeight: 600, color: '#33415C' }}>
                               {rev.creator_first ? `${rev.creator_first} ${rev.creator_last}` : 'System Admin'}
                             </span>
                           </div>
                         </div>
                         {rev.remarks && (
-                          <div style={{ marginTop: 10, fontSize: 11, fontStyle: 'italic', color: '#64748b', background: '#ffffff', padding: '6px 10px', borderRadius: 6, border: '1px solid #e2e8f0' }}>
+                          <div style={{ marginTop: 10, fontSize: 11, fontStyle: 'italic', color: '#7D8597', background: '#ffffff', padding: '6px 10px', borderRadius: 6, border: '1px solid #E3E7EE' }}>
                             Remarks: {rev.remarks}
                           </div>
                         )}
@@ -375,23 +375,23 @@ export default function ViewEmployee() {
 
             {/* Shift Assignments & Timeline Section */}
             {shiftHistory && shiftHistory.length > 0 && (
-              <div style={{ marginTop: 28, borderTop: '1px solid #e2e8f0', paddingTop: 28 }}>
+              <div style={{ marginTop: 28, borderTop: '1px solid #E3E7EE', paddingTop: 28 }}>
                 <SectionTitle title="Shift Assignments & Timeline" />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 14, paddingLeft: 14, borderLeft: '3px solid #C2071A', position: 'relative' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14, paddingLeft: 14, borderLeft: '3px solid #0466C8', position: 'relative' }}>
                   {shiftHistory.map((sh, idx) => {
                     const isCurrent = sh.status === 'ACTIVE'
                     const isScheduled = sh.status === 'SCHEDULED'
-                    const statusBg = isCurrent ? '#dcfce7' : isScheduled ? '#fef3c7' : '#f1f5f9'
-                    const statusColor = isCurrent ? '#15803d' : isScheduled ? '#b45309' : '#475569'
-                    const statusBorder = isCurrent ? 'rgba(21,128,61,0.2)' : isScheduled ? 'rgba(180,83,9,0.2)' : '#e2e8f0'
+                    const statusBg = isCurrent ? '#dcfce7' : isScheduled ? '#fef3c7' : '#F1F4F8'
+                    const statusColor = isCurrent ? '#15803d' : isScheduled ? '#b45309' : '#33415C'
+                    const statusBorder = isCurrent ? 'rgba(21,128,61,0.2)' : isScheduled ? 'rgba(180,83,9,0.2)' : '#E3E7EE'
 
                     return (
-                      <div key={sh.shift_assignment_id || idx} style={{ position: 'relative', background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #e2e8f0' }}>
-                        <div style={{ position: 'absolute', left: -22, top: 20, width: 12, height: 12, borderRadius: '50%', background: sh.color_code || '#C2071A', border: '2px solid #fff', boxShadow: '0 0 0 2px #e2e8f0' }} />
+                      <div key={sh.shift_assignment_id || idx} style={{ position: 'relative', background: '#f8fafc', padding: 16, borderRadius: 12, border: '1px solid #E3E7EE' }}>
+                        <div style={{ position: 'absolute', left: -22, top: 20, width: 12, height: 12, borderRadius: '50%', background: sh.color_code || '#0466C8', border: '2px solid #fff', boxShadow: '0 0 0 2px #E3E7EE' }} />
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <span style={{ fontSize: 14, fontWeight: 800, color: '#0f172a' }}>{sh.shift_name}</span>
-                            <span style={{ fontSize: 10, fontWeight: 700, color: '#C2071A', background: '#feecee', padding: '2px 8px', borderRadius: 6, border: '1px solid #f7a6af' }}>{sh.shift_code}</span>
+                            <span style={{ fontSize: 14, fontWeight: 800, color: '#001233' }}>{sh.shift_name}</span>
+                            <span style={{ fontSize: 10, fontWeight: 700, color: '#0466C8', background: '#EEF8FF', padding: '2px 8px', borderRadius: 6, border: '1px solid #C9DDF3' }}>{sh.shift_code}</span>
                           </div>
                           <span style={{
                             fontSize: 10, fontWeight: 800, padding: '2px 10px', borderRadius: 20,
@@ -401,19 +401,19 @@ export default function ViewEmployee() {
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12, fontSize: 12 }}>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Effective From</span>
-                            <strong style={{ color: '#1e293b' }}>{fmtDate(sh.effective_from)}</strong>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Effective From</span>
+                            <strong style={{ color: '#001233' }}>{fmtDate(sh.effective_from)}</strong>
                           </div>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Effective To</span>
-                            <strong style={{ color: sh.effective_to ? '#1e293b' : '#15803d' }}>{sh.effective_to ? fmtDate(sh.effective_to) : 'Current / Ongoing'}</strong>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Effective To</span>
+                            <strong style={{ color: sh.effective_to ? '#001233' : '#15803d' }}>{sh.effective_to ? fmtDate(sh.effective_to) : 'Current / Ongoing'}</strong>
                           </div>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Shift Hours</span>
-                            <strong style={{ color: '#475569' }}>{sh.start_time?.substring(0,5)} - {sh.end_time?.substring(0,5)} ({sh.minimum_hours || 8} hrs)</strong>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Shift Hours</span>
+                            <strong style={{ color: '#33415C' }}>{sh.start_time?.substring(0,5)} - {sh.end_time?.substring(0,5)} ({sh.minimum_hours || 8} hrs)</strong>
                           </div>
                           <div>
-                            <span style={{ color: '#64748b', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Assignment Status</span>
+                            <span style={{ color: '#7D8597', display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Assignment Status</span>
                             <span style={{ fontWeight: 700, color: statusColor }}>{sh.status === 'ACTIVE' ? 'Active Shift' : sh.status === 'SCHEDULED' ? 'Scheduled Future Shift' : 'Previous Assignment'}</span>
                           </div>
                         </div>

@@ -136,50 +136,50 @@ export default function EmployeeRegularization() {
   const containerStyle = { flex: 1, padding: '24px 32px', overflowY: 'auto' }
 
   return (
-    <div style={pageStyle}>
+    <div className="pms-page" style={pageStyle}>
       <EmployeeSidebar active="regularization" />
 
       <div style={mainStyle}>
         <EmployeeTopBar />
 
-        <div style={containerStyle}>
+        <div className="pms-content" style={containerStyle}>
           
           {/* Header */}
           <div style={{ marginBottom: '28px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FiFileText size={20} color="#C2071A" strokeWidth={2.5} />
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiFileText size={20} color="#0466C8" strokeWidth={2.5} />
               </div>
               Attendance Regularization
             </h1>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>
+            <p style={{ fontSize: '13px', color: '#7D8597', margin: 0, fontWeight: 500 }}>
               Correct missed punch clock ins/outs, update shift times, or submit partial day permissions.
             </p>
           </div>
 
           {/* Tabs */}
-          <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px', paddingBottom: '2px' }}>
+          <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #E3E7EE', marginBottom: '24px', paddingBottom: '2px' }}>
             <button
               onClick={() => setActiveTab('submit')}
               style={{
                 padding: '10px 18px', border: 'none', background: 'none', fontSize: '13px', fontWeight: 700,
-                color: activeTab === 'submit' ? '#C2071A' : '#64748b', cursor: 'pointer',
-                borderBottom: activeTab === 'submit' ? '2.5px solid #C2071A' : '2.5px solid transparent',
+                color: activeTab === 'submit' ? '#0466C8' : '#7D8597', cursor: 'pointer',
+                borderBottom: activeTab === 'submit' ? '2.5px solid #0466C8' : '2.5px solid transparent',
                 display: 'flex', alignItems: 'center', gap: '6px'
               }}
             >
-              <FiPlusCircle size={15} color={activeTab === 'submit' ? '#C2071A' : '#64748b'} /> Create Request
+              <FiPlusCircle size={15} color={activeTab === 'submit' ? '#0466C8' : '#7D8597'} /> Create Request
             </button>
             <button
               onClick={() => setActiveTab('history')}
               style={{
                 padding: '10px 18px', border: 'none', background: 'none', fontSize: '13px', fontWeight: 700,
-                color: activeTab === 'history' ? '#C2071A' : '#64748b', cursor: 'pointer',
-                borderBottom: activeTab === 'history' ? '2.5px solid #C2071A' : '2.5px solid transparent',
+                color: activeTab === 'history' ? '#0466C8' : '#7D8597', cursor: 'pointer',
+                borderBottom: activeTab === 'history' ? '2.5px solid #0466C8' : '2.5px solid transparent',
                 display: 'flex', alignItems: 'center', gap: '6px'
               }}
             >
-              <FiList size={15} color={activeTab === 'history' ? '#C2071A' : '#64748b'} /> My Request History
+              <FiList size={15} color={activeTab === 'history' ? '#0466C8' : '#7D8597'} /> My Request History
             </button>
           </div>
 
@@ -203,23 +203,23 @@ export default function EmployeeRegularization() {
                   
                   {/* Request Date */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Attendance Date</label>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Attendance Date</label>
                     <input
                       type="date"
                       value={date}
                       onChange={e => setDate(e.target.value)}
                       required
-                      style={{ padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', outline: 'none', colorScheme: 'light' }}
+                      style={{ padding: '9px 12px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', outline: 'none', colorScheme: 'light' }}
                     />
                   </div>
 
                   {/* Request Type */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Adjustment Request Type</label>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Adjustment Request Type</label>
                     <select
                       value={type}
                       onChange={e => setType(e.target.value)}
-                      style={{ padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', outline: 'none', cursor: 'pointer', background: '#fff' }}
+                      style={{ padding: '9px 12px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', outline: 'none', cursor: 'pointer', background: '#fff' }}
                     >
                       {settings?.allow_missed_punch && (
                         <>
@@ -250,7 +250,7 @@ export default function EmployeeRegularization() {
                 {/* Timing overrides */}
                 {['MISSING_PUNCH_IN', 'ATTENDANCE_CORRECTION', 'LATE_COMING_PERMISSION', 'TEMPORARY_EXIT_PERMISSION'].includes(type) && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       {type === 'LATE_COMING_PERMISSION' ? 'Expected Check-in Time' : 'Corrected Check-in Time'}
                     </label>
                     <input
@@ -258,14 +258,14 @@ export default function EmployeeRegularization() {
                       value={checkInTime}
                       onChange={e => setCheckInTime(e.target.value)}
                       required={['MISSING_PUNCH_IN', 'ATTENDANCE_CORRECTION', 'LATE_COMING_PERMISSION'].includes(type)}
-                      style={{ padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', outline: 'none', maxWidth: '200px' }}
+                      style={{ padding: '9px 12px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', outline: 'none', maxWidth: '200px' }}
                     />
                   </div>
                 )}
 
                 {['MISSING_PUNCH_OUT', 'ATTENDANCE_CORRECTION', 'EARLY_EXIT_PERMISSION', 'TEMPORARY_EXIT_PERMISSION'].includes(type) && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
-                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    <label style={{ fontSize: '11px', fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       {type === 'EARLY_EXIT_PERMISSION' ? 'Expected Check-out Time' : 'Corrected Check-out Time'}
                     </label>
                     <input
@@ -273,21 +273,21 @@ export default function EmployeeRegularization() {
                       value={checkOutTime}
                       onChange={e => setCheckOutTime(e.target.value)}
                       required={['MISSING_PUNCH_OUT', 'ATTENDANCE_CORRECTION', 'EARLY_EXIT_PERMISSION'].includes(type)}
-                      style={{ padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', outline: 'none', maxWidth: '200px' }}
+                      style={{ padding: '9px 12px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', outline: 'none', maxWidth: '200px' }}
                     />
                   </div>
                 )}
 
                 {/* Reason description */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '24px' }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reason / Remarks {settings?.reason_required && <span style={{ color: '#ef4444' }}>*</span>}</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reason / Remarks {settings?.reason_required && <span style={{ color: '#ef4444' }}>*</span>}</label>
                   <textarea
                     rows={4}
                     value={reason}
                     onChange={e => setReason(e.target.value)}
                     required={settings?.reason_required}
                     placeholder="Describe why this correction or exception is needed..."
-                    style={{ padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
+                    style={{ padding: '10px 12px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
                   />
                 </div>
 
@@ -296,9 +296,9 @@ export default function EmployeeRegularization() {
                     type="submit"
                     disabled={saving}
                     style={{
-                      background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#fff', padding: '10px 24px', border: 'none',
+                      background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#fff', padding: '10px 24px', border: 'none',
                       borderRadius: '10px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s',
-                      display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)', opacity: saving ? 0.7 : 1
+                      display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)', opacity: saving ? 0.7 : 1
                     }}
                   >
                     <FiPlusCircle size={16} color="#ffffff" stroke="#ffffff" />
@@ -311,21 +311,21 @@ export default function EmployeeRegularization() {
               {/* Side limits cards */}
               {settings && (
                 <div style={{ background: '#fff', border: 'none', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' }}>
-                  <h4 style={{ margin: 0, fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>Adjustment Allowance</h4>
+                  <h4 style={{ margin: 0, fontSize: '14px', color: '#001233', fontWeight: 700 }}>Adjustment Allowance</h4>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>MAX ALLOWED PER PERIOD</span>
-                    <strong style={{ fontSize: '16px', color: '#0f172a' }}>{settings.max_requests_allowed} per {settings.request_period.toLowerCase()}</strong>
+                    <span style={{ fontSize: '11px', color: '#7D8597', fontWeight: 600 }}>MAX ALLOWED PER PERIOD</span>
+                    <strong style={{ fontSize: '16px', color: '#001233' }}>{settings.max_requests_allowed} per {settings.request_period.toLowerCase()}</strong>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>REGULARIZATION WINDOW</span>
-                    <strong style={{ fontSize: '16px', color: '#0f172a' }}>{settings.regularization_window_days} past days</strong>
+                    <span style={{ fontSize: '11px', color: '#7D8597', fontWeight: 600 }}>REGULARIZATION WINDOW</span>
+                    <strong style={{ fontSize: '16px', color: '#001233' }}>{settings.regularization_window_days} past days</strong>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>FUTURE PUNCH RULES</span>
-                    <strong style={{ fontSize: '13px', color: settings.allow_future_regularization ? '#15803d' : '#64748b' }}>
+                    <span style={{ fontSize: '11px', color: '#7D8597', fontWeight: 600 }}>FUTURE PUNCH RULES</span>
+                    <strong style={{ fontSize: '13px', color: settings.allow_future_regularization ? '#15803d' : '#7D8597' }}>
                       {settings.allow_future_regularization ? 'Future Dates Allowed' : 'Past Dates Only'}
                     </strong>
                   </div>
@@ -338,18 +338,18 @@ export default function EmployeeRegularization() {
             <div style={{ background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' }}>
               
               {historyLoading ? (
-                <div style={{ padding: '60px 40px', textAlign: 'center', color: '#64748b' }}>
+                <div style={{ padding: '60px 40px', textAlign: 'center', color: '#7D8597' }}>
                   Loading history logs...
                 </div>
               ) : history.length === 0 ? (
-                <div style={{ padding: '60px 40px', textAlign: 'center', color: '#64748b' }}>
+                <div style={{ padding: '60px 40px', textAlign: 'center', color: '#7D8597' }}>
                   No regularization history logs submitted yet.
                 </div>
               ) : (
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
                     <thead>
-                      <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' }}>
+                      <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' }}>
                         {['Date', 'Type', 'Requested checkin', 'Requested checkout', 'Reason', 'Status', 'Remarks', 'Action'].map(h => (
                           <th key={h} style={{ padding: '14px 18px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em', borderBottom: 'none' }}>
                             {h}
@@ -366,31 +366,31 @@ export default function EmployeeRegularization() {
                         
                         return (
                           <tr key={idx} style={{ borderBottom: '1px solid #edf2f7' }}>
-                            <td style={{ padding: '14px 18px', color: '#C2071A', fontWeight: 700 }}>
+                            <td style={{ padding: '14px 18px', color: '#0466C8', fontWeight: 700 }}>
                               {new Date(row.attendance_date).toISOString().slice(0, 10)}
                             </td>
-                            <td style={{ padding: '14px 18px', color: '#475569', fontWeight: 600 }}>
+                            <td style={{ padding: '14px 18px', color: '#33415C', fontWeight: 600 }}>
                               {row.request_type.replace(/_/g, ' ')}
                             </td>
-                            <td style={{ padding: '14px 18px', color: '#1e293b', fontFamily: 'monospace' }}>
+                            <td style={{ padding: '14px 18px', color: '#001233', fontFamily: 'monospace' }}>
                               {row.requested_check_in ? new Date(row.requested_check_in).toISOString().slice(11, 16) : '—'}
                             </td>
-                            <td style={{ padding: '14px 18px', color: '#1e293b', fontFamily: 'monospace' }}>
+                            <td style={{ padding: '14px 18px', color: '#001233', fontFamily: 'monospace' }}>
                               {row.requested_check_out ? new Date(row.requested_check_out).toISOString().slice(11, 16) : '—'}
                             </td>
-                            <td style={{ padding: '14px 18px', color: '#64748b', fontSize: '12px', fontStyle: 'italic', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <td style={{ padding: '14px 18px', color: '#7D8597', fontSize: '12px', fontStyle: 'italic', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                               {row.reason || '—'}
                             </td>
                             <td style={{ padding: '14px 18px' }}>
                               <span style={{
                                 fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '20px',
-                                background: isApproved ? 'rgba(16,185,129,0.12)' : isPending ? 'rgba(245,158,11,0.12)' : isRejected ? 'rgba(239,68,68,0.12)' : '#f1f5f9',
-                                color: isApproved ? '#059669' : isPending ? '#d97706' : isRejected ? '#ef4444' : '#475569'
+                                background: isApproved ? 'rgba(16,185,129,0.12)' : isPending ? 'rgba(245,158,11,0.12)' : isRejected ? 'rgba(239,68,68,0.12)' : '#F1F4F8',
+                                color: isApproved ? '#059669' : isPending ? '#d97706' : isRejected ? '#ef4444' : '#33415C'
                               }}>
                                 {status}
                               </span>
                             </td>
-                            <td style={{ padding: '14px 18px', color: '#475569', fontSize: '12px' }}>
+                            <td style={{ padding: '14px 18px', color: '#33415C', fontSize: '12px' }}>
                               {isApproved ? row.manager_comments : isRejected ? row.rejection_reason : '—'}
                             </td>
                             <td style={{ padding: '14px 18px' }}>

@@ -59,7 +59,7 @@ function KpiCard({ icon, label, value, sub, accent }) {
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: '28px', fontWeight: '800', color: accent, lineHeight: 1, marginBottom: '4px' }}>{value}</div>
-        <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>{label}</div>
+        <div style={{ fontSize: '13px', fontWeight: '700', color: '#001233', marginBottom: '2px' }}>{label}</div>
         {sub && <div style={{ fontSize: '11px', color: '#94a3b8' }}>{sub}</div>}
       </div>
     </div>
@@ -71,23 +71,23 @@ function Pagination({ page, total, onChange }) {
   if (totalPages <= 1) return null
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderTop: '1px solid #f1f5f9', background: '#fcfcfd' }}>
-      <div style={{ fontSize: '12px', color: '#64748b' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderTop: '1px solid #F1F4F8', background: '#fcfcfd' }}>
+      <div style={{ fontSize: '12px', color: '#7D8597' }}>
         Showing {Math.min((page - 1) * PAGE_SIZE + 1, total)}–{Math.min(page * PAGE_SIZE, total)} of {total}
       </div>
       <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
         <button onClick={() => onChange(page - 1)} disabled={page === 1}
-          style={{ padding: '5px 10px', border: '1px solid #e2e8f0', borderRadius: '7px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151', cursor: page === 1 ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
+          style={{ padding: '5px 10px', border: '1px solid #E3E7EE', borderRadius: '7px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151', cursor: page === 1 ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
           ← Prev
         </button>
         {pages.map(p => (
           <button key={p} onClick={() => onChange(p)}
-            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#C2071A' : '#e2e8f0', background: p === page ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}>
+            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#0466C8' : '#E3E7EE', background: p === page ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}>
             {p}
           </button>
         ))}
         <button onClick={() => onChange(page + 1)} disabled={page === totalPages}
-          style={{ padding: '5px 10px', border: '1px solid #e2e8f0', borderRadius: '7px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151', cursor: page === totalPages ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
+          style={{ padding: '5px 10px', border: '1px solid #E3E7EE', borderRadius: '7px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151', cursor: page === totalPages ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
           Next →
         </button>
       </div>
@@ -182,7 +182,7 @@ export default function HolidayList() {
   const isQuotaFull = ohData && ohData.remaining_days <= 0
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <EmployeeSidebar active="holidays" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Holidays" />
@@ -190,18 +190,18 @@ export default function HolidayList() {
 
           {/* Header */}
           <div style={{ marginBottom: '28px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FiCalendar size={20} color="#C2071A" strokeWidth={2.5} />
+            <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FiCalendar size={20} color="#0466C8" strokeWidth={2.5} />
               </div>
               Holiday Calendar
             </h1>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Plan your schedule around official public and optional holidays</p>
+            <p style={{ fontSize: '13px', color: '#7D8597', margin: 0, fontWeight: 500 }}>Plan your schedule around official public and optional holidays</p>
           </div>
 
           {/* KPI Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
-            <KpiCard icon={<FiCalendar size={22} color="#6366f1" />} label="Total Holidays" value={holidays.length} sub={`Year ${yearFilter}`} accent="#6366f1" />
+            <KpiCard icon={<FiCalendar size={22} color="#0466C8" />} label="Total Holidays" value={holidays.length} sub={`Year ${yearFilter}`} accent="#0466C8" />
             <KpiCard icon={<FiGlobe size={22} color="#10b981" />} label="Public Holidays" value={publicCount} sub="Mandatory days off" accent="#10b981" />
             <KpiCard icon={<FiStar size={22} color="#9333ea" />} label="Optional Holidays" value={optionalCount} sub="Choose your preference" accent="#9333ea" />
             {ohLoading ? (
@@ -217,7 +217,7 @@ export default function HolidayList() {
           {/* Upcoming holidays strip */}
           {upcoming.length > 0 && (
             <div style={{ marginBottom: '28px' }}>
-              <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '12px' }}>Upcoming Holidays</div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '12px' }}>Upcoming Holidays</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '14px' }}>
                 {upcoming.map(h => {
                   const b = BADGE[h.holiday_type] || BADGE.PUBLIC
@@ -228,8 +228,8 @@ export default function HolidayList() {
                         <div style={{ fontSize: '22px', fontWeight: '800', color: b.color, lineHeight: 1 }}>{dayNum(h.holiday_date)}</div>
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.holiday_name}</div>
-                        <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>{dayOfWeek(h.holiday_date)}</div>
+                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#001233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.holiday_name}</div>
+                        <div style={{ fontSize: '12px', color: '#7D8597', marginTop: '2px' }}>{dayOfWeek(h.holiday_date)}</div>
                         <span style={{ display: 'inline-block', marginTop: '5px', fontSize: '10px', fontWeight: '700', padding: '1px 7px', borderRadius: '20px', background: b.bg, color: b.color, border: `1px solid ${b.border}`, textTransform: 'uppercase' }}>
                           {h.holiday_type}
                         </span>
@@ -248,25 +248,25 @@ export default function HolidayList() {
               placeholder="Search holiday name or description…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              style={{ flex: 1, minWidth: '180px', padding: '9px 13px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', background: '#f8fafc' }}
+              style={{ flex: 1, minWidth: '180px', padding: '9px 13px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', background: '#f8fafc' }}
             />
             <select value={yearFilter} onChange={e => setYearFilter(e.target.value)}
-              style={{ padding: '9px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer', background: '#fff' }}>
+              style={{ padding: '9px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', cursor: 'pointer', background: '#fff' }}>
               {['2024','2025','2026','2027','2028'].map(y => <option key={y} value={y}>{y}</option>)}
             </select>
             <select value={monthFilter} onChange={e => setMonthFilter(e.target.value)}
-              style={{ padding: '9px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer', background: '#fff' }}>
+              style={{ padding: '9px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', cursor: 'pointer', background: '#fff' }}>
               {MONTHS.map((m, i) => <option key={i} value={String(i)}>{m}</option>)}
             </select>
             <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)}
-              style={{ padding: '9px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', cursor: 'pointer', background: '#fff' }}>
+              style={{ padding: '9px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', cursor: 'pointer', background: '#fff' }}>
               <option value="ALL">All Types</option>
               <option value="PUBLIC">Public</option>
               <option value="OPTIONAL">Optional</option>
             </select>
             {(search || monthFilter !== '0' || typeFilter !== 'ALL') && (
               <button onClick={() => { setSearch(''); setMonthFilter('0'); setTypeFilter('ALL') }}
-                style={{ padding: '8px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', background: '#fff', fontSize: '12px', color: '#64748b', cursor: 'pointer', fontWeight: '600' }}>
+                style={{ padding: '8px 14px', border: '1px solid #E3E7EE', borderRadius: '10px', background: '#fff', fontSize: '12px', color: '#7D8597', cursor: 'pointer', fontWeight: '600' }}>
                 Clear
               </button>
             )}
@@ -286,7 +286,7 @@ export default function HolidayList() {
                 <thead>
                   <tr>
                     {['Holiday Name', 'Date', 'Day', 'Type', 'Description', 'Opt. Holiday'].map(h => (
-                      <th key={h} style={{ padding: '14px 18px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' }}>
+                      <th key={h} style={{ padding: '14px 18px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' }}>
                         {h}
                       </th>
                     ))}
@@ -306,7 +306,7 @@ export default function HolidayList() {
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         style={{ borderBottom: '1px solid #edf2f7', transition: 'background 0.15s' }}
                       >
-                        <td style={{ padding: '14px 18px', fontWeight: '700', color: '#0f172a' }}>
+                        <td style={{ padding: '14px 18px', fontWeight: '700', color: '#001233' }}>
                           <div>{h.holiday_name}</div>
                           {isAvailed && (
                             <div style={{ fontSize: '10px', color: '#d97706', fontWeight: '600', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '3px' }}>
@@ -314,14 +314,14 @@ export default function HolidayList() {
                             </div>
                           )}
                         </td>
-                        <td style={{ padding: '14px 18px', color: '#475569' }}>{dateStr}</td>
-                        <td style={{ padding: '14px 18px', color: '#64748b' }}>{dayOfWeek(h.holiday_date)}</td>
+                        <td style={{ padding: '14px 18px', color: '#33415C' }}>{dateStr}</td>
+                        <td style={{ padding: '14px 18px', color: '#7D8597' }}>{dayOfWeek(h.holiday_date)}</td>
                         <td style={{ padding: '14px 18px' }}>
                           <span style={{ display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', textTransform: 'uppercase', background: b.bg, color: b.color, border: `1px solid ${b.border}` }}>
                             {h.holiday_type}
                           </span>
                         </td>
-                        <td style={{ padding: '14px 18px', color: '#64748b', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <td style={{ padding: '14px 18px', color: '#7D8597', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {h.description || '—'}
                         </td>
                         <td style={{ padding: '14px 18px' }}>
@@ -334,9 +334,9 @@ export default function HolidayList() {
                                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                                 padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '700',
                                 cursor: (isDisabled || isToggling) ? 'not-allowed' : 'pointer',
-                                border: `1px solid ${isAvailed ? 'rgba(245,158,11,0.35)' : isDisabled ? '#e2e8f0' : 'rgba(194,7,26,0.3)'}`,
-                                background: isAvailed ? 'rgba(245,158,11,0.1)' : isDisabled ? '#f8fafc' : 'rgba(194,7,26,0.08)',
-                                color: isAvailed ? '#d97706' : isDisabled ? '#cbd5e1' : '#C2071A',
+                                border: `1px solid ${isAvailed ? 'rgba(245,158,11,0.35)' : isDisabled ? '#E3E7EE' : 'rgba(4, 102, 200,0.3)'}`,
+                                background: isAvailed ? 'rgba(245,158,11,0.1)' : isDisabled ? '#f8fafc' : 'rgba(4, 102, 200,0.08)',
+                                color: isAvailed ? '#d97706' : isDisabled ? '#cbd5e1' : '#0466C8',
                                 opacity: isDisabled ? 0.5 : 1,
                                 transition: 'all 0.15s',
                               }}>
@@ -360,8 +360,8 @@ export default function HolidayList() {
             <div style={{ marginTop: '24px', background: '#fff', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <div>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '2px' }}>My Optional Holiday Selection</div>
-                  <div style={{ fontSize: '12px', color: '#64748b' }}>Leave Year {ohData.leave_year} — Choose up to {ohData.allocated_days} optional holiday{ohData.allocated_days !== 1 ? 's' : ''}</div>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#001233', marginBottom: '2px' }}>My Optional Holiday Selection</div>
+                  <div style={{ fontSize: '12px', color: '#7D8597' }}>Leave Year {ohData.leave_year} — Choose up to {ohData.allocated_days} optional holiday{ohData.allocated_days !== 1 ? 's' : ''}</div>
                 </div>
                 {ohData.remaining_days > 0 ? (
                   <div style={{ padding: '5px 13px', borderRadius: '20px', background: 'rgba(245,158,11,0.1)', color: '#d97706', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(245,158,11,0.25)' }}>
@@ -380,18 +380,18 @@ export default function HolidayList() {
                   <span>{ohData.used_days} of {ohData.allocated_days} availed</span>
                   <span>{ohData.allocated_days > 0 ? Math.round((ohData.used_days / ohData.allocated_days) * 100) : 0}%</span>
                 </div>
-                <div style={{ height: '7px', borderRadius: '6px', background: '#f1f5f9', overflow: 'hidden' }}>
+                <div style={{ height: '7px', borderRadius: '6px', background: '#F1F4F8', overflow: 'hidden' }}>
                   <div style={{ height: '100%', borderRadius: '6px', width: `${ohData.allocated_days > 0 ? Math.min(100, (ohData.used_days / ohData.allocated_days) * 100) : 0}%`, background: ohData.remaining_days <= 0 ? 'linear-gradient(90deg,#ef4444,#dc2626)' : 'linear-gradient(90deg,#f59e0b,#d97706)', transition: 'width 0.5s' }} />
                 </div>
               </div>
 
               {ohData.availed_holidays && ohData.availed_holidays.length > 0 ? (
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Your Availed Holidays</div>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>Your Availed Holidays</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {ohData.availed_holidays.map(h => (
                       <div key={h.holiday_id} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '6px 12px', borderRadius: '10px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.25)' }}>
-                        <span style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a' }}>{h.holiday_name}</span>
+                        <span style={{ fontSize: '13px', fontWeight: '700', color: '#001233' }}>{h.holiday_name}</span>
                         <span style={{ fontSize: '11px', color: '#94a3b8' }}>{h.holiday_date ? h.holiday_date.split('T')[0] : ''}</span>
                         <button
                           onClick={() => toggleOH(h.holiday_id)}

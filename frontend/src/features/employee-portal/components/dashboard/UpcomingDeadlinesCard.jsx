@@ -1,43 +1,31 @@
 import React from 'react'
-import { FiCheckCircle, FiTarget } from 'react-icons/fi'
-import { CalIcon } from '../shared/Icons'
-import { WidgetCard, ViewAllLink } from '../shared/UI'
-import { COLORS } from '../../theme'
+import { FiFlag } from 'react-icons/fi'
+import { PmsCard, CardHeader, HeaderChip, BigStat, EmptyBox, ListRow, daysUntil, dayLabel } from '../shared/PmsUI'
 
 export default function UpcomingDeadlinesCard({ goals, onViewAll }) {
+  const n = goals.length
   return (
-    <WidgetCard
-      icon={<FiTarget size={14} />}
-      iconBg="rgba(194,7,26,0.1)"
-      iconColor={COLORS.primary}
-      title="Upcoming Deadlines"
-      subtitle="Next 30 days"
-      action={onViewAll && <ViewAllLink onClick={onViewAll} />}
-    >
-      {goals.length === 0 ? (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: COLORS.green, fontSize: '12px', padding: '12px 0', fontWeight: '600' }}><FiCheckCircle size={13} /> No upcoming deadlines</div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {goals.map((goal, idx) => {
-            const now = new Date()
-            const dLeft = Math.ceil((new Date(goal.due_date) - now) / 864e5)
-            const urg = dLeft <= 3 ? COLORS.red : dLeft <= 7 ? COLORS.amber : COLORS.textSub
-            return (
-              <div key={goal.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '7px 0', borderBottom: idx < goals.length - 1 ? '1px solid #f8fafc' : 'none' }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{goal.title}</div>
-                  <div style={{ fontSize: '9px', color: COLORS.textMuted, marginTop: '1px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                    <CalIcon />{new Date(goal.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                  </div>
-                </div>
-                <div style={{ fontSize: '11px', fontWeight: '700', color: urg, whiteSpace: 'nowrap', marginLeft: '8px', background: `${urg}12`, padding: '2px 7px', borderRadius: '10px' }}>
-                  {dLeft === 0 ? 'Today' : dLeft === 1 ? 'Tmrw' : `${dLeft}d`}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </WidgetCard>
+    <PmsCard>
+      <CardHeader title="Upcoming Deadlines" chip={<HeaderChip onClick={onViewAll} title="Open performance hub" />} />
+      <BigStat value={n} pill="Next 30 days" caption={n === 0 ? "You're all caught up!" : `${n} goal${n === 1 ? '' : 's'} due soon`} />
+      <div style={{ marginTop: 'auto', paddingTop: '14px' }}>
+        {n === 0 ? (
+          <EmptyBox icon={<FiFlag size={14} />} title="No upcoming deadlines" />
+        ) : goals.slice(0, 3).map((g, i, arr) => {
+          const d = daysUntil(g.due_date)
+          return (
+            <ListRow
+              key={g.goal_id || g.id || i}
+              title={g.title}
+              sub={new Date(g.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+              right={dayLabel(d)}
+              rightTone={d != null && d <= 3 ? 'blue' : 'grey'}
+              last={i === arr.length - 1}
+              onClick={onViewAll}
+            />
+          )
+        })}
+      </div>
+    </PmsCard>
   )
 }

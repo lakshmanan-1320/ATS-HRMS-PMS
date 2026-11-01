@@ -47,7 +47,8 @@ function timeAgo(dateString) {
   return past.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
 }
 
-export default function NotificationDropdown({ role = 'employee' }) {
+export default function NotificationDropdown({ role = 'employee', variant = 'default' }) {
+  const isPms = variant === 'pms'
   const navigate = useNavigate()
   const [items, setItems] = useState([])
   const [unreadCount, setUnreadCount] = useState(0)
@@ -161,19 +162,19 @@ export default function NotificationDropdown({ role = 'employee' }) {
         style={{
           position: 'relative',
           background: showDropdown ? 'var(--card-active-bg, #FEECEE)' : '#fff',
-          border: `1px solid ${showDropdown ? 'var(--card-active-border, #F7A6AF)' : '#e4eaf3'}`,
-          borderRadius: '9px',
-          width: '36px', height: '36px',
+          border: `1px solid ${showDropdown ? 'var(--card-active-border, #F7A6AF)' : (isPms ? '#E3E7EE' : '#e4eaf3')}`,
+          borderRadius: isPms ? '50%' : '9px',
+          width: isPms ? '42px' : '36px', height: isPms ? '42px' : '36px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           cursor: 'pointer', transition: 'all 0.2s',
         }}
         onMouseEnter={e => { e.currentTarget.style.background = 'var(--card-active-bg, #FEECEE)'; e.currentTarget.style.borderColor = 'var(--card-active-border, #F7A6AF)' }}
-        onMouseLeave={e => { if (!showDropdown) { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#e4eaf3' } }}
+        onMouseLeave={e => { if (!showDropdown) { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = isPms ? '#E3E7EE' : '#e4eaf3' } }}
       >
-        <FiBell size={16} color={showDropdown ? 'var(--primary-color, #C2071A)' : '#374151'} />
+        <FiBell size={isPms ? 15 : 16} color={showDropdown ? 'var(--primary-color, #C2071A)' : (isPms ? '#001233' : '#374151')} />
         {unreadCount > 0 && (
           <span style={{
-            position: 'absolute', top: '5px', right: '5px',
+            position: 'absolute', top: isPms ? '6px' : '5px', right: isPms ? '6px' : '5px',
             minWidth: '16px', height: '16px', borderRadius: '8px',
             background: 'var(--primary-color, #C2071A)', border: '2px solid #fff',
             fontSize: '9px', color: '#fff', fontWeight: '700',

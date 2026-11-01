@@ -6,9 +6,9 @@ import PageHeader from '../../../components/common/PageHeader.jsx'
 import { FiTarget } from 'react-icons/fi'
 
 const STATUS_META = {
-  draft:       { label: 'Draft',       color: '#475569', bg: '#f1f5f9', border: 'rgba(71,85,105,0.2)' },
+  draft:       { label: 'Draft',       color: '#33415C', bg: '#F1F4F8', border: 'rgba(71,85,105,0.2)' },
   active:      { label: 'Active',      color: '#15803d', bg: '#dcfce7', border: 'rgba(21,128,61,0.2)' },
-  in_progress: { label: 'In Progress', color: '#4f46e5', bg: '#dbeafe', border: 'rgba(29,78,216,0.2)' },
+  in_progress: { label: 'In Progress', color: '#0353A4', bg: '#dbeafe', border: 'rgba(29,78,216,0.2)' },
   submitted:   { label: 'Submitted',   color: '#b45309', bg: '#fef3c7', border: 'rgba(180,83,9,0.2)' },
   approved:    { label: 'Approved',    color: '#6d28d9', bg: '#f3e8ff', border: 'rgba(109,40,217,0.2)' },
   completed:   { label: 'Completed',   color: '#047857', bg: '#d1fae5', border: 'rgba(4,120,87,0.2)' },
@@ -48,7 +48,7 @@ function ProgressBar({ value, override }) {
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-        <div style={{ flex: 1, height: 6, background: '#e2e8f0', borderRadius: 4, overflow: 'hidden' }}>
+        <div style={{ flex: 1, height: 6, background: '#E3E7EE', borderRadius: 4, overflow: 'hidden' }}>
           <div style={{ width: `${Math.min(100, pct || 0)}%`, height: '100%', background: color, borderRadius: 4, transition: 'width 0.4s' }} />
         </div>
         <span style={{ fontSize: 11, fontWeight: 700, color, minWidth: 32, textAlign: 'right' }}>{Math.round(pct || 0)}%</span>
@@ -61,7 +61,7 @@ function ProgressBar({ value, override }) {
 }
 
 function Badge({ meta, value }) {
-  const m = meta[value] || { label: value, color: '#475569', bg: '#f1f5f9', border: 'rgba(71,85,105,0.2)' }
+  const m = meta[value] || { label: value, color: '#33415C', bg: '#F1F4F8', border: 'rgba(71,85,105,0.2)' }
   return (
     <span style={{
       fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 6,
@@ -105,7 +105,7 @@ function Pagination({ page, totalPages, onPrev, onNext, onPage }) {
   const btnBase = {
     borderRadius: 8, fontSize: 13, fontWeight: 600,
     cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
-    border: '1px solid #e2e8f0',
+    border: '1px solid #E3E7EE',
   }
 
   return (
@@ -115,7 +115,7 @@ function Pagination({ page, totalPages, onPrev, onNext, onPage }) {
         style={{
           ...btnBase, padding: '8px 16px',
           background: page === 1 ? '#f8fafc' : '#ffffff',
-          color: page === 1 ? '#cbd5e1' : '#475569',
+          color: page === 1 ? '#cbd5e1' : '#33415C',
           cursor: page === 1 ? 'not-allowed' : 'pointer',
         }}
       >← Prev</button>
@@ -127,10 +127,10 @@ function Pagination({ page, totalPages, onPrev, onNext, onPage }) {
           <button key={p} onClick={() => onPage(p)} style={{
             ...btnBase,
             width: 38, height: 38,
-            background: p === page ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : '#ffffff',
-            color: p === page ? '#ffffff' : '#475569',
-            border: p === page ? 'none' : '1px solid #e2e8f0',
-            boxShadow: p === page ? '0 2px 8px rgba(99,102,241,0.3)' : 'none',
+            background: p === page ? 'linear-gradient(135deg,#0466C8,#0353A4)' : '#ffffff',
+            color: p === page ? '#ffffff' : '#33415C',
+            border: p === page ? 'none' : '1px solid #E3E7EE',
+            boxShadow: p === page ? '0 2px 8px rgba(4, 102, 200,0.3)' : 'none',
             fontWeight: p === page ? 700 : 600,
           }}>{p}</button>
         )
@@ -141,7 +141,7 @@ function Pagination({ page, totalPages, onPrev, onNext, onPage }) {
         style={{
           ...btnBase, padding: '8px 16px',
           background: page === totalPages ? '#f8fafc' : '#ffffff',
-          color: page === totalPages ? '#cbd5e1' : '#475569',
+          color: page === totalPages ? '#cbd5e1' : '#33415C',
           cursor: page === totalPages ? 'not-allowed' : 'pointer',
         }}
       >Next →</button>
@@ -178,26 +178,26 @@ function GoalDetail({ goal, employees, goals, onClose, onAction }) {
             <div style={{ display: 'flex', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
               <Badge meta={STATUS_META} value={goal.status} />
               <span style={{
-                fontSize: 11, color: TYPE_META[goal.goal_type]?.color || '#64748b', fontWeight: 700,
+                fontSize: 11, color: TYPE_META[goal.goal_type]?.color || '#7D8597', fontWeight: 700,
                 background: TYPE_META[goal.goal_type]?.bg, padding: '2px 8px', borderRadius: 6,
               }}>
                 {TYPE_META[goal.goal_type]?.icon} {TYPE_META[goal.goal_type]?.label}
               </span>
             </div>
-            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{goal.title}</h2>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#001233' }}>{goal.title}</h2>
           </div>
           <button onClick={onClose} style={{
             width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 8,
-            cursor: 'pointer', color: '#64748b', fontSize: 16,
+            cursor: 'pointer', color: '#7D8597', fontSize: 16,
           }}>✕</button>
         </div>
 
-        <div style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px', border: '1px solid #e2e8f0' }}>
-          <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>Progress</div>
+        <div style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px', border: '1px solid #E3E7EE' }}>
+          <div style={{ fontSize: 11, color: '#7D8597', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>Progress</div>
           <ProgressBar value={goal.progress} override={goal.override_progress} />
           {subGoals.length > 0 && (
-            <div style={{ fontSize: 11, color: '#64748b', marginTop: 6, fontWeight: 600 }}>
+            <div style={{ fontSize: 11, color: '#7D8597', marginTop: 6, fontWeight: 600 }}>
               {completedSubs} of {subGoals.length} sub-goals completed
             </div>
           )}
@@ -214,45 +214,45 @@ function GoalDetail({ goal, employees, goals, onClose, onAction }) {
             ['Parent Goal',   goal.parent_goal_title || '—'],
             ['Submitted At',  fmtDate(goal.submitted_at)],
           ].map(([label, val]) => (
-            <div key={label} style={{ background: '#f8fafc', borderRadius: 8, padding: '10px 12px', border: '1px solid #e2e8f0' }}>
-              <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontWeight: 700 }}>{label}</div>
-              <div style={{ fontSize: 13, color: '#1e293b', fontWeight: 700 }}>{val}</div>
+            <div key={label} style={{ background: '#f8fafc', borderRadius: 8, padding: '10px 12px', border: '1px solid #E3E7EE' }}>
+              <div style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontWeight: 700 }}>{label}</div>
+              <div style={{ fontSize: 13, color: '#001233', fontWeight: 700 }}>{val}</div>
             </div>
           ))}
         </div>
 
         {goal.description && (
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: '12px 14px', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, fontWeight: 700 }}>Description</div>
-            <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.6, fontWeight: 500 }}>{goal.description}</div>
+          <div style={{ background: '#f8fafc', borderRadius: 8, padding: '12px 14px', border: '1px solid #E3E7EE' }}>
+            <div style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, fontWeight: 700 }}>Description</div>
+            <div style={{ fontSize: 13, color: '#33415C', lineHeight: 1.6, fontWeight: 500 }}>{goal.description}</div>
           </div>
         )}
 
         <div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
             Sub-Goals ({subGoals.length})
           </div>
           {subGoals.length === 0 ? (
-            <div style={{ fontSize: 13, color: '#64748b', padding: '12px 0', fontWeight: 600 }}>No sub-goals yet.</div>
+            <div style={{ fontSize: 13, color: '#7D8597', padding: '12px 0', fontWeight: 600 }}>No sub-goals yet.</div>
           ) : subGoals.map(sg => (
             <div key={sg.id} style={{
               background: '#f8fafc', borderRadius: 10, padding: '12px 14px',
-              border: '1px solid #e2e8f0', marginBottom: 8,
+              border: '1px solid #E3E7EE', marginBottom: 8,
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{sg.title}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#001233' }}>{sg.title}</div>
                 <Badge meta={STATUS_META} value={sg.status} />
               </div>
               <ProgressBar value={sg.progress} override={sg.override_progress} />
-              <div style={{ fontSize: 11, color: '#64748b', marginTop: 4, fontWeight: 600 }}>
+              <div style={{ fontSize: 11, color: '#7D8597', marginTop: 4, fontWeight: 600 }}>
                 Weight: {sg.weight}% · Due: {fmtDate(sg.due_date)}
               </div>
             </div>
           ))}
         </div>
 
-        <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 16 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Actions</div>
+        <div style={{ borderTop: '1px solid #E3E7EE', paddingTop: 16 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Actions</div>
 
           <div style={{ marginBottom: 12 }}>
             <label style={labelSt}>Acting As (Employee)</label>
@@ -267,7 +267,7 @@ function GoalDetail({ goal, employees, goals, onClose, onAction }) {
               <ActionBtn color="#15803d" onClick={() => onAction('activate', goal.id, {})}>Activate</ActionBtn>
             )}
             {['active', 'in_progress'].includes(goal.status) && (
-              <ActionBtn color="#6366f1" onClick={() => onAction('submit', goal.id, {})}>Submit for Approval</ActionBtn>
+              <ActionBtn color="#0466C8" onClick={() => onAction('submit', goal.id, {})}>Submit for Approval</ActionBtn>
             )}
             {goal.status === 'submitted' && (
               <>
@@ -334,13 +334,13 @@ function ActionBtn({ color, onClick, children, style = {} }) {
 }
 
 const labelSt = {
-  display: 'block', fontSize: 11, fontWeight: 600, color: '#64748b',
+  display: 'block', fontSize: 11, fontWeight: 600, color: '#7D8597',
   textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4,
 }
 const selSt = {
   width: '100%', padding: '9px 12px', borderRadius: 8, fontSize: 13,
-  background: '#ffffff', border: '1px solid #e2e8f0',
-  color: '#1e293b', outline: 'none', fontFamily: 'inherit',
+  background: '#ffffff', border: '1px solid #E3E7EE',
+  color: '#001233', outline: 'none', fontFamily: 'inherit',
   boxSizing: 'border-box', transition: 'border-color 0.15s ease',
 }
 
@@ -357,15 +357,15 @@ function GoalModal({ form, setForm, onSave, onClose, employees, departments, goa
       <div style={{
         width: '100%', maxWidth: 640, maxHeight: '92vh', overflowY: 'auto',
         background: '#ffffff', borderRadius: 16, padding: 28,
-        border: '1px solid #e2e8f0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.08)',
+        border: '1px solid #E3E7EE', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.08)',
       }} onClick={e => e.stopPropagation()}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#1e293b' }}>Edit Goal</h2>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#001233' }}>Edit Goal</h2>
           <button onClick={onClose} style={{
             width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 8,
-            cursor: 'pointer', color: '#64748b', fontSize: 16,
+            cursor: 'pointer', color: '#7D8597', fontSize: 16,
           }}>✕</button>
         </div>
 
@@ -431,16 +431,16 @@ function GoalModal({ form, setForm, onSave, onClose, employees, departments, goa
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 24 }}>
           <button onClick={onClose} style={{
-            padding: '10px 20px', borderRadius: 10, border: '1px solid #e2e8f0',
-            background: '#f8fafc', color: '#64748b', fontSize: 13, cursor: 'pointer',
+            padding: '10px 20px', borderRadius: 10, border: '1px solid #E3E7EE',
+            background: '#f8fafc', color: '#7D8597', fontSize: 13, cursor: 'pointer',
             fontFamily: 'inherit', fontWeight: 600,
           }}>Cancel</button>
           <button onClick={onSave} disabled={saving} style={{
             padding: '10px 24px', borderRadius: 10, border: 'none',
-            background: saving ? 'rgba(99,102,241,0.5)' : 'linear-gradient(135deg,#6366f1,#4f46e5)',
+            background: saving ? 'rgba(4, 102, 200,0.5)' : 'linear-gradient(135deg,#0466C8,#0353A4)',
             color: '#fff', fontSize: 13, fontWeight: 700,
             cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
-            boxShadow: saving ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
+            boxShadow: saving ? 'none' : '0 4px 14px rgba(4, 102, 200,0.35)',
           }}>{saving ? 'Saving…' : 'Update Goal'}</button>
         </div>
       </div>
@@ -609,7 +609,7 @@ export default function Goals() {
   const modeLabel = goalMode === 'top_down' ? 'Top-Down' : goalMode === 'bottom_up' ? 'Bottom-Up' : 'Hybrid'
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: 'Roboto, system-ui, -apple-system, sans-serif' }}>
       <ClientAdminSidebar active="goals" />
       <Toast toasts={toasts} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -628,7 +628,7 @@ export default function Goals() {
           {STAT_CARDS.map(s => (
             <div key={s.key} style={{
               background: '#ffffff', borderRadius: 14, padding: '20px 22px',
-              border: '1px solid #e2e8f0',
+              border: '1px solid #E3E7EE',
               boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
               transition: 'all 0.2s ease',
               position: 'relative', overflow: 'hidden',
@@ -651,7 +651,7 @@ export default function Goals() {
               }}>{s.icon}</div>
               <div style={{ fontSize: 32, fontWeight: 800, color: s.color, lineHeight: 1 }}>{stats[s.key]}</div>
               <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 6, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>{s.label}</div>
-              <div style={{ marginTop: 14, height: 3, borderRadius: 2, background: '#f1f5f9', overflow: 'hidden' }}>
+              <div style={{ marginTop: 14, height: 3, borderRadius: 2, background: '#F1F4F8', overflow: 'hidden' }}>
                 <div style={{
                   height: '100%',
                   width: stats.total > 0 ? `${Math.round((stats[s.key] / stats.total) * 100)}%` : '0%',
@@ -665,7 +665,7 @@ export default function Goals() {
         {/* Filters */}
         <div style={{
           background: '#ffffff', borderRadius: 12, padding: '14px 18px',
-          border: '1px solid #e2e8f0', marginBottom: 20,
+          border: '1px solid #E3E7EE', marginBottom: 20,
           boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
           display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center',
         }}>
@@ -713,7 +713,7 @@ export default function Goals() {
             {[...Array(5)].map((_, i) => (
               <div key={i} style={{
                 background: '#ffffff', borderRadius: 14, height: 108,
-                border: '1px solid #e2e8f0',
+                border: '1px solid #E3E7EE',
                 opacity: 1 - i * 0.15,
               }} />
             ))}
@@ -721,10 +721,10 @@ export default function Goals() {
         ) : filtered.length === 0 ? (
           <div style={{
             textAlign: 'center', padding: '80px 20px',
-            background: '#ffffff', borderRadius: 16, border: '2px dashed #e2e8f0',
+            background: '#ffffff', borderRadius: 16, border: '2px dashed #E3E7EE',
           }}>
             <div style={{ fontSize: 52, marginBottom: 14 }}>🎯</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>No goals found</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: '#001233', marginBottom: 6 }}>No goals found</div>
             <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>
               {search || filterType || filterStatus ? 'Try adjusting your search or filters.' : 'No goals have been created yet.'}
             </div>
@@ -734,12 +734,12 @@ export default function Goals() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {paginated.map(g => {
                 const subCount  = goals.filter(x => x.parent_goal_id === g.id).length
-                const typeColor = TYPE_META[g.goal_type]?.color || '#64748b'
+                const typeColor = TYPE_META[g.goal_type]?.color || '#7D8597'
                 const typeBg    = TYPE_META[g.goal_type]?.bg || 'rgba(100,116,139,0.08)'
                 return (
                   <div key={g.id} style={{
                     background: '#ffffff', borderRadius: 14, padding: '18px 22px',
-                    border: '1px solid #e2e8f0', borderLeft: `4px solid ${typeColor}`,
+                    border: '1px solid #E3E7EE', borderLeft: `4px solid ${typeColor}`,
                     transition: 'all 0.2s ease', cursor: 'pointer',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
                   }}
@@ -751,7 +751,7 @@ export default function Goals() {
                     onMouseLeave={e => {
                       e.currentTarget.style.transform = 'translateY(0)'
                       e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.03)'
-                      e.currentTarget.style.borderColor = '#e2e8f0'
+                      e.currentTarget.style.borderColor = '#E3E7EE'
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
@@ -769,23 +769,23 @@ export default function Goals() {
                           <Badge meta={STATUS_META} value={g.status} />
                           {g.parent_goal_title && (
                             <span style={{
-                              fontSize: 10, color: '#475569', background: '#f8fafc',
-                              border: '1px solid #e2e8f0', padding: '2px 7px', borderRadius: 5, fontWeight: 600,
+                              fontSize: 10, color: '#33415C', background: '#f8fafc',
+                              border: '1px solid #E3E7EE', padding: '2px 7px', borderRadius: 5, fontWeight: 600,
                             }}>↳ {g.parent_goal_title}</span>
                           )}
                           {subCount > 0 && (
                             <span style={{
-                              fontSize: 10, color: '#6366f1', background: 'rgba(99,102,241,0.08)',
-                              border: '1px solid rgba(99,102,241,0.15)', padding: '2px 7px', borderRadius: 5, fontWeight: 700,
+                              fontSize: 10, color: '#0466C8', background: 'rgba(4, 102, 200,0.08)',
+                              border: '1px solid rgba(4, 102, 200,0.15)', padding: '2px 7px', borderRadius: 5, fontWeight: 700,
                             }}>{subCount} sub-goal{subCount > 1 ? 's' : ''}</span>
                           )}
                         </div>
 
                         {/* Title */}
-                        <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>{g.title}</div>
+                        <div style={{ fontSize: 15, fontWeight: 700, color: '#001233', marginBottom: 6 }}>{g.title}</div>
 
                         {/* Meta */}
-                        <div style={{ display: 'flex', gap: 16, fontSize: 12, color: '#64748b', flexWrap: 'wrap', fontWeight: 500, marginBottom: 10 }}>
+                        <div style={{ display: 'flex', gap: 16, fontSize: 12, color: '#7D8597', flexWrap: 'wrap', fontWeight: 500, marginBottom: 10 }}>
                           {g.assigned_to_employee_name && <span>👤 {g.assigned_to_employee_name}</span>}
                           {g.assigned_to_department_name && <span>🏢 {g.assigned_to_department_name}</span>}
                           {g.due_date && <span>📅 Due {fmtDate(g.due_date)}</span>}
@@ -801,12 +801,12 @@ export default function Goals() {
                       {/* Actions */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end', flexShrink: 0 }}>
                         <button onClick={() => openEdit(g)} style={{
-                          padding: '6px 16px', borderRadius: 7, border: '1px solid #e2e8f0',
-                          background: '#f8fafc', color: '#475569', fontSize: 12,
+                          padding: '6px 16px', borderRadius: 7, border: '1px solid #E3E7EE',
+                          background: '#f8fafc', color: '#33415C', fontSize: 12,
                           cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600, transition: 'all 0.15s',
                         }}
-                          onMouseEnter={e => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#1e293b' }}
-                          onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.color = '#475569' }}
+                          onMouseEnter={e => { e.currentTarget.style.background = '#E3E7EE'; e.currentTarget.style.color = '#001233' }}
+                          onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.color = '#33415C' }}
                         >Edit</button>
                         <button onClick={() => handleDelete(g.id)} style={{
                           padding: '6px 16px', borderRadius: 7, border: '1px solid rgba(185,28,28,0.15)',

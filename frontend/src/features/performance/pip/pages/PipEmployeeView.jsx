@@ -101,7 +101,7 @@ export default function PipEmployeeView() {
                         <strong>{m.metric_name} ({m.metric_source})</strong>
                         <Text type="secondary">Target: {m.target_value}% | Weight: {m.weight}% | Mode: {m.calculation_type || m.direction || 'HIGHER_IS_BETTER'}</Text>
                       </div>
-                      <Progress percent={Math.round(m.completion_pct)} size="small" strokeColor="#6366f1" />
+                      <Progress percent={Math.round(m.completion_pct)} size="small" strokeColor="#0466C8" />
                       <div style={{ marginTop: 4, display: 'flex', justifyContent: 'space-between', fontSize: 11 }}>
                         <Text type="secondary">My current score: {m.current_value}%</Text>
                         {m.required && <Tag color="red">Required</Tag>}
@@ -210,16 +210,16 @@ export default function PipEmployeeView() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#001233', fontFamily: "'Inter', sans-serif" }}>
       <EmployeeSidebar active="performance" />
       
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar />
         
-        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
+        <div className="pms-content-flush" style={{ flex: 1, overflowY: 'auto', paddingBottom: 40 }}>
           <div style={{ padding: '24px 24px 8px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <Title level={2} style={{ margin: 0, fontWeight: 800, color: '#0f172a' }}>
+              <Title level={2} style={{ margin: 0, fontWeight: 800, color: '#001233' }}>
                 {selectedPip?.is_monitoring ? 'My Performance Monitoring Plan' : 'My Performance Improvement Plan (PIP)'}
               </Title>
               <Paragraph type="secondary" style={{ margin: '4px 0 0 0' }}>

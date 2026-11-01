@@ -24,9 +24,9 @@ function CodeBadge({ code }) {
   if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
   return (
     <span style={{
-      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      background: '#F1F4F8', color: '#33415C', padding: '3px 8px',
       borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
-      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+      border: '1px solid #E3E7EE', letterSpacing: '0.03em', display: 'inline-block'
     }}>
       {code}
     </span>
@@ -259,13 +259,13 @@ export default function AttendancePolicies() {
   }, [metadataEmployees, empSearch])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="attendance-policies" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+        <div className="pms-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
           <PageHeader
@@ -278,9 +278,9 @@ export default function AttendancePolicies() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '7px',
                   padding: '9px 18px', borderRadius: '10px', border: 'none',
-                  background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                  background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                   color: '#ffffff', fontSize: '13px', fontWeight: 700,
-                  cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                  cursor: 'pointer', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                   fontFamily: "'Inter', sans-serif"
                 }}
               >
@@ -307,7 +307,7 @@ export default function AttendancePolicies() {
                   onChange={e => setSearch(e.target.value)}
                   style={{
                     width: '100%', paddingLeft: '34px', padding: '8px 12px 8px 34px',
-                    borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc',
+                    borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc',
                     fontSize: '13px', boxSizing: 'border-box'
                   }}
                 />
@@ -317,7 +317,7 @@ export default function AttendancePolicies() {
                 <select
                   value={typeFilter}
                   onChange={e => setTypeFilter(e.target.value)}
-                  style={{ padding: '8px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                  style={{ padding: '8px 14px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
                 >
                   <option value="">All Types</option>
                   <option value="OFFICE">Office</option>
@@ -325,7 +325,7 @@ export default function AttendancePolicies() {
                   <option value="HYBRID">Hybrid</option>
                 </select>
                 <span style={{
-                  background: '#FEECEE', color: '#C2071A', padding: '5px 14px',
+                  background: '#EEF8FF', color: '#0466C8', padding: '5px 14px',
                   borderRadius: 20, fontWeight: 700, fontSize: 11.5, letterSpacing: '0.02em',
                 }}>
                   {filteredPolicies.length} Policies
@@ -334,10 +334,10 @@ export default function AttendancePolicies() {
             </div>
 
             {/* Table */}
-            <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+            <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
-                  <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                  <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', textAlign: 'left' }}>
                     <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Policy Name</th>
                     <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Type</th>
                     <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Validations</th>
@@ -348,7 +348,7 @@ export default function AttendancePolicies() {
                 </thead>
                 <tbody>
                   {loading ? (
-                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading policies...</td></tr>
+                    <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#7D8597' }}>Loading policies...</td></tr>
                   ) : paginatedPolicies.length === 0 ? (
                     <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>No attendance policies found.</td></tr>
                   ) : paginatedPolicies.map((p, i) => {
@@ -357,19 +357,19 @@ export default function AttendancePolicies() {
                       <tr
                         key={p.attendance_policy_id}
                         style={{ borderBottom: '1px solid #edf2f7', background: i % 2 === 0 ? '#ffffff' : '#fafafa' }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                        onMouseEnter={e => e.currentTarget.style.background = '#F1F4F8'}
                         onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : '#fafafa'}
                       >
-                        <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>
+                        <td style={{ padding: '14px 16px', fontWeight: 700, color: '#001233' }}>
                           {p.name}
-                          {p.description && <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 400 }}>{p.description}</span>}
+                          {p.description && <span style={{ fontSize: '11px', color: '#7D8597', display: 'block', fontWeight: 400 }}>{p.description}</span>}
                         </td>
                         <td style={{ padding: '14px 16px' }}>
                           <span style={{ padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, background: badge.bg, color: badge.color }}>
                             {p.policy_type}
                           </span>
                         </td>
-                        <td style={{ padding: '14px 16px', fontSize: '12px', color: '#475569' }}>
+                        <td style={{ padding: '14px 16px', fontSize: '12px', color: '#33415C' }}>
                           <div style={{ display: 'flex', gap: '8px' }}>
                             {p.enable_location_validation && <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '2px 6px', borderRadius: '4px', fontSize: '10.5px', fontWeight: 700 }}>Geofence</span>}
                             {p.enable_shift_validation && <span style={{ background: '#f3e8ff', color: '#7c3aed', padding: '2px 6px', borderRadius: '4px', fontSize: '10.5px', fontWeight: 700 }}>Shift</span>}
@@ -387,7 +387,7 @@ export default function AttendancePolicies() {
                             onClick={() => handleToggleStatus(p)}
                             style={{
                               padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, cursor: 'pointer',
-                              background: p.is_active ? '#e8fbf0' : '#feecee',
+                              background: p.is_active ? '#e8fbf0' : '#EEF8FF',
                               color: p.is_active ? '#0fa958' : '#dc2626'
                             }}
                           >
@@ -399,7 +399,7 @@ export default function AttendancePolicies() {
                             <button
                               title="View Policy Details"
                               onClick={() => navigate(`/client-admin/attendance/policies/${p.attendance_policy_id}`)}
-                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#f1f5f9', color: '#475569', cursor: 'pointer' }}
+                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#F1F4F8', color: '#33415C', cursor: 'pointer' }}
                             >
                               <FiEye size={14} />
                             </button>
@@ -420,7 +420,7 @@ export default function AttendancePolicies() {
                             <button
                               title="Delete Policy"
                               onClick={() => handleDelete(p)}
-                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#feecee', color: '#dc2626', cursor: 'pointer' }}
+                              style={{ padding: '6px', borderRadius: '6px', border: 'none', background: '#EEF8FF', color: '#dc2626', cursor: 'pointer' }}
                             >
                               <FiTrash2 size={14} />
                             </button>
@@ -436,12 +436,12 @@ export default function AttendancePolicies() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-                <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Page {page} of {totalPages}</span>
+                <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: 600 }}>Page {page} of {totalPages}</span>
                 <div style={{ display: 'flex', gap: '6px' }}>
-                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#F1F4F8', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}>
                     <FiChevronLeft size={16} />
                   </button>
-                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', opacity: page === totalPages ? 0.4 : 1 }}>
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#F1F4F8', cursor: 'pointer', opacity: page === totalPages ? 0.4 : 1 }}>
                     <FiChevronRight size={16} />
                   </button>
                 </div>
@@ -456,27 +456,27 @@ export default function AttendancePolicies() {
         <div style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: '#ffffff', borderRadius: '16px', padding: '28px', width: '540px', maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#001233' }}>
                 {editingPolicy ? 'Edit Attendance Policy' : 'Create Attendance Policy'}
               </h3>
-              <button onClick={() => setModalOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><FiX size={18} /></button>
+              <button onClick={() => setModalOpen(false)} style={{ background: 'none', border: 'none', color: '#7D8597', cursor: 'pointer' }}><FiX size={18} /></button>
             </div>
 
             {formError && (
-              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#feecee', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
+              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#EEF8FF', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
                 {formError}
               </div>
             )}
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Policy Name *</label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }} />
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Policy Name *</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box' }} />
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Policy Format</label>
-                <select value={policyType} onChange={e => setPolicyType(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px' }}>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Policy Format</label>
+                <select value={policyType} onChange={e => setPolicyType(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px' }}>
                   <option value="OFFICE">Office</option>
                   <option value="REMOTE">Remote</option>
                   <option value="HYBRID">Hybrid</option>
@@ -484,8 +484,8 @@ export default function AttendancePolicies() {
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Description</label>
-                <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }} />
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Description</label>
+                <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box' }} />
               </div>
 
               <div style={{ display: 'flex', gap: '20px' }}>
@@ -500,8 +500,8 @@ export default function AttendancePolicies() {
               </div>
 
               {/* Late Arrival LOP Rules */}
-              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 700, color: '#0f172a', cursor: 'pointer', marginBottom: '12px' }}>
+              <div style={{ borderTop: '1px solid #E3E7EE', paddingTop: '16px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 700, color: '#001233', cursor: 'pointer', marginBottom: '12px' }}>
                   <input type="checkbox" checked={enableLateArrivalLop} onChange={e => setEnableLateArrivalLop(e.target.checked)} />
                   Enable Late Arrival LOP Deduction
                 </label>
@@ -509,11 +509,11 @@ export default function AttendancePolicies() {
                 {enableLateArrivalLop && (
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: '#f8fafc', padding: '14px', borderRadius: '10px' }}>
                     <div>
-                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>Late Arrivals Count</label>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C' }}>Late Arrivals Count</label>
                       <input type="number" min="1" max="30" value={lateArrivalsLimit} onChange={e => setLateArrivalsLimit(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', marginTop: '4px', boxSizing: 'border-box' }} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>LOP Days Deducted</label>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C' }}>LOP Days Deducted</label>
                       <select value={lopDaysDeduction} onChange={e => setLopDaysDeduction(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', marginTop: '4px' }}>
                         <option value="0.5">0.5 Day LOP</option>
                         <option value="1.0">1.0 Day LOP</option>
@@ -526,8 +526,8 @@ export default function AttendancePolicies() {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" onClick={() => setModalOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" disabled={formSaving} style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                <button type="button" onClick={() => setModalOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#F1F4F8', color: '#33415C', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={formSaving} style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' }}>
                   {formSaving ? 'Saving...' : editingPolicy ? 'Update Policy' : 'Create Policy'}
                 </button>
               </div>
@@ -541,32 +541,32 @@ export default function AttendancePolicies() {
         <div style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: '#ffffff', borderRadius: '16px', padding: '28px', width: '500px', maxWidth: '90vw', maxHeight: '85vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: '#001233' }}>
                 Assign "{assigningPolicy?.name}"
               </h3>
-              <button onClick={() => setAssignOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}><FiX size={18} /></button>
+              <button onClick={() => setAssignOpen(false)} style={{ background: 'none', border: 'none', color: '#7D8597', cursor: 'pointer' }}><FiX size={18} /></button>
             </div>
 
             {assignError && (
-              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#feecee', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
+              <div style={{ padding: '10px 14px', borderRadius: '8px', background: '#EEF8FF', color: '#dc2626', fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>
                 {assignError}
               </div>
             )}
 
             <form onSubmit={handleAssignSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '4px', borderRadius: '10px' }}>
-                <button type="button" onClick={() => setAssignMode('DEPARTMENT')} style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', background: assignMode === 'DEPARTMENT' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent', color: assignMode === 'DEPARTMENT' ? '#ffffff' : '#64748b', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setAssignMode('DEPARTMENT')} style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', background: assignMode === 'DEPARTMENT' ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent', color: assignMode === 'DEPARTMENT' ? '#ffffff' : '#7D8597', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
                   Department Wise
                 </button>
-                <button type="button" onClick={() => setAssignMode('EMPLOYEE')} style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', background: assignMode === 'EMPLOYEE' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : 'transparent', color: assignMode === 'EMPLOYEE' ? '#ffffff' : '#64748b', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setAssignMode('EMPLOYEE')} style={{ flex: 1, padding: '8px', borderRadius: '8px', border: 'none', background: assignMode === 'EMPLOYEE' ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : 'transparent', color: assignMode === 'EMPLOYEE' ? '#ffffff' : '#7D8597', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
                   Employee Wise
                 </button>
               </div>
 
               {assignMode === 'DEPARTMENT' ? (
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Select Department *</label>
-                  <select value={selectedDeptId} onChange={e => setSelectedDeptId(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Select Department *</label>
+                  <select value={selectedDeptId} onChange={e => setSelectedDeptId(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px' }}>
                     <option value="">Choose department</option>
                     {metadataDepartments.map(d => (
                       <option key={d.department_id} value={d.department_id}>
@@ -577,11 +577,11 @@ export default function AttendancePolicies() {
                 </div>
               ) : (
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>Select Employees *</label>
-                  <input type="text" placeholder="Search employees..." value={empSearch} onChange={e => setEmpSearch(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', marginBottom: '10px', boxSizing: 'border-box' }} />
-                  <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '8px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '6px' }}>Select Employees *</label>
+                  <input type="text" placeholder="Search employees..." value={empSearch} onChange={e => setEmpSearch(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', marginBottom: '10px', boxSizing: 'border-box' }} />
+                  <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #E3E7EE', borderRadius: '8px', padding: '8px' }}>
                     {filteredEmpMetadata.map(e => (
-                      <label key={e.employee_id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px', fontSize: '13px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }}>
+                      <label key={e.employee_id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px', fontSize: '13px', borderBottom: '1px solid #F1F4F8', cursor: 'pointer' }}>
                         <input
                           type="checkbox"
                           checked={selectedEmployeeIds.includes(e.employee_id)}
@@ -590,7 +590,7 @@ export default function AttendancePolicies() {
                             else setSelectedEmployeeIds(p => p.filter(id => id !== e.employee_id))
                           }}
                         />
-                        <span style={{ fontWeight: 600, color: '#0f172a' }}>{e.first_name} {e.last_name}</span>
+                        <span style={{ fontWeight: 600, color: '#001233' }}>{e.first_name} {e.last_name}</span>
                         <CodeBadge code={e.employee_code} />
                       </label>
                     ))}
@@ -599,13 +599,13 @@ export default function AttendancePolicies() {
               )}
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>Effective From Date</label>
-                <input type="date" value={effectiveFrom} onChange={e => setEffectiveFrom(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #e2e8f0', fontSize: '13px', boxSizing: 'border-box' }} />
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#33415C', display: 'block', marginBottom: '4px' }}>Effective From Date</label>
+                <input type="date" value={effectiveFrom} onChange={e => setEffectiveFrom(e.target.value)} required style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #E3E7EE', fontSize: '13px', boxSizing: 'border-box' }} />
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" onClick={() => setAssignOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" disabled={assignSaving} style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' }}>
+                <button type="button" onClick={() => setAssignOpen(false)} style={{ padding: '9px 18px', borderRadius: '8px', border: 'none', background: '#F1F4F8', color: '#33415C', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={assignSaving} style={{ padding: '9px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' }}>
                   {assignSaving ? 'Assigning...' : 'Assign Coverage'}
                 </button>
               </div>

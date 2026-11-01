@@ -62,7 +62,10 @@ const {
   handleCancelRequest,
   handleGetPendingRequests,
   handleApproveRequest,
-  handleRejectRequest
+  handleRejectRequest,
+  handleAdminGetPendingRequests,
+  handleAdminApproveRequest,
+  handleAdminRejectRequest
 } = require('./attendanceRegularization.controller');
 
 router.use(requireAuth);
@@ -103,6 +106,9 @@ router.post('/regularization/request', handleCreateRequest);
 router.get('/regularization/my-requests', handleGetMyRequests);
 router.delete('/regularization/request/:id', handleCancelRequest);
 router.get('/regularization/pending', handleGetPendingRequests);
+router.get('/regularization/admin/pending', requireClientAdmin, handleAdminGetPendingRequests);
+router.post('/regularization/admin/:id/approve', requireClientAdmin, handleAdminApproveRequest);
+router.post('/regularization/admin/:id/reject', requireClientAdmin, handleAdminRejectRequest);
 router.post('/regularization/:id/approve', handleApproveRequest);
 router.post('/regularization/:id/reject', handleRejectRequest);
 

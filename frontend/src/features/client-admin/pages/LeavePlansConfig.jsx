@@ -56,7 +56,7 @@ export default function LeavePlansConfig() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f1f5f9', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#F1F4F8', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <ClientAdminSidebar active="leave-plans" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
@@ -70,7 +70,7 @@ export default function LeavePlansConfig() {
           />
 
           {/* Master Tabs */}
-          <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #E3E7EE', marginBottom: '24px' }}>
             {[
               { key: 'plans', label: 'Leave Plans', icon: <FiCalendar size={13} /> },
               { key: 'balances', label: 'Employee Balances', icon: <FiUsers size={13} /> },
@@ -86,8 +86,8 @@ export default function LeavePlansConfig() {
                   }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 6, padding: '12px 20px', background: 'none',
-                    border: 'none', borderBottom: `2.5px solid ${isAct ? '#C2071A' : 'transparent'}`,
-                    color: isAct ? '#C2071A' : '#64748b', fontSize: '14px', fontWeight: '700', cursor: 'pointer',
+                    border: 'none', borderBottom: `2.5px solid ${isAct ? '#0466C8' : 'transparent'}`,
+                    color: isAct ? '#0466C8' : '#7D8597', fontSize: '14px', fontWeight: '700', cursor: 'pointer',
                     transition: 'all 0.15s'
                   }}
                 >
@@ -114,17 +114,17 @@ export default function LeavePlansConfig() {
 
             {activeTab === 'accruals' && (
               <div style={{ width: '100%' }}>
-                <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
-                  <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Process Leave Accruals</h3>
-                  <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#64748b' }}>
+                <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <h3 style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '800', color: '#001233' }}>Process Leave Accruals</h3>
+                  <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#7D8597' }}>
                     Trigger the accrual engine to credit monthly or quarterly leave quotas for all assigned employees.
                   </p>
 
                   <form onSubmit={handleRunAccrualsSubmit}>
                     <div style={{ marginBottom: '20px' }}>
-                      <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Accrual Period (YYYY-MM)</label>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Accrual Period (YYYY-MM)</label>
                       <input
-                        style={{ width: '100%', padding: '10px 14px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', fontWeight: '600' }}
+                        style={{ width: '100%', padding: '10px 14px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', fontWeight: '600' }}
                         type="month"
                         value={accrualPeriod}
                         onChange={e => setAccrualPeriod(e.target.value)}
@@ -134,11 +134,11 @@ export default function LeavePlansConfig() {
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: 10, padding: '12px 14px', background: '#feecee', border: '1px solid #f7a6af', borderRadius: '10px', marginBottom: '20px' }}>
-                      <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg, #C2071A 0%, #C2071A 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                    <div style={{ display: 'flex', gap: 10, padding: '12px 14px', background: '#EEF8FF', border: '1px solid #C9DDF3', borderRadius: '10px', marginBottom: '20px' }}>
+                      <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg, #0466C8 0%, #0466C8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
                         <FiActivity size={12} color="#ffffff" />
                       </div>
-                      <span style={{ fontSize: '11px', color: '#7c0a1a', lineHeight: '16px' }}>
+                      <span style={{ fontSize: '11px', color: '#001233', lineHeight: '16px' }}>
                         This will calculate fractional credits (e.g. <code>quota_days / 12</code> for Monthly, or <code>quota_days / 4</code> for Quarterly) and post them directly to each employee's transaction ledger.
                       </span>
                     </div>
@@ -167,8 +167,8 @@ export default function LeavePlansConfig() {
                       style={{
                         padding: '12px 28px', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff',
                         cursor: runningAccrual ? 'not-allowed' : 'pointer',
-                        background: runningAccrual ? '#e2e8f0' : 'linear-gradient(135deg,#C2071A,#941018)',
-                        boxShadow: runningAccrual ? 'none' : '0 4px 14px rgba(194,7,26,0.35)',
+                        background: runningAccrual ? '#E3E7EE' : 'linear-gradient(135deg,#0466C8,#023E7D)',
+                        boxShadow: runningAccrual ? 'none' : '0 4px 14px rgba(4, 102, 200,0.35)',
                         transition: 'all 0.2s'
                       }}
                     >

@@ -44,7 +44,7 @@ export function ProgressBar({ value }) {
         <span style={{ fontSize: '10px', color: COLORS.textMuted }}>Progress</span>
         <span style={{ fontSize: '10px', fontWeight: '700', color }}>{pct}%</span>
       </div>
-      <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '2px' }}>
+      <div style={{ height: '4px', background: '#F1F4F8', borderRadius: '2px' }}>
         <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: '2px', transition: 'width 0.5s ease' }} />
       </div>
     </div>

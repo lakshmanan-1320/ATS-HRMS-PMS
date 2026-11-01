@@ -94,7 +94,7 @@ async function handleRejectRequest(req, res, next) {
 
 async function handleGetAllRequests(req, res, next) {
   try {
-    const data = await service.listAllRequests(req.query);
+    const data = await service.listAllRequests({ ...req.query, organizationId: req.user.organizationId });
     res.status(STATUS_CODES.OK).json({ success: true, data });
   } catch (err) {
     next(err);
@@ -104,7 +104,7 @@ async function handleGetAllRequests(req, res, next) {
 async function handleAdminApproveRequest(req, res, next) {
   const { id } = req.params;
   try {
-    const data = await service.adminApproveRequest(id);
+    const data = await service.adminApproveRequest(id, req.user.organizationId);
     res.status(STATUS_CODES.OK).json({ success: true, message: 'Regularization approved by admin.', data });
   } catch (err) {
     next(err);
@@ -115,7 +115,7 @@ async function handleAdminRejectRequest(req, res, next) {
   const { id } = req.params;
   const { rejection_reason } = req.body;
   try {
-    const data = await service.adminRejectRequest(id, rejection_reason);
+    const data = await service.adminRejectRequest(id, rejection_reason, req.user.organizationId);
     res.status(STATUS_CODES.OK).json({ success: true, message: 'Regularization rejected by admin.', data });
   } catch (err) {
     next(err);

@@ -94,8 +94,8 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
 
   const inputStyle = {
     width: '100%', padding: '10px 14px', background: '#f8fafc',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box',
     fontFamily: 'inherit'
   }
 
@@ -110,12 +110,12 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Adjust Leave Balance</h3>
-            <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#64748b' }}>For {employee?.first_name} {employee?.last_name} ({employee?.employee_code})</p>
+            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#001233' }}>Adjust Leave Balance</h3>
+            <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#7D8597' }}>For {employee?.first_name} {employee?.last_name} ({employee?.employee_code})</p>
           </div>
           <button
             onClick={onClose}
-            style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}
+            style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}
           >
             <FiX size={14} />
           </button>
@@ -124,7 +124,7 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Type</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Leave Type</label>
               <select style={inputStyle} value={selectedTypeId} onChange={e => setSelectedTypeId(e.target.value)}>
                 {leaveTypes.map(t => (
                   <option key={t.leave_type_id} value={t.leave_type_id}>{t.leave_type_name}</option>
@@ -132,7 +132,7 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
               </select>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Financial Year</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Financial Year</label>
               <select style={inputStyle} value={selectedYear} onChange={e => setSelectedYear(e.target.value)}>
                 {[currentYear - 1, currentYear, currentYear + 1].map(y => (
                   <option key={y} value={y}>{y}</option>
@@ -142,18 +142,18 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
           </div>
 
           {/* Current Info Panel */}
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '14px 16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '12px', padding: '14px 16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {loadingCurrent ? (
-              <span style={{ fontSize: '12px', color: '#64748b' }}>Loading current balance...</span>
+              <span style={{ fontSize: '12px', color: '#7D8597' }}>Loading current balance...</span>
             ) : (
               <>
                 <div>
-                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Current Allocated</div>
-                  <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>{currentAllocated} days</div>
+                  <div style={{ fontSize: '11px', color: '#7D8597', fontWeight: '600' }}>Current Allocated</div>
+                  <div style={{ fontSize: '16px', fontWeight: '800', color: '#001233' }}>{currentAllocated} days</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Current Used</div>
-                  <div style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>{currentUsed} days</div>
+                  <div style={{ fontSize: '11px', color: '#7D8597', fontWeight: '600' }}>Current Used</div>
+                  <div style={{ fontSize: '16px', fontWeight: '800', color: '#001233' }}>{currentUsed} days</div>
                 </div>
               </>
             )}
@@ -162,24 +162,24 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
           {/* Adjust Inputs */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>New Allocated Days</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>New Allocated Days</label>
               <input style={inputStyle} type="number" step="0.5" value={newAllocated} onChange={e => setNewAllocated(e.target.value)} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>New Used Days</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>New Used Days</label>
               <input style={inputStyle} type="number" step="0.5" value={newUsed} onChange={e => setNewUsed(e.target.value)} />
             </div>
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Audit Remarks *</label>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Audit Remarks *</label>
             <textarea style={{ ...inputStyle, height: '70px', resize: 'none' }} placeholder="Explain the reason for adjustment (e.g. balance correction, legacy upload)..." value={remarks} onChange={e => setRemarks(e.target.value)} />
           </div>
 
           {/* Ledger notice */}
-          <div style={{ display: 'flex', gap: 8, padding: '10px 12px', background: '#feecee', border: '1px solid #f7a6af', borderRadius: '8px', marginBottom: '20px' }}>
-            <FiInfo size={13} color="#941018" style={{ flexShrink: 0, marginTop: 2 }} />
-            <span style={{ fontSize: '11px', color: '#7c0a1a', lineHeight: '15px' }}>
+          <div style={{ display: 'flex', gap: 8, padding: '10px 12px', background: '#EEF8FF', border: '1px solid #C9DDF3', borderRadius: '8px', marginBottom: '20px' }}>
+            <FiInfo size={13} color="#023E7D" style={{ flexShrink: 0, marginTop: 2 }} />
+            <span style={{ fontSize: '11px', color: '#001233', lineHeight: '15px' }}>
               This action creates formal credit/debit double-entry transactions in the employee's Leave Ledger for absolute historical auditing.
             </span>
           </div>
@@ -194,8 +194,8 @@ export default function LeaveAdjustmentsForm({ employee, onClose, onSave }) {
           )}
 
           <div style={{ display: 'flex', gap: 10 }}>
-            <button type="button" onClick={onClose} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>Cancel</button>
-            <button type="submit" disabled={saving} style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}>
+            <button type="button" onClick={onClose} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>Cancel</button>
+            <button type="submit" disabled={saving} style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)' }}>
               {saving ? 'Saving Adjustment…' : 'Save Adjustment'}
             </button>
           </div>

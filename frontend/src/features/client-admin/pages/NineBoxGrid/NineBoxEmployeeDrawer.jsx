@@ -12,7 +12,7 @@ export default function NineBoxEmployeeDrawer({ employee, onClose }) {
         width: 420,
         height: '100vh',
         background: '#ffffff',
-        borderLeft: '1px solid #e2e8f0',
+        borderLeft: '1px solid #E3E7EE',
         boxShadow: '-8px 0 24px rgba(15,23,42,0.08)',
         zIndex: 1000,
         padding: 24,
@@ -30,7 +30,7 @@ export default function NineBoxEmployeeDrawer({ employee, onClose }) {
         style={{
           marginTop: 24,
           padding: '10px 18px',
-          background: '#6366f1',
+          background: '#0466C8',
           color: '#fff',
           border: 'none',
           borderRadius: 8,

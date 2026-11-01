@@ -1,14 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiSearch, FiMenu, FiMinus, FiLogOut, FiChevronDown, FiChevronRight, FiLock, FiX } from 'react-icons/fi'
+import { useChatbot } from '../../context/ChatbotContext.jsx'
+import PmsSidebar from './PmsSidebar'
 
-export default function ExpandableSidebar({ roleName, roleLetter, companyName = 'Insight PMS', activeId, sections, onLogout, onChangePassword }) {
+const PMS_NARROW_QUERY = '(max-width: 1023px)'
+
+export default function ExpandableSidebar({ roleName, roleLetter, companyName = 'Insight PMS', activeId, sections, onLogout, onChangePassword, variant = 'default', settingsPath }) {
   const navigate = useNavigate()
+  const isPms = variant === 'pms'
+  const { openChat } = useChatbot()
   const [showDropdown, setShowDropdown] = useState(false)
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(() => isPms && typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia(PMS_NARROW_QUERY).matches
+    : false)
+  const [isNarrow, setIsNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia(PMS_NARROW_QUERY).matches
+    : false)
+  const [closedSections, setClosedSections] = useState({})
   const dropdownRef = useRef(null)
+  const searchInputRef = useRef(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearchFocused, setIsSearchFocused] = useState(false)
+
+  // PMS variant: auto-collapse on narrow screens; Ctrl/Cmd+K focuses the menu search
+  useEffect(() => {
+    if (!isPms || !window.matchMedia) return
+    const mq = window.matchMedia(PMS_NARROW_QUERY)
+    const onChange = (e) => { setIsNarrow(e.matches); setIsCollapsed(e.matches) }
+    mq.addEventListener ? mq.addEventListener('change', onChange) : mq.addListener(onChange)
+    return () => { mq.removeEventListener ? mq.removeEventListener('change', onChange) : mq.removeListener(onChange) }
+  }, [isPms])
+
+  useEffect(() => {
+    if (!isPms) return
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault()
+        setIsCollapsed(false)
+        setTimeout(() => searchInputRef.current && searchInputRef.current.focus(), 0)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isPms])
 
   // Auto-expand parent items that contain the active child on mount/activeId change
   const [expandedItems, setExpandedItems] = useState(() => {
@@ -75,6 +110,36 @@ export default function ExpandableSidebar({ roleName, roleLetter, companyName = 
     })
     return { ...section, links: filteredLinks }
   }).filter(section => section.links.length > 0)
+
+  if (isPms) {
+    return (
+      <PmsSidebar
+        sections={filteredSections}
+        activeId={activeId}
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+        isNarrow={isNarrow}
+        closedSections={closedSections}
+        toggleSection={(key) => setClosedSections(prev => ({ ...prev, [key]: !prev[key] }))}
+        expandedItems={expandedItems}
+        toggleExpand={toggleExpand}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchInputRef={searchInputRef}
+        navigate={navigate}
+        roleLetter={roleLetter}
+        displayName={displayName}
+        userEmail={userEmail}
+        showDropdown={showDropdown}
+        setShowDropdown={setShowDropdown}
+        dropdownRef={dropdownRef}
+        onLogout={onLogout}
+        onChangePassword={onChangePassword}
+        onSettings={settingsPath ? () => navigate(settingsPath) : null}
+        onHelp={() => openChat()}
+      />
+    )
+  }
 
   const styles = {
     aside: {

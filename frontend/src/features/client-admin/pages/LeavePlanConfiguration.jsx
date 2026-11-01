@@ -99,8 +99,8 @@ export default function LeavePlanConfiguration({ planId }) {
 
   const inputStyle = {
     width: '100%', padding: '10px 14px', background: '#f8fafc',
-    border: '1px solid #e2e8f0', borderRadius: '10px',
-    fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box',
+    border: '1px solid #E3E7EE', borderRadius: '10px',
+    fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box',
     fontFamily: 'inherit'
   }
 
@@ -108,14 +108,14 @@ export default function LeavePlanConfiguration({ planId }) {
     <div>
       {loading ? (
         <div style={{ padding: '40px', textAlign: 'center' }}>
-          <div style={{ width: 30, height: 30, border: '3px solid #e2e8f0', borderTopColor: '#C2071A', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
-          <div style={{ color: '#64748b', fontSize: '13px' }}>Loading configurations…</div>
+          <div style={{ width: 30, height: 30, border: '3px solid #E3E7EE', borderTopColor: '#0466C8', borderRadius: '50%', margin: '0 auto 10px', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ color: '#7D8597', fontSize: '13px' }}>Loading configurations…</div>
         </div>
       ) : (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden' }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 8, background: '#fafbff' }}>
-            <FiInfo size={14} color="#C2071A" />
-            <span style={{ fontSize: '12px', color: '#941018', fontWeight: '700' }}>
+        <div style={{ background: '#fff', border: '1px solid #E3E7EE', borderRadius: '16px', overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid #E3E7EE', display: 'flex', alignItems: 'center', gap: 8, background: '#fafbff' }}>
+            <FiInfo size={14} color="#0466C8" />
+            <span style={{ fontSize: '12px', color: '#023E7D', fontWeight: '700' }}>
               Assign quota, carry forward rules, and cashout criteria for each active leave policy in this plan.
             </span>
           </div>
@@ -123,23 +123,23 @@ export default function LeavePlanConfiguration({ planId }) {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Policy Type</th>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Assigned Status</th>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Annual Quota</th>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Accrual Basis</th>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Carry Forward Rule</th>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Encashment Rule</th>
-                  <th style={{ padding: '13px 18px', color: '#64748b', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Action</th>
+                <tr style={{ background: '#f8fafc', borderBottom: '2px solid #E3E7EE' }}>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Policy Type</th>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Assigned Status</th>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Annual Quota</th>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Accrual Basis</th>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Carry Forward Rule</th>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Encashment Rule</th>
+                  <th style={{ padding: '13px 18px', color: '#7D8597', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {leaveTypes.map((type, idx) => {
                   const conf = getConfigForType(type.leave_type_id)
                   return (
-                    <tr key={type.leave_type_id} style={{ borderBottom: idx < leaveTypes.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                    <tr key={type.leave_type_id} style={{ borderBottom: idx < leaveTypes.length - 1 ? '1px solid #F1F4F8' : 'none' }}>
                       <td style={{ padding: '14px 18px' }}>
-                        <div style={{ fontWeight: '700', color: '#0f172a' }}>{type.leave_type_name}</div>
+                        <div style={{ fontWeight: '700', color: '#001233' }}>{type.leave_type_name}</div>
                         <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'monospace', marginTop: 2 }}>{type.leave_type_code}</div>
                       </td>
                       <td style={{ padding: '14px 18px' }}>
@@ -148,21 +148,21 @@ export default function LeavePlanConfiguration({ planId }) {
                             <FiCheck size={11} /> Configured
                           </span>
                         ) : (
-                          <span style={{ fontSize: '11px', fontWeight: '600', padding: '3px 8px', borderRadius: '6px', background: '#f1f5f9', color: '#64748b' }}>
+                          <span style={{ fontSize: '11px', fontWeight: '600', padding: '3px 8px', borderRadius: '6px', background: '#F1F4F8', color: '#7D8597' }}>
                             Not Configured
                           </span>
                         )}
                       </td>
-                      <td style={{ padding: '14px 18px', fontWeight: '700', color: '#334155' }}>
+                      <td style={{ padding: '14px 18px', fontWeight: '700', color: '#33415C' }}>
                         {conf ? conf.quota_days + ' days' : '—'}
                       </td>
-                      <td style={{ padding: '14px 18px', fontWeight: '600', color: '#475569' }}>
+                      <td style={{ padding: '14px 18px', fontWeight: '600', color: '#33415C' }}>
                         {conf ? conf.accrual_type : '—'}
                       </td>
                       <td style={{ padding: '14px 18px' }}>
                         {conf ? (
                           <div>
-                            <span style={{ fontWeight: '600', color: '#475569' }}>{conf.carry_forward_rule.replace(/_/g, ' ')}</span>
+                            <span style={{ fontWeight: '600', color: '#33415C' }}>{conf.carry_forward_rule.replace(/_/g, ' ')}</span>
                             {conf.carry_forward_rule === 'CARRY_FORWARD_LIMIT' && (
                               <div style={{ fontSize: '11px', color: '#94a3b8' }}>Max CF: {conf.max_carry_forward_days} days</div>
                             )}
@@ -172,7 +172,7 @@ export default function LeavePlanConfiguration({ planId }) {
                       <td style={{ padding: '14px 18px' }}>
                         {conf ? (
                           <div>
-                            <span style={{ fontWeight: '600', color: '#475569' }}>{conf.encashment_rule.replace(/_/g, ' ')}</span>
+                            <span style={{ fontWeight: '600', color: '#33415C' }}>{conf.encashment_rule.replace(/_/g, ' ')}</span>
                             {conf.encashment_rule === 'ENCASH_LIMIT' && (
                               <div style={{ fontSize: '11px', color: '#94a3b8' }}>Max Encash: {conf.max_encash_days} days</div>
                             )}
@@ -182,7 +182,7 @@ export default function LeavePlanConfiguration({ planId }) {
                       <td style={{ padding: '14px 18px' }}>
                         <button
                           onClick={() => openConfigModal(type)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f8fafc', color: '#C2071A', border: '1px solid #f7a6af', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: '#f8fafc', color: '#0466C8', border: '1px solid #C9DDF3', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s' }}
                         >
                           <FiEdit2 size={11} /> {conf ? 'Configure' : 'Setup'}
                         </button>
@@ -206,12 +206,12 @@ export default function LeavePlanConfiguration({ planId }) {
             onClick={e => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px' }}>
-              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: '#001233' }}>
                 Setup {configuringType?.leave_type_name}
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
-                style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7D8597' }}
               >
                 <FiX size={14} />
               </button>
@@ -220,11 +220,11 @@ export default function LeavePlanConfiguration({ planId }) {
             <form onSubmit={handleSubmit}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quota Days</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quota Days</label>
                   <input style={inputStyle} type="number" step="0.5" value={quota} onChange={e => setQuota(e.target.value)} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Accrual Basis</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Accrual Basis</label>
                   <select style={inputStyle} value={accrualType} onChange={e => setAccrualType(e.target.value)}>
                     <option value="ANNUAL">Annual (Lump Sum)</option>
                     <option value="MONTHLY">Monthly Accrual</option>
@@ -235,7 +235,7 @@ export default function LeavePlanConfiguration({ planId }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Carry Forward Rule</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Carry Forward Rule</label>
                   <select style={inputStyle} value={carryRule} onChange={e => setCarryRule(e.target.value)}>
                     <option value="LAPSE">Lapse (Reset to 0)</option>
                     <option value="CARRY_FORWARD_ALL">Carry Forward All</option>
@@ -243,14 +243,14 @@ export default function LeavePlanConfiguration({ planId }) {
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Max Carry Forward Days</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Max Carry Forward Days</label>
                   <input style={inputStyle} type="number" step="0.5" value={maxCarry} onChange={e => setMaxCarry(e.target.value)} disabled={carryRule !== 'CARRY_FORWARD_LIMIT'} />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Encashment Rule</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Encashment Rule</label>
                   <select style={inputStyle} value={encashRule} onChange={e => setEncashRule(e.target.value)}>
                     <option value="NONE">No Encashment (Lapse remaining)</option>
                     <option value="ENCASH_ALL">Encash All Remaining</option>
@@ -258,7 +258,7 @@ export default function LeavePlanConfiguration({ planId }) {
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#475569', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Max Encash Days</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', color: '#33415C', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Max Encash Days</label>
                   <input style={inputStyle} type="number" step="0.5" value={maxEncash} onChange={e => setMaxEncash(e.target.value)} disabled={encashRule !== 'ENCASH_LIMIT'} />
                 </div>
               </div>
@@ -273,8 +273,8 @@ export default function LeavePlanConfiguration({ planId }) {
               )}
 
               <div style={{ display: 'flex', gap: 10 }}>
-                <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#475569', cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#C2071A,#941018)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(194,7,26,0.35)' }}>
+                <button type="button" onClick={() => setModalOpen(false)} style={{ flex: 1, padding: '11px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#33415C', cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" style={{ flex: 2, padding: '11px', background: 'linear-gradient(135deg,#0466C8,#023E7D)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 14px rgba(4, 102, 200,0.35)' }}>
                   Save Configuration
                 </button>
               </div>

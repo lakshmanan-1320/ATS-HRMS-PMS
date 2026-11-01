@@ -32,6 +32,34 @@ export default function ClientAdminSidebar({ active }) {
     sessionStorage.getItem('company_name') || 'Client Admin'
   )
 
+  // Real pending-regularization count for the sidebar badge (cached per session;
+  // the dashboard refreshes it after loading stats or acting on a request).
+  const [pendingRegs, setPendingRegs] = useState(() => {
+    const v = sessionStorage.getItem('ca_pending_regs')
+    return v == null ? null : Number(v)
+  })
+
+  useEffect(() => {
+    function onUpdate() {
+      const v = sessionStorage.getItem('ca_pending_regs')
+      setPendingRegs(v == null ? null : Number(v))
+    }
+    window.addEventListener('pms:pending-updated', onUpdate)
+    return () => window.removeEventListener('pms:pending-updated', onUpdate)
+  }, [])
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('sa_token')
+    if (!token || sessionStorage.getItem('ca_pending_regs') != null) return
+    axios.get('/api/client-admin/dashboard/stats?range=all', { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => {
+        const n = Number(res.data?.pending_regularizations ?? 0)
+        sessionStorage.setItem('ca_pending_regs', String(n))
+        setPendingRegs(n)
+      })
+      .catch(() => {})
+  }, [])
+
   useEffect(() => {
     const token = sessionStorage.getItem('sa_token')
     if (!token) return
@@ -106,7 +134,7 @@ export default function ClientAdminSidebar({ active }) {
         { id: 'holidays',       icon: FiGift,        label: 'Holiday Calendar', path: '/client-admin/holidays' },
       ]
     },
-    isEnabled('attendance') && { id: 'regularizations', icon: FiCheckSquare, label: 'Regularization', path: '/client-admin/regularizations', badge: '12' },
+    isEnabled('attendance') && { id: 'regularizations', icon: FiCheckSquare, label: 'Regularization', path: '/client-admin/regularizations', badge: pendingRegs > 0 ? String(pendingRegs) : undefined },
   ].filter(Boolean)
 
   const payrollLinks = [
@@ -152,6 +180,7 @@ export default function ClientAdminSidebar({ active }) {
       activeId={active}
       sections={sections}
       onLogout={handleLogout}
+      variant="pms"
     />
   )
 }

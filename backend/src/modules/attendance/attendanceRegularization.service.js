@@ -241,6 +241,16 @@ async function approveRequest(userId, requestId, managerComments) {
     throw new Error('Only requests in PENDING status can be approved.');
   }
 
+  return await applyApproval(request, managerEmployeeId, managerComments);
+}
+
+/**
+ * Applies an approved request: adjusts the attendance punch (for REGULARIZATION
+ * requests) and marks the request APPROVED. Shared by manager and admin approval.
+ */
+async function applyApproval(request, approverEmployeeId, comments) {
+  const requestId = request.regularization_request_id;
+
   // 1. If Request Category is REGULARIZATION, apply checks and insert/update attendance punch
   if (request.request_category === 'REGULARIZATION') {
     const empUserId = await repo.getUserIdFromEmployee(request.employee_id);
@@ -312,7 +322,42 @@ async function approveRequest(userId, requestId, managerComments) {
   }
 
   // 2. Mark the request as Approved
-  return await repo.updateRequestStatus(requestId, 'APPROVED', managerEmployeeId, 'manager_comments', managerComments);
+  return await repo.updateRequestStatus(requestId, 'APPROVED', approverEmployeeId, 'manager_comments', comments);
+}
+
+// ── Client-admin actions (organization-wide) ─────────────────────────────────
+
+function notFound() {
+  const err = new Error('Regularization request not found.');
+  err.statusCode = 404;
+  return err;
+}
+
+async function getOrgPendingRequests(organizationId) {
+  return await repo.getPendingRequestsForOrganization(organizationId);
+}
+
+async function adminApproveRequest(organizationId, userId, requestId, comments) {
+  const request = await repo.getRequestById(requestId);
+  if (!request || request.organization_id !== organizationId) throw notFound();
+  if (request.approval_status !== 'PENDING') {
+    throw new Error('Only requests in PENDING status can be approved.');
+  }
+  // Admins may not have an employee record; approved_by stays null in that case.
+  const approverEmployeeId = await repo.getEmployeeIdFromUser(userId);
+  return await applyApproval(request, approverEmployeeId || null, comments);
+}
+
+async function adminRejectRequest(organizationId, requestId, rejectionReason) {
+  if (!rejectionReason || !rejectionReason.trim()) {
+    throw new Error('A rejection comment is mandatory.');
+  }
+  const request = await repo.getRequestById(requestId);
+  if (!request || request.organization_id !== organizationId) throw notFound();
+  if (request.approval_status !== 'PENDING') {
+    throw new Error('Only requests in PENDING status can be rejected.');
+  }
+  return await repo.updateRequestStatus(requestId, 'REJECTED', null, 'rejection_reason', rejectionReason);
 }
 
 /**
@@ -347,5 +392,8 @@ module.exports = {
   cancelRequest,
   getPendingRequests,
   approveRequest,
-  rejectRequest
+  rejectRequest,
+  getOrgPendingRequests,
+  adminApproveRequest,
+  adminRejectRequest
 };

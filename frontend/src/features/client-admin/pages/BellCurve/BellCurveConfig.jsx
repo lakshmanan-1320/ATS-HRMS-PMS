@@ -6,7 +6,7 @@ import * as api from '../../api/bellCurve.api';
 const { Title, Text, Paragraph } = Typography;
 
 const PRESET_COLORS = [
-  { value: '#6366f1', label: 'Indigo (Primary)' },
+  { value: '#0466C8', label: 'Indigo (Primary)' },
   { value: '#10b981', label: 'Emerald (Green)' },
   { value: '#f59e0b', label: 'Amber (Yellow)' },
   { value: '#ef4444', label: 'Rose (Red)' },
@@ -14,7 +14,7 @@ const PRESET_COLORS = [
   { value: '#f97316', label: 'Orange (Warning)' },
   { value: '#14b8a6', label: 'Teal (Cyan)' },
   { value: '#8b5cf6', label: 'Violet (Purple)' },
-  { value: '#64748b', label: 'Slate (Grey)' },
+  { value: '#7D8597', label: 'Slate (Grey)' },
 ];
 
 export default function BellCurveConfig() {
@@ -77,7 +77,7 @@ export default function BellCurveConfig() {
       // Save initial 3 standard buckets
       const initialBuckets = [
         { bucket_name: 'Top Performers', bucket_order: 1, percentage: 20, color: '#10b981', suggested_action: 'Promotion / High Increment' },
-        { bucket_name: 'Average Performers', bucket_order: 2, percentage: 70, color: '#6366f1', suggested_action: 'Standard Increment' },
+        { bucket_name: 'Average Performers', bucket_order: 2, percentage: 70, color: '#0466C8', suggested_action: 'Standard Increment' },
         { bucket_name: 'Low Performers', bucket_order: 3, percentage: 10, color: '#ef4444', suggested_action: 'Performance Improvement Plan (PIP)' }
       ];
       await api.saveBuckets(res.data.configuration_id, initialBuckets);
@@ -196,10 +196,10 @@ export default function BellCurveConfig() {
       <Row gutter={24}>
         {/* Left Side: List of Templates */}
         <Col span={7}>
-          <Card style={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+          <Card style={{ borderRadius: 16, border: '1px solid #E3E7EE', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center', marginBottom: 16 }}>
-              <Text style={{ fontWeight: 800, fontSize: 15, color: '#334155' }}>Calibration Templates</Text>
-              <Button type="text" icon={<FiPlus />} onClick={handleCreateNewConfig} style={{ color: '#6366f1', padding: 0 }} />
+              <Text style={{ fontWeight: 800, fontSize: 15, color: '#33415C' }}>Calibration Templates</Text>
+              <Button type="text" icon={<FiPlus />} onClick={handleCreateNewConfig} style={{ color: '#0466C8', padding: 0 }} />
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -209,13 +209,13 @@ export default function BellCurveConfig() {
                   onClick={() => handleSelectConfig(c)}
                   style={{
                     padding: '12px 16px', borderRadius: 12, cursor: 'pointer',
-                    background: selectedConfig?.configuration_id === c.configuration_id ? 'rgba(99,102,241,0.06)' : '#fff',
-                    border: selectedConfig?.configuration_id === c.configuration_id ? '1px solid #6366f1' : '1px solid #e2e8f0',
+                    background: selectedConfig?.configuration_id === c.configuration_id ? 'rgba(4, 102, 200,0.06)' : '#fff',
+                    border: selectedConfig?.configuration_id === c.configuration_id ? '1px solid #0466C8' : '1px solid #E3E7EE',
                     transition: 'all 0.2s', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                   }}
                 >
                   <div style={{ minWidth: 0 }}>
-                    <Text style={{ fontWeight: 700, color: selectedConfig?.configuration_id === c.configuration_id ? '#4f46e5' : '#1e293b', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    <Text style={{ fontWeight: 700, color: selectedConfig?.configuration_id === c.configuration_id ? '#0353A4' : '#001233', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                       {c.name}
                     </Text>
                     <Text style={{ fontSize: 11, color: '#94a3b8' }}>
@@ -240,11 +240,11 @@ export default function BellCurveConfig() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               
               {/* Properties Section */}
-              <Card style={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+              <Card style={{ borderRadius: 16, border: '1px solid #E3E7EE', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <FiSettings size={18} style={{ color: '#6366f1' }} />
-                    <Text style={{ fontWeight: 800, fontSize: 16, color: '#1e293b' }}>Template Rules & Settings</Text>
+                    <FiSettings size={18} style={{ color: '#0466C8' }} />
+                    <Text style={{ fontWeight: 800, fontSize: 16, color: '#001233' }}>Template Rules & Settings</Text>
                   </div>
                   <Space>
                     <Button danger icon={<FiTrash2 />} onClick={handleDeleteConfig}>Delete</Button>
@@ -254,11 +254,11 @@ export default function BellCurveConfig() {
 
                 <Row gutter={[20, 20]}>
                   <Col span={12}>
-                    <div style={{ marginBottom: 6 }}><Text style={{ fontWeight: 700, color: '#475569', fontSize: 13 }}>Template Name</Text></div>
+                    <div style={{ marginBottom: 6 }}><Text style={{ fontWeight: 700, color: '#33415C', fontSize: 13 }}>Template Name</Text></div>
                     <Input value={configName} onChange={(e) => setConfigName(e.target.value)} style={{ borderRadius: 8, height: 40 }} />
                   </Col>
                   <Col span={12}>
-                    <div style={{ marginBottom: 6 }}><Text style={{ fontWeight: 700, color: '#475569', fontSize: 13 }}>Tie-Breaker Cutoff Strategy</Text></div>
+                    <div style={{ marginBottom: 6 }}><Text style={{ fontWeight: 700, color: '#33415C', fontSize: 13 }}>Tie-Breaker Cutoff Strategy</Text></div>
                     <Select
                       value={tieStrategy}
                       onChange={(val) => setTieStrategy(val)}
@@ -273,8 +273,8 @@ export default function BellCurveConfig() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>
                       <Switch checked={isDefault} onChange={(checked) => setIsDefault(checked)} />
                       <div>
-                        <Text style={{ fontWeight: 700, color: '#1e293b', display: 'block', fontSize: 13 }}>Default Template</Text>
-                        <Text style={{ fontSize: 11, color: '#64748b' }}>Make this configuration the default template for new calibration runs.</Text>
+                        <Text style={{ fontWeight: 700, color: '#001233', display: 'block', fontSize: 13 }}>Default Template</Text>
+                        <Text style={{ fontSize: 11, color: '#7D8597' }}>Make this configuration the default template for new calibration runs.</Text>
                       </div>
                     </div>
                   </Col>
@@ -282,11 +282,11 @@ export default function BellCurveConfig() {
               </Card>
 
               {/* Buckets Section */}
-              <Card style={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+              <Card style={{ borderRadius: 16, border: '1px solid #E3E7EE', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <FiSliders size={18} style={{ color: '#10b981' }} />
-                    <Text style={{ fontWeight: 800, fontSize: 16, color: '#1e293b' }}>Performance Buckets & Allocations</Text>
+                    <Text style={{ fontWeight: 800, fontSize: 16, color: '#001233' }}>Performance Buckets & Allocations</Text>
                   </div>
                   <Space>
                     <Button icon={<FiPlus />} onClick={handleAddBucket}>Add Bucket</Button>
@@ -302,7 +302,7 @@ export default function BellCurveConfig() {
                       key={idx}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 16, background: '#f8fafc',
-                        padding: '16px 20px', borderRadius: 12, border: '1px solid #e2e8f0'
+                        padding: '16px 20px', borderRadius: 12, border: '1px solid #E3E7EE'
                       }}
                     >
                       {/* Order Badge */}
@@ -312,13 +312,13 @@ export default function BellCurveConfig() {
 
                       {/* Bucket Name */}
                       <div style={{ flex: 2 }}>
-                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#64748b' }}>Bucket Level Name</Text></div>
+                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#7D8597' }}>Bucket Level Name</Text></div>
                         <Input value={b.bucket_name} onChange={(e) => handleUpdateBucketField(idx, 'bucket_name', e.target.value)} style={{ borderRadius: 8 }} />
                       </div>
 
                       {/* Percentage Allocation */}
                       <div style={{ width: 120 }}>
-                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#64748b' }}>Target Ratio %</Text></div>
+                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#7D8597' }}>Target Ratio %</Text></div>
                         <Input
                           type="number" prefix="%" value={b.percentage}
                           onChange={(e) => handleUpdateBucketField(idx, 'percentage', parseFloat(e.target.value) || 0)}
@@ -328,7 +328,7 @@ export default function BellCurveConfig() {
 
                       {/* Color Dropdown */}
                       <div style={{ width: 160 }}>
-                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#64748b' }}>Theme Color</Text></div>
+                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#7D8597' }}>Theme Color</Text></div>
                         <Select
                           value={b.color} onChange={(val) => handleUpdateBucketField(idx, 'color', val)}
                           style={{ width: '100%' }}
@@ -346,7 +346,7 @@ export default function BellCurveConfig() {
 
                       {/* Suggested Action */}
                       <div style={{ flex: 3 }}>
-                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#64748b' }}>Suggested Action Recommendation</Text></div>
+                        <div style={{ marginBottom: 4 }}><Text style={{ fontWeight: 600, fontSize: 12, color: '#7D8597' }}>Suggested Action Recommendation</Text></div>
                         <Input value={b.suggested_action} onChange={(e) => handleUpdateBucketField(idx, 'suggested_action', e.target.value)} style={{ borderRadius: 8 }} placeholder="PIP, Training, Standard Raise..." />
                       </div>
 
@@ -368,7 +368,7 @@ export default function BellCurveConfig() {
                     <Text style={{ fontWeight: 700, fontSize: 14 }}>
                       Total Configured Percentage: <span style={{ color: Math.abs(totalPct - 100) < 0.01 ? '#10b981' : '#ef4444' }}>{totalPct}%</span>
                     </Text>
-                    <Text style={{ fontSize: 11, color: '#64748b' }}>Must sum to exactly 100% to save.</Text>
+                    <Text style={{ fontSize: 11, color: '#7D8597' }}>Must sum to exactly 100% to save.</Text>
                   </Space>
                   <Tag color={Math.abs(totalPct - 100) < 0.01 ? 'success' : 'error'} style={{ padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 700 }}>
                     {Math.abs(totalPct - 100) < 0.01 ? 'Ready to Save' : 'Allocation Validation Failed'}
@@ -378,9 +378,9 @@ export default function BellCurveConfig() {
 
             </div>
           ) : (
-            <Card style={{ borderRadius: 16, padding: '48px 0', textAlign: 'center', border: '1px solid #e2e8f0' }}>
+            <Card style={{ borderRadius: 16, padding: '48px 0', textAlign: 'center', border: '1px solid #E3E7EE' }}>
               <FiFileText size={48} style={{ color: '#94a3b8', marginBottom: 16 }} />
-              <Title level={4} style={{ margin: 0, fontWeight: 700, color: '#475569' }}>No Template Selected</Title>
+              <Title level={4} style={{ margin: 0, fontWeight: 700, color: '#33415C' }}>No Template Selected</Title>
               <Paragraph style={{ color: '#94a3b8', marginTop: 8, maxWidth: 360, marginInline: 'auto' }}>
                 Select a template config on the left panel, or click "Create New Template" to get started.
               </Paragraph>

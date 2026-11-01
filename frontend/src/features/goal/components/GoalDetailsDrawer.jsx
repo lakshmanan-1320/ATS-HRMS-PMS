@@ -31,7 +31,7 @@ function GoalStatusTimeline({ currentStatus }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginBottom: 4 }}>
       {STATUS_FLOW.map((s, i) => {
-        const meta = STATUS_META[s] || { color: '#e2e8f0', label: s };
+        const meta = STATUS_META[s] || { color: '#E3E7EE', label: s };
         const isActive = i <= idx && !isRejected && !isChangesReq;
         const isCurrent = s === currentStatus;
 
@@ -40,14 +40,14 @@ function GoalStatusTimeline({ currentStatus }) {
             {i > 0 && (
               <div style={{
                 flex: 1, height: 3, borderRadius: 2,
-                background: isActive ? meta.color : '#e2e8f0',
+                background: isActive ? meta.color : '#E3E7EE',
                 transition: 'background 0.3s',
               }} />
             )}
             <div style={{
               width: isCurrent ? 28 : 22, height: isCurrent ? 28 : 22,
               borderRadius: '50%',
-              background: isActive ? meta.color : '#e2e8f0',
+              background: isActive ? meta.color : '#E3E7EE',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: isCurrent ? 12 : 10, color: isActive ? '#fff' : '#94a3b8',
               fontWeight: 700, transition: 'all 0.3s',
@@ -75,8 +75,8 @@ function GoalTree({ goal, allGoals, currentGoalId, onSelectGoal, depth = 0 }) {
         style={{
           display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
           borderRadius: 8,
-          background: isCurrent ? 'rgba(99,102,241,0.12)' : depth === 0 ? 'rgba(99,102,241,0.04)' : '#ffffff',
-          border: isCurrent ? '1.5px solid #6366f1' : depth === 0 ? '1px solid rgba(99,102,241,0.1)' : '1px solid #e2e8f0',
+          background: isCurrent ? 'rgba(4, 102, 200,0.12)' : depth === 0 ? 'rgba(4, 102, 200,0.04)' : '#ffffff',
+          border: isCurrent ? '1.5px solid #0466C8' : depth === 0 ? '1px solid rgba(4, 102, 200,0.1)' : '1px solid #E3E7EE',
           marginBottom: 6, cursor: 'pointer',
           transition: 'all 0.15s ease',
         }}
@@ -86,14 +86,14 @@ function GoalTree({ goal, allGoals, currentGoalId, onSelectGoal, depth = 0 }) {
         )}
         <span style={{
           fontSize: 12, fontWeight: isCurrent ? 800 : depth === 0 ? 700 : 600,
-          color: isCurrent ? '#4338ca' : depth === 0 ? '#6366f1' : '#334155',
+          color: isCurrent ? '#023E7D' : depth === 0 ? '#0466C8' : '#33415C',
           flex: 1
         }}>
           {goal.assigned_to_employee_name ? `👤 ${goal.assigned_to_employee_name} — ` : ''}{goal.title}
         </span>
         <span style={{
-          fontSize: 10, color: STATUS_META[goal.status]?.color || '#64748b',
-          background: STATUS_META[goal.status]?.bg || '#f1f5f9',
+          fontSize: 10, color: STATUS_META[goal.status]?.color || '#7D8597',
+          background: STATUS_META[goal.status]?.bg || '#F1F4F8',
           padding: '1px 6px', borderRadius: 4, fontWeight: 700,
         }}>{STATUS_META[goal.status]?.label}</span>
       </div>
@@ -107,9 +107,9 @@ function GoalTree({ goal, allGoals, currentGoalId, onSelectGoal, depth = 0 }) {
 /* ─── Detail Section ─── */
 function DetailField({ label, value }) {
   return (
-    <div style={{ background: '#f8fafc', borderRadius: 8, padding: '10px 12px', border: '1px solid #e2e8f0' }}>
-      <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontWeight: 700 }}>{label}</div>
-      <div style={{ fontSize: 13, color: '#1e293b', fontWeight: 700 }}>{value || '—'}</div>
+    <div style={{ background: '#f8fafc', borderRadius: 8, padding: '10px 12px', border: '1px solid #E3E7EE' }}>
+      <div style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, fontWeight: 700 }}>{label}</div>
+      <div style={{ fontSize: 13, color: '#001233', fontWeight: 700 }}>{value || '—'}</div>
     </div>
   );
 }
@@ -318,14 +318,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
       }} onClick={e => e.stopPropagation()}>
 
         {/* ─── Header ─── */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #f1f5f9', paddingBottom: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #F1F4F8', paddingBottom: 16 }}>
           <div>
             <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
               {goal.goal_code && (
                 <span style={{
-                  fontSize: 11, color: '#6366f1', background: 'rgba(99,102,241,0.08)',
+                  fontSize: 11, color: '#0466C8', background: 'rgba(4, 102, 200,0.08)',
                   padding: '2px 8px', borderRadius: 5, fontWeight: 700,
-                  border: '1px solid rgba(99,102,241,0.15)', fontFamily: 'monospace',
+                  border: '1px solid rgba(4, 102, 200,0.15)', fontFamily: 'monospace',
                 }}>{goal.goal_code}</span>
               )}
               <span style={{
@@ -340,7 +340,7 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                 }}>{priorityMeta.label} Priority</span>
               )}
             </div>
-            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#1e293b' }}>{goal.title}</h2>
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#001233' }}>{goal.title}</h2>
             {(goal.status === 'CHANGES_REQUESTED' || goal.status === 'REJECTED') && (
               <Alert
                 message={goal.status === 'CHANGES_REQUESTED' ? 'Action Required: Changes Requested' : 'Goal Plan Rejected'}
@@ -361,15 +361,15 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
           <div style={{ display: 'flex', gap: 8 }}>
             {canEdit && (
               <button onClick={() => onEdit(goal)} style={{
-                padding: '7px 14px', borderRadius: 8, border: '1px solid rgba(99,102,241,0.2)',
-                background: 'rgba(99,102,241,0.06)', color: '#6366f1', fontSize: 12,
+                padding: '7px 14px', borderRadius: 8, border: '1px solid rgba(4, 102, 200,0.2)',
+                background: 'rgba(4, 102, 200,0.06)', color: '#0466C8', fontSize: 12,
                 fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
               }}>✏ Edit</button>
             )}
             <button onClick={onClose} style={{
               width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 8,
-              cursor: 'pointer', color: '#64748b', fontSize: 16,
+              cursor: 'pointer', color: '#7D8597', fontSize: 16,
             }}>✕</button>
           </div>
         </div>
@@ -391,9 +391,9 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
               {/* Goal Completion Stats */}
               {canSelectAssignedEmployee && assignments.length > 1 && (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-                  <Card size="small" style={{ background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                    <span style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>Total Members</span>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b', marginTop: 4 }}>{assignments.length}</div>
+                  <Card size="small" style={{ background: '#f8fafc', borderRadius: 10, border: '1px solid #E3E7EE', textAlign: 'center' }}>
+                    <span style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>Total Members</span>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#001233', marginTop: 4 }}>{assignments.length}</div>
                   </Card>
                   <Card size="small" style={{ background: '#f0fdf4', borderRadius: 10, border: '1px solid #bbf7d0', textAlign: 'center' }}>
                     <span style={{ fontSize: 10, color: '#166534', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>Achieved</span>
@@ -421,15 +421,15 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
 
               {/* Selected Employee Assignment / Status bar on Overview tab */}
               {goal.performance_technique === 'CONTINUOUS_FEEDBACK' && selectedEmployee && (
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+                <div style={{ background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#475569' }}>Selected Member:</span>
-                    <strong style={{ fontSize: 14, color: '#1e293b' }}>👤 {selectedEmployee.employee_name}</strong>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#33415C' }}>Selected Member:</span>
+                    <strong style={{ fontSize: 14, color: '#001233' }}>👤 {selectedEmployee.employee_name}</strong>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#475569' }}>Status:</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#33415C' }}>Status:</span>
                       {['client_admin', 'hr', 'manager'].includes(role) || sessionStorage.getItem('is_manager') === 'true' ? (
                         <select
                           value={selectedEmployee.status}
@@ -459,7 +459,7 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                           <option value="ACTIVE" style={{ background: '#fff', color: '#2563eb' }}>ACTIVE</option>
                           <option value="COMPLETED" style={{ background: '#fff', color: '#16a34a' }}>COMPLETED</option>
                           <option value="ON_HOLD" style={{ background: '#fff', color: '#dc2626' }}>ON_HOLD</option>
-                          <option value="PENDING" style={{ background: '#fff', color: '#475569' }}>PENDING</option>
+                          <option value="PENDING" style={{ background: '#fff', color: '#33415C' }}>PENDING</option>
                           <option value="CANCELLED" style={{ background: '#fff', color: '#94a3b8' }}>CANCELLED</option>
                         </select>
                       ) : (
@@ -471,7 +471,7 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
 
                     {selectedEmployee.status === 'COMPLETED' && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#475569' }}>Completion Outcome:</span>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#33415C' }}>Completion Outcome:</span>
                         {['client_admin', 'hr', 'manager'].includes(role) || sessionStorage.getItem('is_manager') === 'true' ? (
                           <select
                             value={selectedEmployee.completion_outcome || 'ACHIEVED'}
@@ -522,14 +522,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
               <Card size="small" style={{ background: '#fafafa', border: '1px solid #f0f0f0' }}>
                 {goal.performance_technique === 'CONTINUOUS_FEEDBACK' && selectedEmployee ? (
                   <>
-                    <span style={{ fontSize: 12, color: '#64748b', display: 'block', marginBottom: 4 }}>
+                    <span style={{ fontSize: 12, color: '#7D8597', display: 'block', marginBottom: 4 }}>
                       Target Progress ({selectedEmployee.employee_name})
                     </span>
                     <Progress percent={parseFloat(selectedEmployee.progress || 0)} status={parseFloat(selectedEmployee.progress || 0) >= 100 ? 'success' : 'active'} />
                   </>
                 ) : (
                   <>
-                    <span style={{ fontSize: 12, color: '#64748b', display: 'block', marginBottom: 4 }}>Goal Target Completion</span>
+                    <span style={{ fontSize: 12, color: '#7D8597', display: 'block', marginBottom: 4 }}>Goal Target Completion</span>
                     <Progress percent={parseFloat(goal.progress)} status={parseFloat(goal.progress) >= 100 ? 'success' : 'active'} />
                   </>
                 )}
@@ -538,19 +538,19 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
               {/* Goal Continuous Feedback Components Progress List */}
               {goal.performance_technique === 'CONTINUOUS_FEEDBACK' && selectedEmployee && (
                 <div style={{ marginTop: 4 }}>
-                  <h3 style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', margin: '0 0 4px 0' }}>Goal Continuous Feedback Components</h3>
-                  <p style={{ fontSize: 11, color: '#64748b', margin: '0 0 12px 0' }}>
+                  <h3 style={{ fontSize: 13, fontWeight: 800, color: '#001233', margin: '0 0 4px 0' }}>Goal Continuous Feedback Components</h3>
+                  <p style={{ fontSize: 11, color: '#7D8597', margin: '0 0 12px 0' }}>
                     Coaching components map specific actions to align with the goal milestones and targets.
                   </p>
-                  <div style={{ border: '1px solid #e2e8f0', borderRadius: 10, overflow: 'hidden' }}>
+                  <div style={{ border: '1px solid #E3E7EE', borderRadius: 10, overflow: 'hidden' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', background: '#fff' }}>
                       <thead>
-                        <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#475569', textTransform: 'uppercase' }}>Component Name</th>
-                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#475569', textTransform: 'uppercase', width: '70px', textAlign: 'center' }}>Weight</th>
-                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#475569', textTransform: 'uppercase' }}>Target / Current</th>
-                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#475569', textTransform: 'uppercase', width: '130px' }}>Completion</th>
-                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#475569', textTransform: 'uppercase', width: '100px' }}>Status</th>
+                        <tr style={{ background: '#f8fafc', borderBottom: '1px solid #E3E7EE' }}>
+                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#33415C', textTransform: 'uppercase' }}>Component Name</th>
+                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#33415C', textTransform: 'uppercase', width: '70px', textAlign: 'center' }}>Weight</th>
+                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#33415C', textTransform: 'uppercase' }}>Target / Current</th>
+                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#33415C', textTransform: 'uppercase', width: '130px' }}>Completion</th>
+                          <th style={{ padding: '12px 16px', fontSize: 11, fontWeight: 800, color: '#33415C', textTransform: 'uppercase', width: '100px' }}>Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -604,13 +604,13 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                           ].filter(Boolean);
 
                           return rows.map((r, i) => (
-                            <tr key={i} style={{ borderBottom: i < rows.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                            <tr key={i} style={{ borderBottom: i < rows.length - 1 ? '1px solid #F1F4F8' : 'none' }}>
                               <td style={{ padding: '16px' }}>
-                                <strong style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>{r.title}</strong>
-                                <span style={{ fontSize: 11, color: '#64748b', marginTop: 2, display: 'block' }}>{r.desc}</span>
+                                <strong style={{ fontSize: 13, color: '#001233', display: 'block' }}>{r.title}</strong>
+                                <span style={{ fontSize: 11, color: '#7D8597', marginTop: 2, display: 'block' }}>{r.desc}</span>
                               </td>
-                              <td style={{ padding: '16px', fontSize: 13, color: '#334155', fontWeight: 600, textAlign: 'center' }}>{r.weight}</td>
-                              <td style={{ padding: '16px', fontSize: 12, color: '#475569' }}>{r.targetCurrent}</td>
+                              <td style={{ padding: '16px', fontSize: 13, color: '#33415C', fontWeight: 600, textAlign: 'center' }}>{r.weight}</td>
+                              <td style={{ padding: '16px', fontSize: 12, color: '#33415C' }}>{r.targetCurrent}</td>
                               <td style={{ padding: '16px' }}>
                                 <Progress percent={r.percent} status={r.percent >= 100 ? 'success' : 'active'} />
                               </td>
@@ -635,18 +635,18 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
 
               {goal.performance_technique === 'COMPETENCY_ASSESSMENT' && !selectedEmployee && goal.competency_stats && (
                 <div style={{ marginTop: 8, marginBottom: 12 }}>
-                  <h3 style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', margin: '0 0 10px 0' }}>📋 Competency Assessment Overview</h3>
+                  <h3 style={{ fontSize: 13, fontWeight: 800, color: '#001233', margin: '0 0 10px 0' }}>📋 Competency Assessment Overview</h3>
                   <Row gutter={[12, 12]}>
                     <Col span={6}>
-                      <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>Average Progress</div>
-                        <div style={{ fontSize: 18, fontWeight: 900, color: '#6366f1', marginTop: 4 }}>{parseFloat(goal.competency_stats.avg_progress || 0).toFixed(1)}%</div>
+                      <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
+                        <div style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', fontWeight: 700 }}>Average Progress</div>
+                        <div style={{ fontSize: 18, fontWeight: 900, color: '#0466C8', marginTop: 4 }}>{parseFloat(goal.competency_stats.avg_progress || 0).toFixed(1)}%</div>
                       </div>
                     </Col>
                     <Col span={6}>
-                      <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>Average Score</div>
-                        <div style={{ fontSize: 18, fontWeight: 900, color: '#4f46e5', marginTop: 4 }}>{parseFloat(goal.competency_stats.avg_score || 0).toFixed(1)}%</div>
+                      <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: 10, border: '1px solid #E3E7EE' }}>
+                        <div style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', fontWeight: 700 }}>Average Score</div>
+                        <div style={{ fontSize: 18, fontWeight: 900, color: '#0353A4', marginTop: 4 }}>{parseFloat(goal.competency_stats.avg_score || 0).toFixed(1)}%</div>
                       </div>
                     </Col>
                     <Col span={6}>
@@ -666,8 +666,8 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
               )}
 
               {/* Status Timeline */}
-              <div style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px', border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>Status Timeline</div>
+              <div style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px', border: '1px solid #E3E7EE' }}>
+                <div style={{ fontSize: 11, color: '#7D8597', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>Status Timeline</div>
                 <GoalStatusTimeline currentStatus={goal.status} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
                   {STATUS_FLOW.map(s => (
@@ -713,9 +713,9 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
 
               {/* Description */}
               {goal.description && (
-                <div style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px', border: '1px solid #e2e8f0' }}>
-                  <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, fontWeight: 700 }}>Description</div>
-                  <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.6, fontWeight: 500 }}>{goal.description}</div>
+                <div style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px', border: '1px solid #E3E7EE' }}>
+                  <div style={{ fontSize: 10, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6, fontWeight: 700 }}>Description</div>
+                  <div style={{ fontSize: 13, color: '#33415C', lineHeight: 1.6, fontWeight: 500 }}>{goal.description}</div>
                 </div>
               )}
 
@@ -723,11 +723,11 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
               {canSelectAssignedEmployee && (
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                       Assigned Employees ({assignments.length})
                     </div>
                     {selectedEmployee && (
-                      <span style={{ fontSize: 11, color: '#6366f1', fontWeight: 700 }}>
+                      <span style={{ fontSize: 11, color: '#0466C8', fontWeight: 700 }}>
                         Active Selection: {selectedEmployee.employee_name}
                       </span>
                     )}
@@ -746,18 +746,18 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                             onClick={() => setSelectedEmployee(emp)}
                             style={{
                               padding: '12px 14px', borderRadius: 10,
-                              border: isSelected ? '2px solid #6366f1' : '1px solid #e2e8f0',
-                              background: isSelected ? 'rgba(99,102,241,0.06)' : '#ffffff',
+                              border: isSelected ? '2px solid #0466C8' : '1px solid #E3E7EE',
+                              background: isSelected ? 'rgba(4, 102, 200,0.06)' : '#ffffff',
                               cursor: 'pointer', transition: 'all 0.15s ease',
                               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              boxShadow: isSelected ? '0 4px 12px rgba(99,102,241,0.12)' : 'none'
+                              boxShadow: isSelected ? '0 4px 12px rgba(4, 102, 200,0.12)' : 'none'
                             }}
                           >
                             <div>
-                              <div style={{ fontSize: 13, fontWeight: 700, color: isSelected ? '#4338ca' : '#1e293b', display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <div style={{ fontSize: 13, fontWeight: 700, color: isSelected ? '#023E7D' : '#001233', display: 'flex', alignItems: 'center', gap: 6 }}>
                                 <span>👤</span> {emp.employee_name}
                               </div>
-                              <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                              <div style={{ fontSize: 11, color: '#7D8597', marginTop: 2 }}>
                                 {emp.department_name || 'Department Member'}
                               </div>
                             </div>
@@ -776,7 +776,7 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                                   {emp.completion_outcome === 'ACHIEVED' ? 'Achieved' : 'Needs Dev'}
                                 </div>
                               )}
-                              <div style={{ fontSize: 11, fontWeight: 700, color: '#6366f1' }}>
+                              <div style={{ fontSize: 11, fontWeight: 700, color: '#0466C8' }}>
                                 {emp.progress || 0}%
                               </div>
                             </div>
@@ -794,8 +794,8 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
 
               {/* Actions */}
               {canApprove && (
-                <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 16 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Manager Actions</div>
+                <div style={{ borderTop: '1px solid #E3E7EE', paddingTop: 16 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: '#7D8597', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Manager Actions</div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <button onClick={() => onStatusChange(goal.goal_id, 'ACTIVE')} style={{
                       padding: '8px 16px', borderRadius: 8, border: '1px solid rgba(22,163,74,0.2)',
@@ -819,11 +819,11 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                   {/* Changes Requested Form */}
                   {showChanges && (
                     <div style={{ marginTop: 12 }}>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', marginBottom: 4 }}>Comment for Employee</label>
+                      <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#7D8597', textTransform: 'uppercase', marginBottom: 4 }}>Comment for Employee</label>
                       <textarea value={changesReason} onChange={e => setChangesReason(e.target.value)} rows={2}
                         style={{
                           width: '100%', padding: '9px 12px', borderRadius: 8, fontSize: 13,
-                          background: '#fff', border: '1px solid #e2e8f0', color: '#1e293b',
+                          background: '#fff', border: '1px solid #E3E7EE', color: '#001233',
                           outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', resize: 'vertical',
                         }} placeholder="What changes are needed?" />
                       <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
@@ -837,8 +837,8 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                           fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
                         }}>Send Changes</button>
                         <button onClick={() => setShowChanges(false)} style={{
-                          padding: '7px 14px', borderRadius: 8, border: '1px solid #e2e8f0',
-                          background: '#f8fafc', color: '#64748b', fontSize: 12,
+                          padding: '7px 14px', borderRadius: 8, border: '1px solid #E3E7EE',
+                          background: '#f8fafc', color: '#7D8597', fontSize: 12,
                           fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
                         }}>Cancel</button>
                       </div>
@@ -848,11 +848,11 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                   {/* Reject Form */}
                   {showReject && (
                     <div style={{ marginTop: 12 }}>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', marginBottom: 4 }}>Rejection Reason</label>
+                      <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#7D8597', textTransform: 'uppercase', marginBottom: 4 }}>Rejection Reason</label>
                       <textarea value={rejectReason} onChange={e => setRejectReason(e.target.value)} rows={2}
                         style={{
                           width: '100%', padding: '9px 12px', borderRadius: 8, fontSize: 13,
-                          background: '#fff', border: '1px solid #e2e8f0', color: '#1e293b',
+                          background: '#fff', border: '1px solid #E3E7EE', color: '#001233',
                           outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', resize: 'vertical',
                         }} placeholder="Why is this goal being rejected?" />
                       <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
@@ -866,8 +866,8 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                           fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
                         }}>Confirm Reject</button>
                         <button onClick={() => setShowReject(false)} style={{
-                          padding: '7px 14px', borderRadius: 8, border: '1px solid #e2e8f0',
-                          background: '#f8fafc', color: '#64748b', fontSize: 12,
+                          padding: '7px 14px', borderRadius: 8, border: '1px solid #E3E7EE',
+                          background: '#f8fafc', color: '#7D8597', fontSize: 12,
                           fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
                         }}>Cancel</button>
                       </div>
@@ -921,14 +921,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                         dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
                         color="blue"
                       >
-                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #E3E7EE' }}>
                           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                             <span style={{ fontWeight: 700, fontSize: 13 }}>
                               Progress Shift: {parseFloat(h.old_progress)}% → {parseFloat(h.new_progress)}%
                             </span>
                             <AntTag color={STATUS_META[h.status]?.bg ? 'default' : 'cyan'}>{h.status}</AntTag>
                           </Space>
-                          <div style={{ fontSize: 12, color: '#475569', marginTop: 4 }}>
+                          <div style={{ fontSize: 12, color: '#33415C', marginTop: 4 }}>
                             {h.comment}
                           </div>
                           <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>
@@ -968,14 +968,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                         dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
                         color="blue"
                       >
-                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #E3E7EE' }}>
                           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                             <span style={{ fontWeight: 700, fontSize: 13 }}>
                               Progress Shift: {parseFloat(h.old_progress)}% → {parseFloat(h.new_progress)}%
                             </span>
                             <AntTag color={STATUS_META[h.status]?.bg ? 'default' : 'cyan'}>{h.status}</AntTag>
                           </Space>
-                          <div style={{ fontSize: 12, color: '#475569', marginTop: 4 }}>
+                          <div style={{ fontSize: 12, color: '#33415C', marginTop: 4 }}>
                             {h.comment}
                           </div>
                           <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>
@@ -1016,14 +1016,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                         dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
                         color="blue"
                       >
-                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #E3E7EE' }}>
                           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                             <span style={{ fontWeight: 700, fontSize: 13 }}>
                               Progress Shift: {parseFloat(h.old_progress)}% → {parseFloat(h.new_progress)}%
                             </span>
                             <AntTag color={STATUS_META[h.status]?.bg ? 'default' : 'cyan'}>{h.status}</AntTag>
                           </Space>
-                          <div style={{ fontSize: 12, color: '#475569', marginTop: 4 }}>
+                          <div style={{ fontSize: 12, color: '#33415C', marginTop: 4 }}>
                             {h.comment}
                           </div>
                           <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>
@@ -1062,14 +1062,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                         dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
                         color="blue"
                       >
-                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                        <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #E3E7EE' }}>
                           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                             <span style={{ fontWeight: 700, fontSize: 13 }}>
                               Progress Shift: {parseFloat(h.old_progress)}% → {parseFloat(h.new_progress)}%
                             </span>
                             <AntTag color={STATUS_META[h.status]?.bg ? 'default' : 'cyan'}>{h.status}</AntTag>
                           </Space>
-                          <div style={{ fontSize: 12, color: '#475569', marginTop: 4 }}>
+                          <div style={{ fontSize: 12, color: '#33415C', marginTop: 4 }}>
                             {h.comment}
                           </div>
                           <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>
@@ -1093,18 +1093,18 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                   <div style={{ padding: '16px 8px' }}>
                     {documents.attachments?.length > 0 && (
                       <div style={{ marginBottom: 20 }}>
-                        <Title level={5} style={{ fontSize: 13, color: '#475569', marginBottom: 10 }}>Uploaded Evidence Files</Title>
+                        <Title level={5} style={{ fontSize: 13, color: '#33415C', marginBottom: 10 }}>Uploaded Evidence Files</Title>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                           {documents.attachments.map((att) => (
-                            <div key={att.attachment_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '10px 14px', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                            <div key={att.attachment_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '10px 14px', borderRadius: 8, border: '1px solid #E3E7EE' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                <FileTextOutlined style={{ color: '#6366f1', fontSize: 16 }} />
+                                <FileTextOutlined style={{ color: '#0466C8', fontSize: 16 }} />
                                 <div>
-                                  <strong style={{ fontSize: 12, display: 'block', color: '#1e293b' }}>{att.file_name}</strong>
+                                  <strong style={{ fontSize: 12, display: 'block', color: '#001233' }}>{att.file_name}</strong>
                                   <span style={{ fontSize: 10, color: '#94a3b8' }}>Submitted for KPI {att.kpi_code} • {new Date(att.uploaded_at).toLocaleDateString('en-IN')}</span>
                                 </div>
                               </div>
-                              <a href={att.file_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: '#6366f1' }}>
+                              <a href={att.file_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: '#0466C8' }}>
                                 View / Download
                               </a>
                             </div>
@@ -1115,14 +1115,14 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
 
                     {documents.links?.length > 0 && (
                       <div>
-                        <Title level={5} style={{ fontSize: 13, color: '#475569', marginBottom: 10 }}>Evidence Reference Links</Title>
+                        <Title level={5} style={{ fontSize: 13, color: '#33415C', marginBottom: 10 }}>Evidence Reference Links</Title>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                           {documents.links.map((link) => (
-                            <div key={link.link_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '10px 14px', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                            <div key={link.link_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '10px 14px', borderRadius: 8, border: '1px solid #E3E7EE' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <LinkOutlined style={{ color: '#10b981', fontSize: 16 }} />
                                 <div>
-                                  <strong style={{ fontSize: 12, display: 'block', color: '#1e293b' }}>{link.link_name}</strong>
+                                  <strong style={{ fontSize: 12, display: 'block', color: '#001233' }}>{link.link_name}</strong>
                                   <span style={{ fontSize: 10, color: '#94a3b8' }}>Submitted for KPI {link.kpi_code} • {new Date(link.created_at).toLocaleDateString('en-IN')}</span>
                                 </div>
                               </div>
@@ -1157,15 +1157,15 @@ export default function GoalDetailsDrawer({ goal: propGoal, allGoals = [], role,
                     dot={<ClockCircleOutlined style={{ fontSize: '14px', color: '#10b981' }} />}
                     color="green"
                   >
-                    <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                    <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #E3E7EE' }}>
                       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                        <span style={{ fontWeight: 700, fontSize: 12, color: '#1e293b', textTransform: 'capitalize' }}>
+                        <span style={{ fontWeight: 700, fontSize: 12, color: '#001233', textTransform: 'capitalize' }}>
                           {act.action_name.replace(/_/g, ' ')}
                         </span>
                         <AntTag color="blue">{act.actor_role}</AntTag>
                       </Space>
-                      <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>
-                        Performed on: <strong style={{ color: '#6366f1' }}>{act.entity_name}</strong>
+                      <div style={{ fontSize: 11, color: '#33415C', marginTop: 4 }}>
+                        Performed on: <strong style={{ color: '#0466C8' }}>{act.entity_name}</strong>
                       </div>
                       <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>
                         <span>Actor: {act.actor_name} ({act.actor_email})</span>

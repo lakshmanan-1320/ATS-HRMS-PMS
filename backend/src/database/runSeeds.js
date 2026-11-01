@@ -30,7 +30,12 @@ async function run() {
       await seedOrgEmployees()
       await seedHolidays()
       await seedHRPolicies()
-      await indexPolicies()
+      try {
+        await indexPolicies()
+      } catch (err) {
+        // Needs pgvector + Ollama; skip so the remaining seeders still run.
+        logger.warn('Policy embedding indexing skipped:', err.message)
+      }
       await seedAttendance()
       await seedLeave()
       await seedPayroll()

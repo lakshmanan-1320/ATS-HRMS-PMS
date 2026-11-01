@@ -14,11 +14,16 @@ import {
   FiZap,
   FiShare2,
   FiCopy,
-  FiLink
+  FiLink,
+  FiLayers,
+  FiClock
 } from 'react-icons/fi';
 import EmployeeSidebar from '../../../components/layout/EmployeeSidebar.jsx';
 import EmployeeTopBar from '../../../components/layout/EmployeeTopBar';
 import { useChatbot } from '../../../context/ChatbotContext.jsx';
+import { PMS } from '../theme';
+import { PmsCard, CardHeader, HeaderChip, BigStat, Pill, EmptyBox, T } from '../components/shared/PmsUI';
+import { NeedHelpCard } from '../components/dashboard/DashboardFooterBanners';
 
 const CATEGORIES = [
   'All',
@@ -177,300 +182,292 @@ export default function EmployeePolicies() {
     return matchesSearch && matchesCategory;
   });
 
-  const iStyle = {
-    padding: '10px 14px',
-    background: '#ffffff',
-    border: '1px solid #e2e8f0',
-    borderRadius: 10,
-    color: '#1e293b',
-    fontSize: 13,
-    outline: 'none',
-    width: '100%',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit'
-  };
+  // ── Derived stats (real data only) ─────────────────────────────────────────
+  const categoryCount = (cat) => (cat === 'All' ? policies.length : policies.filter((p) => p.category === cat).length);
+  const activeCategories = new Set(policies.map((p) => p.category).filter(Boolean)).size;
+  const now = new Date();
+  const recentCount = policies.filter((p) => p.effective_date && (now - new Date(p.effective_date)) / 864e5 <= 90 && new Date(p.effective_date) <= now).length;
+  const latest = [...policies]
+    .filter((p) => p.effective_date)
+    .sort((a, b) => new Date(b.effective_date) - new Date(a.effective_date))[0];
+  const fmtDate = (d) => (d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
-  const BD = {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(15, 23, 42, 0.6)',
-    backdropFilter: 'blur(6px)',
-    zIndex: 1000,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24
+  const roundBtn = {
+    width: 34, height: 34, borderRadius: '50%', flexShrink: 0, padding: 0,
+    background: PMS.white, border: `1px solid ${PMS.border}`, color: PMS.navy,
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
   };
-
-  const cardShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)';
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#1e293b', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: PMS.white, fontFamily: PMS.fontHead }}>
       <EmployeeSidebar active="policies" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <EmployeeTopBar />
+        <EmployeeTopBar title="Company Policies" />
 
-        <main style={{ flex: 1, padding: '32px 36px', overflowY: 'auto', overflowX: 'hidden' }}>
-          {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, color: '#C2071A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                <FiShield size={14} /> Governance & Guidelines
+        <main className="pms-main" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+          {/* ── Heading + search ─────────────────────────────────────────── */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '20px 24px', flexWrap: 'wrap', paddingTop: 19 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontFamily: PMS.fontHead, fontSize: 'clamp(26px, 3.2vw, 36px)', fontWeight: 700, lineHeight: 1.5, color: PMS.navy, letterSpacing: '-0.5px' }}>
+                Company <span style={{ color: PMS.blue }}>Policies</span>
               </div>
-              <h1 style={{ margin: '4px 0 0', fontSize: 24, fontWeight: 800, color: '#1e293b' }}>
-                Company Policies & HR Guidelines
-              </h1>
-              <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: 13 }}>
-                Browse official company policies, codes of conduct, and workplace guidelines. Share direct links with team members.
-              </p>
+              <div style={{ fontFamily: PMS.fontHead, fontSize: 13, color: PMS.muted, lineHeight: '20px', marginTop: -2 }}>
+                Browse official company policies, codes of conduct and workplace guidelines.
+              </div>
             </div>
 
-          </div>
-
-          {/* Controls & Filter Bar */}
-          <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ position: 'relative', width: 320 }}>
-              <FiSearch size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, height: 42, padding: '0 16px', width: 340, maxWidth: '100%',
+              background: PMS.white, border: `1px solid ${PMS.border}`, borderRadius: 21, boxSizing: 'border-box',
+            }}>
+              <FiSearch size={14} color={PMS.navy} style={{ flexShrink: 0 }} />
               <input
                 type="text"
-                placeholder="Search policy title, summary, or keywords..."
+                placeholder="Search title, summary or keywords..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{ ...iStyle, paddingLeft: 38, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}
+                aria-label="Search policies"
+                style={{ flex: 1, minWidth: 0, border: 'none', outline: 'none', background: 'transparent', fontFamily: PMS.fontHead, fontSize: 12, color: PMS.navy }}
               />
-            </div>
-
-            {/* Category Filter Chips */}
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  style={{
-                    padding: '8px 14px',
-                    borderRadius: 8,
-                    fontSize: 12,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    transition: 'all 0.15s ease',
-                    background: selectedCategory === cat ? 'linear-gradient(135deg, #C2071A, #941018)' : '#ffffff',
-                    border: selectedCategory === cat ? 'none' : '1px solid #e2e8f0',
-                    color: selectedCategory === cat ? '#ffffff' : '#475569',
-                    boxShadow: selectedCategory === cat ? '0 4px 12px rgba(194,7,26,0.25)' : 'none'
-                  }}
-                >
-                  {cat}
+              {search && (
+                <button type="button" onClick={() => setSearch('')} title="Clear search" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: PMS.muted, display: 'flex' }}>
+                  <FiX size={14} />
                 </button>
-              ))}
+              )}
             </div>
           </div>
 
-          {/* Policy Catalog Grid */}
-          {loading ? (
-            <div style={{ padding: 60, textAlign: 'center', color: '#64748b', fontSize: 14 }}>
-              Loading policies...
-            </div>
-          ) : filteredPolicies.length === 0 ? (
-            <div style={{ padding: '60px 20px', textAlign: 'center', background: '#ffffff', borderRadius: 16, border: '1px dashed #e2e8f0', boxShadow: cardShadow }}>
-              <FiFileText size={40} style={{ color: '#e2e8f0', marginBottom: 12 }} />
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#1e293b', marginBottom: 4 }}>No Matching Policies</div>
-              <div style={{ fontSize: 13, color: '#64748b', maxWidth: 360, margin: '0 auto' }}>
-                No published company policies match your search term or selected category filter.
+          {/* ── Summary cards ────────────────────────────────────────────── */}
+          <div className="pms-grid-4" style={{ marginTop: 39 }}>
+            <PmsCard style={{ minHeight: 0 }}>
+              <CardHeader title="Total Policies" chip={<HeaderChip icon={<FiFileText size={14} />} />} />
+              <BigStat value={loading ? '—' : policies.length} pill="Published" pillTone="blue" caption="Available to all employees" />
+            </PmsCard>
+            <PmsCard style={{ minHeight: 0 }}>
+              <CardHeader title="Categories" chip={<HeaderChip icon={<FiLayers size={14} />} />} />
+              <BigStat value={loading ? '—' : activeCategories} pill={`of ${CATEGORIES.length - 1}`} caption="Policy areas covered" />
+            </PmsCard>
+            <PmsCard style={{ minHeight: 0 }}>
+              <CardHeader title="Recently Effective" chip={<HeaderChip icon={<FiClock size={14} />} />} />
+              <BigStat value={loading ? '—' : recentCount} pill="Last 90 days" caption={recentCount ? 'New or updated policies' : 'No recent changes'} />
+            </PmsCard>
+            <PmsCard style={{ minHeight: 0 }}>
+              <CardHeader
+                title="Latest Policy"
+                chip={<HeaderChip onClick={latest ? () => openPolicyReader(latest) : undefined} icon={latest ? undefined : <FiShield size={14} />} title="Read latest policy" />}
+              />
+              <div style={{ marginTop: 3 }}>
+                <div style={{ fontFamily: PMS.fontHead, fontSize: 16, fontWeight: 700, color: PMS.navy, lineHeight: '24px', marginTop: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {latest ? latest.title : '—'}
+                </div>
+                <div style={{ ...T.caption, marginTop: 4 }}>
+                  {latest ? `Effective ${fmtDate(latest.effective_date)}` : 'No effective dates yet'}
+                </div>
               </div>
+            </PmsCard>
+          </div>
+
+          {/* ── Category tabs ────────────────────────────────────────────── */}
+          <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+            <div role="tablist" aria-label="Policy category" className="pms-tabs-scroll" style={{
+              display: 'flex', alignItems: 'center', height: 44, padding: '0 5px', gap: 2, maxWidth: '100%',
+              background: PMS.surfaceAlt, border: `1px solid ${PMS.border}`, borderRadius: 22, boxSizing: 'border-box',
+            }}>
+              {CATEGORIES.map((cat) => {
+                const active = selectedCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setSelectedCategory(cat)}
+                    className="pms-focus"
+                    style={{
+                      height: 34, padding: '0 16px', borderRadius: 17, border: 'none', flexShrink: 0,
+                      background: active ? PMS.white : 'transparent',
+                      boxShadow: active ? '0 4px 12px rgba(0,18,51,0.08)' : 'none',
+                      color: active ? PMS.navy : PMS.muted,
+                      fontFamily: PMS.fontHead, fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap',
+                      display: 'inline-flex', alignItems: 'center', gap: 8,
+                    }}
+                  >
+                    {cat}
+                    <span style={{
+                      minWidth: 20, height: 20, borderRadius: 10, padding: '0 5px', boxSizing: 'border-box', fontSize: 10.5,
+                      background: active ? PMS.gradBlue : PMS.white, color: active ? PMS.white : PMS.navy,
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    }}>{categoryCount(cat)}</span>
+                  </button>
+                );
+              })}
             </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20 }}>
-              {filteredPolicies.map((policy) => (
-                <div
-                  key={policy.policy_id}
-                  style={{
-                    background: '#ffffff',
-                    borderRadius: 16,
-                    border: '1px solid #e2e8f0',
-                    padding: 22,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: cardShadow,
-                    transition: 'all 0.2s ease-in-out'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-3px)';
-                    e.currentTarget.style.boxShadow = '0 12px 24px -4px rgba(194, 7, 26, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.04)';
-                    e.currentTarget.style.borderColor = '#f7a6af';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = cardShadow;
-                    e.currentTarget.style.borderColor = '#e2e8f0';
-                  }}
-                >
-                  <div>
-                    {/* Category Tag & Version */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                      <span style={{ display: 'inline-block', padding: '3px 9px', background: 'rgba(194, 7, 26, 0.08)', border: '1px solid rgba(194, 7, 26, 0.2)', borderRadius: 6, fontSize: 11, fontWeight: 700, color: '#941018' }}>
-                        {policy.category}
-                      </span>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b' }}>v{policy.version_number}</span>
+            <span style={{ ...T.caption, whiteSpace: 'nowrap' }}>
+              {loading ? 'Loading…' : `${filteredPolicies.length} of ${policies.length} policies`}
+            </span>
+          </div>
+
+          {/* ── Policy catalog ───────────────────────────────────────────── */}
+          <div style={{ marginTop: 25 }}>
+            {loading ? (
+              <EmptyBox icon={<FiFileText size={14} />} title="Loading policies…" sub="Fetching the latest published versions" style={{ minHeight: 180 }} />
+            ) : filteredPolicies.length === 0 ? (
+              <EmptyBox
+                icon={<FiFileText size={14} />}
+                title="No matching policies"
+                sub="No published policies match your search or selected category."
+                style={{ minHeight: 180 }}
+              />
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: 25 }}>
+                {filteredPolicies.map((policy) => (
+                  <PmsCard key={policy.policy_id} className="pms-hover-lift" style={{ minHeight: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                      <Pill tone="blue" style={{ maxWidth: '75%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{policy.category}</Pill>
+                      <Pill>v{policy.version_number}</Pill>
                     </div>
 
-                    {/* Policy Title */}
-                    <h3
+                    <button
+                      type="button"
                       onClick={() => openPolicyReader(policy)}
-                      style={{ margin: '0 0 8px', fontSize: 16, fontWeight: 800, color: '#1e293b', cursor: 'pointer', lineHeight: 1.3, transition: 'color 0.15s' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = '#C2071A')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#1e293b')}
+                      className="pms-focus"
+                      style={{ background: 'none', border: 'none', padding: 0, margin: '16px 0 0', textAlign: 'left', cursor: 'pointer', fontFamily: PMS.fontHead, fontSize: 16, fontWeight: 700, color: PMS.navy, lineHeight: '24px' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = PMS.blue; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = PMS.navy; }}
                     >
                       {policy.title}
-                    </h3>
+                    </button>
 
-                    {/* Executive Summary */}
-                    <p style={{ margin: 0, fontSize: 13, color: '#64748b', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <div style={{ ...T.caption, marginTop: 6, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {policy.summary || 'No overview summary provided.'}
-                    </p>
+                    </div>
 
-                    {/* Keywords */}
                     {policy.keywords && policy.keywords.length > 0 && (
                       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
                         {policy.keywords.slice(0, 3).map((kw, i) => (
-                          <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, padding: '2px 8px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 4, color: '#475569', fontWeight: 600 }}>
-                            <FiTag size={10} style={{ color: '#94a3b8' }} /> {kw}
+                          <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, height: 22, padding: '0 9px', borderRadius: 11, background: PMS.surfaceAlt, border: `1px solid ${PMS.border}`, fontFamily: PMS.fontHead, fontSize: 10, color: PMS.slate }}>
+                            <FiTag size={9} color={PMS.muted} /> {kw}
                           </span>
                         ))}
                       </div>
                     )}
-                  </div>
 
-                  {/* Card Footer with Direct Share Link */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 20, paddingTop: 14, borderTop: '1px solid #f1f5f9', gap: 8, flexWrap: 'wrap' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#64748b' }}>
-                      <FiCalendar size={12} /> {policy.effective_date ? new Date(policy.effective_date).toLocaleDateString('en-IN') : 'Active'}
-                    </span>
-
-                    <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                      {/* AI Assistant button hidden for client deployment
-                      <button
-                        onClick={() => {
-                          const categoryMap = {
-                            'IT & Data Security': 'IT_SECURITY',
-                            'Leave & Employee Conduct': 'LEAVE_CONDUCT',
-                            'Attendance & Working Hours': 'ATTENDANCE_LEAVE',
-                            'Benefits & Compensation': 'BENEFITS_COMPENSATION'
-                          };
-                          const mappedCat = categoryMap[policy.category] || null;
-                          openChat(mappedCat, `${policy.title} AI Assistant`);
-                        }}
-                        title="Ask AI Assistant about this policy"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 5,
-                          padding: '6px 10px',
-                          background: policy.category === 'IT & Data Security' ? 'rgba(194, 7, 26, 0.12)' : '#f8fafc',
-                          border: policy.category === 'IT & Data Security' ? '1px solid rgba(194, 7, 26, 0.3)' : '1px solid #e2e8f0',
-                          borderRadius: 8,
-                          cursor: 'pointer',
-                          fontSize: 11,
-                          fontWeight: 700,
-                          color: policy.category === 'IT & Data Security' ? '#941018' : '#475569'
-                        }}
-                      >
-                        <FiZap size={13} color={policy.category === 'IT & Data Security' ? '#941018' : '#64748b'} /> Ask AI
-                      </button>
-                      */}
-
-                      <button
-                        onClick={(e) => copyDirectLink(policy, e)}
-                        title="Copy Direct Link to Policy"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#475569' }}
-                      >
-                        <FiShare2 size={13} /> Share Link
-                      </button>
-
-                      <button
-                        onClick={() => openPolicyReader(policy)}
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'linear-gradient(135deg, #C2071A, #941018)', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 700, color: '#ffffff', boxShadow: '0 2px 8px rgba(194, 7, 26, 0.25)' }}
-                      >
-                        <FiEye size={13} /> Read
-                      </button>
-
-                      <button
-                        onClick={() => handleDownloadDoc(policy)}
-                        title="Download Official PDF"
-                        style={{ width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', color: '#7c0a1a' }}
-                      >
-                        <FiDownload size={14} />
-                      </button>
+                    <div style={{ marginTop: 'auto', paddingTop: 18 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, paddingTop: 14, borderTop: `1px solid ${PMS.pillGrey}`, flexWrap: 'wrap' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, ...T.small }}>
+                          <FiCalendar size={12} /> {policy.effective_date ? fmtDate(policy.effective_date) : 'Active'}
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <button type="button" onClick={(e) => copyDirectLink(policy, e)} title="Copy direct link" aria-label="Copy direct link" className="pms-icon-btn pms-focus" style={roundBtn}>
+                            <FiShare2 size={13} />
+                          </button>
+                          <button type="button" onClick={() => handleDownloadDoc(policy)} title="Download official PDF" aria-label="Download official PDF" className="pms-icon-btn pms-focus" style={roundBtn}>
+                            <FiDownload size={13} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openPolicyReader(policy)}
+                            className="pms-hover-lift pms-focus"
+                            style={{ height: 34, padding: '0 18px', borderRadius: 17, border: 'none', background: PMS.gradBlue, color: PMS.white, display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: PMS.fontHead, fontSize: 12, fontWeight: 700, cursor: 'pointer', boxShadow: PMS.shadowCta }}
+                          >
+                            <FiEye size={13} /> Read
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </PmsCard>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ── Help ─────────────────────────────────────────────────────── */}
+          <div className="pms-grid-4" style={{ marginTop: 40 }}>
+            <section className="pms-span-3" style={{
+              background: PMS.navy, borderRadius: PMS.radiusPanel, minHeight: 120, padding: '24px 28px', boxSizing: 'border-box',
+              display: 'flex', alignItems: 'center', gap: 18, minWidth: 0,
+            }}>
+              <span style={{ width: 44, height: 44, borderRadius: '50%', background: PMS.steel, color: PMS.white, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <FiShield size={18} />
+              </span>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontFamily: PMS.fontHead, fontSize: 16, fontWeight: 700, color: PMS.white }}>Stay informed, stay compliant.</div>
+                <div style={{ fontFamily: PMS.fontHead, fontSize: 11, color: 'rgba(255,255,255,0.55)', marginTop: 4 }}>
+                  Policies apply from their effective date. Share a direct link to point teammates to the exact policy.
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            </section>
+            <NeedHelpCard onContact={() => openChat()} />
+          </div>
         </main>
       </div>
 
-      {/* POLICY READER MODAL */}
+      {/* ── Policy reader ──────────────────────────────────────────────── */}
       {selectedPolicy && (
-        <div style={BD} onClick={closePolicyReader}>
+        <div
+          onClick={closePolicyReader}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0, 18, 51, 0.55)', backdropFilter: 'blur(6px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+        >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedPolicy.title}
             onClick={(e) => e.stopPropagation()}
-            style={{ background: '#ffffff', borderRadius: 16, border: '1px solid #e2e8f0', padding: 28, width: 780, maxWidth: '95vw', maxHeight: '88vh', overflowY: 'auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)', display: 'flex', flexDirection: 'column' }}
+            style={{ background: PMS.white, borderRadius: PMS.radiusInner, border: `1px solid ${PMS.border}`, width: 820, maxWidth: '100%', maxHeight: '88vh', display: 'flex', flexDirection: 'column', boxShadow: '0 30px 60px rgba(0,18,51,0.25)', overflow: 'hidden', fontFamily: PMS.fontHead }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #f1f5f9', paddingBottom: 14 }}>
-              <div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#C2071A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                  {selectedPolicy.category} • Version {selectedPolicy.version_number}
-                </span>
-                <h2 style={{ margin: '4px 0 0', fontSize: 20, fontWeight: 800, color: '#1e293b' }}>
+            {/* Header */}
+            <div style={{ padding: '22px 24px 18px', borderBottom: `1px solid ${PMS.pillGrey}`, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <Pill tone="blue">{selectedPolicy.category}</Pill>
+                  <Pill>Version {selectedPolicy.version_number}</Pill>
+                </div>
+                <div style={{ fontFamily: PMS.fontHead, fontSize: 20, fontWeight: 700, color: PMS.navy, lineHeight: '30px', marginTop: 10 }}>
                   {selectedPolicy.title}
-                </h2>
+                </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <button
-                  onClick={(e) => copyDirectLink(selectedPolicy, e)}
-                  title="Copy Direct Link to Clipboard"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#475569' }}
-                >
-                  <FiLink size={14} /> Copy Direct Link
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                <button type="button" onClick={(e) => copyDirectLink(selectedPolicy, e)} title="Copy direct link" aria-label="Copy direct link" className="pms-icon-btn pms-focus" style={roundBtn}>
+                  <FiLink size={14} />
                 </button>
-                <button onClick={closePolicyReader} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', padding: 4 }}>
-                  <FiX size={20} />
+                <button type="button" onClick={closePolicyReader} title="Close" aria-label="Close" className="pms-icon-btn pms-focus" style={roundBtn}>
+                  <FiX size={15} />
                 </button>
               </div>
             </div>
 
-            <div ref={modalContentRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Body */}
+            <div ref={modalContentRef} className="pms-policy-content" style={{ flex: 1, overflowY: 'auto', padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
               {selectedPolicy.summary && (
-                <div style={{ padding: 14, background: 'rgba(194, 7, 26, 0.06)', border: '1px solid rgba(194, 7, 26, 0.2)', borderRadius: 12 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#941018', textTransform: 'uppercase', marginBottom: 4 }}>Executive Overview</div>
-                  <div style={{ fontSize: 13, color: '#334155', lineHeight: 1.5 }}>{selectedPolicy.summary}</div>
+                <div style={{ padding: '14px 16px', background: PMS.ice, border: `1px solid ${PMS.barSoft}`, borderRadius: 16 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: PMS.blue, marginBottom: 4 }}>Executive overview</div>
+                  <div style={{ fontSize: 13, color: PMS.slate, lineHeight: 1.6 }}>{selectedPolicy.summary}</div>
                 </div>
               )}
-
               <div
-                style={{ fontSize: 14, color: '#1e293b', lineHeight: 1.6 }}
+                style={{ fontFamily: PMS.fontBody, fontSize: 14, color: PMS.navy, lineHeight: 1.7 }}
                 dangerouslySetInnerHTML={{ __html: selectedPolicy.content_html }}
               />
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 24, paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#64748b' }}>
-                <FiCalendar size={14} /> Effective: {selectedPolicy.effective_date ? new Date(selectedPolicy.effective_date).toLocaleDateString('en-IN') : 'N/A'}
-              </div>
+            {/* Footer */}
+            <div style={{ padding: '16px 24px', borderTop: `1px solid ${PMS.pillGrey}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, ...T.caption }}>
+                <FiCalendar size={13} /> Effective {fmtDate(selectedPolicy.effective_date)}
+              </span>
               <button
+                type="button"
                 onClick={() => handleDownloadDoc(selectedPolicy)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg, #C2071A, #941018)', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#ffffff', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.35)' }}
+                className="pms-hover-lift pms-focus"
+                style={{ height: 44, padding: '0 22px', borderRadius: 22, border: 'none', background: PMS.gradBlue, color: PMS.white, display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: PMS.fontHead, fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: PMS.shadowCta }}
               >
-                <FiDownload size={15} /> Download Official PDF
+                <FiDownload size={15} /> Download official PDF
               </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

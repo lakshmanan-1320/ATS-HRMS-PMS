@@ -15,7 +15,7 @@ const STATUS_STYLE = {
   PENDING:   { bg: 'rgba(245,158,11,0.12)',  color: '#d97706' },
   APPROVED:  { bg: 'rgba(16,185,129,0.12)', color: '#059669' },
   REJECTED:  { bg: 'rgba(239,68,68,0.12)',  color: '#ef4444' },
-  CANCELLED: { bg: 'rgba(100,116,139,0.12)', color: '#64748b' }
+  CANCELLED: { bg: 'rgba(100,116,139,0.12)', color: '#7D8597' }
 }
 
 const PAGE_SIZE = 10
@@ -30,23 +30,23 @@ function Pagination({ page, total, onChange }) {
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   if (totalPages <= 1) return null
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderTop: '1px solid #f1f5f9' }}>
-      <div style={{ fontSize: '12px', color: '#64748b' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderTop: '1px solid #F1F4F8' }}>
+      <div style={{ fontSize: '12px', color: '#7D8597' }}>
         Showing {Math.min((page - 1) * PAGE_SIZE + 1, total)}–{Math.min(page * PAGE_SIZE, total)} of {total}
       </div>
       <div style={{ display: 'flex', gap: '4px' }}>
         <button onClick={() => onChange(page - 1)} disabled={page === 1}
-          style={{ padding: '5px 10px', border: '1px solid #e2e8f0', borderRadius: '7px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151', cursor: page === 1 ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
+          style={{ padding: '5px 10px', border: '1px solid #E3E7EE', borderRadius: '7px', background: page === 1 ? '#f8fafc' : '#fff', color: page === 1 ? '#cbd5e1' : '#374151', cursor: page === 1 ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
           ← Prev
         </button>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
           <button key={p} onClick={() => onChange(p)}
-            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#C2071A' : '#e2e8f0', background: p === page ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}>
+            style={{ width: '30px', height: '30px', border: '1px solid', borderRadius: '7px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', borderColor: p === page ? '#0466C8' : '#E3E7EE', background: p === page ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#fff', color: p === page ? '#fff' : '#374151' }}>
             {p}
           </button>
         ))}
         <button onClick={() => onChange(page + 1)} disabled={page === totalPages}
-          style={{ padding: '5px 10px', border: '1px solid #e2e8f0', borderRadius: '7px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151', cursor: page === totalPages ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
+          style={{ padding: '5px 10px', border: '1px solid #E3E7EE', borderRadius: '7px', background: page === totalPages ? '#f8fafc' : '#fff', color: page === totalPages ? '#cbd5e1' : '#374151', cursor: page === totalPages ? 'default' : 'pointer', fontSize: '12px', fontWeight: '600' }}>
           Next →
         </button>
       </div>
@@ -58,23 +58,23 @@ const s = {
   page: { display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" },
   main: { flex: 1, padding: '28px 32px', overflowY: 'auto' },
   card: { background: '#ffffff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' },
-  th: { padding: '14px 18px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' },
-  td: { padding: '14px 18px', color: '#1e293b', borderBottom: '1px solid #edf2f7', fontSize: '13px' },
+  th: { padding: '14px 18px', color: '#ffffff', fontWeight: '700', borderBottom: 'none', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', textTransform: 'uppercase', fontSize: '11.5px', letterSpacing: '0.06em' },
+  td: { padding: '14px 18px', color: '#001233', borderBottom: '1px solid #edf2f7', fontSize: '13px' },
   statusBadge: { display: 'inline-block', fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', textTransform: 'uppercase' },
   approveBtn: { padding: '6px 14px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#059669', cursor: 'pointer', marginRight: '8px' },
   rejectBtn:  { padding: '6px 14px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',  borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#ef4444', cursor: 'pointer', marginRight: '8px' },
-  overrideBtn:{ padding: '6px 14px', background: 'rgba(194,7,26,0.1)', border: '1px solid rgba(194,7,26,0.25)',  borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#C2071A', cursor: 'pointer' },
+  overrideBtn:{ padding: '6px 14px', background: 'rgba(4, 102, 200,0.1)', border: '1px solid rgba(4, 102, 200,0.25)',  borderRadius: '8px', fontSize: '12px', fontWeight: '600', color: '#0466C8', cursor: 'pointer' },
   modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
   modal: { background: '#ffffff', border: 'none', borderRadius: '16px', padding: '32px', width: '450px', maxWidth: '90%', boxShadow: '0 10px 30px rgba(0,0,0,0.18)' },
-  modalHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #e8eaf0', paddingBottom: '12px' },
-  closeBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#64748b', cursor: 'pointer' },
-  label: { display: 'block', fontSize: '11px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' },
-  input: { width: '100%', padding: '10px 14px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '13px', color: '#1e293b', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' },
-  submitBtn: { padding: '11px 24px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', width: '100%', marginTop: '10px', boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)' },
+  modalHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #E3E7EE', paddingBottom: '12px' },
+  closeBtn: { background: 'none', border: 'none', fontSize: '20px', color: '#7D8597', cursor: 'pointer' },
+  label: { display: 'block', fontSize: '11px', fontWeight: '700', color: '#7D8597', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  input: { width: '100%', padding: '10px 14px', background: '#ffffff', border: '1px solid #E3E7EE', borderRadius: '10px', fontSize: '13px', color: '#001233', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' },
+  submitBtn: { padding: '11px 24px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', color: '#ffffff', cursor: 'pointer', width: '100%', marginTop: '10px', boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)' },
   error: { color: '#ef4444', fontSize: '12px', marginTop: '6px' },
-  filterBar: { display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', borderBottom: '1px solid #e8eaf0', flexWrap: 'wrap', background: '#fcfcfd' },
-  filterInput: { padding: '7px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#fff', outline: 'none', height: '34px', boxSizing: 'border-box' },
-  tab: (active) => ({ padding: '13px 20px', fontSize: '13px', fontWeight: active ? '700' : '500', color: active ? '#C2071A' : '#64748b', border: 'none', borderBottom: active ? '2.5px solid #C2071A' : '2.5px solid transparent', background: 'none', cursor: 'pointer', marginBottom: '-1px', transition: 'all 0.15s' }),
+  filterBar: { display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', borderBottom: '1px solid #E3E7EE', flexWrap: 'wrap', background: '#fcfcfd' },
+  filterInput: { padding: '7px 12px', border: '1px solid #E3E7EE', borderRadius: '8px', fontSize: '12px', color: '#374151', background: '#fff', outline: 'none', height: '34px', boxSizing: 'border-box' },
+  tab: (active) => ({ padding: '13px 20px', fontSize: '13px', fontWeight: active ? '700' : '500', color: active ? '#0466C8' : '#7D8597', border: 'none', borderBottom: active ? '2.5px solid #0466C8' : '2.5px solid transparent', background: 'none', cursor: 'pointer', marginBottom: '-1px', transition: 'all 0.15s' }),
 }
 
 export default function LeaveApprovals() {
@@ -178,7 +178,7 @@ export default function LeaveApprovals() {
   }
 
   return (
-    <div style={s.page}>
+    <div className="pms-page" style={s.page}>
       <EmployeeSidebar active="leave-approvals" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <EmployeeTopBar title="Leave Approvals" />
@@ -187,13 +187,13 @@ export default function LeaveApprovals() {
           {/* Header */}
           <div style={{ marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#FEECEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FiClock size={20} color="#C2071A" strokeWidth={2.5} />
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#001233', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: '#EEF8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FiClock size={20} color="#0466C8" strokeWidth={2.5} />
                 </div>
                 Leave Approval Board
               </h1>
-              <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>Review, approve, or override leave requests from your direct reports</p>
+              <p style={{ fontSize: '13px', color: '#7D8597', margin: 0, fontWeight: 500 }}>Review, approve, or override leave requests from your direct reports</p>
             </div>
           </div>
 
@@ -209,7 +209,7 @@ export default function LeaveApprovals() {
                 <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: bg, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{icon}</div>
                 <div>
                   <div style={{ fontSize: '26px', fontWeight: '800', color: accent, lineHeight: 1, marginBottom: '3px' }}>{value}</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>{label}</div>
+                  <div style={{ fontSize: '12px', color: '#7D8597', fontWeight: '600' }}>{label}</div>
                 </div>
               </div>
             ))}
@@ -217,7 +217,7 @@ export default function LeaveApprovals() {
 
           {/* Tab Bar */}
           <div style={{ background: '#fff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)' }}>
-            <div style={{ display: 'flex', gap: 0, padding: '0 18px', borderBottom: '1px solid #e8eaf0' }}>
+            <div style={{ display: 'flex', gap: 0, padding: '0 18px', borderBottom: '1px solid #E3E7EE' }}>
               <button style={s.tab(activeTab === 'requests')} onClick={() => setActiveTab('requests')}>
                 Leave Requests ({leaves.length})
               </button>
@@ -246,7 +246,7 @@ export default function LeaveApprovals() {
                   </select>
                   {(fStatus !== 'ALL' || fEmployee) && (
                     <button onClick={() => { setFStatus('ALL'); setFEmployee('') }}
-                      style={{ padding: '6px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#64748b', cursor: 'pointer' }}>
+                      style={{ padding: '6px 12px', border: '1px solid #E3E7EE', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#7D8597', cursor: 'pointer' }}>
                       Clear
                     </button>
                   )}
@@ -272,7 +272,7 @@ export default function LeaveApprovals() {
                     </thead>
                     <tbody>
                       {pagedLeaves.map(r => {
-                        const st = STATUS_STYLE[r.current_status] || { bg: '#f1f5f9', color: '#64748b' }
+                        const st = STATUS_STYLE[r.current_status] || { bg: '#F1F4F8', color: '#7D8597' }
                         return (
                           <tr key={r.leave_request_id}
                             onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
@@ -280,24 +280,24 @@ export default function LeaveApprovals() {
                             style={{ transition: 'background 0.15s' }}
                           >
                             <td style={s.td}>
-                              <div style={{ fontWeight: '700', color: '#0f172a' }}>{r.employee_name}</div>
-                              <div style={{ fontSize: '11px', color: '#64748b' }}>{r.employee_code}</div>
+                              <div style={{ fontWeight: '700', color: '#001233' }}>{r.employee_name}</div>
+                              <div style={{ fontSize: '11px', color: '#7D8597' }}>{r.employee_code}</div>
                             </td>
                             <td style={s.td}>
                               <div style={{ fontWeight: '600' }}>{r.leave_type_name}</div>
-                              {r.session_type !== 'FULL_DAY' && <div style={{ fontSize: '11px', color: '#C2071A' }}>{r.session_type}</div>}
+                              {r.session_type !== 'FULL_DAY' && <div style={{ fontSize: '11px', color: '#0466C8' }}>{r.session_type}</div>}
                             </td>
                             <td style={s.td}>
                               <div>{fmt(r.start_date)}</div>
                               {r.start_date !== r.end_date && <div style={{ fontSize: '11px', color: '#94a3b8' }}>→ {fmt(r.end_date)}</div>}
                             </td>
-                            <td style={{ ...s.td, fontWeight: '700', color: '#0f172a' }}>{parseFloat(r.total_leave_days)}</td>
+                            <td style={{ ...s.td, fontWeight: '700', color: '#001233' }}>{parseFloat(r.total_leave_days)}</td>
                             <td style={s.td}>
                               <div style={{ maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.leave_reason || '—'}</div>
                               {r.attachment_url && (
                                 <a href={r.attachment_url} target="_blank" rel="noopener noreferrer"
-                                  style={{ color: '#C2071A', textDecoration: 'none', fontSize: '11px', fontWeight: '600', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                  <FiLink size={12} color="#C2071A" /> Attachment
+                                  style={{ color: '#0466C8', textDecoration: 'none', fontSize: '11px', fontWeight: '600', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <FiLink size={12} color="#0466C8" /> Attachment
                                 </a>
                               )}
                             </td>
@@ -346,13 +346,13 @@ export default function LeaveApprovals() {
                   />
                   {(ohEmployee || ohHoliday) && (
                     <button onClick={() => { setOhEmployee(''); setOhHoliday('') }}
-                      style={{ padding: '6px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#64748b', cursor: 'pointer' }}>
+                      style={{ padding: '6px 12px', border: '1px solid #E3E7EE', borderRadius: '8px', background: '#fff', fontSize: '12px', color: '#7D8597', cursor: 'pointer' }}>
                       Clear
                     </button>
                   )}
                   <button onClick={loadTeamOH}
-                    style={{ padding: '6px 14px', border: '1px solid rgba(194,7,26,0.3)', borderRadius: '8px', background: 'rgba(194,7,26,0.06)', fontSize: '12px', fontWeight: '600', color: '#C2071A', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <FiRefreshCw size={13} color="#C2071A" /> Refresh
+                    style={{ padding: '6px 14px', border: '1px solid rgba(4, 102, 200,0.3)', borderRadius: '8px', background: 'rgba(4, 102, 200,0.06)', fontSize: '12px', fontWeight: '600', color: '#0466C8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <FiRefreshCw size={13} color="#0466C8" /> Refresh
                   </button>
                   <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#94a3b8', fontWeight: '600', whiteSpace: 'nowrap' }}>
                     {teamOHUniqueEmpCount} employee{teamOHUniqueEmpCount !== 1 ? 's' : ''} · {teamOH.length} avail{teamOH.length !== 1 ? 's' : ''}
@@ -394,23 +394,23 @@ export default function LeaveApprovals() {
                           style={{ transition: 'background 0.15s' }}
                         >
                           <td style={s.td}>
-                            <div style={{ fontWeight: '700', color: '#0f172a' }}>{r.employee_name}</div>
-                            <div style={{ fontSize: '11px', color: '#64748b' }}>{r.employee_code}</div>
+                            <div style={{ fontWeight: '700', color: '#001233' }}>{r.employee_name}</div>
+                            <div style={{ fontSize: '11px', color: '#7D8597' }}>{r.employee_code}</div>
                           </td>
                           <td style={{ ...s.td, fontWeight: '600' }}>
                             <div>{r.holiday_name}</div>
                             {r.description && <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{r.description}</div>}
                           </td>
                           <td style={s.td}>{r.holiday_date ? r.holiday_date.split('T')[0] : '—'}</td>
-                          <td style={{ ...s.td, color: '#64748b' }}>
+                          <td style={{ ...s.td, color: '#7D8597' }}>
                             {r.holiday_date ? new Date(r.holiday_date.split('T')[0] + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }) : '—'}
                           </td>
                           <td style={s.td}>
-                            <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '6px', background: 'rgba(194,7,26,0.08)', color: '#C2071A', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(194,7,26,0.2)' }}>
+                            <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '6px', background: 'rgba(4, 102, 200,0.08)', color: '#0466C8', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(4, 102, 200,0.2)' }}>
                               FY {r.leave_year}
                             </span>
                           </td>
-                          <td style={{ ...s.td, color: '#64748b' }}>{fmt(r.availed_at)}</td>
+                          <td style={{ ...s.td, color: '#7D8597' }}>{fmt(r.availed_at)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -428,10 +428,10 @@ export default function LeaveApprovals() {
           <div style={s.modalOverlay} onClick={() => setModalOpen(false)}>
             <div style={s.modal} onClick={e => e.stopPropagation()}>
               <div style={s.modalHeader}>
-                <h3 style={{ margin: 0, color: '#0f172a', fontSize: '17px', fontWeight: '700', textTransform: 'capitalize' }}>
+                <h3 style={{ margin: 0, color: '#001233', fontSize: '17px', fontWeight: '700', textTransform: 'capitalize' }}>
                   {actionType} Request — {selectedReq?.employee_name}
                 </h3>
-                <button style={s.closeBtn} onClick={() => setModalOpen(false)}><FiX size={18} color="#64748b" /></button>
+                <button style={s.closeBtn} onClick={() => setModalOpen(false)}><FiX size={18} color="#7D8597" /></button>
               </div>
               <form onSubmit={handleActionSubmit}>
                 <div style={{ marginBottom: '16px' }}>
@@ -453,7 +453,7 @@ export default function LeaveApprovals() {
                 <button style={{
                   ...s.submitBtn,
                   background: actionType === 'reject' ? 'linear-gradient(135deg,#ef4444,#dc2626)'
-                    : actionType === 'cancel' ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)'
+                    : actionType === 'cancel' ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)'
                     : 'linear-gradient(135deg,#10b981,#059669)'
                 }} type="submit">
                   Confirm {actionType}

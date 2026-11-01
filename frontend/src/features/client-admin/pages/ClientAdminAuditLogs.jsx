@@ -53,14 +53,14 @@ function getBadgeStyle(action) {
   if (a.includes('login'))
     return { bg: '#e8fbf0', color: '#0fa958', border: 'none', label: 'Login' }
   if (a.includes('delete') || a.includes('remove'))
-    return { bg: '#feecee', color: '#dc2626', border: 'none', label: 'Delete' }
+    return { bg: '#EEF8FF', color: '#dc2626', border: 'none', label: 'Delete' }
   if (a.includes('update') || a.includes('edit') || a.includes('changed') || a.includes('modified'))
     return { bg: '#fef3c7', color: '#d97706', border: 'none', label: 'Update' }
   if (a.includes('create') || a.includes('import') || a.includes('add'))
-    return { bg: 'rgba(194, 7, 26, 0.08)', color: 'var(--primary-color, #C2071A)', border: 'none', label: 'Create' }
+    return { bg: 'rgba(4, 102, 200, 0.08)', color: 'var(--primary-color, #0466C8)', border: 'none', label: 'Create' }
   if (a.includes('logout') || a.includes('password') || a.includes('security'))
     return { bg: '#f3e8ff', color: '#7c3aed', border: 'none', label: 'Security' }
-  return { bg: '#f1f5f9', color: '#64748b', border: 'none', label: 'Other' }
+  return { bg: '#F1F4F8', color: '#7D8597', border: 'none', label: 'Other' }
 }
 
 function fmtDate(d) {
@@ -163,7 +163,7 @@ export default function ClientAdminAuditLogs() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#111827', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa', color: '#111827', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="audit" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
@@ -189,7 +189,7 @@ export default function ClientAdminAuditLogs() {
                 <button
                   onClick={() => load(page)}
                   disabled={loading}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 22px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(194, 7, 26, 0.25)', opacity: loading ? 0.7 : 1, transition: 'all 0.2s ease' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '11px 22px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 14px rgba(4, 102, 200, 0.25)', opacity: loading ? 0.7 : 1, transition: 'all 0.2s ease' }}
                   onMouseEnter={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(-1px)'; }}
                   onMouseLeave={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
@@ -203,10 +203,10 @@ export default function ClientAdminAuditLogs() {
           {/* Borderless Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total Events',    value: total,             icon: <FiList size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { label: 'Login Events',    value: pageCounts.login,  icon: <FiLogIn size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { label: 'Data Changes',    value: pageCounts.create + pageCounts.update, icon: <FiEdit size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
-              { label: 'Security Events', value: pageCounts.security, icon: <FiAlertTriangle size={24} style={{ color: 'var(--primary-color, #C2071A)', stroke: 'var(--primary-color, #C2071A)' }} strokeWidth={1.75} /> },
+              { label: 'Total Events',    value: total,             icon: <FiList size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { label: 'Login Events',    value: pageCounts.login,  icon: <FiLogIn size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { label: 'Data Changes',    value: pageCounts.create + pageCounts.update, icon: <FiEdit size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
+              { label: 'Security Events', value: pageCounts.security, icon: <FiAlertTriangle size={24} style={{ color: 'var(--primary-color, #0466C8)', stroke: 'var(--primary-color, #0466C8)' }} strokeWidth={1.75} /> },
             ].map(({ label, value, icon }) => (
               <div key={label} style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '20px 22px', boxShadow: cardShadow, display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -224,7 +224,7 @@ export default function ClientAdminAuditLogs() {
           <div style={{ background: '#ffffff', border: 'none', borderRadius: '16px', padding: '16px 20px', marginBottom: '16px', boxShadow: cardShadow }}>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
               {/* Search */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9px', padding: '0 11px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '0 1 260px', minWidth: '180px', maxWidth: '260px', background: '#f8fafc', border: '1px solid #E3E7EE', borderRadius: '9px', padding: '0 11px' }}>
                 <button
                   onClick={applySearch}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', display: 'flex', padding: 0 }}>
@@ -258,7 +258,7 @@ export default function ClientAdminAuditLogs() {
               {/* Advanced toggle */}
               <button
                 onClick={() => setShowAdvanced(v => !v)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 14px', background: showAdvanced || hasAdvancedFilters ? 'rgba(194, 7, 26, 0.08)' : '#ffffff', border: 'none', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? 'var(--primary-color, #C2071A)' : '#374151', cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 14px', background: showAdvanced || hasAdvancedFilters ? 'rgba(4, 102, 200, 0.08)' : '#ffffff', border: 'none', boxShadow: '0 2px 6px rgba(0,0,0,0.04)', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: showAdvanced || hasAdvancedFilters ? 'var(--primary-color, #0466C8)' : '#374151', cursor: 'pointer', fontFamily: 'inherit' }}>
                 <FiFilter size={13} />
                 Advanced {hasAdvancedFilters ? '•' : ''}
                 {showAdvanced ? <FiChevronUp size={12} /> : <FiChevronDown size={12} />}
@@ -266,7 +266,7 @@ export default function ClientAdminAuditLogs() {
 
               {hasAnyFilter && (
                 <button onClick={resetAll}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '9px 14px', background: '#feecee', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#dc2626', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '9px 14px', background: '#EEF8FF', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#dc2626', cursor: 'pointer', fontFamily: 'inherit' }}>
                   <FiX size={12} /> Clear All
                 </button>
               )}
@@ -280,7 +280,7 @@ export default function ClientAdminAuditLogs() {
 
             {/* Advanced filters */}
             {showAdvanced && (
-              <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #F1F4F8', display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <label style={{ fontSize: '11px', fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Action Type</label>
                   <select value={actionFilter} onChange={e => { setActionFilter(e.target.value); setPage(1) }}
@@ -302,7 +302,7 @@ export default function ClientAdminAuditLogs() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     <label style={{ fontSize: '11px', color: 'transparent' }}>&nbsp;</label>
                     <button onClick={() => { setActionFilter(''); setFromDate(''); setToDate(''); setPage(1) }}
-                      style={{ padding: '9px 14px', background: '#feecee', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#dc2626', cursor: 'pointer', fontFamily: 'inherit' }}>
+                      style={{ padding: '9px 14px', background: '#EEF8FF', border: 'none', borderRadius: '10px', fontSize: '12px', fontWeight: '700', color: '#dc2626', cursor: 'pointer', fontFamily: 'inherit' }}>
                       Reset
                     </button>
                   </div>
@@ -329,9 +329,9 @@ export default function ClientAdminAuditLogs() {
                   style={{
                     padding: '7px 16px', borderRadius: '20px',
                     border: 'none',
-                    background: active ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#ffffff',
+                    background: active ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#ffffff',
                     color: active ? '#ffffff' : '#4b5563',
-                    boxShadow: active ? '0 4px 12px rgba(194, 7, 26, 0.25)' : '0 2px 6px rgba(0, 0, 0, 0.04)',
+                    boxShadow: active ? '0 4px 12px rgba(4, 102, 200, 0.25)' : '0 2px 6px rgba(0, 0, 0, 0.04)',
                     fontSize: '12px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'inherit'
                   }}>
                   {o.label}
@@ -344,14 +344,14 @@ export default function ClientAdminAuditLogs() {
           <div style={{ background: '#ffffff', border: 'none', borderRadius: '16px', overflow: 'hidden', boxShadow: cardShadow }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTopColor: 'var(--primary-color, #C2071A)', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 40, height: 40, border: '3px solid #E3E7EE', borderTopColor: 'var(--primary-color, #0466C8)', borderRadius: '50%', margin: '0 auto 14px', animation: 'spin 0.8s linear infinite' }} />
                 <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: '600' }}>Loading audit logs…</div>
               </div>
             ) : error ? (
               <div style={{ padding: '60px', textAlign: 'center' }}>
                 <FiAlertTriangle size={36} color="#dc2626" style={{ marginBottom: 10 }} />
                 <div style={{ color: '#dc2626', fontSize: '14px', fontWeight: '700', marginBottom: 12 }}>{error}</div>
-                <button onClick={() => load(page)} style={{ padding: '10px 22px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit' }}>
+                <button onClick={() => load(page)} style={{ padding: '10px 22px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit' }}>
                   Retry
                 </button>
               </div>
@@ -364,7 +364,7 @@ export default function ClientAdminAuditLogs() {
                   {hasAnyFilter ? 'No events match the current filters' : 'No audit events recorded yet'}
                 </div>
                 {hasAnyFilter && (
-                  <span onClick={resetAll} style={{ color: 'var(--primary-color, #C2071A)', fontSize: '13px', cursor: 'pointer', fontWeight: '700', textDecoration: 'underline' }}>
+                  <span onClick={resetAll} style={{ color: 'var(--primary-color, #0466C8)', fontSize: '13px', cursor: 'pointer', fontWeight: '700', textDecoration: 'underline' }}>
                     Clear all filters
                   </span>
                 )}
@@ -373,7 +373,7 @@ export default function ClientAdminAuditLogs() {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                    <tr style={{ background: '#f8fafc', borderBottom: '1px solid #F1F4F8' }}>
                       {['Timestamp', 'Actor', 'Action', 'Target', 'IP Address', 'Details'].map(h => (
                         <th key={h} style={{ padding: '14px 18px', color: '#6b7280', fontWeight: '700', textAlign: 'left', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
@@ -385,7 +385,7 @@ export default function ClientAdminAuditLogs() {
                       return (
                         <tr
                           key={log.id}
-                          style={{ borderBottom: idx < logs.length - 1 ? '1px solid #f1f5f9' : 'none', transition: 'background 0.15s', cursor: 'pointer' }}
+                          style={{ borderBottom: idx < logs.length - 1 ? '1px solid #F1F4F8' : 'none', transition: 'background 0.15s', cursor: 'pointer' }}
                           onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
                           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                           onClick={() => setActiveLog(log)}
@@ -397,7 +397,7 @@ export default function ClientAdminAuditLogs() {
                             </div>
                           </td>
                           <td style={{ padding: '16px 18px' }}>
-                            <div style={{ fontSize: '12px', color: 'var(--primary-color, #C2071A)', fontFamily: 'monospace', fontWeight: '700' }}>{log.actor_email || '—'}</div>
+                            <div style={{ fontSize: '12px', color: 'var(--primary-color, #0466C8)', fontFamily: 'monospace', fontWeight: '700' }}>{log.actor_email || '—'}</div>
                             {log.actor_role && (
                               <div style={{ fontSize: '10px', color: '#6b7280', marginTop: 2, textTransform: 'capitalize' }}>{log.actor_role.replace(/_/g, ' ')}</div>
                             )}
@@ -426,10 +426,10 @@ export default function ClientAdminAuditLogs() {
                             <button
                               onClick={e => { e.stopPropagation(); setActiveLog(log) }}
                               style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '6px 12px', background: '#f8fafc', color: '#111827', border: 'none', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s' }}
-                              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(194, 7, 26, 0.08)'; e.currentTarget.style.color = 'var(--primary-color, #C2071A)'; }}
+                              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(4, 102, 200, 0.08)'; e.currentTarget.style.color = 'var(--primary-color, #0466C8)'; }}
                               onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.color = '#111827'; }}
                             >
-                              <FiEye size={13} style={{ color: 'var(--primary-color, #C2071A)' }} /> View
+                              <FiEye size={13} style={{ color: 'var(--primary-color, #0466C8)' }} /> View
                             </button>
                           </td>
                         </tr>
@@ -459,7 +459,7 @@ export default function ClientAdminAuditLogs() {
                     <span key={`d${i}`} style={{ padding: '6px 8px', color: '#9ca3af', fontSize: '13px' }}>…</span>
                   ) : (
                     <button key={p} onClick={() => setPage(p)}
-                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: 'none', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg, #C2071A 0%, #900513 100%)' : '#ffffff', color: page === p ? '#ffffff' : '#374151', boxShadow: page === p ? '0 4px 12px rgba(194, 7, 26, 0.25)' : '0 2px 6px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>
+                      style={{ width: '34px', height: '34px', borderRadius: '8px', fontSize: '13px', fontWeight: page === p ? '800' : '600', border: 'none', cursor: 'pointer', background: page === p ? 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)' : '#ffffff', color: page === p ? '#ffffff' : '#374151', boxShadow: page === p ? '0 4px 12px rgba(4, 102, 200, 0.25)' : '0 2px 6px rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>
                       {p}
                     </button>
                   )
@@ -488,9 +488,9 @@ export default function ClientAdminAuditLogs() {
             style={{ background: '#ffffff', borderRadius: '16px', border: 'none', padding: '28px', width: '560px', maxWidth: '100%', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)', overflowY: 'auto', maxHeight: '90vh', fontFamily: "'Inter', sans-serif" }}
             onClick={e => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #F1F4F8', paddingBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <FiShield size={18} color="var(--primary-color, #C2071A)" />
+                <FiShield size={18} color="var(--primary-color, #0466C8)" />
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#111827' }}>Event Details</h3>
               </div>
               <button
@@ -505,7 +505,7 @@ export default function ClientAdminAuditLogs() {
                 {[
                   { label: 'Timestamp',  value: fmtDate(activeLog.created_at) },
                   { label: 'IP Address', value: activeLog.ip_address || '—' },
-                  { label: 'Actor',      value: activeLog.actor_email || '—', mono: true, color: 'var(--primary-color, #C2071A)' },
+                  { label: 'Actor',      value: activeLog.actor_email || '—', mono: true, color: 'var(--primary-color, #0466C8)' },
                   { label: 'Role',       value: activeLog.actor_role?.replace(/_/g, ' ') || '—' },
                   { label: 'Target',     value: activeLog.target || '—' },
                 ].map(({ label, value, mono, color }) => (

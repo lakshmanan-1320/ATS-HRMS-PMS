@@ -50,9 +50,9 @@ function CodeBadge({ code }) {
   if (!code || code === '—') return <span style={{ color: '#94a3b8' }}>—</span>
   return (
     <span style={{
-      background: '#f1f5f9', color: '#334155', padding: '3px 8px',
+      background: '#F1F4F8', color: '#33415C', padding: '3px 8px',
       borderRadius: 6, fontSize: 11.5, fontWeight: 700, fontFamily: 'monospace',
-      border: '1px solid #e2e8f0', letterSpacing: '0.03em', display: 'inline-block'
+      border: '1px solid #E3E7EE', letterSpacing: '0.03em', display: 'inline-block'
     }}>
       {code}
     </span>
@@ -63,7 +63,7 @@ function CodeBadge({ code }) {
 function StatusBadge({ status }) {
   const cfg = status === 'present'
     ? { bg: '#e8fbf0', color: '#0fa958', dot: '#10b981', label: 'Present' }
-    : { bg: '#feecee', color: '#dc2626', dot: '#ef4444', label: 'Absent' }
+    : { bg: '#EEF8FF', color: '#dc2626', dot: '#ef4444', label: 'Absent' }
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -78,8 +78,8 @@ function StatusBadge({ status }) {
 }
 
 function LocationStatusBadge({ status }) {
-  let bg = '#f1f5f9'
-  let color = '#64748b'
+  let bg = '#F1F4F8'
+  let color = '#7D8597'
   let label = 'Location Not Verified'
 
   if (status === 'INSIDE_FENCE') {
@@ -87,7 +87,7 @@ function LocationStatusBadge({ status }) {
     color = '#0fa958'
     label = 'Inside Fence'
   } else if (status === 'OUTSIDE_FENCE') {
-    bg = '#feecee'
+    bg = '#EEF8FF'
     color = '#dc2626'
     label = 'Outside Fence'
   }
@@ -236,13 +236,13 @@ export default function ClientAdminAttendanceTracking() {
   const pagination = adminOverview?.pagination || { totalCount: 0, totalPages: 1 }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+    <div className="pms-page" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
       <ClientAdminSidebar active="attendance-tracking" />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <ClientAdminTopBar />
 
-        <div style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
+        <div className="pms-content" style={{ flex: 1, padding: '28px 32px', overflowY: 'auto' }}>
           
           {/* Header */}
           <PageHeader
@@ -273,10 +273,10 @@ export default function ClientAdminAttendanceTracking() {
                   onClick={loadOverview}
                   style={{
                     display: 'flex', alignItems: 'center', gap: '7px',
-                    padding: '9px 16px', background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)',
+                    padding: '9px 16px', background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)',
                     color: '#ffffff', border: 'none', borderRadius: '10px',
                     fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-                    boxShadow: '0 3px 10px rgba(194, 7, 26, 0.25)',
+                    boxShadow: '0 3px 10px rgba(4, 102, 200, 0.25)',
                     fontFamily: "'Inter', sans-serif"
                   }}
                 >
@@ -301,13 +301,13 @@ export default function ClientAdminAttendanceTracking() {
               flexDirection: 'column',
               gap: '16px'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <FiFilter size={14} color="#C2071A" strokeWidth={2.5} /> Filters
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F1F4F8', paddingBottom: '12px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 800, color: '#001233', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FiFilter size={14} color="#0466C8" strokeWidth={2.5} /> Filters
                 </span>
                 <button
                   onClick={clearFilters}
-                  style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+                  style={{ background: 'none', border: 'none', color: '#7D8597', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
                 >
                   Reset All
                 </button>
@@ -315,28 +315,28 @@ export default function ClientAdminAttendanceTracking() {
 
               {/* Date Pickers */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date Range</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date Range</label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={e => { setStartDate(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
                 />
                 <input
                   type="date"
                   value={endDate}
                   onChange={e => { setEndDate(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
                 />
               </div>
 
               {/* Department */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Department</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Department</label>
                 <select
                   value={selectedDept}
                   onChange={e => { setSelectedDept(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
                 >
                   <option value="">All Departments</option>
                   {departments.map(d => (
@@ -347,11 +347,11 @@ export default function ClientAdminAttendanceTracking() {
 
               {/* Policy */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Policy</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Policy</label>
                 <select
                   value={selectedPolicy}
                   onChange={e => { setSelectedPolicy(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
                 >
                   <option value="">All Policies</option>
                   {policies.map(p => (
@@ -362,11 +362,11 @@ export default function ClientAdminAttendanceTracking() {
 
               {/* Shift */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shift</label>
                 <select
                   value={selectedShift}
                   onChange={e => { setSelectedShift(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
                 >
                   <option value="">All Shifts</option>
                   {shifts.map(s => (
@@ -377,11 +377,11 @@ export default function ClientAdminAttendanceTracking() {
 
               {/* Result */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Result</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Result</label>
                 <select
                   value={selectedResult}
                   onChange={e => { setSelectedResult(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
                 >
                   <option value="">All Results</option>
                   <option value="PRESENT">PRESENT</option>
@@ -396,11 +396,11 @@ export default function ClientAdminAttendanceTracking() {
 
               {/* Location Status */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location Status</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#33415C', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location Status</label>
                 <select
                   value={selectedLocation}
                   onChange={e => { setSelectedLocation(e.target.value); resetPageAndFilter() }}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}
                 >
                   <option value="">All Statuses</option>
                   <option value="INSIDE_FENCE">INSIDE_FENCE</option>
@@ -429,7 +429,7 @@ export default function ClientAdminAttendanceTracking() {
                     onChange={e => { setSearch(e.target.value); resetPageAndFilter() }}
                     style={{
                       width: '100%', paddingLeft: '34px', padding: '8px 12px 8px 34px',
-                      borderRadius: '10px', border: '1.5px solid #e2e8f0', background: '#f8fafc',
+                      borderRadius: '10px', border: '1.5px solid #E3E7EE', background: '#f8fafc',
                       fontSize: '13px', boxSizing: 'border-box'
                     }}
                   />
@@ -437,7 +437,7 @@ export default function ClientAdminAttendanceTracking() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{
-                    background: '#FEECEE', color: '#C2071A', padding: '5px 14px',
+                    background: '#EEF8FF', color: '#0466C8', padding: '5px 14px',
                     borderRadius: 20, fontWeight: 700, fontSize: 11.5, letterSpacing: '0.02em',
                   }}>
                     {pagination.totalCount || records.length} records found
@@ -446,10 +446,10 @@ export default function ClientAdminAttendanceTracking() {
               </div>
 
               {/* Main Log Table */}
-              <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
+              <div style={{ overflowX: 'auto', borderRadius: '14px', border: '1px solid #E3E7EE', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', background: '#ffffff' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ background: 'linear-gradient(135deg, #C2071A 0%, #900513 100%)', color: '#ffffff', textAlign: 'left' }}>
+                    <tr style={{ background: 'linear-gradient(135deg, #0466C8 0%, #023E7D 100%)', color: '#ffffff', textAlign: 'left' }}>
                       <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Employee</th>
                       <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Code</th>
                       <th style={{ padding: '14px 16px', fontWeight: 700, fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Shift & Policy</th>
@@ -464,7 +464,7 @@ export default function ClientAdminAttendanceTracking() {
                   <tbody>
                     {loadingOverview ? (
                       <tr>
-                        <td colSpan={9} style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>
+                        <td colSpan={9} style={{ padding: '40px', textAlign: 'center', color: '#7D8597' }}>
                           Loading tracking records...
                         </td>
                       </tr>
@@ -485,13 +485,13 @@ export default function ClientAdminAttendanceTracking() {
                             cursor: 'pointer',
                             transition: 'background 0.15s ease'
                           }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                          onMouseEnter={e => e.currentTarget.style.background = '#F1F4F8'}
                           onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : '#fafafa'}
                         >
                           {/* Employee Name */}
-                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#0f172a' }}>
+                          <td style={{ padding: '14px 16px', fontWeight: 700, color: '#001233' }}>
                             {r.first_name} {r.last_name}
-                            <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 500 }}>{r.department || 'No Dept'}</span>
+                            <span style={{ fontSize: '11px', color: '#7D8597', display: 'block', fontWeight: 500 }}>{r.department || 'No Dept'}</span>
                           </td>
 
                           {/* Code */}
@@ -501,22 +501,22 @@ export default function ClientAdminAttendanceTracking() {
 
                           {/* Shift & Policy */}
                           <td style={{ padding: '14px 16px' }}>
-                            <div style={{ fontWeight: 600, color: '#1e293b' }}>{r.shift_name || 'Standard Shift'}</div>
-                            <div style={{ fontSize: '11px', color: '#64748b' }}>{r.policy_name || 'Default Policy'}</div>
+                            <div style={{ fontWeight: 600, color: '#001233' }}>{r.shift_name || 'Standard Shift'}</div>
+                            <div style={{ fontSize: '11px', color: '#7D8597' }}>{r.policy_name || 'Default Policy'}</div>
                           </td>
 
                           {/* Check In */}
-                          <td style={{ padding: '14px 16px', color: '#0f172a', fontWeight: 600 }}>
+                          <td style={{ padding: '14px 16px', color: '#001233', fontWeight: 600 }}>
                             {formatTime(r.check_in_time)}
                           </td>
 
                           {/* Check Out */}
-                          <td style={{ padding: '14px 16px', color: '#0f172a', fontWeight: 600 }}>
+                          <td style={{ padding: '14px 16px', color: '#001233', fontWeight: 600 }}>
                             {formatTime(r.check_out_time)}
                           </td>
 
                           {/* Duration */}
-                          <td style={{ padding: '14px 16px', fontWeight: 600, color: '#475569' }}>
+                          <td style={{ padding: '14px 16px', fontWeight: 600, color: '#33415C' }}>
                             {formatDuration(r.work_duration_minutes)}
                           </td>
 
@@ -524,7 +524,7 @@ export default function ClientAdminAttendanceTracking() {
                           <td style={{ padding: '14px 16px' }}>
                             <span style={{
                               padding: '4px 9px', borderRadius: '6px', fontSize: '11px', fontWeight: 700,
-                              background: r.attendance_result === 'PRESENT' ? '#e8fbf0' : r.attendance_result === 'LATE_ARRIVAL' ? '#fef3c7' : '#feecee',
+                              background: r.attendance_result === 'PRESENT' ? '#e8fbf0' : r.attendance_result === 'LATE_ARRIVAL' ? '#fef3c7' : '#EEF8FF',
                               color: r.attendance_result === 'PRESENT' ? '#0fa958' : r.attendance_result === 'LATE_ARRIVAL' ? '#d97706' : '#dc2626'
                             }}>
                               {r.attendance_result || 'PENDING'}
@@ -550,7 +550,7 @@ export default function ClientAdminAttendanceTracking() {
               {/* Pagination Controls */}
               {pagination.totalPages > 1 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
+                  <span style={{ fontSize: '12px', color: '#7D8597', fontWeight: 600 }}>
                     Page {page} of {pagination.totalPages}
                   </span>
 
@@ -558,7 +558,7 @@ export default function ClientAdminAttendanceTracking() {
                     <button
                       onClick={() => setPage(p => Math.max(1, p - 1))}
                       disabled={page === 1}
-                      style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}
+                      style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#F1F4F8', cursor: 'pointer', opacity: page === 1 ? 0.4 : 1 }}
                     >
                       <FiChevronLeft size={16} />
                     </button>
@@ -566,7 +566,7 @@ export default function ClientAdminAttendanceTracking() {
                     <button
                       onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
                       disabled={page === pagination.totalPages}
-                      style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', opacity: page === pagination.totalPages ? 0.4 : 1 }}
+                      style={{ padding: '8px 12px', borderRadius: '8px', border: 'none', background: '#F1F4F8', cursor: 'pointer', opacity: page === pagination.totalPages ? 0.4 : 1 }}
                     >
                       <FiChevronRight size={16} />
                     </button>

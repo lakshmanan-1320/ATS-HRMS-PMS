@@ -13,6 +13,7 @@ async function start() {
       // Auto-seed: always run idempotent seeds in development mode
       // Seeders are designed to skip existing data (upsert/check-before-insert)
       const { query } = require('./config/db');
+      let tablesExist = true;
       try {
         const res = await query('SELECT COUNT(*) FROM client_admins');
         if (parseInt(res.rows[0].count) === 0) {
@@ -20,10 +21,20 @@ async function start() {
         } else {
           logger.info('Ensuring seed data is up to date...');
         }
-        const runSeeds = require('./database/runSeeds');
-        await runSeeds();
       } catch (err) {
-        logger.info('Database tables may not exist. Running full reset and seed...');
+        tablesExist = false;
+      }
+
+      if (tablesExist) {
+        // A seeder failure must never trigger a reset: resetDB drops the whole schema.
+        try {
+          const runSeeds = require('./database/runSeeds');
+          await runSeeds();
+        } catch (seedErr) {
+          logger.error('Seeding failed (non-fatal, existing data kept):', seedErr.message);
+        }
+      } else {
+        logger.info('Database tables do not exist. Running full reset and seed...');
         try {
           const resetDB = require('./database/resetDB');
           await resetDB();

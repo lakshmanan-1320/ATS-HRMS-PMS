@@ -40,8 +40,8 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
       key: 'employee',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#1e293b' }}>{r.employee_name || 'Unassigned'}</div>
-          <div style={{ fontSize: 11, color: '#64748b' }}>{r.employee_designation || 'Team Member'}</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#001233' }}>{r.employee_name || 'Unassigned'}</div>
+          <div style={{ fontSize: 11, color: '#7D8597' }}>{r.employee_designation || 'Team Member'}</div>
         </div>
       )
     },
@@ -50,8 +50,8 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
       key: 'goal',
       render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, color: '#6366f1' }}>{r.title}</div>
-          {r.description && <div style={{ fontSize: 11, color: '#64748b', maxLines: 1 }}>{r.description}</div>}
+          <div style={{ fontWeight: 700, fontSize: 13, color: '#0466C8' }}>{r.title}</div>
+          {r.description && <div style={{ fontSize: 11, color: '#7D8597', maxLines: 1 }}>{r.description}</div>}
         </div>
       )
     },
@@ -153,9 +153,9 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
       {/* 2. Coaching Stats Summary Bar */}
       <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Development Goals</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Development Goals</span>}
               value={stats?.total_development_goals || 0}
               valueStyle={{ color: '#0f766e', fontWeight: 800, fontSize: 22 }}
               prefix={<MessageOutlined style={{ marginRight: 6 }} />}
@@ -163,9 +163,9 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Pending Actions</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Pending Actions</span>}
               value={stats?.pending_action_items || 0}
               valueStyle={{ color: '#b45309', fontWeight: 800, fontSize: 22 }}
               prefix={<ClockCircleOutlined style={{ marginRight: 6 }} />}
@@ -173,9 +173,9 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Praise Badges Awarded</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Praise Badges Awarded</span>}
               value={stats?.praise_sent || 0}
               valueStyle={{ color: '#166534', fontWeight: 800, fontSize: 22 }}
               prefix={<TrophyOutlined style={{ marginRight: 6 }} />}
@@ -183,11 +183,11 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
           </Card>
         </Col>
         <Col span={6}>
-          <Card size="small" style={{ borderRadius: 12, border: '1px solid #e2e8f0' }}>
+          <Card size="small" style={{ borderRadius: 12, border: '1px solid #E3E7EE' }}>
             <Statistic
-              title={<span style={{ fontSize: 12, color: '#64748b', fontWeight: 600 }}>Coaching Notes Added</span>}
+              title={<span style={{ fontSize: 12, color: '#7D8597', fontWeight: 600 }}>Coaching Notes Added</span>}
               value={stats?.feedback_given || 0}
-              valueStyle={{ color: '#6366f1', fontWeight: 800, fontSize: 22 }}
+              valueStyle={{ color: '#0466C8', fontWeight: 800, fontSize: 22 }}
               prefix={<CheckCircleOutlined style={{ marginRight: 6 }} />}
             />
           </Card>
@@ -198,13 +198,13 @@ export default function ContinuousFeedbackReviewsPage({ onSelectGoal }) {
       <Card
         title={
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 800, fontSize: 15, color: '#1e293b' }}>
+            <span style={{ fontWeight: 800, fontSize: 15, color: '#001233' }}>
               💬 Development Goals & Coaching Streams ({goals.length})
             </span>
             <Button size="small" onClick={loadData}>Refresh</Button>
           </div>
         }
-        style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}
+        style={{ borderRadius: 14, border: '1px solid #E3E7EE' }}
       >
         <Table
           dataSource={goals}
