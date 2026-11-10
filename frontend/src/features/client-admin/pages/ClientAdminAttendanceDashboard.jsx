@@ -243,7 +243,7 @@ export default function ClientAdminAttendanceDashboard() {
                 Real-time tracking, metrics and compliance logs · {formatDisplayDate(selectedDate)}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px 24px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px 24px', flexWrap: 'wrap', minWidth: 0, maxWidth: '100%' }}>
               <SegmentTabs tabs={PERIODS} value={activeFilter} onChange={setActiveFilter} label="Attendance period" />
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 42, padding: '0 18px', background: PMS.white, border: `1px solid ${PMS.border}`, borderRadius: 21, fontSize: 12, color: PMS.navy, whiteSpace: 'nowrap', boxSizing: 'border-box' }}>
                 <FiCalendar size={13} /> {dateChip}

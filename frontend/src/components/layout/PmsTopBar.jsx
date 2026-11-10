@@ -120,7 +120,7 @@ export default function PmsTopBar({
             <img className="pms-show-sm" src="/pms/insight-technology-mark.svg" alt="Insight Technology" style={{ height: '36px', width: 'auto' }} />
           </button>
           {showTitle && (
-            <div className="pms-hide-sm" style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0 }}>
+            <div className="pms-topbar-title" style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0 }}>
               <span style={{ width: '1px', height: '28px', background: PMS.border, flexShrink: 0 }} />
               <span style={{ fontSize: '15px', fontWeight: 700, color: PMS.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</span>
             </div>

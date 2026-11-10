@@ -38,8 +38,8 @@ export default function QuickActionsWidget({ className }) {
                 <Icon size={15} />
               </span>
               <span style={{ minWidth: 0 }}>
-                <span style={{ display: 'block', fontFamily: PMS.fontHead, fontSize: '12px', fontWeight: 600, color: PMS.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</span>
-                <span style={{ display: 'block', ...T.small, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{subtitle}</span>
+                <span style={{ display: 'block', fontFamily: PMS.fontHead, fontSize: '12px', fontWeight: 600, color: PMS.navy, lineHeight: '17px' }}>{title}</span>
+                <span style={{ ...T.small, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{subtitle}</span>
               </span>
             </span>
             <FiChevronRight size={14} color={PMS.muted} style={{ flexShrink: 0 }} />

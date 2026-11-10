@@ -29,7 +29,7 @@ function Tile({ value, caption, icon, onClick, disabled, title, dashed }) {
       onClick={interactive ? onClick : undefined}
       disabled={!interactive}
       title={title}
-      className={interactive ? 'pms-hover-lift pms-focus' : undefined}
+      className={`pms-att-tile${dashed ? ' pms-att-tile-dashed' : ''}${interactive ? ' pms-hover-lift pms-focus' : ''}`}
       style={{
         position: 'relative', minHeight: '99px', minWidth: 0, borderRadius: '18px',
         padding: dashed ? '14px' : '20px 18px 16px 18px', boxSizing: 'border-box',
@@ -49,7 +49,8 @@ function Tile({ value, caption, icon, onClick, disabled, title, dashed }) {
       ) : (
         <>
           <span style={{ position: 'absolute', top: '14px', right: '16px', color: 'rgba(255,255,255,0.9)', display: 'flex' }}>{icon}</span>
-          <span style={{ fontFamily: PMS.fontHead, fontSize: '19px', fontWeight: 700, lineHeight: '28px', paddingRight: '20px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value}</span>
+          {/* Up to two lines so long values (address, "in – out" times) stay readable on narrow tiles */}
+          <span className="pms-att-tile-value" style={{ fontFamily: PMS.fontHead, fontSize: '19px', fontWeight: 700, lineHeight: '26px', paddingRight: '20px', overflow: 'hidden', overflowWrap: 'break-word', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{value}</span>
           <span style={{ fontFamily: PMS.fontHead, fontSize: '10.5px', color: 'rgba(255,255,255,0.8)', lineHeight: '16px' }}>{caption}</span>
         </>
       )}
@@ -136,7 +137,7 @@ export default function AttendanceCard({
   const workPct = Math.min(100, (elapsedSeconds / (8 * 3600)) * 100)
 
   return (
-    <div style={{
+    <div className="pms-att-card" style={{
       background: PMS.gradPanel, borderRadius: PMS.radiusInner, padding: '26px 24px 24px',
       boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18)',
       display: 'flex', flexDirection: 'column', minWidth: 0, boxSizing: 'border-box', color: PMS.white,

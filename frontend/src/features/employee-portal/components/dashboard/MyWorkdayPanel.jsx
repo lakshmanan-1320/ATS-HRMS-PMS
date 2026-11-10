@@ -106,7 +106,7 @@ function TeamRow({ members, subtitle, onView }) {
       display: 'flex', alignItems: 'center', gap: '14px', minHeight: '62px', padding: '0 14px 0 18px',
       borderRadius: PMS.radiusRow, background: PMS.navyRow, boxSizing: 'border-box',
     }}>
-      <span style={{ display: 'flex', flexShrink: 0 }}>
+      <span className="pms-team-avatars" style={{ display: 'flex', flexShrink: 0 }}>
         {shown.length === 0 ? (
           <span style={{ width: '32px', height: '32px', borderRadius: '50%', background: PMS.slate, border: `2px solid ${PMS.navyRow}` }} />
         ) : shown.map((m, i) => (
@@ -119,7 +119,7 @@ function TeamRow({ members, subtitle, onView }) {
         ))}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
-        <span style={{ display: 'block', fontFamily: PMS.fontHead, fontSize: '13px', fontWeight: 700, color: PMS.white }}>Your team</span>
+        <span style={{ display: 'block', fontFamily: PMS.fontHead, fontSize: '13px', fontWeight: 700, color: PMS.white, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Your team</span>
         <span style={{ display: 'block', fontFamily: PMS.fontHead, fontSize: '10px', color: 'rgba(255,255,255,0.5)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{subtitle}</span>
       </span>
       {onView && (
@@ -128,7 +128,7 @@ function TeamRow({ members, subtitle, onView }) {
           color: PMS.white, fontFamily: PMS.fontHead, fontSize: '10.5px', cursor: 'pointer', flexShrink: 0,
         }}>View</button>
       )}
-      <span style={{ width: '40px', textAlign: 'right', fontFamily: PMS.fontHead, fontSize: '12.7px', fontWeight: 700, color: PMS.white, flexShrink: 0 }}>{members.length}</span>
+      <span style={{ minWidth: '20px', textAlign: 'right', fontFamily: PMS.fontHead, fontSize: '12.7px', fontWeight: 700, color: PMS.white, flexShrink: 0 }}>{members.length}</span>
     </div>
   )
 }
@@ -196,7 +196,7 @@ export default function MyWorkdayPanel({
         : { title: 'No open goals', sub: 'Set a new goal to get started' }
 
   return (
-    <section style={{ background: PMS.navy, borderRadius: PMS.radiusPanel, padding: '26px 24px 24px', boxSizing: 'border-box', minWidth: 0 }}>
+    <section className="pms-workday" style={{ background: PMS.navy, borderRadius: PMS.radiusPanel, padding: '26px 24px 24px', boxSizing: 'border-box', minWidth: 0 }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
         <div style={{ minWidth: 0 }}>

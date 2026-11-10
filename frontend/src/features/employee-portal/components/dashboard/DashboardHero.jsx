@@ -25,7 +25,7 @@ export function PeriodTabs({ value, onChange }) {
             role="tab"
             aria-selected={active}
             onClick={() => onChange(p.key)}
-            className="pms-focus"
+            className="pms-focus pms-period-tab"
             style={{
               height: '34px', padding: '0 19px', borderRadius: '17px', border: 'none',
               background: active ? PMS.white : 'transparent',
@@ -111,12 +111,12 @@ export function DailyFocus({ quote }) {
         </span>
       </div>
       <div style={{
-        flex: 1, minWidth: '240px', minHeight: '43px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
-        padding: '0 20px 0 20px', background: PMS.white, border: `1px solid ${PMS.border}`, borderRadius: '22px', boxSizing: 'border-box',
+        flex: 1, minWidth: 'min(240px, 100%)', minHeight: '43px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
+        padding: '10px 20px', background: PMS.white, border: `1px solid ${PMS.border}`, borderRadius: '22px', boxSizing: 'border-box',
       }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
           <FiStar size={13} color={PMS.blue} style={{ flexShrink: 0 }} />
-          <span style={{ fontFamily: PMS.fontHead, fontSize: '12px', color: PMS.navy, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span style={{ fontFamily: PMS.fontHead, fontSize: '12px', lineHeight: '18px', color: PMS.navy }}>
             “{quote}”
           </span>
         </span>

@@ -24,7 +24,7 @@ export function SectionHeading({ title, sub, right }) {
 
 export function SegmentTabs({ tabs, value, onChange, label }) {
   return (
-    <div role="tablist" aria-label={label} className="pms-tabs-scroll" style={{ display: 'flex', alignItems: 'center', height: 44, padding: '0 5px', gap: 2, background: PMS.surfaceAlt, border: `1px solid ${PMS.border}`, borderRadius: 22, boxSizing: 'border-box', maxWidth: '100%' }}>
+    <div role="tablist" aria-label={label} className="pms-tabs-scroll" style={{ display: 'flex', alignItems: 'center', height: 44, padding: '0 5px', gap: 2, minWidth: 0, background: PMS.surfaceAlt, border: `1px solid ${PMS.border}`, borderRadius: 22, boxSizing: 'border-box', maxWidth: '100%' }}>
       {tabs.map(t => {
         const active = t.key === value
         return (
@@ -190,7 +190,7 @@ export function PendingActionsChart({ items, total, className }) {
         </div>
         <Pill tone="blue" style={{ height: 22, fontSize: 10, padding: '0 10px' }}>{total} items</Pill>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '24px 1fr', gap: 8, marginTop: 18, flex: 1 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '24px minmax(0, 1fr)', gap: 8, marginTop: 18, flex: 1 }}>
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: 150, paddingBottom: 0 }}>
           {[top, Math.round(top * 2 / 3), Math.round(top / 3), 0].map(t => <span key={t} style={{ ...T.small, fontSize: 9 }}>{t}</span>)}
         </div>
@@ -212,7 +212,7 @@ export function PendingActionsChart({ items, total, className }) {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-around', gap: 6, marginTop: 8 }}>
             {items.map(i => (
-              <span key={i.label} style={{ flex: 1, maxWidth: 70, textAlign: 'center', fontFamily: PMS.fontHead, fontSize: 9.5, lineHeight: 1.3, color: i.value === peak && peak > 0 ? PMS.navy : PMS.muted, fontWeight: i.value === peak && peak > 0 ? 700 : 400 }}>{i.label}</span>
+              <span key={i.label} style={{ flex: 1, minWidth: 0, maxWidth: 70, overflowWrap: 'anywhere', hyphens: 'auto', textAlign: 'center', fontFamily: PMS.fontHead, fontSize: 9.5, lineHeight: 1.3, color: i.value === peak && peak > 0 ? PMS.navy : PMS.muted, fontWeight: i.value === peak && peak > 0 ? 700 : 400 }}>{i.label}</span>
             ))}
           </div>
         </div>

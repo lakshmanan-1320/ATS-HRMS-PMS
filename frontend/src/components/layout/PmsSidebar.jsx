@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiSearch, FiX, FiChevronDown, FiChevronRight, FiChevronLeft, FiLock, FiLogOut, FiSettings, FiHeadphones } from 'react-icons/fi'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -19,12 +19,27 @@ const SB = {
 
 // Sizes mirrored from the client-admin sidebar
 const SIZE = {
-  width: 280, collapsedWidth: 76,
+  width: 280, collapsedWidth: 76, phoneRailWidth: 60,
   itemFont: '14px', itemPad: '10.5px 14px', itemIcon: 18, itemGap: '12px', itemRadius: '10px',
   childFont: '13px', childPad: '8.5px 12px', childIcon: 16, childRadius: '8px',
   sectionGap: '22px', groupGap: '6px',
   titleFont: '11px', titleSpacing: '0.08em',
   searchHeight: '40px', searchFont: '13.5px',
+}
+
+const PHONE_QUERY = '(max-width: 599px)'
+
+function useMediaQuery(query) {
+  const get = () => typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia(query).matches
+  const [matches, setMatches] = useState(get)
+  useEffect(() => {
+    if (!window.matchMedia) return
+    const mq = window.matchMedia(query)
+    const onChange = (e) => setMatches(e.matches)
+    mq.addEventListener ? mq.addEventListener('change', onChange) : mq.addListener(onChange)
+    return () => { mq.removeEventListener ? mq.removeEventListener('change', onChange) : mq.removeListener(onChange) }
+  }, [query])
+  return matches
 }
 
 const soonTag = (
@@ -82,16 +97,39 @@ export default function PmsSidebar({
   roleLetter, displayName, userEmail,
   showDropdown, setShowDropdown, dropdownRef, onLogout, onChangePassword, onSettings, onHelp,
 }) {
-  const width = isCollapsed ? SIZE.collapsedWidth : SIZE.width
+  const isPhone = useMediaQuery(PHONE_QUERY)
+  const railWidth = isPhone ? SIZE.phoneRailWidth : SIZE.collapsedWidth
+  const width = isCollapsed ? railWidth : SIZE.width
+  // Tablets/phones: the opened menu slides over the page instead of squeezing it
+  const overlay = isNarrow && !isCollapsed
   const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || '')
   const initial = (displayName || roleLetter || 'U').charAt(0).toUpperCase()
 
+  useEffect(() => {
+    if (!overlay) return
+    const onKey = (e) => { if (e.key === 'Escape') setIsCollapsed(true) }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [overlay, setIsCollapsed])
+
   return (
+    <>
+    {overlay && (
+      <>
+        {/* Keeps the page where the collapsed rail was, so content doesn't jump */}
+        <div aria-hidden="true" style={{ width: `${railWidth}px`, minWidth: `${railWidth}px`, flexShrink: 0 }} />
+        <div aria-hidden="true" onClick={() => setIsCollapsed(true)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0, 18, 51, 0.45)', zIndex: 999 }} />
+      </>
+    )}
     <aside className="no-scrollbar" style={{
-      width: `${width}px`, minWidth: `${width}px`, background: SB.bg,
-      display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
+      width: `${width}px`, minWidth: `${width}px`, maxWidth: overlay ? '85vw' : undefined, background: SB.bg,
+      display: 'flex', flexDirection: 'column', height: '100vh',
+      ...(overlay
+        ? { position: 'fixed', top: 0, left: 0, zIndex: 1000, boxShadow: '8px 0 32px rgba(0, 18, 51, 0.35)' }
+        : { position: 'sticky', top: 0, zIndex: 100 }),
       overflow: 'hidden', fontFamily: SB.font, color: '#ffffff', userSelect: 'none',
-      zIndex: 100, boxSizing: 'border-box', transition: 'width 0.25s ease, min-width 0.25s ease',
+      boxSizing: 'border-box', transition: 'width 0.25s ease, min-width 0.25s ease',
     }}>
       {/* Search / expand */}
       <div style={{ padding: isCollapsed ? '20px 0 4px' : '20px 16px 8px', display: 'flex', justifyContent: 'center', gap: '8px', flexShrink: 0 }}>
@@ -274,5 +312,6 @@ export default function PmsSidebar({
         )}
       </div>
     </aside>
+    </>
   )
 }
